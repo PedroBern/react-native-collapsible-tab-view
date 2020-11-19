@@ -150,7 +150,7 @@ Basic usage looks like this:
 
 #### Props
 
-All props are optional, but if you are not rendering a header, you'd be probabbly better with the original [TabView](https://github.com/satya164/react-native-tab-view#tabview).
+All props are optional, but if you are not rendering a header, you'd be probably better with the original [TabView](https://github.com/satya164/react-native-tab-view#tabview).
 
 #### animatedValue `optional`
 
