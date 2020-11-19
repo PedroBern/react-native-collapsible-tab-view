@@ -4,7 +4,7 @@ A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-n
 
 ## Demo
 
-<img src="https://github.com/PedroBern/react-native-collapsible-tab-view/main/demo/demo-collapsible.gif" width="360">
+<img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/demo-collapsible.gif" width="360">
 
 ## Installation
 
