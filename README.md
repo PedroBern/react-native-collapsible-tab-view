@@ -8,7 +8,7 @@ A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-n
 
 ## Demo
 
-<img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/demo-collapsible.gif" width="360">
+<img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/demo2.gif" width="360">
 
 ## Installation
 
@@ -215,12 +215,14 @@ Works with:
 - Animated.ScrollView
 - Animated.FlatList
 
-```js
-const scenePropsAndRef = useCollapsibleScene('routeKey')
+```tsx
+const FirstScene: React.FC<object> = ({ children }) => {
+  const scrollPropsAndRef = useCollapsibleScene('firstScene');
 
-<Animated.ScrollList {...scenePropsAndRef} >
-  { ... }
-</Animated.ScrollList>
+  return (
+    <Animated.ScrollView {...scrollPropsAndRef}>{children}</Animated.ScrollView>
+  );
+};
 ```
 
 It includes de following values:
