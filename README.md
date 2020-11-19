@@ -152,43 +152,43 @@ Basic usage looks like this:
 
 All props are optional, but if you are not rendering a header, you'd be probabbly better with the original [TabView](https://github.com/satya164/react-native-tab-view#tabview).
 
-##### animatedValue `optional`
+#### animatedValue `optional`
 
 Optionally controlled animated value. Default is `new Animated.Value(0)`.
 
-##### headerHeight `optional`
+#### headerHeight `optional`
 
 Header component height, default is 0. It is computed on layout. Providing it is just an optimization.
 
-##### tabBarHeight `optional`
+#### tabBarHeight `optional`
 
 Tab bar height, default is 49.
 
-##### tabBarProps `optional`
+#### tabBarProps `optional`
 
 Props passed to the tab bar component.
 
-##### renderHeader `optional`
+#### renderHeader `optional`
 
 Header rendered on top of the tab bar. Defaul is `() => null`.
 
-##### headerContainerStyle `optional`
+#### headerContainerStyle `optional`
 
 Styles applied to header and tabbar container.
 
-##### preventTabPressOnGliding `optional`
+#### preventTabPressOnGliding `optional`
 
 Prevent tab press if screen is gliding. Default is `true`. It is ignores if a `renderTabBar` is provided.
 
-##### disableSnap `optional`
+#### disableSnap `optional`
 
 Disable the snap animation. Default is `false`.
 
-##### renderTabBar `optional`
+#### renderTabBar `optional`
 
 Same as [renderTabBar](https://github.com/satya164/react-native-tab-view#rendertabbar) of the original [TabView](https://github.com/satya164/react-native-tab-view#tabview), but with the additional `isGliding` property.
 
-##### onHeaderHeightChange `optional`
+#### onHeaderHeightChange `optional`
 
 Callback fired when the `headerHeight` state value inside
 `CollapsibleTabView` will be updated in the `onLayout` event
@@ -202,7 +202,7 @@ const onHeaderHeightChange = () => {
 };
 ```
 
-##### snapThreshold `optional`
+#### snapThreshold `optional`
 
 Percentage of header height to make the snap effect. A number between 0 and 1. Default is 0.5.
 
@@ -223,33 +223,33 @@ const scenePropsAndRef = useCollapsibleScene('routeKey')
 </Animated.ScrollList>
 ```
 
-#### Value
+It includes de following values:
 
-##### ref
+#### ref
 
 Function to get ref from scrollable components inside the scene, and track in the Collapsible Tab View.
 
-##### onScroll
+#### onScroll
 
 Scroll event, enabled only for the focused route.
 
-##### scrollEnabled
+#### scrollEnabled
 
 Disable scroll for unfocused routes is optional, but prevents weird/delayed animations if the user changes tabs and quickly start scrolling the new tab, before the animated value starting to track the new focused route.
 
-##### contentContainerStyle
+#### contentContainerStyle
 
 Content container style with top padding with the same height as the tab bar + header height.
 
-##### onMomentumScrollBegin
+#### onMomentumScrollBegin
 
 Callback to set `isGliding` to `true`.
 
-##### onScrollEndDrag
+#### onScrollEndDrag
 
 Callback to sync the scroll of unfocused routes.
 
-##### onMomentumScrollEnd
+#### onMomentumScrollEnd
 
 Callback to sync the scroll of unfocused routes.
 
