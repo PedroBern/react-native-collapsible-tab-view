@@ -1,22 +1,3 @@
-# react-native-collapsible-tab-view
-
-A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-native-tab-view) that helps to build a collapsible tab view.
-
-## Demo
-
-<img src="https://github.com/PedroBern/react-native-collapsible-tab-view/main/demo/demo-collapsible.gif" width="360">
-
-## Installation
-
-Open a Terminal in the project root and run:
-
-```sh
-yarn add react-native-tab-view react-native-collapsible-tab-view
-```
-
-## Quick Start
-
-```tsx
 import * as React from 'react';
 import { StyleSheet, View, Text, Animated } from 'react-native';
 import {
@@ -84,8 +65,6 @@ const App: React.FC<object> = () => {
   );
 };
 
-export default App;
-
 const styles = StyleSheet.create({
   header: {
     height: HEADER_HEIGHT,
@@ -102,4 +81,13 @@ const styles = StyleSheet.create({
     height: 1500,
   },
 });
-```
+
+export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
+  static title = 'Collapsible Tab View Minimal Demo';
+  static backgroundColor = '#2196f3';
+  static appbarElevation = 0;
+
+  render() {
+    return <App />;
+  }
+}

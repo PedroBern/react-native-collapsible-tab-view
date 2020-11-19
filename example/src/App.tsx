@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import CollapsibleTabViewExample from './CollapsibleTabViewExample';
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
+import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
 
 type State = {
   title: string;
@@ -45,6 +46,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewExample,
   CollapsibleTabViewNoSnapExample,
   CollapsibleTabViewResizeExample,
+  CollapsibleTabViewDemoExample,
 ];
 
 const KeepAwake = () => {
