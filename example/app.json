@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "React Native Collapsible Tab View Demos",
+    "description": "Demonstrates the various capabilities of react-native-collapsible-tab-view: https://github.com/pedrobern/react-native-collapsible-tab-view",
+    "slug": "react-native-collapsible-tab-view-demos",
+    "privacy": "public",
+    "version": "1.0.0",
+    "primaryColor": "#2196f3",
+    "icon": "assets/icon.png",
+    "loading": {
+      "icon": "assets/icon.png",
+      "hideExponentText": false
+    },
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ]
+  }
+}
