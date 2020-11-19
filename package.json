@@ -1,0 +1,97 @@
+{
+  "name": "react-native-collapsible-tab-view",
+  "version": "1.0.0",
+  "description": "Collapsible tab view component for React Native",
+  "main": "lib/commonjs/index.js",
+  "react-native": "lib/module/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
+  "files": [
+    "src",
+    "lib"
+  ],
+  "scripts": {
+    "test": "jest",
+    "typescript": "tsc --noEmit",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "release": "release-it",
+    "example": "yarn --cwd example",
+    "bootstrap": "yarn example && yarn",
+    "prepare": "bob build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "react-native-component",
+    "react-component",
+    "react-native",
+    "ios",
+    "android",
+    "tab",
+    "swipe",
+    "scrollable",
+    "coverflow"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PedroBern/react-native-collapsible-tab-view.git"
+  },
+  "author": "Pedro Bern <pedrobermoreira@gmail.com> (https://github.com/pedrobern/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pedrobern/react-native-collapsible-tab-view/issues"
+  },
+  "homepage": "https://github.com/PedroBern/react-native-collapsible-tab-view#readme",
+  "devDependencies": {
+    "@commitlint/config-conventional": "^9.1.1",
+    "@expo/vector-icons": "^10.2.0",
+    "@react-native-community/bob": "^0.16.2",
+    "@release-it/conventional-changelog": "^1.1.4",
+    "@types/react": "^16.9.44",
+    "@types/react-native": "0.63.4",
+    "babel-jest": "^26.2.2",
+    "babel-preset-react-native": "^4.0.0",
+    "commitlint": "^9.1.0",
+    "eslint": "^7.6.0",
+    "eslint-config-satya164": "^3.1.7",
+    "eslint-plugin-react-native-globals": "^0.1.2",
+    "husky": "^4.2.5",
+    "jest": "^26.2.2",
+    "prettier": "^2.0.5",
+    "react": "~16.11.0",
+    "react-native": "~0.62.2",
+    "react-native-gesture-handler": "~1.6.0",
+    "react-native-reanimated": "~1.9.0",
+    "react-native-tab-view": "^2.15.2",
+    "release-it": "^13.6.6",
+    "typescript": "^3.9.7"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-tab-view": "*"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn lint && yarn typescript"
+    }
+  },
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ]
+  },
+  "@react-native-community/bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  }
+}
