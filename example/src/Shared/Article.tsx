@@ -5,9 +5,11 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  ViewStyle,
   Animated,
+  RefreshControl,
 } from 'react-native';
+import { CollapsibleScenePropsAndRef } from 'react-native-collapsible-tab-view';
+import useRefresh from './useRefresh';
 
 const ArticleContent = () => {
   return (
@@ -63,14 +65,21 @@ export default class Article extends React.Component {
 // used in Collapsible TabView examples
 export const AnimatedArticle = React.forwardRef<
   any,
-  {
-    contentContainerStyle?: ViewStyle;
-  }
->(({ contentContainerStyle, ...rest }, ref) => {
+  React.PropsWithoutRef<CollapsibleScenePropsAndRef>
+>(({ contentContainerStyle, progressViewOffset, ...rest }, ref) => {
+  const [isRefreshing, startRefreshing] = useRefresh();
+
   return (
     <Animated.ScrollView
       ref={ref}
       style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={startRefreshing}
+          progressViewOffset={progressViewOffset}
+        />
+      }
       contentContainerStyle={[styles.content, contentContainerStyle]}
       {...rest}
     >

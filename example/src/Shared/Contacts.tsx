@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Animated, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { CollapsibleScenePropsAndRef } from 'react-native-collapsible-tab-view';
+import useRefresh from './useRefresh';
 
 type Item = { name: string; number: number };
 
@@ -102,17 +103,7 @@ export const AnimatedContacts = React.forwardRef<
   any,
   React.PropsWithoutRef<CollapsibleScenePropsAndRef>
 >((props, ref) => {
-  const [isRefreshing, setIsRefreshing] = React.useState(false);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isRefreshing) {
-        setIsRefreshing(false);
-      }
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [isRefreshing]);
+  const [isRefreshing, startRefreshing] = useRefresh();
 
   return (
     <Animated.FlatList
@@ -121,13 +112,8 @@ export const AnimatedContacts = React.forwardRef<
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={() => setIsRefreshing(true)}
-          progressViewOffset={props.contentContainerStyle.paddingTop}
-        />
-      }
+      refreshing={isRefreshing}
+      onRefresh={startRefreshing}
       {...props}
     />
   );
