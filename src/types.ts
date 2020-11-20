@@ -79,6 +79,10 @@ export type CollapsibleScenePropsAndRef = {
   contentContainerStyle: {
     paddingTop: number;
   };
+  /**
+   * Needed for the loading indicator to show correctly on android.
+   */
+  progressViewOffset: number;
 } & Pick<
   CollapsibleContext,
   'onMomentumScrollBegin' | 'onScrollEndDrag' | 'onMomentumScrollEnd'

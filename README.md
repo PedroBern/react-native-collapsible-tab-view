@@ -246,6 +246,10 @@ Disable scroll for unfocused routes is optional, but prevents weird/delayed anim
 
 Content container style with top padding with the same height as the tab bar + header height.
 
+in#### progressViewOffset
+
+Needed for the loading indicator to show correctly on android.
+
 #### onMomentumScrollBegin
 
 Callback to set `isGliding` to `true`.
