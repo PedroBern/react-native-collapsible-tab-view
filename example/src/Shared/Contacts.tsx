@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet, Animated, RefreshControl } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { CollapsibleScenePropsAndRef } from 'react-native-collapsible-tab-view';
 
 type Item = { name: string; number: number };
 
@@ -97,7 +98,22 @@ export default class Contacts extends React.Component {
 }
 
 // used in Collapsible TabView examples
-export const AnimatedContacts = React.forwardRef<any, object>((props, ref) => {
+export const AnimatedContacts = React.forwardRef<
+  any,
+  React.PropsWithoutRef<CollapsibleScenePropsAndRef>
+>((props, ref) => {
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isRefreshing) {
+        setIsRefreshing(false);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [isRefreshing]);
+
   return (
     <Animated.FlatList
       ref={ref}
@@ -105,6 +121,13 @@ export const AnimatedContacts = React.forwardRef<any, object>((props, ref) => {
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={() => setIsRefreshing(true)}
+          progressViewOffset={props.contentContainerStyle.paddingTop}
+        />
+      }
       {...props}
     />
   );
