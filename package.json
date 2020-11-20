@@ -58,7 +58,7 @@
     "eslint-plugin-react-native-globals": "^0.1.2",
     "husky": "^4.2.5",
     "jest": "^26.2.2",
-    "prettier": "^2.0.5",
+    "prettier": "2.0.5",
     "react": "~16.11.0",
     "react-native": "~0.62.2",
     "react-native-gesture-handler": "~1.6.0",
