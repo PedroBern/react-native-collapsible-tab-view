@@ -6,6 +6,9 @@
 
 A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-native-tab-view) that helps to build a collapsible tab view.
 
+- [View it with Expo](https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos).
+- Checkout the [examples](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/example) for the source code of the Expo app.
+
 ## Demo
 
 <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/demo2.gif" width="360">
