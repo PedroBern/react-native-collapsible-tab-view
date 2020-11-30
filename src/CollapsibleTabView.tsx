@@ -86,7 +86,7 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * The property from the `routes` map to use for the active route key
      * Default is 'key'
      */
-    routeKeyProp?: keyof Extract<T, string>;
+    routeKeyProp?: keyof T;
   };
 
 /**
@@ -141,7 +141,7 @@ const CollapsibleTabView = <T extends Route>({
    * can be disabled with `disableSnap` prop.
    */
   const syncScrollOffset = React.useCallback(() => {
-    const curRouteKey = routes[index].key;
+    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
     const offset = listOffset.current[curRouteKey];
 
     const newOffset: number | null =
@@ -179,7 +179,7 @@ const CollapsibleTabView = <T extends Route>({
         });
       }
     });
-  }, [routes, index, headerHeight, disableSnap, snapThreshold]);
+  }, [routes, index, routeKeyProp, headerHeight, disableSnap, snapThreshold]);
 
   const onMomentumScrollBegin = () => {
     isGliding.current = true;
