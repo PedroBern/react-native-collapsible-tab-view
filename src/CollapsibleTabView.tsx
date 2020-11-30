@@ -82,6 +82,11 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * 0 and 1. Default is 0.5.
      */
     snapThreshold?: number;
+    /**
+     * The property from the `routes` map to use for the active route key
+     * Default is 'key'
+     */
+    routeKeyProp?: keyof Extract<T, string>;
   };
 
 /**
@@ -101,6 +106,7 @@ const CollapsibleTabView = <T extends Route>({
   renderTabBar: customRenderTabBar,
   onHeaderHeightChange,
   snapThreshold = 0.5,
+  routeKeyProp = 'key',
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(initialHeaderHeight);
@@ -289,7 +295,7 @@ const CollapsibleTabView = <T extends Route>({
   return (
     <CollapsibleContextProvider
       value={{
-        activeRouteKey: routes[index].key,
+        activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
         scrollY,
         buildGetRef,
         headerHeight,
