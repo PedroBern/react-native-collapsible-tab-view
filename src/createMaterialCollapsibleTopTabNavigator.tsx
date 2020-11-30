@@ -13,7 +13,9 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationOptions,
 } from '@react-navigation/material-top-tabs';
+import { Props as CollapsibleTabViewProps } from './CollapsibleTabView';
 
+// copied from @react-navigation/material-top-tabs because it's not exported
 type MaterialTopTabNavigationEventMap = {
   /**
    * Event which fires on tapping on the tab in the tab bar.
@@ -37,9 +39,13 @@ type BaseNavigator = ReturnType<
   typeof createMaterialTopTabNavigator
 >['Navigator'];
 
-type Props = Parameters<
+type BaseProps = Parameters<
   Extract<BaseNavigator, React.FunctionComponent<any>>
 >[0];
+
+type Props = BaseProps & {
+  collapsibleOptions?: Partial<CollapsibleTabViewProps<any>>;
+};
 
 function MaterialTopTabNavigator({
   initialRouteName,
