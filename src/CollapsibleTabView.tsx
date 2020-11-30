@@ -127,13 +127,13 @@ const CollapsibleTabView = <T extends Route>({
 
   React.useEffect(() => {
     scrollY.addListener(({ value }) => {
-      const curRoute = routes[index].key;
+      const curRoute = routes[index][routeKeyProp as keyof Route] as string;
       listOffset.current[curRoute] = value;
     });
     return () => {
       scrollY.removeAllListeners();
     };
-  }, [routes, index, scrollY]);
+  }, [routes, index, scrollY, routeKeyProp]);
 
   /**
    * Sync the scroll of unfocused routes to the current focused route,
