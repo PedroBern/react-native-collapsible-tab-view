@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "react-native-collapsible-tab-view": ["./src/index"]
+      "react-native-collapsible-tab-view": ["../src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -23,6 +23,5 @@
     "strict": true,
     "target": "esnext",
     "isolatedModules": true
-  },
-  "exclude": ["./example"]
+  }
 }
