@@ -207,10 +207,6 @@ const onHeaderHeightChange = () => {
 };
 ```
 
-#### snapThreshold `optional`
-
-Percentage of header height to make the snap effect. A number between 0 and 1. Default is 0.5.
-
 ### `useCollapsibleScene`
 
 A hook to get all props and ref for the animated component in order to make the collapsible tabs work.
@@ -250,7 +246,7 @@ Content container style with top padding with the same height
 as the tab bar + header height, and a minHeight to prevent blanck space
 if the scroll content is smaller than the screen.
 
-in#### progressViewOffset
+#### progressViewOffset
 
 Needed for the loading indicator to show correctly on android.
 
@@ -265,6 +261,14 @@ Callback to sync the scroll of unfocused routes.
 #### onMomentumScrollEnd
 
 Callback to sync the scroll of unfocused routes.
+
+#### snapToOffsets
+
+Handle snap animation, if `disableSnap` is not set to `true`, default is `[0, number]`
+
+#### snapToEnd
+
+Prevent snaping to end, if `disableSnap` is not set to `true`.
 
 ## Contributing
 

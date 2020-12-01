@@ -53,6 +53,7 @@ export type CollapsibleContext = {
   ) => void;
   onScrollEndDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onMomentumScrollEnd: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  disableSnap: boolean;
 };
 
 export type CollapsibleScenePropsAndRef = {
@@ -85,6 +86,14 @@ export type CollapsibleScenePropsAndRef = {
    * Needed for the loading indicator to show correctly on android.
    */
   progressViewOffset: number;
+  /**
+   * Handle snap animation, if `disableSnap` is not set to `true`, default is `[0, number]`
+   */
+  snapToOffsets?: [0, number];
+  /**
+   * Prevent snaping to end, if `disableSnap` is not set to `true`.
+   */
+  snapToEnd?: boolean;
 } & Pick<
   CollapsibleContext,
   'onMomentumScrollBegin' | 'onScrollEndDrag' | 'onMomentumScrollEnd'

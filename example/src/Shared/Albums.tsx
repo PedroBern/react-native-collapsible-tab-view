@@ -51,7 +51,10 @@ export const AnimatedAlbums = React.forwardRef<
     <Animated.ScrollView
       ref={ref}
       style={styles.container}
-      contentContainerStyle={[styles.content, contentContainerStyle]}
+      contentContainerStyle={[
+        styles.content,
+        { ...contentContainerStyle, minHeight: 0 },
+      ]}
       {...rest}
     >
       {albumsContent()}

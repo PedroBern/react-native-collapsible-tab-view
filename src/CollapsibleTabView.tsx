@@ -100,7 +100,6 @@ const CollapsibleTabView = <T extends Route>({
   disableSnap = false,
   renderTabBar: customRenderTabBar,
   onHeaderHeightChange,
-  snapThreshold = 0.5,
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(initialHeaderHeight);
@@ -142,23 +141,21 @@ const CollapsibleTabView = <T extends Route>({
       offset >= 0 && offset <= headerHeight
         ? disableSnap
           ? offset
-          : offset <= headerHeight * snapThreshold
+          : offset <= headerHeight * 0.5
           ? 0
-          : offset > headerHeight * snapThreshold
+          : offset > headerHeight * 0.5
           ? headerHeight
           : null
         : null;
 
     listRefArr.current.forEach((item) => {
       if (newOffset !== null) {
-        if ((disableSnap && item.key !== curRouteKey) || !disableSnap) {
+        if (item.key !== curRouteKey) {
           scrollScene({
             ref: item.value,
             offset: newOffset,
             animated: item.key === curRouteKey,
           });
-        }
-        if (item.key !== curRouteKey) {
           listOffset.current[item.key] = newOffset;
         }
       } else if (
@@ -173,7 +170,7 @@ const CollapsibleTabView = <T extends Route>({
         });
       }
     });
-  }, [routes, index, headerHeight, disableSnap, snapThreshold]);
+  }, [routes, index, headerHeight, disableSnap]);
 
   const onMomentumScrollBegin = () => {
     isGliding.current = true;
@@ -297,6 +294,7 @@ const CollapsibleTabView = <T extends Route>({
         onMomentumScrollBegin,
         onScrollEndDrag,
         onMomentumScrollEnd,
+        disableSnap,
       }}
     >
       <TabView
