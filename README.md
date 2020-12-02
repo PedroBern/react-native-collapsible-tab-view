@@ -155,11 +155,11 @@ const styles = StyleSheet.create({
 
 The package has 3 main exports:
 
-| export                                     | description                                                                                                                            |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `CollapsibleTabView`                       | Component which is the one you'd use to render the collapsible tab view.                                                               |
-| `useCollapsibleScene`                      | Hook which you use to get props and ref for `ScrollView` or `FlatList`.                                                                |
-| `createMaterialCollapsibleTopTabNavigator` | Function to create the Navigator, if you are integrating with [react-navigation](https://github.com/react-navigation/react-navigation) |
+| export                                                                                | description                                                                                                                            |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [CollapsibleTabView](#collapsibletabview)                                             | Component which is the one you'd use to render the collapsible tab view.                                                               |
+| [useCollapsibleScene](#usecollapsiblescene)                                           | Hook which you use to get props and ref for `ScrollView` or `FlatList`.                                                                |
+| [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator) | Function to create the Navigator, if you are integrating with [react-navigation](https://github.com/react-navigation/react-navigation) |
 
 ### `CollapsibleTabView`
 
