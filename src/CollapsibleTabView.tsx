@@ -82,6 +82,11 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * 0 and 1. Default is 0.5.
      */
     snapThreshold?: number;
+    /**
+     * The property from the `routes` map to use for the active route key
+     * Default is 'key'
+     */
+    routeKeyProp?: keyof T;
   };
 
 /**
@@ -101,6 +106,7 @@ const CollapsibleTabView = <T extends Route>({
   renderTabBar: customRenderTabBar,
   onHeaderHeightChange,
   snapThreshold = 0.5,
+  routeKeyProp = 'key',
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(initialHeaderHeight);
@@ -121,13 +127,13 @@ const CollapsibleTabView = <T extends Route>({
 
   React.useEffect(() => {
     scrollY.addListener(({ value }) => {
-      const curRoute = routes[index].key;
+      const curRoute = routes[index][routeKeyProp as keyof Route] as string;
       listOffset.current[curRoute] = value;
     });
     return () => {
       scrollY.removeAllListeners();
     };
-  }, [routes, index, scrollY]);
+  }, [routes, index, scrollY, routeKeyProp]);
 
   /**
    * Sync the scroll of unfocused routes to the current focused route,
@@ -135,7 +141,7 @@ const CollapsibleTabView = <T extends Route>({
    * can be disabled with `disableSnap` prop.
    */
   const syncScrollOffset = React.useCallback(() => {
-    const curRouteKey = routes[index].key;
+    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
     const offset = listOffset.current[curRouteKey];
 
     const newOffset: number | null =
@@ -173,7 +179,8 @@ const CollapsibleTabView = <T extends Route>({
         });
       }
     });
-  }, [routes, index, headerHeight, disableSnap, snapThreshold]);
+  }, [routes, index, routeKeyProp, headerHeight, disableSnap, snapThreshold]);
+
   const syncScrollOffsetDebounced = useDebouncedCallback(syncScrollOffset, 16);
 
   const onMomentumScrollBegin = () => {
@@ -291,7 +298,7 @@ const CollapsibleTabView = <T extends Route>({
   return (
     <CollapsibleContextProvider
       value={{
-        activeRouteKey: routes[index].key,
+        activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
         scrollY,
         buildGetRef,
         headerHeight,

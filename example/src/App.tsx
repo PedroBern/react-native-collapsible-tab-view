@@ -22,6 +22,7 @@ import CollapsibleTabViewSmallContentExample from './CollapsibleTabViewSmallCont
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
 import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
+import MaterialTopTabsCollapsibleTabViewDemoExample from './NavigationExample';
 
 type State = {
   title: string;
@@ -49,6 +50,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewResizeExample,
   CollapsibleTabViewDemoExample,
   CollapsibleTabViewSmallContentExample,
+  MaterialTopTabsCollapsibleTabViewDemoExample,
 ];
 
 const KeepAwake = () => {

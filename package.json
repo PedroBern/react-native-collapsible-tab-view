@@ -5,7 +5,7 @@
   "main": "lib/commonjs/index.js",
   "react-native": "lib/module/index.js",
   "module": "lib/module/index.js",
-  "types": "lib/typescript/src/index.d.ts",
+  "types": "lib/typescript/index.d.ts",
   "files": [
     "src",
     "lib"
@@ -17,7 +17,7 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn",
-    "prepare": "bob build"
+    "prepack": "bob build"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -47,6 +47,8 @@
     "@commitlint/config-conventional": "^9.1.1",
     "@expo/vector-icons": "^10.2.0",
     "@react-native-community/bob": "^0.16.2",
+    "@react-navigation/material-top-tabs": "^5.3.10",
+    "@react-navigation/native": "^5.8.10",
     "@release-it/conventional-changelog": "^1.1.4",
     "@types/react": "^16.9.44",
     "@types/react-native": "0.63.4",
@@ -68,9 +70,19 @@
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
+    "@react-navigation/material-top-tabs": "^5",
+    "@react-navigation/native": "^5",
     "react": "*",
     "react-native": "*",
     "react-native-tab-view": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-navigation/material-top-tabs": {
+      "optional": true
+    },
+    "@react-navigation/native": {
+      "optional": true
+    }
   },
   "husky": {
     "hooks": {
