@@ -21,8 +21,8 @@ const COVERS = [
   require('../../assets/album-art-8.jpg'),
 ];
 
-const albumsContent = () =>
-  COVERS.map((source, i) => (
+const albumsContent = (n = 8) =>
+  [...COVERS.filter((_e, i) => i < n)].map((source, i) => (
     // eslint-disable-next-line react/no-array-index-key
     <Image key={i} source={source} style={styles.cover} />
   ));
@@ -45,8 +45,9 @@ export const AnimatedAlbums = React.forwardRef<
   any,
   {
     contentContainerStyle?: ViewStyle;
+    nCovers?: number;
   }
->(({ contentContainerStyle, ...rest }, ref) => {
+>(({ nCovers = 8, contentContainerStyle, ...rest }, ref) => {
   return (
     <Animated.ScrollView
       ref={ref}
@@ -54,7 +55,7 @@ export const AnimatedAlbums = React.forwardRef<
       contentContainerStyle={[styles.content, contentContainerStyle]}
       {...rest}
     >
-      {albumsContent()}
+      {albumsContent(nCovers)}
     </Animated.ScrollView>
   );
 });

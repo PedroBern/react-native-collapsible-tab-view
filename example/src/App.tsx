@@ -18,6 +18,7 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-community/async-storage';
 import CollapsibleTabViewExample from './CollapsibleTabViewExample';
+import CollapsibleTabViewSmallContentExample from './CollapsibleTabViewSmallContentExample';
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
 import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
@@ -47,6 +48,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewNoSnapExample,
   CollapsibleTabViewResizeExample,
   CollapsibleTabViewDemoExample,
+  CollapsibleTabViewSmallContentExample,
 ];
 
 const KeepAwake = () => {
