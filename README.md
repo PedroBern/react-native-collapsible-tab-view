@@ -210,6 +210,7 @@ All props are optional, but if you are not rendering a header, you'd be probably
 | `renderTabBar?`             | Same as [renderTabBar](https://github.com/satya164/react-native-tab-view#rendertabbar) of the original [TabView](https://github.com/satya164/react-native-tab-view#tabview), but with the additional `isGliding` property.                                                              | `undefined`             |
 | `snapThreshold?`            | Percentage of header height to make the snap effect. A number between 0 and 1.                                                                                                                                                                                                          | `0.5`                   |
 | `onHeaderHeightChange?`     | Callback fired when the `headerHeight` state value inside `CollapsibleTabView` will be updated in the `onLayout` event from the tab/header container.<br/><br/> Useful to call layout animations. Example:<br/><br/><pre lang="js">() => {LayoutAnimation.configureNext(preset)};</pre> | `undefined`             |
+| `routeKeyProp?`             | The property from the `routes` map to use for the active route key.                                                                                                                                                                                                                     | `key`                   |
 
 ### `useCollapsibleScene`
 
