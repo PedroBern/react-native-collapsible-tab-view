@@ -43,14 +43,14 @@ jobs:
 
       - name: Get expo link
         id: expo
-        run: echo "::set-output name=path::@pedrobern/react-native-collapsible-tab-view-demos?release-channel=pr-${{ github.event.number }}
+        run: echo "::set-output name=path::@pedrobern/react-native-collapsible-tab-view-demos?release-channel=pr-${{ github.event.number }}"
 
       - name: Comment on PR
         uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const body = const body = 'The Expo app for the example from this branch is ready!\n\n[expo.io/${{ steps.expo.outputs.path }}](https://expo.io/${{ steps.expo.outputs.path }})\n\n<a href="https://expo.io/${{ steps.expo.outputs.path }}"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=exp://exp.host/${{ steps.expo.outputs.path }}" height="200px" width="200px"></a>';
+            const body = 'The Expo app for the example from this branch is ready!\n\n[expo.io/${{ steps.expo.outputs.path }}](https://expo.io/${{ steps.expo.outputs.path }})\n\n<a href="https://expo.io/${{ steps.expo.outputs.path }}"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=exp://exp.host/${{ steps.expo.outputs.path }}" height="200px" width="200px"></a>';
             const comments = await github.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,

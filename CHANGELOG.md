@@ -1,3 +1,11 @@
+## [1.1.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.1.2...v1.1.3) (2020-12-02)
+
+
+### Bug Fixes
+
+* remove minHeight from contentContainerStyle ([fa0e2ed](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fa0e2edd6bff91c9f8b18c98cc5dca401cd13fd5)), closes [#8](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/8)
+* snapping when momentum scrolling ([887b0d9](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/887b0d934a2236ae7697a8f506c1ec5ba39ea163))
+
 ## [1.1.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.1.1...v1.1.2) (2020-11-30)
 
 
