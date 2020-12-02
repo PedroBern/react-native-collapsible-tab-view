@@ -4,6 +4,18 @@
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
 
+- [Expo app](#expo-app)
+- [Demo](#demo)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API reference](#api-reference)
+  - [CollapsibleTabView](#collapsibletabview)
+  - [useCollapsibleScene](#usecollapsiblescene)
+  - [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator)
+
+## Expo app
+
 A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-native-tab-view) that helps to build a collapsible tab view.
 
 - [View it with Expo](https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos).
