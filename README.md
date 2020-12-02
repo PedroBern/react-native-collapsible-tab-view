@@ -4,6 +4,19 @@
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
 
+- [Expo app](#expo-app)
+- [Demo](#demo)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API reference](#api-reference)
+  - [CollapsibleTabView](#collapsibletabview)
+  - [useCollapsibleScene](#usecollapsiblescene)
+  - [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator)
+- [Contributing](#contributing)
+
+## Expo app
+
 A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-native-tab-view) that helps to build a collapsible tab view.
 
 - [View it with Expo](https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos).
@@ -14,6 +27,22 @@ A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-n
 ## Demo
 
 <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/demo2.gif" width="360">
+
+## Features
+
+#### From [react-native-tab-view](https://github.com/satya164/react-native-tab-view)
+
+- Smooth animations and gestures
+- Scrollable tabs
+- Supports ~~both top and~~ bottom tab bars
+- Follows Material Design spec
+- Highly customizable
+- Fully typed with [TypeScript](https://typescriptlang.org)
+
+#### From this package
+
+- Integration with [react-navigation](https://github.com/react-navigation/react-navigation) - **optional**
+- Collapsible Tabs
 
 ## Installation
 
@@ -36,6 +65,14 @@ expo install react-native-gesture-handler react-native-reanimated
 ```
 
 If not using expo, [follow these instructions](https://github.com/satya164/react-native-tab-view#installation).
+
+#### React Navigation Integration - **Optional**
+
+If you want to integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
+
+```sh
+yarn add @react-navigation/native @react-navigation/material-top-tabs
+```
 
 ## Quick Start
 
@@ -129,10 +166,13 @@ const styles = StyleSheet.create({
 
 ## API reference
 
-The package has two exports:
+The package has 3 main exports:
 
-- `CollapsibleTabView` component which is the one you'd use to render the collapsible tab view.
-- `useCollapsibleScene` hook which you use to get props and ref for `ScrollView` or `FlatList`.
+| export                                                                                | description                                                                                                                            |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [CollapsibleTabView](#collapsibletabview)                                             | Component which is the one you'd use to render the collapsible tab view.                                                               |
+| [useCollapsibleScene](#usecollapsiblescene)                                           | Hook which you use to get props and ref for `ScrollView` or `FlatList`.                                                                |
+| [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator) | Function to create the Navigator, if you are integrating with [react-navigation](https://github.com/react-navigation/react-navigation) |
 
 ### `CollapsibleTabView`
 
@@ -157,59 +197,19 @@ Basic usage looks like this:
 
 All props are optional, but if you are not rendering a header, you'd be probably better with the original [TabView](https://github.com/satya164/react-native-tab-view#tabview).
 
-#### animatedValue `optional`
-
-Optionally controlled animated value. Default is `new Animated.Value(0)`.
-
-#### headerHeight `optional`
-
-Header component height, default is 0. It is computed on layout. Providing it is just an optimization.
-
-#### tabBarHeight `optional`
-
-Tab bar height, default is 49.
-
-#### tabBarProps `optional`
-
-Props passed to the tab bar component.
-
-#### renderHeader `optional`
-
-Header rendered on top of the tab bar. Defaul is `() => null`.
-
-#### headerContainerStyle `optional`
-
-Styles applied to header and tabbar container.
-
-#### preventTabPressOnGliding `optional`
-
-Prevent tab press if screen is gliding. Default is `true`. It is ignores if a `renderTabBar` is provided.
-
-#### disableSnap `optional`
-
-Disable the snap animation. Default is `false`.
-
-#### renderTabBar `optional`
-
-Same as [renderTabBar](https://github.com/satya164/react-native-tab-view#rendertabbar) of the original [TabView](https://github.com/satya164/react-native-tab-view#tabview), but with the additional `isGliding` property.
-
-#### onHeaderHeightChange `optional`
-
-Callback fired when the `headerHeight` state value inside
-`CollapsibleTabView` will be updated in the `onLayout` event
-from the tab/header container. Useful to call layout animations.
-
-Example:
-
-```js
-const onHeaderHeightChange = () => {
-  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-};
-```
-
-#### snapThreshold `optional`
-
-Percentage of header height to make the snap effect. A number between 0 and 1. Default is 0.5.
+| prop                        | description                                                                                                                                                                                                                                                                             | default                 |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `animatedValue?`            | Optionally controlled animated value.                                                                                                                                                                                                                                                   | `new Animated.Value(0)` |
+| `headerHeight?`             | Header component height. It is computed on layout. Providing it is just an optimization.                                                                                                                                                                                                | `0`                     |
+| `tabBarHeight?`             | Tab bar height.                                                                                                                                                                                                                                                                         | `49`                    |
+| `tabBarProps?`              | Props passed to the tab bar component.                                                                                                                                                                                                                                                  | `undefined`             |
+| `renderHeader?`             | Header rendered on top of the tab bar.                                                                                                                                                                                                                                                  | `() => null`            |
+| `headerContainerStyle?`     | Styles applied to header and tabbar container.                                                                                                                                                                                                                                          | `undefined`             |
+| `preventTabPressOnGliding?` | Prevent tab press if screen is gliding. Ignored if `renderTabBar` is provided.                                                                                                                                                                                                          | `true`                  |
+| `disableSnap?`              | Disable the snap animation.                                                                                                                                                                                                                                                             | `false`                 |
+| `renderTabBar?`             | Same as [renderTabBar](https://github.com/satya164/react-native-tab-view#rendertabbar) of the original [TabView](https://github.com/satya164/react-native-tab-view#tabview), but with the additional `isGliding` property.                                                              | `undefined`             |
+| `snapThreshold?`            | Percentage of header height to make the snap effect. A number between 0 and 1.                                                                                                                                                                                                          | `0.5`                   |
+| `onHeaderHeightChange?`     | Callback fired when the `headerHeight` state value inside `CollapsibleTabView` will be updated in the `onLayout` event from the tab/header container.<br/><br/> Useful to call layout animations. Example:<br/><br/><pre lang="js">() => {LayoutAnimation.configureNext(preset)};</pre> | `undefined`             |
 
 ### `useCollapsibleScene`
 
@@ -232,42 +232,26 @@ const FirstScene: React.FC<object> = ({ children }) => {
 
 It includes de following values:
 
-#### ref
+| value                   | description                                                                                                                                                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ref`                   | Function to get ref from scrollable components inside the scene, and track in the Collapsible Tab View.                                                                                                                     |
+| `onScroll`              | Scroll event, enabled only for the focused route.                                                                                                                                                                           |
+| `scrollEnabled`         | Disable scroll for unfocused routes is optional, but prevents weird/delayed animations if the user changes tabs and quickly start scrolling the new tab, before the animated value starting to track the new focused route. |
+| `contentContainerStyle` | Content container style with top padding with the same height as the tab bar + header height.                                                                                                                               |
+| `progressViewOffset`    | Needed for the loading indicator to show correctly on android.                                                                                                                                                              |
+| onMomentumScrollBegin   | Callback to set `isGliding` to `true`.                                                                                                                                                                                      |
+| `onScrollEndDrag`       | Callback to sync the scroll of unfocused routes.                                                                                                                                                                            |
+| `onMomentumScrollEnd`   | Callback to sync the scroll of unfocused routes.                                                                                                                                                                            |
 
-Function to get ref from scrollable components inside the scene, and track in the Collapsible Tab View.
+### `createMaterialCollapsibleTopTabNavigator`
 
-#### onScroll
-
-Scroll event, enabled only for the focused route.
-
-#### scrollEnabled
-
-Disable scroll for unfocused routes is optional, but prevents weird/delayed animations if the user changes tabs and quickly start scrolling the new tab, before the animated value starting to track the new focused route.
-
-#### contentContainerStyle
-
-Content container style with top padding with the same height
-as the tab bar + header height.
-
-in#### progressViewOffset
-
-Needed for the loading indicator to show correctly on android.
-
-#### onMomentumScrollBegin
-
-Callback to set `isGliding` to `true`.
-
-#### onScrollEndDrag
-
-Callback to sync the scroll of unfocused routes.
-
-#### onMomentumScrollEnd
-
-Callback to sync the scroll of unfocused routes.
+Same API as the [createMaterialTopTabNavigator (not-collapsible)](https://reactnavigation.org/docs/material-top-tab-navigator#props).
 
 ## Contributing
 
 While developing, you can run the [example app](/example/README.md) to test your changes.
+
+Please follow the [angular commit message format](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
 
 Make sure your code passes TypeScript and ESLint. Run the following to verify:
 
