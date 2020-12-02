@@ -247,8 +247,7 @@ Disable scroll for unfocused routes is optional, but prevents weird/delayed anim
 #### contentContainerStyle
 
 Content container style with top padding with the same height
-as the tab bar + header height, and a minHeight to prevent blanck space
-if the scroll content is smaller than the screen.
+as the tab bar + header height.
 
 in#### progressViewOffset
 
