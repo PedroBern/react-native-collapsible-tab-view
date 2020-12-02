@@ -74,10 +74,12 @@ export type CollapsibleScenePropsAndRef = {
   ref: GetRef;
   /**
    * Content container style with top padding with the same height
-   * as the tab bar + header heights.
+   * as the tab bar + header height, and a minHeight to prevent blanck space
+   * if the scroll content is smaller than the screen.
    */
   contentContainerStyle: {
     paddingTop: number;
+    minHeight: number;
   };
   /**
    * Needed for the loading indicator to show correctly on android.

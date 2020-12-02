@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 import { Route } from 'react-native-tab-view';
 
 import type { CollapsibleScenePropsAndRef } from './types';
@@ -53,6 +53,7 @@ const useCollapsibleScene = <T extends Route>(
     ref: buildGetRef(routeKey),
     contentContainerStyle: {
       paddingTop: headerHeight + tabBarHeight,
+      minHeight: Dimensions.get('window').height + headerHeight - tabBarHeight,
     },
     progressViewOffset: headerHeight + tabBarHeight,
     ...rest,

@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.1.1...v1.1.2) (2020-11-30)
+
+
+### Bug Fixes
+
+* prevent blank space on small content ([98f7b7e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/98f7b7e4f44e25f9c225d29782c8d55fabdbc83f)), closes [#8](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/8)
+
 ## [1.1.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.1.0...v1.1.1) (2020-11-20)
 
 
