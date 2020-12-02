@@ -14,7 +14,7 @@ import {
   NavigationState,
   SceneRendererProps,
 } from 'react-native-tab-view';
-
+import { useDebouncedCallback } from 'use-debounce';
 import { CollapsibleContextProvider } from './CollapsibleTabViewContext';
 import scrollScene from './scrollScene';
 import type { ScrollRef, GetRef } from './types';
@@ -174,18 +174,20 @@ const CollapsibleTabView = <T extends Route>({
       }
     });
   }, [routes, index, headerHeight, disableSnap, snapThreshold]);
+  const syncScrollOffsetDebounced = useDebouncedCallback(syncScrollOffset, 16);
 
   const onMomentumScrollBegin = () => {
     isGliding.current = true;
+    syncScrollOffsetDebounced.cancel();
   };
 
   const onMomentumScrollEnd = () => {
     isGliding.current = false;
-    syncScrollOffset();
+    syncScrollOffsetDebounced.callback();
   };
 
   const onScrollEndDrag = () => {
-    syncScrollOffset();
+    syncScrollOffsetDebounced.callback();
   };
 
   /**

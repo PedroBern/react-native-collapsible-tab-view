@@ -93,5 +93,8 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "use-debounce": "^5.1.0"
   }
 }
