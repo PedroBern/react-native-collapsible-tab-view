@@ -13,6 +13,7 @@
   - [CollapsibleTabView](#collapsibletabview)
   - [useCollapsibleScene](#usecollapsiblescene)
   - [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator)
+- [Contributing](#contributing)
 
 ## Expo app
 
@@ -249,6 +250,8 @@ Same API as the [createMaterialTopTabNavigator (not-collapsible)](https://reactn
 ## Contributing
 
 While developing, you can run the [example app](/example/README.md) to test your changes.
+
+Please follow the [angular commit message format](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
 
 Make sure your code passes TypeScript and ESLint. Run the following to verify:
 
