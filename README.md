@@ -246,7 +246,7 @@ It includes de following values:
 
 ### `createMaterialCollapsibleTopTabNavigator`
 
-Same API as the [createMaterialTopTabNavigator (not-collapsible)](https://reactnavigation.org/docs/material-top-tab-navigator#props).
+Same API as the [createMaterialTopTabNavigator (not-collapsible)](https://reactnavigation.org/docs/material-top-tab-navigator#props), with aditional `collapsibleOptions` prop, extending all props of [CollapsibleTabView](#collapsibletabview).
 
 ## Contributing
 
