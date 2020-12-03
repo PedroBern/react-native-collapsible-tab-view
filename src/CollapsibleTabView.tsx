@@ -127,6 +127,7 @@ const CollapsibleTabView = <T extends Route>({
 
   const activateSnapDebounced = useDebouncedCallback(
     () => {
+      // make sure the user is not currently still scrolling
       if (!isUserScrolling.current) {
         setCanSnap(true);
       }
@@ -151,7 +152,9 @@ const CollapsibleTabView = <T extends Route>({
       const curRoute = routes[index][routeKeyProp as keyof Route] as string;
       listOffset.current[curRoute] = value;
       // ensure we activate the snapping when scrollY stops changing (handled by debouncer)
-      activateSnapDebounced.callback();
+      if (isUserScrolling.current) {
+        activateSnapDebounced.callback();
+      }
     });
     return () => {
       currY.removeAllListeners();
@@ -160,48 +163,32 @@ const CollapsibleTabView = <T extends Route>({
 
   /**
    * Sync the scroll of unfocused routes to the current focused route,
-   * the default behavior is to snap to 0 or the `headerHeight`, it
-   * can be disabled with `disableSnap` prop.
    */
-  React.useEffect(() => {
+  const syncScrollOffsets = React.useCallback(() => {
     const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
     const offset = listOffset.current[curRouteKey];
 
-    if (canSnap !== false) {
-      setCanSnap(false);
-    }
-    const newOffset: number | null =
-      offset >= 0 && offset <= headerHeight
-        ? disableSnap
-          ? offset
-          : offset <= headerHeight * snapThreshold
-          ? 0
-          : offset > headerHeight * snapThreshold
-          ? headerHeight
-          : null
-        : null;
+    const newOffset = calculateNewOffset(
+      offset,
+      headerHeight,
+      disableSnap,
+      snapThreshold
+    );
 
     listRefArr.current.forEach((item) => {
       const isCurrentRoute = item.key === curRouteKey;
-      const itemOffset = listOffset.current[item.key];
+      if (isCurrentRoute) return;
 
+      const itemOffset = listOffset.current[item.key];
       if (newOffset !== null) {
-        if ((disableSnap && !isCurrentRoute) || !disableSnap) {
-          if (newOffset !== itemOffset) {
-            scrollScene({
-              ref: item.value,
-              offset: newOffset,
-              animated: isCurrentRoute,
-            });
-          }
-        }
-        if (!isCurrentRoute) {
-          listOffset.current[item.key] = newOffset;
-        }
-      } else if (
-        !isCurrentRoute &&
-        (itemOffset < headerHeight || !itemOffset)
-      ) {
+        scrollScene({
+          ref: item.value,
+          offset: newOffset,
+          animated: false,
+        });
+
+        listOffset.current[item.key] = newOffset;
+      } else if (itemOffset < headerHeight || !itemOffset) {
         scrollScene({
           ref: item.value,
           offset: headerHeight,
@@ -209,21 +196,57 @@ const CollapsibleTabView = <T extends Route>({
         });
       }
     });
+  }, [disableSnap, headerHeight, index, routeKeyProp, routes, snapThreshold]);
+
+  /**
+   * Snapping
+   */
+  React.useEffect(() => {
+    if (disableSnap || !canSnap) return;
+
+    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
+    const offset = listOffset.current[curRouteKey];
+
+    setCanSnap(false);
+
+    const newOffset = calculateNewOffset(
+      offset,
+      headerHeight,
+      disableSnap,
+      snapThreshold
+    );
+
+    if (newOffset === null) return;
+
+    const item = listRefArr.current.find((item) => item.key === curRouteKey);
+    if (!item) return;
+
+    const itemOffset = listOffset.current[curRouteKey];
+
+    if (newOffset !== itemOffset) {
+      scrollScene({
+        ref: item.value,
+        offset: newOffset,
+        animated: true,
+      });
+    }
   }, [
-    routes,
+    canSnap,
+    disableSnap,
+    headerHeight,
     index,
     routeKeyProp,
-    headerHeight,
-    disableSnap,
+    routes,
     snapThreshold,
-    canSnap,
   ]);
+
   const onMomentumScrollBegin = () => {
     isGliding.current = true;
   };
 
   const onMomentumScrollEnd = () => {
     isGliding.current = false;
+    syncScrollOffsets();
   };
 
   const onScrollBeginDrag = () => {
@@ -234,6 +257,7 @@ const CollapsibleTabView = <T extends Route>({
     isUserScrolling.current = false;
     // make sure we snap if the user keeps his finger in the same position for a while then lifts it
     activateSnapDebounced.callback();
+    syncScrollOffsets();
   };
 
   /**
@@ -367,3 +391,20 @@ const styles = StyleSheet.create({
 });
 
 export default CollapsibleTabView;
+
+function calculateNewOffset(
+  offset: number,
+  headerHeight: number,
+  disableSnap: boolean,
+  snapThreshold: number
+) {
+  return offset >= 0 && offset <= headerHeight
+    ? disableSnap
+      ? offset
+      : offset <= headerHeight * snapThreshold
+      ? 0
+      : offset > headerHeight * snapThreshold
+      ? headerHeight
+      : null
+    : null;
+}
