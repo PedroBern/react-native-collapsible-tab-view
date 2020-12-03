@@ -152,7 +152,7 @@ const CollapsibleTabView = <T extends Route>({
       const curRoute = routes[index][routeKeyProp as keyof Route] as string;
       listOffset.current[curRoute] = value;
       // ensure we activate the snapping when scrollY stops changing (handled by debouncer)
-      if (isUserScrolling.current) {
+      if (isUserScrolling.current || isGliding.current) {
         activateSnapDebounced.callback();
       }
     });
