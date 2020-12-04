@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 });
 
 export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Collapsible Tab View Minimal Demo';
+  static title = 'Minimal demo';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 

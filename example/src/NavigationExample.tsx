@@ -43,7 +43,7 @@ export default class MaterialTopTabsCollapsibleTabViewExample extends React.Comp
   Partial<CollapsibleTabViewProps<Route>>,
   State
 > {
-  static title = 'React Navigation Material Top Tabs';
+  static title = 'React Navigation Integration';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 
@@ -67,25 +67,22 @@ export default class MaterialTopTabsCollapsibleTabViewExample extends React.Comp
             options={{
               tabBarLabel: 'Article',
             }}
-          >
-            {() => <ArticleScene />}
-          </Tab.Screen>
+            component={ArticleScene}
+          />
           <Tab.Screen
             name="contacts"
             options={{
               tabBarLabel: 'Contacts',
             }}
-          >
-            {() => <ContactsScene />}
-          </Tab.Screen>
+            component={ContactsScene}
+          />
           <Tab.Screen
             name="albums"
             options={{
               tabBarLabel: 'Albums',
             }}
-          >
-            {() => <AlbumsScene />}
-          </Tab.Screen>
+            component={AlbumsScene}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     );

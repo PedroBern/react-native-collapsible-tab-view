@@ -40,7 +40,7 @@ export default class CollapsibleTabViewSmallContentExample extends React.Compone
   State
 > {
   // eslint-disable-next-line react/sort-comp
-  static title = 'Collapsible Tab View Small Content';
+  static title = 'Small content demo';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 

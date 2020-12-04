@@ -41,7 +41,7 @@ export default class CollapsibleTabViewExample extends React.Component<
   State
 > {
   // eslint-disable-next-line react/sort-comp
-  static title = 'Collapsible Tab View';
+  static title = 'Default example';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 
