@@ -74,8 +74,7 @@ export type CollapsibleScenePropsAndRef = {
    */
   ref: GetRef;
   /**
-   * Content container style with top padding with the same height
-   * as the tab bar + header height
+   * Content container style with `paddingTop` and `minHeight`.
    */
   contentContainerStyle: {
     paddingTop: number;
