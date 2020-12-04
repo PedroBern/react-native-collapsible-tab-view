@@ -110,7 +110,9 @@ const CollapsibleTabView = <T extends Route>({
   routeKeyProp = 'key',
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
-  const [headerHeight, setHeaderHeight] = React.useState(initialHeaderHeight);
+  const [headerHeight, setHeaderHeight] = React.useState(
+    Math.max(initialHeaderHeight, 0)
+  );
   const scrollY = React.useRef<Animated.Value>(animatedValue).current;
   const listRefArr = React.useRef<{ key: T['key']; value?: ScrollRef }[]>([]);
   const listOffset = React.useRef<{ [key: string]: number }>({});
@@ -232,7 +234,7 @@ const CollapsibleTabView = <T extends Route>({
       const value = event.nativeEvent.layout.height - tabBarHeight;
       if (Math.round(value * 10) / 10 !== Math.round(headerHeight * 10) / 10) {
         onHeaderHeightChange?.();
-        setHeaderHeight(value);
+        setHeaderHeight(Math.max(value, 0));
         setTranslateY(
           headerHeight === 0
             ? 0
@@ -273,7 +275,7 @@ const CollapsibleTabView = <T extends Route>({
         ]}
         onLayout={getHeaderHeight}
       >
-        {headerHeight > 0 && renderHeader()}
+        {!!headerHeight && renderHeader()}
         {customRenderTabBar ? (
           customRenderTabBar({
             ...props,
