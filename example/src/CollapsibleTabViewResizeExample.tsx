@@ -61,7 +61,7 @@ const CollapsibleTabViewExampleComponent: React.FC<object> = () => {
 };
 
 export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Collapsible Tab View Resize Height';
+  static title = 'Resizing height example';
   static backgroundColor = '#3f51b5';
   static appbarElevation = 0;
 

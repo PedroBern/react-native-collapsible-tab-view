@@ -110,20 +110,20 @@ const CollapsibleTabView = <T extends Route>({
   routeKeyProp = 'key',
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
-  const [headerHeight, setHeaderHeight] = React.useState(initialHeaderHeight);
+  const [headerHeight, setHeaderHeight] = React.useState(
+    Math.max(initialHeaderHeight, 0)
+  );
   const scrollY = React.useRef<Animated.Value>(animatedValue).current;
   const listRefArr = React.useRef<{ key: T['key']; value?: ScrollRef }[]>([]);
   const listOffset = React.useRef<{ [key: string]: number }>({});
   const isGliding = React.useRef(false);
 
   const [translateY, setTranslateY] = React.useState(
-    headerHeight === 0
-      ? 0
-      : scrollY.interpolate({
-          inputRange: [0, Math.max(headerHeight, 0)],
-          outputRange: [0, -headerHeight],
-          extrapolateRight: 'clamp',
-        })
+    scrollY.interpolate({
+      inputRange: [0, Math.max(headerHeight, 0)],
+      outputRange: [0, -headerHeight],
+      extrapolateRight: 'clamp',
+    })
   );
 
   React.useEffect(() => {
@@ -232,15 +232,13 @@ const CollapsibleTabView = <T extends Route>({
       const value = event.nativeEvent.layout.height - tabBarHeight;
       if (Math.round(value * 10) / 10 !== Math.round(headerHeight * 10) / 10) {
         onHeaderHeightChange?.();
-        setHeaderHeight(value);
+        setHeaderHeight(Math.max(value, 0));
         setTranslateY(
-          headerHeight === 0
-            ? 0
-            : scrollY.interpolate({
-                inputRange: [0, Math.max(value, 0)],
-                outputRange: [0, -value],
-                extrapolateRight: 'clamp',
-              })
+          scrollY.interpolate({
+            inputRange: [0, Math.max(value, 0)],
+            outputRange: [0, -value],
+            extrapolateRight: 'clamp',
+          })
         );
       }
     },
@@ -273,7 +271,7 @@ const CollapsibleTabView = <T extends Route>({
         ]}
         onLayout={getHeaderHeight}
       >
-        {headerHeight > 0 && renderHeader()}
+        {renderHeader()}
         {customRenderTabBar ? (
           customRenderTabBar({
             ...props,
