@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.2.0...v1.3.0) (2020-12-04)
+
+
+### Features
+
+* add content container minHeight ([a633910](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/a633910afe0b7bf08c796d1902ccaeff63a80291)), closes [#6](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/6) [#8](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/8)
+
 # [1.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.1.3...v1.2.0) (2020-12-02)
 
 ### Features
