@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.3.0...v1.3.1) (2020-12-04)
+
+
+### Bug Fixes
+
+* prevent header not showing ([534aa58](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/534aa58b13d4d5f923de794eaa85a5329ef854b9)), closes [#16](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/16)
+
 # [1.3.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.2.0...v1.3.0) (2020-12-04)
 
 
