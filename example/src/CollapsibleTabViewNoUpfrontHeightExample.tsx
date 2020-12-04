@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Animated,
-  LayoutAnimation,
-  UIManager,
-  Platform,
-} from 'react-native';
+import { StyleSheet, View, Text, Animated } from 'react-native';
 import {
   CollapsibleTabView,
   useCollapsibleScene,
@@ -18,13 +10,6 @@ type Route = {
   key: string;
   title: string;
 };
-
-if (
-  Platform.OS === 'android' &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 const SomeRoute: React.FC<{ routeKey: string; color: string }> = ({
   routeKey,
@@ -75,11 +60,6 @@ const App: React.FC<object> = () => {
       renderScene={renderScene}
       onIndexChange={handleIndexChange}
       renderHeader={renderHeader}
-      onHeaderHeightChange={() => {
-        LayoutAnimation.configureNext(
-          LayoutAnimation.create(300, 'easeIn', 'opacity')
-        );
-      }}
     />
   );
 };
