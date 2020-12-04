@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 });
 
 export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'No Upfront height example';
+  static title = 'No upfront height example';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 
