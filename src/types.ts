@@ -48,6 +48,7 @@ export type CollapsibleContext = {
   buildGetRef: (routeKey: string) => GetRef;
   headerHeight: number;
   tabBarHeight: number;
+  containerHeight: number;
   onMomentumScrollBegin: (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => void;
@@ -78,6 +79,7 @@ export type CollapsibleScenePropsAndRef = {
    */
   contentContainerStyle: {
     paddingTop: number;
+    minHeight: number;
   };
   /**
    * Needed for the loading indicator to show correctly on android.

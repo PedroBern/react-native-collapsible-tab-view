@@ -4,6 +4,7 @@ import {
   Animated,
   ViewStyle,
   LayoutChangeEvent,
+  View,
 } from 'react-native';
 import {
   TabView,
@@ -295,25 +296,36 @@ const CollapsibleTabView = <T extends Route>({
     );
   };
 
+  const [containerHeight, setContainerHeight] = React.useState<
+    number | undefined
+  >(undefined);
+
+  const onLayout = React.useCallback((e: LayoutChangeEvent) => {
+    setContainerHeight(e.nativeEvent.layout.height);
+  }, []);
+
   return (
-    <CollapsibleContextProvider
-      value={{
-        activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
-        scrollY,
-        buildGetRef,
-        headerHeight,
-        tabBarHeight,
-        onMomentumScrollBegin,
-        onScrollEndDrag,
-        onMomentumScrollEnd,
-      }}
-    >
-      <TabView
-        {...tabViewProps}
-        navigationState={{ index, routes }}
-        renderTabBar={renderTabBar}
-      />
-    </CollapsibleContextProvider>
+    <View style={styles.container} onLayout={onLayout}>
+      <CollapsibleContextProvider
+        value={{
+          activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
+          scrollY,
+          buildGetRef,
+          headerHeight,
+          tabBarHeight,
+          onMomentumScrollBegin,
+          onScrollEndDrag,
+          onMomentumScrollEnd,
+          containerHeight: containerHeight || 0,
+        }}
+      >
+        <TabView
+          {...tabViewProps}
+          navigationState={{ index, routes }}
+          renderTabBar={renderTabBar}
+        />
+      </CollapsibleContextProvider>
+    </View>
   );
 };
 
@@ -323,6 +335,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
     position: 'absolute',
     width: '100%',
+  },
+  container: {
+    flex: 1,
+    overflow: 'hidden',
   },
 });
 
