@@ -119,13 +119,11 @@ const CollapsibleTabView = <T extends Route>({
   const isGliding = React.useRef(false);
 
   const [translateY, setTranslateY] = React.useState(
-    headerHeight === 0
-      ? 0
-      : scrollY.interpolate({
-          inputRange: [0, Math.max(headerHeight, 0)],
-          outputRange: [0, -headerHeight],
-          extrapolateRight: 'clamp',
-        })
+    scrollY.interpolate({
+      inputRange: [0, Math.max(headerHeight, 0)],
+      outputRange: [0, -headerHeight],
+      extrapolateRight: 'clamp',
+    })
   );
 
   React.useEffect(() => {
@@ -236,13 +234,11 @@ const CollapsibleTabView = <T extends Route>({
         onHeaderHeightChange?.();
         setHeaderHeight(Math.max(value, 0));
         setTranslateY(
-          headerHeight === 0
-            ? 0
-            : scrollY.interpolate({
-                inputRange: [0, Math.max(value, 0)],
-                outputRange: [0, -value],
-                extrapolateRight: 'clamp',
-              })
+          scrollY.interpolate({
+            inputRange: [0, Math.max(value, 0)],
+            outputRange: [0, -value],
+            extrapolateRight: 'clamp',
+          })
         );
       }
     },
@@ -275,7 +271,7 @@ const CollapsibleTabView = <T extends Route>({
         ]}
         onLayout={getHeaderHeight}
       >
-        {!!headerHeight && renderHeader()}
+        {renderHeader()}
         {customRenderTabBar ? (
           customRenderTabBar({
             ...props,
