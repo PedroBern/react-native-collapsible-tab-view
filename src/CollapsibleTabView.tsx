@@ -188,7 +188,7 @@ const CollapsibleTabView = <T extends Route>({
       } else if (itemOffset < headerHeight || !itemOffset) {
         scrollScene({
           ref: item.value,
-          offset: offset,
+          offset: Math.min(offset, headerHeight),
           animated: false,
         });
       }
