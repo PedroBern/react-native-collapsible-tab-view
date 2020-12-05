@@ -9,7 +9,7 @@ assignees: ''
 
 <!-- Issues that don't use this template are likely to be closed. -->
 
-### Current behaviour
+### Current behavior
 
 <!-- What's currently happening? -->
 

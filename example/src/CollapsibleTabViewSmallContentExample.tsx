@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Platform,
-  Dimensions,
-  StatusBar,
-} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { SceneMap, NavigationState } from 'react-native-tab-view';
 
 import {
@@ -25,33 +18,14 @@ type Route = {
 type State = NavigationState<Route>;
 
 const HEADER_HEIGHT = 250;
-const APP_HEADER_HEIGHT = 56; // from "./App"
-
-const RN_DEVICE_HEIGHT = Dimensions.get('window').height;
-
-// Fix for android devices with noch
-const DEVICE_HEIGHT =
-  Platform.select({
-    ios: RN_DEVICE_HEIGHT,
-    android:
-      !StatusBar.currentHeight || StatusBar.currentHeight > 24
-        ? RN_DEVICE_HEIGHT
-        : RN_DEVICE_HEIGHT - StatusBar.currentHeight,
-  }) || RN_DEVICE_HEIGHT;
 
 export const AlbumsSmallScene = () => {
-  const { contentContainerStyle, ...rest } = useCollapsibleScene(
-    'albums-small'
-  );
+  const propsAndRef = useCollapsibleScene('albums-small');
 
   return (
     <AnimatedAlbums
       nCovers={2} // only two covers
-      {...rest}
-      contentContainerStyle={{
-        ...contentContainerStyle,
-        minHeight: DEVICE_HEIGHT + HEADER_HEIGHT - APP_HEADER_HEIGHT,
-      }}
+      {...propsAndRef}
     />
   );
 };
@@ -66,7 +40,7 @@ export default class CollapsibleTabViewSmallContentExample extends React.Compone
   State
 > {
   // eslint-disable-next-line react/sort-comp
-  static title = 'Collapsible Tab View Small Content';
+  static title = 'Small content demo';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 

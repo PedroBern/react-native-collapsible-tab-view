@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ViewStyle,
   Animated,
+  View,
 } from 'react-native';
 
 const COVERS = [
@@ -52,10 +53,10 @@ export const AnimatedAlbums = React.forwardRef<
     <Animated.ScrollView
       ref={ref}
       style={styles.container}
-      contentContainerStyle={[styles.content, contentContainerStyle]}
+      contentContainerStyle={contentContainerStyle}
       {...rest}
     >
-      {albumsContent(nCovers)}
+      <View style={styles.content}>{albumsContent(nCovers)}</View>
     </Animated.ScrollView>
   );
 });

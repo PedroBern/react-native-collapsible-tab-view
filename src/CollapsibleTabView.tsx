@@ -4,6 +4,7 @@ import {
   Animated,
   ViewStyle,
   LayoutChangeEvent,
+  View,
 } from 'react-native';
 import {
   TabView,
@@ -115,7 +116,9 @@ const CollapsibleTabView = <T extends Route>({
   routeKeyProp = 'key',
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
-  const [headerHeight, setHeaderHeight] = React.useState(initialHeaderHeight);
+  const [headerHeight, setHeaderHeight] = React.useState(
+    Math.max(initialHeaderHeight, 0)
+  );
   const scrollY = React.useRef(animatedValue);
   const listRefArr = React.useRef<{ key: T['key']; value?: ScrollRef }[]>([]);
   const listOffset = React.useRef<{ [key: string]: number }>({});
@@ -137,13 +140,11 @@ const CollapsibleTabView = <T extends Route>({
   );
 
   const [translateY, setTranslateY] = React.useState(
-    headerHeight === 0
-      ? 0
-      : scrollY.current.interpolate({
-          inputRange: [0, Math.max(headerHeight, 0)],
-          outputRange: [0, -headerHeight],
-          extrapolateRight: 'clamp',
-        })
+    scrollY.current.interpolate({
+      inputRange: [0, Math.max(headerHeight, 0)],
+      outputRange: [0, -headerHeight],
+      extrapolateRight: 'clamp',
+    })
   );
 
   React.useEffect(() => {
@@ -294,15 +295,13 @@ const CollapsibleTabView = <T extends Route>({
       const value = event.nativeEvent.layout.height - tabBarHeight;
       if (Math.round(value * 10) / 10 !== Math.round(headerHeight * 10) / 10) {
         onHeaderHeightChange?.();
-        setHeaderHeight(value);
+        setHeaderHeight(Math.max(value, 0));
         setTranslateY(
-          headerHeight === 0
-            ? 0
-            : scrollY.current.interpolate({
-                inputRange: [0, Math.max(value, 0)],
-                outputRange: [0, -value],
-                extrapolateRight: 'clamp',
-              })
+          scrollY.current.interpolate({
+            inputRange: [0, Math.max(value, 0)],
+            outputRange: [0, -value],
+            extrapolateRight: 'clamp',
+          })
         );
       }
     },
@@ -335,7 +334,7 @@ const CollapsibleTabView = <T extends Route>({
         ]}
         onLayout={getHeaderHeight}
       >
-        {headerHeight > 0 && renderHeader()}
+        {renderHeader()}
         {customRenderTabBar ? (
           customRenderTabBar({
             ...props,
@@ -358,26 +357,37 @@ const CollapsibleTabView = <T extends Route>({
     );
   };
 
+  const [containerHeight, setContainerHeight] = React.useState<
+    number | undefined
+  >(undefined);
+
+  const onLayout = React.useCallback((e: LayoutChangeEvent) => {
+    setContainerHeight(e.nativeEvent.layout.height);
+  }, []);
+
   return (
-    <CollapsibleContextProvider
-      value={{
-        activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
-        scrollY: scrollY.current,
-        buildGetRef,
-        headerHeight,
-        tabBarHeight,
-        onMomentumScrollBegin,
-        onScrollBeginDrag,
-        onScrollEndDrag,
-        onMomentumScrollEnd,
-      }}
-    >
-      <TabView
-        {...tabViewProps}
-        navigationState={{ index, routes }}
-        renderTabBar={renderTabBar}
-      />
-    </CollapsibleContextProvider>
+    <View style={styles.container} onLayout={onLayout}>
+      <CollapsibleContextProvider
+        value={{
+          activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
+          scrollY: scrollY.current,
+          buildGetRef,
+          headerHeight,
+          tabBarHeight,
+          onMomentumScrollBegin,
+          onScrollBeginDrag,
+          onScrollEndDrag,
+          onMomentumScrollEnd,
+          containerHeight: containerHeight || 0,
+        }}
+      >
+        <TabView
+          {...tabViewProps}
+          navigationState={{ index, routes }}
+          renderTabBar={renderTabBar}
+        />
+      </CollapsibleContextProvider>
+    </View>
   );
 };
 
@@ -387,6 +397,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
     position: 'absolute',
     width: '100%',
+  },
+  container: {
+    flex: 1,
+    overflow: 'hidden',
   },
 });
 

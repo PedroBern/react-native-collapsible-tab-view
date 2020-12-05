@@ -36,6 +36,7 @@ const useCollapsibleScene = <T extends Route>(
     buildGetRef,
     headerHeight,
     tabBarHeight,
+    containerHeight,
     ...rest
   } = context;
 
@@ -53,6 +54,7 @@ const useCollapsibleScene = <T extends Route>(
     ref: buildGetRef(routeKey),
     contentContainerStyle: {
       paddingTop: headerHeight + tabBarHeight,
+      minHeight: containerHeight + headerHeight,
     },
     progressViewOffset: headerHeight + tabBarHeight,
     ...rest,
