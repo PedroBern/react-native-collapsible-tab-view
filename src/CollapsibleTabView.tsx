@@ -147,7 +147,7 @@ const CollapsibleTabView = <T extends Route>({
     })
   );
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const currY = scrollY.current;
     currY.addListener(({ value }) => {
       const curRoute = routes[index][routeKeyProp as keyof Route] as string;
@@ -180,15 +180,15 @@ const CollapsibleTabView = <T extends Route>({
       if (newOffset !== null) {
         scrollScene({
           ref: item.value,
-          offset: newOffset,
+          offset,
           animated: false,
         });
 
-        listOffset.current[item.key] = newOffset;
+        listOffset.current[item.key] = offset;
       } else if (itemOffset < headerHeight || !itemOffset) {
         scrollScene({
           ref: item.value,
-          offset: headerHeight,
+          offset: offset,
           animated: false,
         });
       }
@@ -198,7 +198,7 @@ const CollapsibleTabView = <T extends Route>({
   /**
    * Snapping
    */
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (disableSnap || !canSnap) return;
 
     const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
@@ -213,16 +213,14 @@ const CollapsibleTabView = <T extends Route>({
       snapThreshold
     );
 
-    if (newOffset === null) return;
-
-    const item = listRefArr.current.find((item) => item.key === curRouteKey);
-    if (!item) return;
-
     if (newOffset !== null && newOffset !== offset) {
-      scrollScene({
-        ref: item.value,
-        offset: newOffset,
-        animated: true,
+      listRefArr.current.forEach((item) => {
+        // scroll everything because we could be moving to a new tab
+        scrollScene({
+          ref: item.value,
+          offset: newOffset,
+          animated: true,
+        });
       });
     }
   }, [
