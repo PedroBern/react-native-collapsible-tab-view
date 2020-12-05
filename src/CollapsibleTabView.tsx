@@ -152,10 +152,6 @@ const CollapsibleTabView = <T extends Route>({
     currY.addListener(({ value }) => {
       const curRoute = routes[index][routeKeyProp as keyof Route] as string;
       listOffset.current[curRoute] = value;
-      // ensure we activate the snapping when scrollY stops changing (handled by debouncer)
-      if (isUserScrolling.current || isGliding.current) {
-        activateSnapDebounced.callback();
-      }
     });
     return () => {
       currY.removeAllListeners();
@@ -222,9 +218,7 @@ const CollapsibleTabView = <T extends Route>({
     const item = listRefArr.current.find((item) => item.key === curRouteKey);
     if (!item) return;
 
-    const itemOffset = listOffset.current[curRouteKey];
-
-    if (newOffset !== itemOffset) {
+    if (newOffset !== null && newOffset !== offset) {
       scrollScene({
         ref: item.value,
         offset: newOffset,
@@ -241,23 +235,56 @@ const CollapsibleTabView = <T extends Route>({
     snapThreshold,
   ]);
 
+  const maybeSnap = React.useCallback(() => {
+    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
+
+    const offset = listOffset.current[curRouteKey];
+
+    const newOffset = calculateNewOffset(
+      offset,
+      headerHeight,
+      disableSnap,
+      snapThreshold
+    );
+
+    // only snap if the current offset is different
+    if (newOffset !== null && offset !== newOffset) {
+      activateSnapDebounced.callback();
+    }
+  }, [
+    activateSnapDebounced,
+    disableSnap,
+    headerHeight,
+    index,
+    routeKeyProp,
+    routes,
+    snapThreshold,
+  ]);
+
+  const cancelSnap = React.useCallback(() => {
+    activateSnapDebounced.cancel();
+  }, [activateSnapDebounced]);
+
   const onMomentumScrollBegin = () => {
     isGliding.current = true;
+    cancelSnap();
   };
 
   const onMomentumScrollEnd = () => {
     isGliding.current = false;
+    maybeSnap();
     syncScrollOffsets();
   };
 
   const onScrollBeginDrag = () => {
     isUserScrolling.current = true;
+    cancelSnap();
   };
 
   const onScrollEndDrag = () => {
     isUserScrolling.current = false;
     // make sure we snap if the user keeps his finger in the same position for a while then lifts it
-    activateSnapDebounced.callback();
+    maybeSnap();
     syncScrollOffsets();
   };
 
