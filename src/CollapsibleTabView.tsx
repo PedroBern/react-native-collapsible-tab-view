@@ -112,7 +112,7 @@ const CollapsibleTabView = <T extends Route>({
   renderTabBar: customRenderTabBar,
   onHeaderHeightChange,
   snapThreshold = 0.5,
-  snapTimeout = 100,
+  snapTimeout = 250,
   routeKeyProp = 'key',
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
@@ -124,18 +124,23 @@ const CollapsibleTabView = <T extends Route>({
   const listOffset = React.useRef<{ [key: string]: number }>({});
   const isGliding = React.useRef(false);
   /** Used to keep track if the user is actively scrolling */
-  const isUserScrolling = React.useRef(false);
+  const isUserInteracting = React.useRef(false);
+  const lastInteractionTime = React.useRef(0);
 
   const [canSnap, setCanSnap] = React.useState(false);
 
   const activateSnapDebounced = useDebouncedCallback(
     () => {
+      const lastInteractedAgo = Date.now() - lastInteractionTime.current;
       // make sure the user is not currently still scrolling
-      if (!isUserScrolling.current) {
+      if (!isUserInteracting.current && lastInteractedAgo > snapTimeout) {
         setCanSnap(true);
+      } else {
+        // re-enter until we have no interactions in the past `snapTimeout`
+        activateSnapDebounced.callback();
       }
     },
-    snapTimeout,
+    16, // check about once per frame
     { trailing: true, leading: false }
   );
 
@@ -152,6 +157,7 @@ const CollapsibleTabView = <T extends Route>({
     currY.addListener(({ value }) => {
       const curRoute = routes[index][routeKeyProp as keyof Route] as string;
       listOffset.current[curRoute] = value;
+      lastInteractionTime.current = Date.now();
     });
     return () => {
       currY.removeAllListeners();
@@ -247,6 +253,7 @@ const CollapsibleTabView = <T extends Route>({
 
     // only snap if the current offset is different
     if (newOffset !== null && offset !== newOffset) {
+      lastInteractionTime.current = Date.now();
       activateSnapDebounced.callback();
     }
   }, [
@@ -259,13 +266,8 @@ const CollapsibleTabView = <T extends Route>({
     snapThreshold,
   ]);
 
-  const cancelSnap = React.useCallback(() => {
-    activateSnapDebounced.cancel();
-  }, [activateSnapDebounced]);
-
   const onMomentumScrollBegin = () => {
     isGliding.current = true;
-    cancelSnap();
   };
 
   const onMomentumScrollEnd = () => {
@@ -275,12 +277,13 @@ const CollapsibleTabView = <T extends Route>({
   };
 
   const onScrollBeginDrag = () => {
-    isUserScrolling.current = true;
-    cancelSnap();
+    isUserInteracting.current = true;
+    lastInteractionTime.current = Date.now();
   };
 
   const onScrollEndDrag = () => {
-    isUserScrolling.current = false;
+    isUserInteracting.current = false;
+    lastInteractionTime.current = Date.now();
     // make sure we snap if the user keeps his finger in the same position for a while then lifts it
     maybeSnap();
     syncScrollOffsets();
@@ -390,8 +393,24 @@ const CollapsibleTabView = <T extends Route>({
     setContainerHeight(e.nativeEvent.layout.height);
   }, []);
 
+  const onTouchStart = React.useCallback(() => {
+    lastInteractionTime.current = Date.now();
+    isUserInteracting.current = true;
+  }, []);
+
+  const onTouchEnd = React.useCallback(() => {
+    lastInteractionTime.current = Date.now();
+    isUserInteracting.current = false;
+  }, []);
+
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View
+      style={styles.container}
+      onLayout={onLayout}
+      onTouchStart={onTouchStart}
+      onTouchCancel={onTouchEnd}
+      onTouchEnd={onTouchEnd}
+    >
       <CollapsibleContextProvider
         value={{
           activeRouteKey: routes[index][routeKeyProp as keyof Route] as string,
