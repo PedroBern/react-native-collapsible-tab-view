@@ -165,7 +165,7 @@ const CollapsibleTabView = <T extends Route>({
   }, [routes, index, routeKeyProp, activateSnapDebounced]);
 
   /**
-   * Sync the scroll of unfocused routes to the current focused route,
+   * Sync the scroll of unfocused routes to the current focused route.
    */
   const syncScrollOffsets = React.useCallback(() => {
     const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
@@ -341,8 +341,7 @@ const CollapsibleTabView = <T extends Route>({
    * Wraps the tab bar with `Animated.View` to
    * control the translateY property.
    *
-   * Render the header with `renderHeader` prop if
-   * the header height is greater than 0.
+   * Render the header with `renderHeader` prop.
    *
    * Render the default `<TabBar />` with additional
    * `tabBarProps`, or a custom tab bar from the
