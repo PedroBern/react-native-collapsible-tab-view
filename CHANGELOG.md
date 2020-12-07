@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.3.1...v1.4.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* prevent iOS infinite loop([e1d9db2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/e1d9db2ebfbfc8984e998ce676b47c9681f1bfe3))
+
+
+### Features
+
+* add `snapTimeout` ([3c476ca](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/3c476ca9635d86ecd1d3beb7174ec60f127e6f7e))
+
 ## [1.3.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.3.0...v1.3.1) (2020-12-04)
 
 
