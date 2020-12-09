@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.4.0...v1.4.1) (2020-12-09)
+
+### Code Refactoring
+
+* export createContext helper ([24a1185](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/24a1185b26ada7185a20864d87580d58a729b97b))
+
 # [1.4.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.3.1...v1.4.0) (2020-12-07)
 
 
