@@ -22,6 +22,7 @@ import CollapsibleTabViewSmallContentExample from './CollapsibleTabViewSmallCont
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
 import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
+import CollapsibleTabViewCenteredEmptyListExample from './CollapsibleTabViewCenteredEmptyListExample';
 import MaterialTopTabsCollapsibleTabViewDemoExample from './NavigationExample';
 import CollapsibleTabViewNoUpfrontHeightExample from './CollapsibleTabViewNoUpfrontHeightExample';
 
@@ -53,6 +54,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewSmallContentExample,
   CollapsibleTabViewNoUpfrontHeightExample,
   MaterialTopTabsCollapsibleTabViewDemoExample,
+  CollapsibleTabViewCenteredEmptyListExample,
 ];
 
 const KeepAwake = () => {

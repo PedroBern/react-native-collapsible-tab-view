@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { CollapsibleScenePropsAndRef } from 'react-native-collapsible-tab-view';
+import {
+  CollapsibleScenePropsAndRef,
+  useCollapsibleScene,
+} from 'react-native-collapsible-tab-view';
 import useRefresh from './useRefresh';
+import { useAnimatedValueContext } from './AnimatedContext';
 
 type Item = { name: string; number: number };
 
@@ -98,22 +102,57 @@ export default class Contacts extends React.Component {
   }
 }
 
+const ListEmptyComponent = () => {
+  const animatedValue = useAnimatedValueContext();
+  const {
+    contentContainerStyle: { paddingTop },
+  } = useCollapsibleScene('contacts');
+
+  const [translateY] = React.useState(
+    animatedValue.interpolate({
+      inputRange: [0, paddingTop - 49], // 49 is the default tabBar height, use your value here
+      outputRange: [-(paddingTop - 49) / 2, 0],
+      extrapolateRight: 'clamp',
+    })
+  );
+
+  return (
+    <Animated.View
+      style={{
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+        transform: [{ translateY }],
+        borderColor: 'black',
+        borderWidth: 10,
+      }}
+    >
+      <Text>Centered Empty List!</Text>
+    </Animated.View>
+  );
+};
+
 // used in Collapsible TabView examples
 export const AnimatedContacts = React.forwardRef<
   any,
-  React.PropsWithoutRef<CollapsibleScenePropsAndRef>
->((props, ref) => {
+  React.PropsWithoutRef<CollapsibleScenePropsAndRef> & { data?: Item[] }
+>(({ data = CONTACTS, ...props }, ref) => {
   const [isRefreshing, startRefreshing] = useRefresh();
 
   return (
     <Animated.FlatList
       ref={ref}
-      data={CONTACTS}
+      data={data}
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
       refreshing={isRefreshing}
       onRefresh={startRefreshing}
+      // add the empty component only if there is no data,
+      // otherwise it will break, because the ListEmptyComponent
+      // needs to be inside the context, and the context
+      // is used only in the EmptyListExample
+      ListEmptyComponent={data.length === 0 ? ListEmptyComponent : undefined}
       {...props}
     />
   );
