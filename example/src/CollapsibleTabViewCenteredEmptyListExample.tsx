@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Animated } from 'react-native';
 import { SceneMap } from 'react-native-tab-view';
 
 import {
   CollapsibleTabView,
   useCollapsibleScene,
-  CollapsibleTabViewProps,
 } from 'react-native-collapsible-tab-view';
+
+import { AnimatedValueContextProvider } from './Shared/AnimatedContext';
 
 import { AnimatedAlbums } from './Shared/Albums';
 import { AnimatedArticle } from './Shared/Article';
@@ -19,7 +20,7 @@ type Route = {
 
 export const ContactsScene = () => {
   const scenePropsAndRef = useCollapsibleScene('contacts');
-  return <AnimatedContacts {...scenePropsAndRef} />;
+  return <AnimatedContacts {...scenePropsAndRef} data={[]} />;
 };
 
 export const ArticleScene = () => {
@@ -46,13 +47,11 @@ const renderScene = SceneMap({
   article: ArticleScene,
 });
 
-const App: React.FC<Partial<Partial<CollapsibleTabViewProps<Route>>>> = (
-  props
-) => {
+const App: React.FC<object> = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
-    { key: 'article', title: 'Article' },
     { key: 'contacts', title: 'Contacts' },
+    { key: 'article', title: 'Article' },
     { key: 'albums', title: 'Albums' },
   ]);
 
@@ -60,20 +59,24 @@ const App: React.FC<Partial<Partial<CollapsibleTabViewProps<Route>>>> = (
     setIndex(index);
   };
 
+  const [animatedValue] = React.useState(new Animated.Value(0));
+
   return (
-    <CollapsibleTabView<Route>
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={handleIndexChange}
-      renderHeader={renderHeader}
-      headerHeight={HEADER_HEIGHT}
-      {...props}
-    />
+    <AnimatedValueContextProvider value={animatedValue}>
+      <CollapsibleTabView<Route>
+        animatedValue={animatedValue}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={handleIndexChange}
+        renderHeader={renderHeader}
+        headerHeight={HEADER_HEIGHT}
+      />
+    </AnimatedValueContextProvider>
   );
 };
 
 export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Default example';
+  static title = 'Centered empty list example';
   static backgroundColor = '#2196f3';
   static appbarElevation = 0;
 
