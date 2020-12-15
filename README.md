@@ -68,9 +68,7 @@ If not using expo, [follow these instructions](https://github.com/satya164/react
 
 #### React Navigation Integration
 
-> You can ignore this step if not using react-navigation
-
-If you want to integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
+To integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
 
 ```sh
 yarn add @react-navigation/native @react-navigation/material-top-tabs
