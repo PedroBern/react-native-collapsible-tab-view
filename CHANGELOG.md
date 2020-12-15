@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.4.1...v1.4.2) (2020-12-15)
+
+
+### Bug Fixes
+
+* **deps:** remove peerDependenciesMeta field ([a681d0a](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/a681d0ae6f55fafe43e08f12d8e9af0165f714cc))
+
 ## [1.4.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.4.0...v1.4.1) (2020-12-09)
 
 ### Code Refactoring
