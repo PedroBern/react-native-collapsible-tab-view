@@ -41,7 +41,7 @@ A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-n
 
 #### From this package
 
-- Integration with [react-navigation](https://github.com/react-navigation/react-navigation) - **optional**
+- Integration with [react-navigation](https://github.com/react-navigation/react-navigation)
 - Collapsible Tabs
 
 ## Installation
