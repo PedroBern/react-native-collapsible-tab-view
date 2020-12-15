@@ -66,7 +66,9 @@ expo install react-native-gesture-handler react-native-reanimated
 
 If not using expo, [follow these instructions](https://github.com/satya164/react-native-tab-view#installation).
 
-#### React Navigation Integration - **Optional**
+#### React Navigation Integration
+
+> You can ignore this step if not using react-navigation
 
 If you want to integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
 
