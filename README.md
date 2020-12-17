@@ -39,17 +39,23 @@ A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-n
 - Highly customizable
 - Fully typed with [TypeScript](https://typescriptlang.org)
 
-#### From this package
+#### From this repo
 
 - Integration with [react-navigation](https://github.com/react-navigation/react-navigation)
 - Collapsible Tabs
 
 ## Installation
 
-Open a Terminal in the project root and run:
+To use without [react-navigation](https://github.com/react-navigation/react-navigation), just run the following:
 
 ```sh
 yarn add react-native-collapsible-tab-view
+```
+
+To integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
+
+```sh
+yarn add react-native-collapsible-tab-view-navigation
 ```
 
 Now add `react-native-tab-view` and all it's peer dependencies:
@@ -65,14 +71,6 @@ expo install react-native-gesture-handler react-native-reanimated
 ```
 
 If not using expo, [follow these instructions](https://github.com/satya164/react-native-tab-view#installation).
-
-#### React Navigation Integration
-
-To integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
-
-```sh
-yarn add @react-navigation/native @react-navigation/material-top-tabs
-```
 
 ## Quick Start
 
@@ -166,7 +164,7 @@ const styles = StyleSheet.create({
 
 ## API reference
 
-The package has 3 main exports:
+This repo has 2 packages with 3 main exports.
 
 | export                                                                                | description                                                                                                                            |
 | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -248,6 +246,8 @@ It includes de following values:
 ### `createMaterialCollapsibleTopTabNavigator`
 
 Same API as the [createMaterialTopTabNavigator (not-collapsible)](https://reactnavigation.org/docs/material-top-tab-navigator#props), with aditional `collapsibleOptions` prop, extending all props of [CollapsibleTabView](#collapsibletabview).
+
+Import from `react-native-collapsible-tab-view-navigation`.
 
 ## Contributing
 

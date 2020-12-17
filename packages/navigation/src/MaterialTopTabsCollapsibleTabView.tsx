@@ -6,9 +6,10 @@ import {
   useTheme,
 } from '@react-navigation/native';
 
-import CollapsibleTabView, {
-  Props as CollapsibleTabViewProps,
-} from './CollapsibleTabView';
+import {
+  CollapsibleTabView,
+  CollapsibleTabViewProps,
+} from 'react-native-collapsible-tab-view';
 import {
   MaterialTopTabBarProps,
   MaterialTopTabBar,

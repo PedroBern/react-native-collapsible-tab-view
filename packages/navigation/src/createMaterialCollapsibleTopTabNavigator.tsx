@@ -13,7 +13,7 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationOptions,
 } from '@react-navigation/material-top-tabs';
-import { Props as CollapsibleTabViewProps } from './CollapsibleTabView';
+import { CollapsibleTabViewProps } from 'react-native-collapsible-tab-view';
 
 // copied from @react-navigation/material-top-tabs because it's not exported
 type MaterialTopTabNavigationEventMap = {

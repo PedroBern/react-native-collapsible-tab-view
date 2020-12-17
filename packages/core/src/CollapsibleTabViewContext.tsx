@@ -10,11 +10,16 @@ type CreateCtx<A> = readonly [
 // https://github.com/dooboolab/expo-relay-boilerplate/blob/master/src/utils/createCtx.ts
 // create context with no upfront defaultValue
 // without having to do undefined check all the time
-function createContext<A>(): CreateCtx<A> {
+function createContext<A>(errorMessage?: string): CreateCtx<A> {
   const ctx = React.createContext<A | undefined>(undefined);
   function useCtx(): A {
     const c = React.useContext(ctx);
-    if (!c) throw new Error('useCtx must be inside a Provider with a value');
+    if (!c)
+      throw new Error(
+        errorMessage
+          ? errorMessage
+          : 'useCollapsibleContext must be inside a CollapsibleContextProvider'
+      );
     return c;
   }
   // make TypeScript infer a tuple, not an array of union types
