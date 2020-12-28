@@ -11,6 +11,7 @@ import {
 import CollapsibleTabView, {
   HEADER_HEIGHT as INITIAL_HEADER_HEIGHT,
 } from './CollapsibleTabViewExample';
+import { ExampleComponentType } from './types';
 
 if (
   Platform.OS === 'android' &&
@@ -35,7 +36,7 @@ const Header: React.FC<{ height: number; onPress: () => void }> = ({
 const configureNextLayoutAnimation = () =>
   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
-const CollapsibleTabViewExampleComponent: React.FC<object> = () => {
+const CollapsibleTabViewExample: ExampleComponentType = () => {
   const [height, setHeight] = React.useState(INITIAL_HEADER_HEIGHT);
 
   const renderHeader = () => (
@@ -60,16 +61,6 @@ const CollapsibleTabViewExampleComponent: React.FC<object> = () => {
   );
 };
 
-export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Resizing height example';
-  static backgroundColor = '#3f51b5';
-  static appbarElevation = 0;
-
-  render() {
-    return <CollapsibleTabViewExampleComponent />;
-  }
-}
-
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#2196f3',
@@ -82,3 +73,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
 });
+
+CollapsibleTabViewExample.title = 'Resizing height example';
+CollapsibleTabViewExample.backgroundColor = '#3f51b5';
+CollapsibleTabViewExample.appbarElevation = 0;
+
+export default CollapsibleTabViewExample;

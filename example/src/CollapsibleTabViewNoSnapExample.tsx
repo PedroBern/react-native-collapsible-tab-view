@@ -1,12 +1,13 @@
 import React from 'react';
 import CollapsibleTabView from './CollapsibleTabViewExample';
+import { ExampleComponentType } from './types';
 
-export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Without snapping';
-  static backgroundColor = '#3f51b5';
-  static appbarElevation = 0;
+const CollapsibleTabViewExample: ExampleComponentType = () => {
+  return <CollapsibleTabView disableSnap />;
+};
 
-  render() {
-    return <CollapsibleTabView disableSnap />;
-  }
-}
+CollapsibleTabViewExample.title = 'Without snapping';
+CollapsibleTabViewExample.backgroundColor = '#3f51b5';
+CollapsibleTabViewExample.appbarElevation = 0;
+
+export default CollapsibleTabViewExample;

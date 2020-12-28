@@ -25,19 +25,12 @@ import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
 import CollapsibleTabViewCenteredEmptyListExample from './CollapsibleTabViewCenteredEmptyListExample';
 import MaterialTopTabsCollapsibleTabViewDemoExample from './NavigationExample';
 import CollapsibleTabViewNoUpfrontHeightExample from './CollapsibleTabViewNoUpfrontHeightExample';
+import { ExampleComponentType } from './types';
 
 type State = {
   title: string;
   index: number;
   restoring: boolean;
-};
-
-type ExampleComponentType = React.ComponentType<{}> & {
-  title: string;
-  tintColor?: string;
-  backgroundColor?: string;
-  statusBarStyle?: 'light-content' | 'dark-content';
-  appbarElevation?: number;
 };
 
 I18nManager.forceRTL(false);
