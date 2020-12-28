@@ -6,6 +6,7 @@ import {
   LayoutChangeEvent,
   PanResponder,
   View,
+  PanResponderInstance,
 } from 'react-native';
 import {
   TabView,
@@ -94,6 +95,10 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * Default is 'key'
      */
     routeKeyProp?: keyof T;
+    /**
+     * Allow scroll when from the header. Default is false.
+     */
+    enableScrollOnHeader?: boolean;
   };
 
 /**
@@ -115,6 +120,7 @@ const CollapsibleTabView = <T extends Route>({
   snapThreshold = 0.5,
   snapTimeout = 250,
   routeKeyProp = 'key',
+  enableScrollOnHeader = false,
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(
@@ -129,6 +135,7 @@ const CollapsibleTabView = <T extends Route>({
   const lastInteractionTime = React.useRef(0);
 
   const [canSnap, setCanSnap] = React.useState(false);
+  const panOffset = React.useRef(0);
 
   const activateSnapDebounced = useDebouncedCallback(
     () => {
@@ -339,36 +346,66 @@ const CollapsibleTabView = <T extends Route>({
     [headerHeight, onHeaderHeightChange, scrollY, tabBarHeight]
   );
 
-  const panResponder = React.useRef(
-    PanResponder.create({
-      onPanResponderRelease: () => {
-        isGliding.current = false;
-        lastInteractionTime.current = Date.now();
-        syncScrollOffsets(true);
-        maybeSnap();
-      },
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (_, gs) => {
-        isUserInteracting.current = true;
-        lastInteractionTime.current = Date.now();
+  const [
+    panResponder,
+    setPanResponser,
+  ] = React.useState<PanResponderInstance | null>();
 
-        const curRouteKey = routes[index][
-          routeKeyProp as keyof Route
-        ] as string;
-
-        listRefArr.current.forEach((item) => {
-          const isCurrentRoute = item.key === curRouteKey;
-          if (isCurrentRoute) {
-            scrollScene({
-              ref: item.value,
-              offset: -gs.dy,
-              animated: false,
-            });
-          }
-        });
-      },
-    })
-  ).current;
+  /**
+   * Update the panResponder. We use React.useState instead of
+   * React.useRef to handle the panResponder to force the renderTabBar
+   * to rerender, otherwise it would need a swipe in the scrollable
+   * component to rerender the header with the new panResponder after
+   * index change.
+   */
+  React.useLayoutEffect(() => {
+    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
+    setPanResponser(
+      PanResponder.create({
+        onPanResponderGrant: () => {
+          panOffset.current =
+            calculateNewOffset(
+              listOffset.current[curRouteKey] || 0,
+              headerHeight,
+              disableSnap,
+              snapThreshold
+            ) || 0;
+        },
+        onPanResponderRelease: () => {
+          lastInteractionTime.current = Date.now();
+          isUserInteracting.current = false;
+          isGliding.current = false;
+          syncScrollOffsets(true);
+          maybeSnap();
+        },
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (_, gs) => {
+          lastInteractionTime.current = Date.now();
+          isUserInteracting.current = true;
+          isGliding.current = true;
+          listRefArr.current.forEach((item) => {
+            const isCurrentRoute = item.key === curRouteKey;
+            if (isCurrentRoute) {
+              scrollScene({
+                ref: item.value,
+                offset: panOffset.current + -gs.dy,
+                animated: false,
+              });
+            }
+          });
+        },
+      })
+    );
+  }, [
+    disableSnap,
+    headerHeight,
+    index,
+    maybeSnap,
+    routeKeyProp,
+    routes,
+    snapThreshold,
+    syncScrollOffsets,
+  ]);
 
   /**
    *
@@ -394,12 +431,10 @@ const CollapsibleTabView = <T extends Route>({
           headerContainerStyle,
         ]}
         onLayout={getHeaderHeight}
-        onTouchStart={onTouchStart}
-        onTouchCancel={onTouchEnd}
-        onTouchEnd={onTouchEnd}
-        {...panResponder.panHandlers}
       >
-        {renderHeader()}
+        <View {...(enableScrollOnHeader ? panResponder?.panHandlers : {})}>
+          {renderHeader()}
+        </View>
         {customRenderTabBar ? (
           customRenderTabBar({
             ...props,

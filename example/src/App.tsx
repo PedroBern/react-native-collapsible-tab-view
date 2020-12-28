@@ -8,7 +8,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  YellowBox,
   I18nManager,
 } from 'react-native';
 import { registerRootComponent } from 'expo';
@@ -18,6 +17,7 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-community/async-storage';
 import CollapsibleTabViewExample from './CollapsibleTabViewExample';
+import CollapsibleTabViewScrollOnHeaderExample from './CollapsibleTabViewScrollOnHeaderExample';
 import CollapsibleTabViewSmallContentExample from './CollapsibleTabViewSmallContentExample';
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
@@ -35,8 +35,6 @@ type State = {
 
 I18nManager.forceRTL(false);
 
-YellowBox.ignoreWarnings(['bind():']);
-
 const PERSISTENCE_KEY = 'index_persistence';
 
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
@@ -48,6 +46,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewNoUpfrontHeightExample,
   MaterialTopTabsCollapsibleTabViewDemoExample,
   CollapsibleTabViewCenteredEmptyListExample,
+  CollapsibleTabViewScrollOnHeaderExample,
 ];
 
 const KeepAwake = () => {
