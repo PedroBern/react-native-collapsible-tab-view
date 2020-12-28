@@ -12,6 +12,7 @@ import { AnimatedValueContextProvider } from './Shared/AnimatedContext';
 import { AnimatedAlbums } from './Shared/Albums';
 import { AnimatedArticle } from './Shared/Article';
 import { AnimatedContacts } from './Shared/Contacts';
+import { ExampleComponentType } from './types';
 
 type Route = {
   key: string;
@@ -47,7 +48,7 @@ const renderScene = SceneMap({
   article: ArticleScene,
 });
 
-const App: React.FC<object> = () => {
+const CollapsibleTabViewExample: ExampleComponentType = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
     { key: 'contacts', title: 'Contacts' },
@@ -75,15 +76,11 @@ const App: React.FC<object> = () => {
   );
 };
 
-export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Centered empty list example';
-  static backgroundColor = '#2196f3';
-  static appbarElevation = 0;
+CollapsibleTabViewExample.title = 'Centered empty list example';
+CollapsibleTabViewExample.backgroundColor = '#2196f3';
+CollapsibleTabViewExample.appbarElevation = 0;
 
-  render() {
-    return <App />;
-  }
-}
+export default CollapsibleTabViewExample;
 
 const styles = StyleSheet.create({
   header: {

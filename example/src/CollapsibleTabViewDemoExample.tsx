@@ -5,6 +5,7 @@ import {
   useCollapsibleScene,
 } from 'react-native-collapsible-tab-view';
 import { SceneMap } from 'react-native-tab-view';
+import { ExampleComponentType } from './types';
 
 type Route = {
   key: string;
@@ -43,7 +44,7 @@ const renderScene = SceneMap({
   second: SecondScene,
 });
 
-const App: React.FC<object> = () => {
+const CollapsibleTabViewExample: ExampleComponentType = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
     { key: 'first', title: 'First' },
@@ -82,12 +83,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class CollapsibleTabViewExample extends React.Component<{}, {}> {
-  static title = 'Minimal demo';
-  static backgroundColor = '#2196f3';
-  static appbarElevation = 0;
+CollapsibleTabViewExample.title = 'Minimal demo';
+CollapsibleTabViewExample.backgroundColor = '#2196f3';
+CollapsibleTabViewExample.appbarElevation = 0;
 
-  render() {
-    return <App />;
-  }
-}
+export default CollapsibleTabViewExample;

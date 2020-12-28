@@ -1,21 +1,19 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { SceneMap, NavigationState } from 'react-native-tab-view';
+import { SceneMap } from 'react-native-tab-view';
 
 import {
   CollapsibleTabView,
   useCollapsibleScene,
-  CollapsibleTabViewProps,
 } from 'react-native-collapsible-tab-view';
 
 import { AnimatedAlbums } from './Shared/Albums';
+import { ExampleComponentType } from './types';
 
 type Route = {
   key: string;
   title: string;
 };
-
-type State = NavigationState<Route>;
 
 const HEADER_HEIGHT = 250;
 
@@ -35,52 +33,39 @@ export const AlbumsLargeScene = () => {
   return <AnimatedAlbums {...scenePropsAndRef} />;
 };
 
-export default class CollapsibleTabViewSmallContentExample extends React.Component<
-  Partial<CollapsibleTabViewProps<Route>>,
-  State
-> {
-  // eslint-disable-next-line react/sort-comp
-  static title = 'Small content demo';
-  static backgroundColor = '#2196f3';
-  static appbarElevation = 0;
+const renderHeader = () => (
+  <View style={styles.header}>
+    <Text style={styles.headerText}>COLLAPSIBLE</Text>
+  </View>
+);
 
-  state = {
-    index: 0,
-    routes: [
-      { key: 'albums-small', title: 'Small' },
-      { key: 'albums-large', title: 'Large' },
-    ],
+const renderScene = SceneMap({
+  'albums-small': AlbumsSmallScene,
+  'albums-large': AlbumsLargeScene,
+});
+
+const CollapsibleTabViewExample: ExampleComponentType = (props) => {
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState<Route[]>([
+    { key: 'albums-small', title: 'Small' },
+    { key: 'albums-large', title: 'Large' },
+  ]);
+
+  const handleIndexChange = (index: number) => {
+    setIndex(index);
   };
 
-  private handleIndexChange = (index: number) =>
-    this.setState({
-      index,
-    });
-
-  private renderHeader = () => (
-    <View style={styles.header}>
-      <Text style={styles.headerText}>COLLAPSIBLE</Text>
-    </View>
+  return (
+    <CollapsibleTabView<Route>
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={handleIndexChange}
+      renderHeader={renderHeader}
+      headerHeight={HEADER_HEIGHT}
+      {...props}
+    />
   );
-
-  private renderScene = SceneMap({
-    'albums-small': AlbumsSmallScene,
-    'albums-large': AlbumsLargeScene,
-  });
-
-  render() {
-    return (
-      <CollapsibleTabView<Route>
-        navigationState={this.state}
-        renderScene={this.renderScene}
-        renderHeader={this.renderHeader}
-        onIndexChange={this.handleIndexChange}
-        headerHeight={HEADER_HEIGHT}
-        {...this.props}
-      />
-    );
-  }
-}
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -95,3 +80,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
 });
+
+CollapsibleTabViewExample.title = 'Small content demo';
+CollapsibleTabViewExample.backgroundColor = '#2196f3';
+CollapsibleTabViewExample.appbarElevation = 0;
+
+export default CollapsibleTabViewExample;

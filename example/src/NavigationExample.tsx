@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { NavigationState } from 'react-native-tab-view';
 
 import {
   useCollapsibleScene,
-  CollapsibleTabViewProps,
   createMaterialCollapsibleTopTabNavigator,
 } from 'react-native-collapsible-tab-view';
 
@@ -12,13 +10,7 @@ import { AnimatedAlbums } from './Shared/Albums';
 import { AnimatedArticle } from './Shared/Article';
 import { AnimatedContacts } from './Shared/Contacts';
 import { NavigationContainer } from '@react-navigation/native';
-
-type Route = {
-  key: string;
-  title: string;
-};
-
-type State = NavigationState<Route>;
+import { ExampleComponentType } from './types';
 
 const Tab = createMaterialCollapsibleTopTabNavigator();
 
@@ -39,55 +31,46 @@ export const AlbumsScene = () => {
 
 export const HEADER_HEIGHT = 250;
 
-export default class MaterialTopTabsCollapsibleTabViewExample extends React.Component<
-  Partial<CollapsibleTabViewProps<Route>>,
-  State
-> {
-  static title = 'React Navigation Integration';
-  static backgroundColor = '#2196f3';
-  static appbarElevation = 0;
+const renderHeader = () => (
+  <View style={styles.header}>
+    <Text style={styles.headerText}>COLLAPSIBLE</Text>
+  </View>
+);
 
-  private renderHeader = () => (
-    <View style={styles.header}>
-      <Text style={styles.headerText}>COLLAPSIBLE</Text>
-    </View>
-  );
-
-  render() {
-    return (
-      <NavigationContainer>
-        <Tab.Navigator
-          collapsibleOptions={{
-            headerHeight: HEADER_HEIGHT,
-            renderHeader: this.renderHeader,
+const CollapsibleTabViewExample: ExampleComponentType = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        collapsibleOptions={{
+          headerHeight: HEADER_HEIGHT,
+          renderHeader,
+        }}
+      >
+        <Tab.Screen
+          name="article"
+          options={{
+            tabBarLabel: 'Article',
           }}
-        >
-          <Tab.Screen
-            name="article"
-            options={{
-              tabBarLabel: 'Article',
-            }}
-            component={ArticleScene}
-          />
-          <Tab.Screen
-            name="contacts"
-            options={{
-              tabBarLabel: 'Contacts',
-            }}
-            component={ContactsScene}
-          />
-          <Tab.Screen
-            name="albums"
-            options={{
-              tabBarLabel: 'Albums',
-            }}
-            component={AlbumsScene}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    );
-  }
-}
+          component={ArticleScene}
+        />
+        <Tab.Screen
+          name="contacts"
+          options={{
+            tabBarLabel: 'Contacts',
+          }}
+          component={ContactsScene}
+        />
+        <Tab.Screen
+          name="albums"
+          options={{
+            tabBarLabel: 'Albums',
+          }}
+          component={AlbumsScene}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -102,3 +85,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
 });
+
+CollapsibleTabViewExample.title = 'React Navigation Integration';
+CollapsibleTabViewExample.backgroundColor = '#2196f3';
+CollapsibleTabViewExample.appbarElevation = 0;
+
+export default CollapsibleTabViewExample;
