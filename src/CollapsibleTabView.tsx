@@ -189,7 +189,6 @@ const CollapsibleTabView = <T extends Route>({
           offset,
           animated: false,
         });
-
         listOffset.current[item.key] = offset;
       } else if (itemOffset < headerHeight || !itemOffset) {
         scrollScene({
@@ -354,6 +353,7 @@ const CollapsibleTabView = <T extends Route>({
   ): React.ReactNode => {
     return (
       <Animated.View
+        pointerEvents="box-none"
         style={[
           styles.headerContainer,
           { transform: [{ translateY }] },
