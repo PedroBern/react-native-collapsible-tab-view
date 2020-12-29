@@ -20,6 +20,7 @@ import CollapsibleTabViewExample from './CollapsibleTabViewExample';
 import CollapsibleTabViewScrollOnHeaderExample from './CollapsibleTabViewScrollOnHeaderExample';
 import CollapsibleTabViewSmallContentExample from './CollapsibleTabViewSmallContentExample';
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
+import CollapsibleTabViewStartCollapsedExample from './CollapsibleTabViewStartCollapsedExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
 import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
 import CollapsibleTabViewCenteredEmptyListExample from './CollapsibleTabViewCenteredEmptyListExample';
@@ -40,6 +41,7 @@ const PERSISTENCE_KEY = 'index_persistence';
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewExample,
   CollapsibleTabViewNoSnapExample,
+  CollapsibleTabViewStartCollapsedExample,
   CollapsibleTabViewResizeExample,
   CollapsibleTabViewDemoExample,
   CollapsibleTabViewSmallContentExample,

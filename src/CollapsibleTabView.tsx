@@ -93,6 +93,10 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * Default is 'key'
      */
     routeKeyProp?: keyof T;
+    /**
+     * Start collapsed. It causes a rerender of the first render. Default is false.
+     */
+    startCollapsed?: boolean;
   };
 
 /**
@@ -114,6 +118,7 @@ const CollapsibleTabView = <T extends Route>({
   snapThreshold = 0.5,
   snapTimeout = 250,
   routeKeyProp = 'key',
+  startCollapsed = false,
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(
@@ -128,6 +133,13 @@ const CollapsibleTabView = <T extends Route>({
   const lastInteractionTime = React.useRef(0);
 
   const [canSnap, setCanSnap] = React.useState(false);
+
+  const [
+    shouldTriggerInitialScroll,
+    setShouldTriggerInitialScroll,
+  ] = React.useState<string[]>([]);
+
+  const scrollInitiated = React.useRef<string[]>([]);
 
   const activateSnapDebounced = useDebouncedCallback(
     () => {
@@ -305,10 +317,16 @@ const CollapsibleTabView = <T extends Route>({
             key: routeKey,
             value: ref,
           });
+          if (startCollapsed) {
+            setShouldTriggerInitialScroll([
+              ...shouldTriggerInitialScroll,
+              routeKey,
+            ]);
+          }
         }
       }
     },
-    []
+    [shouldTriggerInitialScroll, startCollapsed]
   );
 
   /**
@@ -401,6 +419,47 @@ const CollapsibleTabView = <T extends Route>({
     lastInteractionTime.current = Date.now();
     isUserInteracting.current = false;
   }, []);
+
+  /**
+   * Have one useEffect specific for the first route,
+   * to make sure it starts with the header collapsed.
+   */
+  React.useEffect(() => {
+    if (startCollapsed) {
+      const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
+      listRefArr.current.forEach((item) => {
+        if (item.key === curRouteKey) {
+          scrollScene({
+            ref: item.value,
+            offset: headerHeight,
+            animated: false,
+          });
+          scrollInitiated.current = [...scrollInitiated.current, item.key];
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldTriggerInitialScroll]);
+
+  React.useEffect(() => {
+    if (startCollapsed) {
+      const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
+      listRefArr.current.forEach((item) => {
+        if (
+          !scrollInitiated.current.includes(item.key) &&
+          item.key !== curRouteKey
+        ) {
+          scrollScene({
+            ref: item.value,
+            offset: headerHeight,
+            animated: false,
+          });
+          scrollInitiated.current = [...scrollInitiated.current, item.key];
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldTriggerInitialScroll]);
 
   return (
     <View

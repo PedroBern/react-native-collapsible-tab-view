@@ -253,6 +253,7 @@ All props are optional, but if you are not rendering a header, you'd be probably
 | `snapTimeout?`              | How long to wait before initiating the snap effect, in milliseconds.                                                                                                                                                                                                                    | `250`                   |
 | `onHeaderHeightChange?`     | Callback fired when the `headerHeight` state value inside `CollapsibleTabView` will be updated in the `onLayout` event from the tab/header container.<br/><br/> Useful to call layout animations. Example:<br/><br/><pre lang="js">() => {LayoutAnimation.configureNext(preset)};</pre> | `undefined`             |
 | `routeKeyProp?`             | The property from the `routes` map to use for the active route key.                                                                                                                                                                                                                     | `key`                   |
+| `startCollapsed?`           | Start collapsed. It causes a rerender of the first render.                                                                                                                                                                                                                              | `false`                 |
 
 ### `useCollapsibleScene`
 
