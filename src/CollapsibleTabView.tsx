@@ -4,9 +4,7 @@ import {
   Animated,
   ViewStyle,
   LayoutChangeEvent,
-  PanResponder,
   View,
-  PanResponderInstance,
 } from 'react-native';
 import {
   TabView,
@@ -95,10 +93,6 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * Default is 'key'
      */
     routeKeyProp?: keyof T;
-    /**
-     * Allow scroll when from the header. Default is false.
-     */
-    enableScrollOnHeader?: boolean;
   };
 
 /**
@@ -120,7 +114,6 @@ const CollapsibleTabView = <T extends Route>({
   snapThreshold = 0.5,
   snapTimeout = 250,
   routeKeyProp = 'key',
-  enableScrollOnHeader = false,
   ...tabViewProps
 }: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(
@@ -135,7 +128,6 @@ const CollapsibleTabView = <T extends Route>({
   const lastInteractionTime = React.useRef(0);
 
   const [canSnap, setCanSnap] = React.useState(false);
-  const panOffset = React.useRef(0);
 
   const activateSnapDebounced = useDebouncedCallback(
     () => {
@@ -175,41 +167,38 @@ const CollapsibleTabView = <T extends Route>({
   /**
    * Sync the scroll of unfocused routes to the current focused route.
    */
-  const syncScrollOffsets = React.useCallback(
-    (all: boolean = false) => {
-      const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
-      const offset = listOffset.current[curRouteKey];
+  const syncScrollOffsets = React.useCallback(() => {
+    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
+    const offset = listOffset.current[curRouteKey];
 
-      const newOffset = calculateNewOffset(
-        offset,
-        headerHeight,
-        disableSnap,
-        snapThreshold
-      );
+    const newOffset = calculateNewOffset(
+      offset,
+      headerHeight,
+      disableSnap,
+      snapThreshold
+    );
 
-      listRefArr.current.forEach((item) => {
-        const isCurrentRoute = item.key === curRouteKey;
-        if (isCurrentRoute && !all) return;
+    listRefArr.current.forEach((item) => {
+      const isCurrentRoute = item.key === curRouteKey;
+      if (isCurrentRoute) return;
 
-        const itemOffset = listOffset.current[item.key];
-        if (newOffset !== null) {
-          scrollScene({
-            ref: item.value,
-            offset,
-            animated: false,
-          });
-          listOffset.current[item.key] = offset;
-        } else if (itemOffset < headerHeight || !itemOffset) {
-          scrollScene({
-            ref: item.value,
-            offset: Math.min(offset, headerHeight),
-            animated: false,
-          });
-        }
-      });
-    },
-    [disableSnap, headerHeight, index, routeKeyProp, routes, snapThreshold]
-  );
+      const itemOffset = listOffset.current[item.key];
+      if (newOffset !== null) {
+        scrollScene({
+          ref: item.value,
+          offset,
+          animated: false,
+        });
+        listOffset.current[item.key] = offset;
+      } else if (itemOffset < headerHeight || !itemOffset) {
+        scrollScene({
+          ref: item.value,
+          offset: Math.min(offset, headerHeight),
+          animated: false,
+        });
+      }
+    });
+  }, [disableSnap, headerHeight, index, routeKeyProp, routes, snapThreshold]);
 
   /**
    * Snapping
@@ -346,67 +335,6 @@ const CollapsibleTabView = <T extends Route>({
     [headerHeight, onHeaderHeightChange, scrollY, tabBarHeight]
   );
 
-  const [
-    panResponder,
-    setPanResponser,
-  ] = React.useState<PanResponderInstance | null>();
-
-  /**
-   * Update the panResponder. We use React.useState instead of
-   * React.useRef to handle the panResponder to force the renderTabBar
-   * to rerender, otherwise it would need a swipe in the scrollable
-   * component to rerender the header with the new panResponder after
-   * index change.
-   */
-  React.useLayoutEffect(() => {
-    const curRouteKey = routes[index][routeKeyProp as keyof Route] as string;
-    setPanResponser(
-      PanResponder.create({
-        onPanResponderGrant: () => {
-          panOffset.current =
-            calculateNewOffset(
-              listOffset.current[curRouteKey] || 0,
-              headerHeight,
-              disableSnap,
-              snapThreshold
-            ) || 0;
-        },
-        onPanResponderRelease: () => {
-          lastInteractionTime.current = Date.now();
-          isUserInteracting.current = false;
-          isGliding.current = false;
-          syncScrollOffsets(true);
-          maybeSnap();
-        },
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: (_, gs) => {
-          lastInteractionTime.current = Date.now();
-          isUserInteracting.current = true;
-          isGliding.current = true;
-          listRefArr.current.forEach((item) => {
-            const isCurrentRoute = item.key === curRouteKey;
-            if (isCurrentRoute) {
-              scrollScene({
-                ref: item.value,
-                offset: panOffset.current + -gs.dy,
-                animated: false,
-              });
-            }
-          });
-        },
-      })
-    );
-  }, [
-    disableSnap,
-    headerHeight,
-    index,
-    maybeSnap,
-    routeKeyProp,
-    routes,
-    snapThreshold,
-    syncScrollOffsets,
-  ]);
-
   /**
    *
    * Wraps the tab bar with `Animated.View` to
@@ -425,6 +353,7 @@ const CollapsibleTabView = <T extends Route>({
   ): React.ReactNode => {
     return (
       <Animated.View
+        pointerEvents="box-none"
         style={[
           styles.headerContainer,
           { transform: [{ translateY }] },
@@ -432,9 +361,7 @@ const CollapsibleTabView = <T extends Route>({
         ]}
         onLayout={getHeaderHeight}
       >
-        <View {...(enableScrollOnHeader ? panResponder?.panHandlers : {})}>
-          {renderHeader()}
-        </View>
+        {renderHeader()}
         {customRenderTabBar ? (
           customRenderTabBar({
             ...props,
