@@ -9,6 +9,7 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
   - [CollapsibleTabView](#collapsibletabview)
   - [useCollapsibleScene](#usecollapsiblescene)
@@ -120,8 +121,10 @@ const SecondScene = () => <SomeRoute routeKey="second" color="black" />;
 
 const HEADER_HEIGHT = 250;
 
+// set pointerEvents="none" to allow scroll on header
+// see the docs for more information
 const renderHeader = () => (
-  <View style={styles.header}>
+  <View pointerEvents="none" style={styles.header}>
     <Text style={styles.headerText}>COLLAPSIBLE</Text>
   </View>
 );
@@ -193,6 +196,14 @@ const styles = StyleSheet.create({
 
 export default WithReactNavigation;
 ```
+
+## Scroll on header
+
+If you want to allow scrolling from the header:
+
+- If `renderHeader` **doesn't** contain touchables set `pointerEvents='none'`
+- If `renderHeader` **does** contain touchables set `pointerEvents='box-none'` for them to work.
+  _Note: With this setting any child component that should **not** respond to touches (e.g. `<Image />`) needs to have `pointerEvents` set to `'none'`. Otherwise it can become the target of a touch gesture on iOS devices and thereby preventing scrolling._
 
 ## API reference
 
