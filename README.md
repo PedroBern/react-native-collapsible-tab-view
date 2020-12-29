@@ -82,8 +82,10 @@ import { StyleSheet, View, Text, Animated } from 'react-native';
 import {
   CollapsibleTabView,
   useCollapsibleScene,
+  createMaterialCollapsibleTopTabNavigator,
 } from 'react-native-collapsible-tab-view';
 import { SceneMap } from 'react-native-tab-view';
+import { NavigationContainer } from '@react-navigation/native';
 
 type Route = {
   key: string;
@@ -101,7 +103,14 @@ const SomeRoute: React.FC<{ routeKey: string; color: string }> = ({
       style={{ backgroundColor: color }}
       {...scrollPropsAndRef}
     >
-      <View style={styles.content} />
+      {new Array(20).fill(null).map((_, index) => {
+        return (
+          // eslint-disable-next-line react/no-array-index-key
+          <Text key={index} style={{ padding: 20, color: 'red' }}>
+            {index}
+          </Text>
+        );
+      })}
     </Animated.ScrollView>
   );
 };
@@ -117,12 +126,35 @@ const renderHeader = () => (
   </View>
 );
 
+// example with react navigation
+
+const Tab = createMaterialCollapsibleTopTabNavigator();
+
+export const WithReactNavigation: React.FC<object> = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        collapsibleOptions={{
+          headerHeight: HEADER_HEIGHT,
+          renderHeader,
+          disableSnap: true,
+        }}
+      >
+        <Tab.Screen name="first" component={FirstScene} />
+        <Tab.Screen name="second" component={SecondScene} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+// example without react navigation
+
 const renderScene = SceneMap({
   first: FirstScene,
   second: SecondScene,
 });
 
-const App: React.FC<object> = () => {
+export const WithoutReactNavigation: React.FC<object> = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
     { key: 'first', title: 'First' },
@@ -140,11 +172,10 @@ const App: React.FC<object> = () => {
       onIndexChange={handleIndexChange}
       renderHeader={renderHeader} // optional
       headerHeight={HEADER_HEIGHT} // optional, will be computed.
+      disableSnap
     />
   );
 };
-
-export default App;
 
 const styles = StyleSheet.create({
   header: {
@@ -158,10 +189,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
   },
-  content: {
-    height: 1500,
-  },
 });
+
+export default WithReactNavigation;
 ```
 
 ## API reference
