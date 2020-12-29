@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.4.2...v1.5.0) (2020-12-29)
+
+
+### Features
+
+* scroll on header ([e02660f](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/e02660f8aba8a86b4e721cfc1b0fd0881e8c9071)), closes [#28](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/28)
+
 ## [1.4.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.4.1...v1.4.2) (2020-12-15)
 
 
