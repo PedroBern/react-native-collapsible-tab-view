@@ -2,15 +2,10 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Animated } from 'react-native';
 import {
   CollapsibleTabView,
+  RenderTabBarProps,
   useCollapsibleScene,
 } from 'react-native-collapsible-tab-view';
-import {
-  SceneMap,
-  TabBarIndicatorProps,
-  TabBarProps,
-  TabBar,
-} from 'react-native-tab-view';
-import { Scene } from 'react-native-tab-view/src/types';
+import { SceneMap, TabBarProps, TabBar } from 'react-native-tab-view';
 import { ExampleComponentType } from './types';
 
 type Route = {
@@ -51,6 +46,35 @@ const renderScene = SceneMap({
   second: SecondScene,
 });
 
+const renderTabBar = (
+  props: RenderTabBarProps<Route, TabBarProps<Route>>
+): React.ReactNode => (
+  <TabBar
+    {...props}
+    activeColor="pink"
+    inactiveColor="red"
+    onTabPress={(event) => {
+      if (props?.isGliding?.current && props?.preventTabPressOnGliding) {
+        event.preventDefault();
+      }
+      props?.onTabPress && props.onTabPress(event);
+    }}
+    renderLabel={({ color, focused, route }) => (
+      <View style={styles.label}>
+        <Text
+          style={[
+            styles.title,
+            { color },
+            { fontWeight: focused ? 'bold' : 'normal' },
+          ]}
+        >
+          {route.icon ?? route.title}
+        </Text>
+      </View>
+    )}
+  />
+);
+
 const CollapsibleTabViewExample: ExampleComponentType = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
@@ -62,94 +86,8 @@ const CollapsibleTabViewExample: ExampleComponentType = () => {
     setIndex(index);
   };
 
-  const renderTabBar = (
-    props: JSX.IntrinsicAttributes &
-      JSX.IntrinsicClassAttributes<TabBar<Route>> &
-      Pick<
-        Readonly<TabBarProps<Route>> & Readonly<{ children?: React.ReactNode }>,
-        | 'layout'
-        | 'position'
-        | 'jumpTo'
-        | 'navigationState'
-        | 'scrollEnabled'
-        | 'bounces'
-        | 'activeColor'
-        | 'inactiveColor'
-        | 'pressColor'
-        | 'pressOpacity'
-        | 'renderLabel'
-        | 'renderIcon'
-        | 'renderBadge'
-        | 'renderTabBarItem'
-        | 'onTabPress'
-        | 'onTabLongPress'
-        | 'tabStyle'
-        | 'indicatorStyle'
-        | 'indicatorContainerStyle'
-        | 'labelStyle'
-        | 'contentContainerStyle'
-        | 'style'
-        | 'children'
-      > &
-      Partial<
-        Pick<
-          Readonly<TabBarProps<Route>> &
-            Readonly<{ children?: React.ReactNode }>,
-          | 'getLabelText'
-          | 'getAccessible'
-          | 'getAccessibilityLabel'
-          | 'getTestID'
-          | 'renderIndicator'
-        >
-      > &
-      Partial<
-        Pick<
-          {
-            getLabelText: ({ route }: Scene<Route>) => string | undefined;
-            getAccessible: ({ route }: Scene<Route>) => boolean;
-            getAccessibilityLabel: ({
-              route,
-            }: Scene<Route>) => string | undefined;
-            getTestID: ({ route }: Scene<Route>) => string | undefined;
-            renderIndicator: (
-              props: TabBarIndicatorProps<Route>
-            ) => JSX.Element;
-          },
-          never
-        >
-      > & {
-        isGliding: React.MutableRefObject<boolean>;
-        preventTabPressOnGliding: boolean;
-      }
-  ) => (
-    <TabBar
-      {...props}
-      activeColor="pink"
-      inactiveColor="red"
-      onTabPress={(event) => {
-        if (props?.isGliding?.current && props?.preventTabPressOnGliding) {
-          event.preventDefault();
-        }
-        props?.onTabPress && props.onTabPress(event);
-      }}
-      renderLabel={({ color, focused, route }) => (
-        <View style={styles.label}>
-          <Text
-            style={[
-              styles.title,
-              { color },
-              { fontWeight: focused ? 'bold' : 'normal' },
-            ]}
-          >
-            {route.icon ?? route.title}
-          </Text>
-        </View>
-      )}
-    />
-  );
-
   return (
-    <CollapsibleTabView<Route>
+    <CollapsibleTabView<Route, TabBarProps<Route>>
       navigationState={{ index, routes }}
       renderScene={renderScene}
       onIndexChange={handleIndexChange}

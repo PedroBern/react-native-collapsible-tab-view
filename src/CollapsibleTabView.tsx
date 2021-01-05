@@ -20,7 +20,19 @@ import { CollapsibleContextProvider } from './CollapsibleTabViewContext';
 import scrollScene from './scrollScene';
 import type { ScrollRef, GetRef } from './types';
 
-export type Props<T extends Route> = Partial<TabViewProps<T>> &
+type PTabBarProps<T extends Route> = Partial<TabBarProps<T>>;
+
+export type RenderTabBarProps<T extends Route, P extends object = {}> = {
+  navigationState: NavigationState<T>;
+  isGliding: React.MutableRefObject<boolean>;
+  preventTabPressOnGliding: boolean;
+} & SceneRendererProps &
+  P;
+
+export type Props<
+  T extends Route,
+  P extends object = PTabBarProps<T>
+> = Partial<Omit<TabViewProps<T>, 'renderTabBar'>> &
   Pick<TabViewProps<T>, 'onIndexChange' | 'navigationState' | 'renderScene'> & {
     /**
      * Optionally controlled animated value.
@@ -38,7 +50,7 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
     /**
      * Props passed to the tab bar component.
      */
-    tabBarProps?: Partial<TabBarProps<T>>;
+    tabBarProps?: P;
     /**
      * Header rendered on top of the tab bar. Default is `() => null`
      */
@@ -59,13 +71,7 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      * Same as `renderTab` of `TabViewProps`, but with the additional
      * `isGliding` and `preventTabPressOnGliding` properties.
      */
-    renderTabBar?: (
-      props: SceneRendererProps & {
-        navigationState: NavigationState<T>;
-        isGliding: React.MutableRefObject<boolean>;
-        preventTabPressOnGliding: boolean;
-      }
-    ) => React.ReactNode;
+    renderTabBar?: (props: RenderTabBarProps<T, P>) => React.ReactNode;
     /**
      * Callback fired when the `headerHeight` state value inside
      * `CollapsibleTabView` will be updated in the `onLayout` event
@@ -100,7 +106,10 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
  * `CollapsibleTabView` wraps the `TabView` and take care of animations /
  * scroll value computations. It should be used with `useCollapsibleScene`.
  */
-const CollapsibleTabView = <T extends Route>({
+const CollapsibleTabView = <
+  T extends Route,
+  P extends object = PTabBarProps<T>
+>({
   animatedValue = new Animated.Value(0),
   navigationState: { index, routes },
   renderHeader = () => null,
@@ -116,7 +125,7 @@ const CollapsibleTabView = <T extends Route>({
   snapTimeout = 250,
   routeKeyProp = 'key',
   ...tabViewProps
-}: React.PropsWithoutRef<Props<T>>): React.ReactElement => {
+}: React.PropsWithoutRef<Props<T, P>>): React.ReactElement => {
   const [headerHeight, setHeaderHeight] = React.useState(
     Math.max(initialHeaderHeight, 0)
   );
@@ -364,6 +373,7 @@ const CollapsibleTabView = <T extends Route>({
       >
         {renderHeader()}
         {customRenderTabBar ? (
+          // @ts-ignore
           customRenderTabBar({
             ...props,
             ...tabBarProps,
@@ -378,6 +388,7 @@ const CollapsibleTabView = <T extends Route>({
               if (isGliding.current && preventTabPressOnGliding) {
                 event.preventDefault();
               }
+              // @ts-ignore
               tabBarProps?.onTabPress && tabBarProps.onTabPress(event);
             }}
           />
