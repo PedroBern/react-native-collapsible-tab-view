@@ -1,3 +1,18 @@
+# [2.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.5.0...v2.0.0) (2021-01-05)
+
+
+### Bug Fixes
+
+* pass isGliding ref instead of current value and update types ([37bf1b8](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/37bf1b8fe0c6b72ab8a11a90b0656e46249d9a0b)), closes [#33](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/33)
+
+
+### BREAKING CHANGES
+
+* pass isGliding ref instead of isGliding.current
+
+Migration: use isGliding.current instead of isGliding inside your
+custom renderTabBar function
+
 # [1.5.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.4.2...v1.5.0) (2020-12-29)
 
 
