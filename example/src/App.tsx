@@ -22,6 +22,7 @@ import CollapsibleTabViewSmallContentExample from './CollapsibleTabViewSmallCont
 import CollapsibleTabViewNoSnapExample from './CollapsibleTabViewNoSnapExample';
 import CollapsibleTabViewResizeExample from './CollapsibleTabViewResizeExample';
 import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
+import CollapsibleTabViewCustomTabBarExample from './CollapsibleTabViewCustomTabBarExample';
 import CollapsibleTabViewCenteredEmptyListExample from './CollapsibleTabViewCenteredEmptyListExample';
 import MaterialTopTabsCollapsibleTabViewDemoExample from './NavigationExample';
 import CollapsibleTabViewNoUpfrontHeightExample from './CollapsibleTabViewNoUpfrontHeightExample';
@@ -42,6 +43,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CollapsibleTabViewNoSnapExample,
   CollapsibleTabViewResizeExample,
   CollapsibleTabViewDemoExample,
+  CollapsibleTabViewCustomTabBarExample,
   CollapsibleTabViewSmallContentExample,
   CollapsibleTabViewNoUpfrontHeightExample,
   MaterialTopTabsCollapsibleTabViewDemoExample,

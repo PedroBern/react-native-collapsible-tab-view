@@ -40,7 +40,7 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
      */
     tabBarProps?: Partial<TabBarProps<T>>;
     /**
-     * Header rendered on top of the tab bar. Defaul is `() => null`
+     * Header rendered on top of the tab bar. Default is `() => null`
      */
     renderHeader?: () => React.ReactNode;
     /**
@@ -57,12 +57,13 @@ export type Props<T extends Route> = Partial<TabViewProps<T>> &
     disableSnap?: boolean;
     /**
      * Same as `renderTab` of `TabViewProps`, but with the additional
-     * `isGliding` property.
+     * `isGliding` and `preventTabPressOnGliding` properties.
      */
     renderTabBar?: (
       props: SceneRendererProps & {
         navigationState: NavigationState<T>;
-        isGliding: boolean;
+        isGliding: React.MutableRefObject<boolean>;
+        preventTabPressOnGliding: boolean;
       }
     ) => React.ReactNode;
     /**
@@ -366,7 +367,8 @@ const CollapsibleTabView = <T extends Route>({
           customRenderTabBar({
             ...props,
             ...tabBarProps,
-            isGliding: isGliding.current,
+            isGliding,
+            preventTabPressOnGliding,
           })
         ) : (
           <TabBar
