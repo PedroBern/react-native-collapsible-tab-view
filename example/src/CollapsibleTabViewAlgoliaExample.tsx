@@ -2,20 +2,11 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Animated } from 'react-native';
 import { SceneMap } from 'react-native-tab-view';
 
-import {
-  CollapsibleTabView,
-  useCollapsibleScene,
-} from 'react-native-collapsible-tab-view';
+import { CollapsibleTabView } from 'react-native-collapsible-tab-view';
 
 import { AnimatedValueContextProvider } from './Shared/AnimatedContext';
 
-import {
-  AnimatedContacts,
-  AnimatedNestedEmptyContacts,
-  AnimatedNestedPopulatedContacts,
-  AnimatedNonNestedEmptyContacts,
-  AnimatedNonNestedPopulatedContacts,
-} from './Shared/Contacts';
+import { Algolia } from './Shared/Algolia';
 import { ExampleComponentType } from './types';
 
 type Route = {
@@ -23,28 +14,11 @@ type Route = {
   title: string;
 };
 
-export const ContactsScene = () => {
-  const scenePropsAndRef = useCollapsibleScene('contacts');
-  return <AnimatedContacts {...scenePropsAndRef} data={[]} />;
-};
+export const AlgoliaScene = () => <Algolia routeKey="algolia" />;
 
-export const ContactsNestedEmpty = () => {
-  const scenePropsAndRef = useCollapsibleScene('contactsNestedPopulated');
-  return <AnimatedNestedEmptyContacts {...scenePropsAndRef} />;
-};
-
-export const ContactsNestedPopulated = () => {
-  const scenePropsAndRef = useCollapsibleScene('contactsNestedPopulated');
-  return <AnimatedNestedPopulatedContacts {...scenePropsAndRef} />;
-};
-
-export const ContactsNonNestedEmpty = () => {
-  return <AnimatedNonNestedEmptyContacts />;
-};
-
-export const ContactsNonNestedPopulated = () => {
-  return <AnimatedNonNestedPopulatedContacts />;
-};
+export const AlgoliaEmptyScene = () => (
+  <Algolia hitsPerPage={0} routeKey="algoliaEmpty" />
+);
 
 export const HEADER_HEIGHT = 250;
 
@@ -55,21 +29,15 @@ const renderHeader = () => (
 );
 
 const renderScene = SceneMap({
-  contacts: ContactsScene,
-  contactsNestedEmpty: ContactsNestedEmpty,
-  contactsNestedPopulated: ContactsNestedPopulated,
-  contactsNonNestedEmpty: ContactsNonNestedEmpty,
-  contactsNonNestedPopulated: ContactsNonNestedPopulated,
+  algolia: AlgoliaScene,
+  algoliaEmpty: AlgoliaEmptyScene,
 });
 
 const CollapsibleTabViewExample: ExampleComponentType = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
-    { key: 'contacts', title: 'C' },
-    { key: 'contactsNestedEmpty', title: 'N-E' },
-    { key: 'contactsNestedPopulated', title: 'N-P' },
-    { key: 'contactsNonNestedEmpty', title: 'NN-E' },
-    { key: 'contactsNonNestedPopulated', title: 'NN-P' },
+    { key: 'algolia', title: 'Algolia' },
+    { key: 'algoliaEmpty', title: 'Algolia Empty' },
   ]);
 
   const handleIndexChange = (index: number) => {
@@ -92,7 +60,7 @@ const CollapsibleTabViewExample: ExampleComponentType = () => {
   );
 };
 
-CollapsibleTabViewExample.title = 'Nested Centered empty list example';
+CollapsibleTabViewExample.title = 'Algolia example';
 CollapsibleTabViewExample.backgroundColor = '#2196f3';
 CollapsibleTabViewExample.appbarElevation = 0;
 
