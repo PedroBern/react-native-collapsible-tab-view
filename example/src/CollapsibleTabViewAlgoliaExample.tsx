@@ -20,6 +20,11 @@ export const AlgoliaEmptyScene = () => (
   <Algolia hitsPerPage={0} routeKey="algoliaEmpty" />
 );
 
+const renderScene = SceneMap({
+  algolia: AlgoliaScene,
+  algoliaEmpty: AlgoliaEmptyScene,
+});
+
 export const HEADER_HEIGHT = 250;
 
 const renderHeader = () => (
@@ -27,11 +32,6 @@ const renderHeader = () => (
     <Text style={styles.headerText}>COLLAPSIBLE</Text>
   </View>
 );
-
-const renderScene = SceneMap({
-  algolia: AlgoliaScene,
-  algoliaEmpty: AlgoliaEmptyScene,
-});
 
 const CollapsibleTabViewExample: ExampleComponentType = () => {
   const [index, setIndex] = React.useState(0);

@@ -57,44 +57,59 @@ const ListEmptyComponent = ({ routeKey }: any) => {
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const ConnectedHits = connectInfiniteHits(
-  ({ hits, hasMore, refine, routeKey }: any) => {
-    const [isRefreshing, startRefreshing] = useRefresh();
+const Item = React.memo(({ item }: any) => (
+  <View style={styles.item}>
+    <Image
+      style={{ height: width, width: width }}
+      source={{ uri: item.image }}
+    />
+  </View>
+));
 
-    const scenePropsAndRef = useCollapsibleScene(routeKey);
+const Hits = ({ hits, hasMore, refine, routeKey }: any) => {
+  const [isRefreshing, startRefreshing] = useRefresh();
 
-    const onEndReached = () => {
-      if (hasMore) {
-        refine();
-      }
-    };
+  const scenePropsAndRef = useCollapsibleScene(routeKey);
 
-    const renderItem = ({ item }: any) => (
-      <View style={styles.item}>
-        <Image
-          style={{ height: width, width: width }}
-          source={{ uri: item.image }}
-        />
-      </View>
-    );
+  const onEndReached = () => {
+    if (hasMore) {
+      refine();
+    }
+  };
 
-    return (
-      <Animated.FlatList
-        data={hits}
-        onEndReached={onEndReached}
-        keyExtractor={(_, i) => String(i)}
-        renderItem={renderItem}
-        ItemSeparatorComponent={ItemSeparator}
-        refreshing={isRefreshing}
-        onRefresh={startRefreshing}
-        ListEmptyComponent={() => <ListEmptyComponent routeKey={routeKey} />}
-        {...scenePropsAndRef}
-      />
-    );
+  const renderItem = ({ item }: any) => <Item item={item} />;
+
+  return (
+    <Animated.FlatList
+      data={hits}
+      onEndReached={onEndReached}
+      keyExtractor={(_, i) => String(i)}
+      renderItem={renderItem}
+      ItemSeparatorComponent={ItemSeparator}
+      refreshing={isRefreshing}
+      onRefresh={startRefreshing}
+      ListEmptyComponent={() => <ListEmptyComponent routeKey={routeKey} />}
+      {...scenePropsAndRef}
+    />
+  );
+};
+
+// Optional: Improvement to prevent unnecessary re-renders
+const comparisonFunction = (prevProps: any, nextProps: any) => {
+  if (prevProps.hits.length !== nextProps.hits.length) {
+    return false;
   }
-);
+  for (let i = 0; i < nextProps.hits.length; i++) {
+    if (nextProps.hits[i].objectID !== prevProps.hits[i].objectID) {
+      return false;
+    }
+  }
+  return true;
+};
 
-export const Algolia = ({ hitsPerPage = 10, routeKey = 'algolia' }) => (
+const ConnectedHits = connectInfiniteHits(React.memo(Hits, comparisonFunction));
+
+export const Algolia = ({ hitsPerPage, routeKey = 'algolia' }: any) => (
   <InstantSearch indexName="instant_search" searchClient={searchClient}>
     <Configure hitsPerPage={hitsPerPage} />
     {/* @ts-ignore */}
