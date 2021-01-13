@@ -325,8 +325,8 @@ const CollapsibleTabView = <T extends Route>({
         setHeaderHeight(Math.max(value, 0));
         setTranslateY(
           scrollY.current.interpolate({
-            inputRange: [0, Math.max(value, 0)],
-            outputRange: [0, -value],
+            inputRange: [0, Math.max(value, tabBarHeight)],
+            outputRange: [0, -tabBarHeight],
             extrapolateRight: 'clamp',
           })
         );

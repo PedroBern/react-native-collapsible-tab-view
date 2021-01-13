@@ -25,6 +25,7 @@ import CollapsibleTabViewDemoExample from './CollapsibleTabViewDemoExample';
 import CollapsibleTabViewCenteredEmptyListExample from './CollapsibleTabViewCenteredEmptyListExample';
 import MaterialTopTabsCollapsibleTabViewDemoExample from './NavigationExample';
 import CollapsibleTabViewNoUpfrontHeightExample from './CollapsibleTabViewNoUpfrontHeightExample';
+import CollapsibleTabViewNoHeaderExample from './CollapsibleTabViewNoHeaderExample';
 import { ExampleComponentType } from './types';
 
 type State = {
@@ -47,6 +48,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   MaterialTopTabsCollapsibleTabViewDemoExample,
   CollapsibleTabViewCenteredEmptyListExample,
   CollapsibleTabViewScrollOnHeaderExample,
+  CollapsibleTabViewNoHeaderExample,
 ];
 
 const KeepAwake = () => {
