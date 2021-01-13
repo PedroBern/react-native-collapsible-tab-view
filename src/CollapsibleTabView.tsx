@@ -322,11 +322,11 @@ const CollapsibleTabView = <T extends Route>({
       const value = event.nativeEvent.layout.height - tabBarHeight;
       if (Math.round(value * 10) / 10 !== Math.round(headerHeight * 10) / 10) {
         onHeaderHeightChange?.();
-        setHeaderHeight(Math.max(value, 0));
+        setHeaderHeight(value);
         setTranslateY(
           scrollY.current.interpolate({
-            inputRange: [0, Math.max(value, tabBarHeight)],
-            outputRange: [0, -tabBarHeight],
+            inputRange: [0, value >= 0 ? value : tabBarHeight],
+            outputRange: [0, -(value >= 0 ? value : tabBarHeight)],
             extrapolateRight: 'clamp',
           })
         );
