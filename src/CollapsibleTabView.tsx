@@ -44,7 +44,7 @@ export type Props<
      */
     headerHeight?: number;
     /**
-     * Tab bar height, default is 49.
+     * Tab bar height, default is 48.
      */
     tabBarHeight?: number;
     /**
@@ -114,7 +114,7 @@ const CollapsibleTabView = <
   navigationState: { index, routes },
   renderHeader = () => null,
   headerHeight: initialHeaderHeight = 0,
-  tabBarHeight = 49,
+  tabBarHeight = 48,
   tabBarProps,
   headerContainerStyle,
   preventTabPressOnGliding = true,
@@ -330,19 +330,17 @@ const CollapsibleTabView = <
   const getHeaderHeight = React.useCallback(
     (event: LayoutChangeEvent) => {
       const value = event.nativeEvent.layout.height - tabBarHeight;
-      if (Math.round(value * 10) / 10 !== Math.round(headerHeight * 10) / 10) {
-        onHeaderHeightChange?.();
-        setHeaderHeight(value);
-        setTranslateY(
-          scrollY.current.interpolate({
-            inputRange: [0, value >= 0 ? value : tabBarHeight],
-            outputRange: [0, -(value >= 0 ? value : tabBarHeight)],
-            extrapolateRight: 'clamp',
-          })
-        );
-      }
+      onHeaderHeightChange?.();
+      setHeaderHeight(Math.max(value, 0));
+      setTranslateY(
+        scrollY.current.interpolate({
+          inputRange: [0, Math.max(value, tabBarHeight)], // Always allow for a minimum of `tabBarHeight`
+          outputRange: [0, -value],
+          extrapolateRight: 'clamp',
+        })
+      );
     },
-    [headerHeight, onHeaderHeightChange, scrollY, tabBarHeight]
+    [onHeaderHeightChange, scrollY, tabBarHeight]
   );
 
   /**

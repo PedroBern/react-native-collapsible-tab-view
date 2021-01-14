@@ -106,12 +106,13 @@ const ListEmptyComponent = () => {
   const animatedValue = useAnimatedValueContext();
   const {
     contentContainerStyle: { paddingTop },
+    tabBarHeight,
   } = useCollapsibleScene('contacts');
 
   const [translateY] = React.useState(
     animatedValue.interpolate({
-      inputRange: [0, paddingTop - 49], // 49 is the default tabBar height, use your value here
-      outputRange: [-(paddingTop - 49) / 2, 0],
+      inputRange: [0, Math.max(paddingTop - tabBarHeight, tabBarHeight)],
+      outputRange: [-(paddingTop - tabBarHeight) / 2, 0],
       extrapolateRight: 'clamp',
     })
   );
