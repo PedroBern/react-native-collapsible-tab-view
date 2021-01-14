@@ -85,6 +85,10 @@ export type CollapsibleScenePropsAndRef = {
    * Needed for the loading indicator to show correctly on android.
    */
   progressViewOffset: number;
+  /**
+   * For use in the Animated ListEmptyComponent.
+   */
+  tabBarHeight: number;
 } & Pick<
   CollapsibleContext,
   'onMomentumScrollBegin' | 'onScrollEndDrag' | 'onMomentumScrollEnd'

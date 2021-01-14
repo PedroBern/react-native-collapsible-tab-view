@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Animated } from 'react-native';
 import { SceneMap } from 'react-native-tab-view';
 
 import {
@@ -6,6 +7,8 @@ import {
   useCollapsibleScene,
   CollapsibleTabViewProps,
 } from 'react-native-collapsible-tab-view';
+
+import { AnimatedValueContextProvider } from './Shared/AnimatedContext';
 
 import { AnimatedAlbums } from './Shared/Albums';
 import { AnimatedArticle } from './Shared/Article';
@@ -19,7 +22,7 @@ type Route = {
 
 export const ContactsScene = () => {
   const scenePropsAndRef = useCollapsibleScene('contacts');
-  return <AnimatedContacts {...scenePropsAndRef} />;
+  return <AnimatedContacts {...scenePropsAndRef} data={[]} />;
 };
 
 export const ArticleScene = () => {
@@ -52,13 +55,18 @@ const CollapsibleTabViewExample: ExampleComponentType<Partial<
     setIndex(index);
   };
 
+  const [animatedValue] = React.useState(new Animated.Value(0));
+
   return (
-    <CollapsibleTabView<Route>
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={handleIndexChange}
-      {...props}
-    />
+    <AnimatedValueContextProvider value={animatedValue}>
+      <CollapsibleTabView<Route>
+        animatedValue={animatedValue}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={handleIndexChange}
+        {...props}
+      />
+    </AnimatedValueContextProvider>
   );
 };
 
