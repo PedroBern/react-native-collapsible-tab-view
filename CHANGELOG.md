@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v2.0.0...v2.0.1) (2021-01-14)
+
+
+### Bug Fixes
+
+* prevent not showing tab bar if no renderHeader ([232561e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/232561e18528300092b9c817e5b621ffcb3cd1ac)), closes [#39](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/39)
+
 # [2.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v1.5.0...v2.0.0) (2021-01-05)
 
 
