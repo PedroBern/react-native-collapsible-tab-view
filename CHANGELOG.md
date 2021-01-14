@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v2.0.1...v2.0.2) (2021-01-14)
+
+
+### Bug Fixes
+
+* correct tabbar height ([483ffcd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/483ffcdf2f14d7390c5bdb8c57295b1073b42927))
+
 ## [2.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v2.0.0...v2.0.1) (2021-01-14)
 
 
