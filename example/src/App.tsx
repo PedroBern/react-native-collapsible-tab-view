@@ -27,6 +27,15 @@ import MaterialTopTabsCollapsibleTabViewDemoExample from './NavigationExample';
 import CollapsibleTabViewNoUpfrontHeightExample from './CollapsibleTabViewNoUpfrontHeightExample';
 import { ExampleComponentType } from './types';
 
+// Used for debugging re-renders
+if (__DEV__) {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+  whyDidYouRender(React, {
+    trackAllPureComponents: true,
+  });
+}
+console.log('__DEV__', __DEV__);
+
 type State = {
   title: string;
   index: number;
