@@ -1,3 +1,17 @@
+# [3.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v2.0.2...v3.0.0) (2021-01-22)
+
+
+### Features
+
+* add createCollapsibleTabs ([8383cef](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/8383cefb63e118c308672c858de29780640f5518)), closes [#2](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/2) [#38](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/38) [#32](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/32) [#26](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/26)
+
+
+### BREAKING CHANGES
+
+* remove react-native-tab-view
+
+v3 has nothing backward compatible, it's a completely new API.
+
 ## [2.0.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v2.0.1...v2.0.2) (2021-01-14)
 
 
