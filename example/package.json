@@ -1,42 +1,33 @@
 {
   "name": "collapsible-tab-view-example",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
-  "main": "index",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo android",
-    "ios": "expo ios",
-    "web": "expo start:web"
-  },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
-    "@react-native-community/async-storage": "~1.12.0",
-    "@react-navigation/material-top-tabs": "^5.3.10",
-    "@react-navigation/native": "^5.8.10",
-    "expo": "^40.0.0",
-    "expo-asset": "~8.2.1",
+    "expo": "^40.0.1",
     "expo-constants": "~9.3.3",
-    "expo-keep-awake": "~8.4.0",
+    "expo-status-bar": "~1.0.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
-    "react-native-gesture-handler": "~1.8.0",
-    "react-native-reanimated": "~1.13.0",
-    "react-native-tab-view": "^2.15.2",
+    "react-native-gesture-handler": "^1.9.0",
+    "react-native-reanimated": "2.0.0-rc.0",
     "react-native-web": "~0.13.12",
-    "scheduler": "^0.19.1"
+    "use-debounce": "^5.2.0"
   },
   "devDependencies": {
-    "@types/react": "~16.9.35",
-    "@types/react-native": "~0.63.2",
-    "babel-plugin-module-resolver": "^4.0.0",
+    "@babel/core": "~7.9.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-native": "^0.63.46",
     "babel-preset-expo": "8.3.0",
-    "expo-cli": "^3.23.1",
-    "typescript": "~4.0.0",
-    "use-debounce": "^5.1.0"
+    "typescript": "^4.1.3"
   },
-  "resolutions": {
-    "@babel/runtime": "^7.9.0"
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo web",
+    "eject": "expo eject"
   }
 }

@@ -1,14 +1,15 @@
-import * as React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import {
-  CollapsibleScenePropsAndRef,
-  useCollapsibleScene,
-} from 'react-native-collapsible-tab-view';
-import useRefresh from './useRefresh';
-import { useAnimatedValueContext } from './AnimatedContext';
+import * as React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+} from 'react-native-reanimated'
 
-type Item = { name: string; number: number };
+import { HEADER_HEIGHT } from './Header'
+import { TABBAR_HEIGHT } from './MaterialTabBar'
+import Tabs, { useTabsContext } from './Tabs'
+
+type Item = { name: string; number: number }
 
 const CONTACTS: Item[] = [
   { name: 'Marissa Castillo', number: 7766398169 },
@@ -61,13 +62,13 @@ const CONTACTS: Item[] = [
   { name: 'Nolan Figueroa', number: 9173443776 },
   { name: 'Sophia Gibbs', number: 6435942770 },
   { name: 'Vincent Sandoval', number: 2606111495 },
-];
+]
 
 class ContactItem extends React.PureComponent<{
-  item: { name: string; number: number };
+  item: { name: string; number: number }
 }> {
   render() {
-    const { item } = this.props;
+    const { item } = this.props
 
     return (
       <View style={styles.item}>
@@ -81,83 +82,58 @@ class ContactItem extends React.PureComponent<{
           <Text style={styles.number}>{item.number}</Text>
         </View>
       </View>
-    );
+    )
   }
 }
 
-const ItemSeparator = () => <View style={styles.separator} />;
+const ItemSeparator = () => <View style={styles.separator} />
 
-const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />;
+const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 
-export default class Contacts extends React.Component {
-  render() {
-    return (
-      <FlatList
-        data={CONTACTS}
-        keyExtractor={(_, i) => String(i)}
-        renderItem={renderItem}
-        ItemSeparatorComponent={ItemSeparator}
-      />
-    );
-  }
-}
+const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
 
 const ListEmptyComponent = () => {
-  const animatedValue = useAnimatedValueContext();
-  const {
-    contentContainerStyle: { paddingTop },
-    tabBarHeight,
-  } = useCollapsibleScene('contacts');
+  const { scrollY, scrollYCurrent } = useTabsContext()
 
-  const [translateY] = React.useState(
-    animatedValue.interpolate({
-      inputRange: [0, Math.max(paddingTop - tabBarHeight, tabBarHeight)],
-      outputRange: [-(paddingTop - tabBarHeight) / 2, 0],
-      extrapolateRight: 'clamp',
-    })
-  );
+  const translateY = useDerivedValue(() => {
+    return Animated.interpolate(
+      scrollYCurrent.value,
+      [0, PADDING_TOP - TABBAR_HEIGHT],
+      [-(PADDING_TOP - TABBAR_HEIGHT) / 2, 0]
+    )
+  }, [scrollY])
+
+  const stylez = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: translateY.value,
+        },
+      ],
+    }
+  })
 
   return (
-    <Animated.View
-      style={{
-        alignItems: 'center',
-        flex: 1,
-        justifyContent: 'center',
-        transform: [{ translateY }],
-        borderColor: 'black',
-        borderWidth: 10,
-      }}
-    >
+    <Animated.View style={[styles.listEmpty, stylez]}>
       <Text>Centered Empty List!</Text>
     </Animated.View>
-  );
-};
+  )
+}
 
-// used in Collapsible TabView examples
-export const AnimatedContacts = React.forwardRef<
-  any,
-  React.PropsWithoutRef<CollapsibleScenePropsAndRef> & { data?: Item[] }
->(({ data = CONTACTS, ...props }, ref) => {
-  const [isRefreshing, startRefreshing] = useRefresh();
-
+const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
   return (
-    <Animated.FlatList
-      ref={ref}
-      data={data}
+    <Tabs.FlatList
+      name="contacts"
+      data={emptyContacts ? [] : CONTACTS}
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
-      refreshing={isRefreshing}
-      onRefresh={startRefreshing}
-      // add the empty component only if there is no data,
-      // otherwise it will break, because the ListEmptyComponent
-      // needs to be inside the context, and the context
-      // is used only in the EmptyListExample
-      ListEmptyComponent={data.length === 0 ? ListEmptyComponent : undefined}
-      {...props}
+      ListEmptyComponent={ListEmptyComponent}
     />
-  );
-});
+  )
+}
+
+export default Contacts
 
 const styles = StyleSheet.create({
   item: {
@@ -194,4 +170,11 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: 'rgba(0, 0, 0, .08)',
   },
-});
+  listEmpty: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    borderColor: 'black',
+    borderWidth: 10,
+  },
+})

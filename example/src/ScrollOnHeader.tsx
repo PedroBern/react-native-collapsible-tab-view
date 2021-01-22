@@ -1,9 +1,9 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import ExampleComponent from './shared/ExampleComponent'
-import Header from './shared/Header'
-import { HeaderProps } from './shared/Tabs'
+import ExampleComponent from './Shared/ExampleComponent'
+import Header from './Shared/Header'
+import { HeaderProps } from './Shared/Tabs'
 import { ExampleComponentType } from './types'
 
 const title = 'Scroll On Header'

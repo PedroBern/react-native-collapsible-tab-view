@@ -1,6 +1,5 @@
 {
-  "extends": "../.eslintrc.json",
-
+  "extends": "../.eslintrc.js",
   "settings": {
     "import/core-modules": [
       "react-native-collapsible-tab-view"
