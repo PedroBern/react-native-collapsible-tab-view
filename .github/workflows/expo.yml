@@ -9,33 +9,19 @@ jobs:
     name: Install and publish
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: 10.x
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v5
+          node-version: 14.x
+      - uses: expo/expo-github-action@v5
         with:
-          expo-version: 3.x
+          expo-version: 4.x
           expo-token: ${{ secrets.EXPO_TOKEN }}
-          expo-cache: true
-
-      - name: Restore yarn cache
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: |
-          yarn install --cwd example --frozen-lockfile
-          yarn install --frozen-lockfile
-      - name: Publish Expo app
+        run: yarn install --frozen-lockfile
         working-directory: ./example
+
+      - name: Publish Expo app
         run: expo publish
+        working-directory: ./example
