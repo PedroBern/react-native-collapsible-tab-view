@@ -241,14 +241,14 @@ const Example: React.FC<Props> = () => {
 #### Props
 
 | prop                    | description                                                                                    | default |
-| ----------------------- | ---------------------------------------------------------------------------------------------- | ------- | --- | --- |
+| ----------------------- | ---------------------------------------------------------------------------------------------- | ------- |
 | `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                       |         |
 | `refMap`                | Map of tab names and refs, must be the same order as the container children.                   |         |
-| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside. |         |     |     |
+| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside. |         |
 | `headerHeight?`         | -                                                                                              |         |
 | `tabBarHeight?`         | -                                                                                              |         |
 | `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.   | `false` |
-| `diffClampEnabled?`     | Enable diff clamp.                                                                             | false   |
+| `diffClampEnabled?`     | Enable diff clamp.                                                                             | `false` |
 | `snapThreshold?`        | Percentage of header height to make the snap effect. A number between 0 and 1.                 | `0.5`   |
 | `HeaderComponent?`      | React component to render above the tabbar.                                                    |         |
 | `TabBarComponent?`      | React component to render above tab scenes.                                                    |         |
@@ -293,7 +293,7 @@ const { focusedTab, ...rest } = useTabsContext()
 #### Props
 
 | prop             | description                               | type                             |
-| ---------------- | ----------------------------------------- | -------------------------------- | -------- |
+| ---------------- | ----------------------------------------- | -------------------------------- |
 | headerHeight     |                                           | `number`                         |
 | tabBarHeight     |                                           | `number`                         |
 | snapEnabled      |                                           | `boolean`                        |
@@ -307,10 +307,10 @@ const { focusedTab, ...rest } = useTabsContext()
 | oldAccScrollY    | Previous accumulted scrollY.              | `Animated.SharedValue<number>`   |
 | accScrollY       | Current accumulated scrollY               | `Animated.SharedValue<number>`   |
 | offset           | Offset.                                   | `Animated.SharedValue<number>`   |
-| isScrolling      | If is scrolling.                          | `Animated.SharedValue<boolean    | number>` |
+| isScrolling      | If is scrolling.                          | `Animated.SharedValue<boolean>`  |
 | focusedTab       | Current focused tab name.                 | `Animated.SharedValue<T>`        |
 | accDiffClamp     | Accumulated diffClamp value.              | `Animated.SharedValue<number>`   |
-| containerHeight? |                                           | ` number`                        |
+| containerHeight? |                                           | `number`                         |
 
 ## Contributing
 
