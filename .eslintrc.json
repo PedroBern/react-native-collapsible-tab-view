@@ -1,9 +1,0 @@
-{
-  "extends": "eslint-config-satya164",
-
-  "plugins": ["react-native-globals"],
-
-  "env": {
-    "react-native-globals/all": true
-  }
-}
