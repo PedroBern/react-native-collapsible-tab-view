@@ -11,39 +11,44 @@
 - [Quick Start](#quick-start)
 - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
-  - [CollapsibleTabView](#collapsibletabview)
-  - [useCollapsibleScene](#usecollapsiblescene)
-  - [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator)
+  - [createCollapsibleTabs](#createcollapsibletabs)
+  - [Tabs.Container](#tabscontainer)
+  - [Tabs.ScrollView and Tabs.FlatList](#tabsscrollview-and-tabsflatlist)
+  - [useTabsContext](#usetabscontext)
 - [Contributing](#contributing)
 
 ## Expo app
 
-A simple wrapper for [react-native-tab-view](https://github.com/satya164/react-native-tab-view) that helps to build a collapsible tab view.
+> If you are looking for the integration with [react-native-tab-view](https://github.com/satya164/react-native-tab-view) and/or [react-navigation](https://github.com/react-navigation/react-navigation), you need to use the [v2](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v2), we are currenlty on v3.
+
+Collapsible Tab View for React Native, with [Reanimated](https://github.com/software-mansion/react-native-reanimated).
 
 - [View it with Expo](https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos).
 - Checkout the [examples](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/example) for the source code of the Expo app.
 
 <a href="https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=exp://exp.host/@pedrobern/react-native-collapsible-tab-view-demos" height="200px" width="200px"></a>
 
+**Credits**
+
+The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) example app was used as template for the demos.
+
 ## Demo
 
-<img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/demo2.gif" width="360">
+|                                                     Default                                                      |                                                     Snap                                                      |                                                     DiffClamp                                                      |                                                    DiffClamp + Snap                                                     |
+| :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
+| <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/default.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/snap.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp_snap.gif" width="360"> |
+
+<!-- todo -->
 
 ## Features
 
-#### From [react-native-tab-view](https://github.com/satya164/react-native-tab-view)
-
-- Smooth animations and gestures
-- Scrollable tabs
-- Supports ~~both top and~~ bottom tab bars
-- Follows Material Design spec
+- Animations and interactions on the UI thread
 - Highly customizable
 - Fully typed with [TypeScript](https://typescriptlang.org)
-
-#### From this package
-
-- Integration with [react-navigation](https://github.com/react-navigation/react-navigation)
-- Collapsible Tabs
+- DiffClamp tabs
+- Interpotated tabs
+- Scroll snap (with interpotated tabs)
+- Animated snap (with diffClamp tabs)
 
 ## Installation
 
@@ -53,242 +58,259 @@ Open a Terminal in the project root and run:
 yarn add react-native-collapsible-tab-view
 ```
 
-Now add `react-native-tab-view` and all it's peer dependencies:
-
-```sh
-yarn add react-native-tab-view
-```
-
-For the peer dependencies, if using expo:
-
-```sh
-expo install react-native-gesture-handler react-native-reanimated
-```
-
-If not using expo, [follow these instructions](https://github.com/satya164/react-native-tab-view#installation).
-
-#### React Navigation Integration
-
-To integrate with [react-navigation](https://github.com/react-navigation/react-navigation):
-
-```sh
-yarn add @react-navigation/native @react-navigation/material-top-tabs
-```
+Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
 
 ## Quick Start
 
 ```tsx
-import * as React from 'react';
-import { StyleSheet, View, Text, Animated } from 'react-native';
+import React from 'react'
+import { View, StyleSheet, ListRenderItem } from 'react-native'
 import {
-  CollapsibleTabView,
-  useCollapsibleScene,
-  createMaterialCollapsibleTopTabNavigator,
-} from 'react-native-collapsible-tab-view';
-import { SceneMap } from 'react-native-tab-view';
-import { NavigationContainer } from '@react-navigation/native';
+  RefComponent,
+  ContainerRef,
+  createCollapsibleTabs,
+  TabBarProps as TabProps,
+} from 'react-native-collapsible-tab-view'
+import { useAnimatedRef } from 'react-native-reanimated'
 
-type Route = {
-  key: string;
-  title: string;
-};
+// see the examples folder
+import TabBar from './MaterialTabBar'
 
-const SomeRoute: React.FC<{ routeKey: string; color: string }> = ({
-  routeKey,
-  color,
-}) => {
-  const scrollPropsAndRef = useCollapsibleScene(routeKey);
+type TabNames = 'A' | 'B'
+type HeaderProps = TabProps<TabNames>
+
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
+
+const HEADER_HEIGHT = 250
+const TABBAR_HEIGHT = 48
+
+const Example: React.FC = () => {
+  const containerRef = useAnimatedRef<ContainerRef>()
+  const tabARef = useAnimatedRef<RefComponent>()
+  const tabBRef = useAnimatedRef<RefComponent>()
+
+  const [refMap] = React.useState({
+    A: tabARef,
+    B: tabBRef,
+  })
 
   return (
-    <Animated.ScrollView
-      style={{ backgroundColor: color }}
-      {...scrollPropsAndRef}
+    <Tabs.Container
+      containerRef={containerRef}
+      TabBarComponent={TabBar}
+      HeaderComponent={Header}
+      headerHeight={HEADER_HEIGHT}
+      tabBarHeight={TABBAR_HEIGHT}
+      refMap={refMap}
     >
-      {new Array(20).fill(null).map((_, index) => {
-        return (
-          // eslint-disable-next-line react/no-array-index-key
-          <Text key={index} style={{ padding: 20, color: 'red' }}>
-            {index}
-          </Text>
-        );
-      })}
-    </Animated.ScrollView>
-  );
-};
+      <ScreenA />
+      <ScreenB />
+    </Tabs.Container>
+  )
+}
 
-const FirstScene = () => <SomeRoute routeKey="first" color="white" />;
-const SecondScene = () => <SomeRoute routeKey="second" color="black" />;
-
-const HEADER_HEIGHT = 250;
-
-// set pointerEvents="none" to allow scroll on header
-// see the docs for more information
-const renderHeader = () => (
-  <View pointerEvents="none" style={styles.header}>
-    <Text style={styles.headerText}>COLLAPSIBLE</Text>
-  </View>
-);
-
-// example with react navigation
-
-const Tab = createMaterialCollapsibleTopTabNavigator();
-
-export const WithReactNavigation: React.FC<object> = () => {
+const ScreenB = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        collapsibleOptions={{
-          headerHeight: HEADER_HEIGHT,
-          renderHeader,
-          disableSnap: true,
-        }}
-      >
-        <Tab.Screen name="first" component={FirstScene} />
-        <Tab.Screen name="second" component={SecondScene} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-};
+    <Tabs.ScrollView name="B">
+      <View style={[styles.box, styles.boxA]} />
+      <View style={[styles.box, styles.boxB]} />
+    </Tabs.ScrollView>
+  )
+}
 
-// example without react navigation
-
-const renderScene = SceneMap({
-  first: FirstScene,
-  second: SecondScene,
-});
-
-export const WithoutReactNavigation: React.FC<object> = () => {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState<Route[]>([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
-  ]);
-
-  const handleIndexChange = (index: number) => {
-    setIndex(index);
-  };
-
+const renderItem: ListRenderItem<number> = ({ index }) => {
   return (
-    <CollapsibleTabView<Route>
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={handleIndexChange}
-      renderHeader={renderHeader} // optional
-      headerHeight={HEADER_HEIGHT} // optional, will be computed.
-      disableSnap
+    <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
+  )
+}
+
+const ScreenA = () => {
+  return (
+    <Tabs.FlatList
+      name="A"
+      data={[0, 1, 2, 3, 4]}
+      renderItem={renderItem}
+      keyExtractor={(v) => v + ''}
     />
-  );
-};
+  )
+}
+
+const Header: React.FC<HeaderProps> = () => {
+  return <View style={styles.header} />
+}
 
 const styles = StyleSheet.create({
+  box: {
+    height: 250,
+    width: '100%',
+  },
+  boxA: {
+    backgroundColor: 'white',
+  },
+  boxB: {
+    backgroundColor: '#D8D8D8',
+  },
   header: {
     height: HEADER_HEIGHT,
+    width: '100%',
     backgroundColor: '#2196f3',
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 4,
   },
-  headerText: {
-    color: 'white',
-    fontSize: 24,
-  },
-});
+})
 
-export default WithReactNavigation;
+export default Example
 ```
 
 ## Scroll on header
 
 If you want to allow scrolling from the header:
 
-- If `renderHeader` **doesn't** contain touchables set `pointerEvents='none'`
-- If `renderHeader` **does** contain touchables set `pointerEvents='box-none'` for them to work.
+- If the `HeaderComponent` **doesn't** contain touchables set `pointerEvents='none'`
+- If `HeaderComponent` **does** contain touchables set `pointerEvents='box-none'` for them to work.
   _Note: With this setting any child component that should **not** respond to touches (e.g. `<Image />`) needs to have `pointerEvents` set to `'none'`. Otherwise it can become the target of a touch gesture on iOS devices and thereby preventing scrolling._
 
 ## API reference
 
-The package has 3 main exports:
-
-| export                                                                                | description                                                                                                                            |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [CollapsibleTabView](#collapsibletabview)                                             | Component which is the one you'd use to render the collapsible tab view.                                                               |
-| [useCollapsibleScene](#usecollapsiblescene)                                           | Hook which you use to get props and ref for `ScrollView` or `FlatList`.                                                                |
-| [createMaterialCollapsibleTopTabNavigator](#creatematerialcollapsibletoptabnavigator) | Function to create the Navigator, if you are integrating with [react-navigation](https://github.com/react-navigation/react-navigation) |
-
-### `CollapsibleTabView`
-
-Simple wrapper of the original [TabView](https://github.com/satya164/react-native-tab-view#tabview).
+### `createCollapsibleTabs`
 
 Basic usage looks like this:
 
-```jsx
-<CollapsibleTabView
-  navigationState={{ index, routes }}
-  onIndexChange={setIndex}
-  renderScene={SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-  })}
-  renderHeader={() => <MyHeader />} // optional
-  headerHeight={HEADER_HEIGHT} // optional
-/>
+```tsx
+type MyTabs = 'tab0' | 'tab1'
+
+const {
+  Container,
+  FlatList,
+  ScrollView,
+  useTabsContext
+} = createCollapsibleTabs<MyTabs>()
+
+// or
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<MyTabs>()
+
+// use like this:
+<Tabs.Container {...props} />
+<Tabs.FlatList name='tab0' {...props} />
+<Tabs.ScrollView name='tab1' {...props} />
+
+```
+
+### `Tabs.Container`
+
+Basic usage looks like this:
+
+```tsx
+import {
+  CollapsibleProps,
+  RefComponent,
+  ContainerRef,
+  TabBarProps,
+} from 'react-native-collapsible-tab-view'
+import { useAnimatedRef } from 'react-native-reanimated'
+
+type MyTabs = 'article' | 'contacts' | 'albums'
+
+// see the examples folder
+const MyTabBar: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+
+const Example: React.FC<Props> = () => {
+  const containerRef = useAnimatedRef<ContainerRef>()
+  const tab0Ref = useAnimatedRef<RefComponent>()
+  const tab1Ref = useAnimatedRef<RefComponent>()
+
+  const [refMap] = React.useState({
+    tab0: tab0Ref,
+    tab1: tab1Ref,
+  })
+
+  return (
+    <Tabs.Container
+      containerRef={containerRef}
+      HeaderComponent={MyHeader}
+      TabBarComponent={MyTabBar}
+      headerHeight={HEADER_HEIGHT}
+      tabBarHeight={TABBAR_HEIGHT}
+      refMap={refMap}
+    >
+      { /* components returning Tabs.ScrollView || Tabs.FlatList */ }
+    </Tabs.Container>
+  )
+}
 ```
 
 #### Props
 
-All props are optional, but if you are not rendering a header, you'd be probably better with the original [TabView](https://github.com/satya164/react-native-tab-view#tabview).
+| prop                    | description                                                                                    | default |
+| ----------------------- | ---------------------------------------------------------------------------------------------- | ------- | --- | --- |
+| `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                       |         |
+| `refMap`                | Map of tab names and refs, must be the same order as the container children.                   |         |
+| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside. |         |     |     |
+| `headerHeight?`         | -                                                                                              |         |
+| `tabBarHeight?`         | -                                                                                              |         |
+| `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.   | `false` |
+| `diffClampEnabled?`     | Enable diff clamp.                                                                             | false   |
+| `snapThreshold?`        | Percentage of header height to make the snap effect. A number between 0 and 1.                 | `0.5`   |
+| `HeaderComponent?`      | React component to render above the tabbar.                                                    |         |
+| `TabBarComponent?`      | React component to render above tab scenes.                                                    |         |
+| `headerContainerStyle?` | Styles applied to the header and tabbar container                                              |         |
+| `containerStyle?`       | Styles applied to the view container.                                                          |         |
+| `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                  | `false` |
 
-| prop                        | description                                                                                                                                                                                                                                                                             | default                 |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `animatedValue?`            | Optionally controlled animated value.                                                                                                                                                                                                                                                   | `new Animated.Value(0)` |
-| `headerHeight?`             | Header component height. It is computed on layout. Providing it is just an optimization.                                                                                                                                                                                                | `0`                     |
-| `tabBarHeight?`             | Tab bar height.                                                                                                                                                                                                                                                                         | `49`                    |
-| `tabBarProps?`              | Props passed to the tab bar component.                                                                                                                                                                                                                                                  | `undefined`             |
-| `renderHeader?`             | Header rendered on top of the tab bar.                                                                                                                                                                                                                                                  | `() => null`            |
-| `headerContainerStyle?`     | Styles applied to header and tabbar container.                                                                                                                                                                                                                                          | `undefined`             |
-| `preventTabPressOnGliding?` | Prevent tab press if screen is gliding. Ignored if `renderTabBar` is provided.                                                                                                                                                                                                          | `true`                  |
-| `disableSnap?`              | Disable the snap animation.                                                                                                                                                                                                                                                             | `false`                 |
-| `renderTabBar?`             | Same as [renderTabBar](https://github.com/satya164/react-native-tab-view#rendertabbar) of the original [TabView](https://github.com/satya164/react-native-tab-view#tabview), but with the additional `isGliding` and `preventTabPressOnGliding` properties.                             | `undefined`             |
-| `snapThreshold?`            | Percentage of header height to make the snap effect. A number between 0 and 1.                                                                                                                                                                                                          | `0.5`                   |
-| `snapTimeout?`              | How long to wait before initiating the snap effect, in milliseconds.                                                                                                                                                                                                                    | `250`                   |
-| `onHeaderHeightChange?`     | Callback fired when the `headerHeight` state value inside `CollapsibleTabView` will be updated in the `onLayout` event from the tab/header container.<br/><br/> Useful to call layout animations. Example:<br/><br/><pre lang="js">() => {LayoutAnimation.configureNext(preset)};</pre> | `undefined`             |
-| `routeKeyProp?`             | The property from the `routes` map to use for the active route key.                                                                                                                                                                                                                     | `key`                   |
+### `Tabs.ScrollView` and `Tabs.FlatList`
 
-### `useCollapsibleScene`
-
-A hook to get all props and ref for the animated component in order to make the collapsible tabs work.
-
-Works with:
-
-- Animated.ScrollView
-- Animated.FlatList
+Basic usage looks like this:
 
 ```tsx
-const FirstScene: React.FC<object> = ({ children }) => {
-  const scrollPropsAndRef = useCollapsibleScene('firstScene');
-
+const ScrollViewScreen: React.FC<object> = () => {
   return (
-    <Animated.ScrollView {...scrollPropsAndRef}>{children}</Animated.ScrollView>
-  );
-};
+    <Tabs.ScrollView name="myTabName0" {...scrollViewProps}>
+      {children}
+    </Tabs.ScrollView>
+  )
+}
+
+const FlatListScreen: React.FC<object> = () => {
+  return <Tabs.FlatList<ItemType> name="myTabName1" {...flatListProps} />
+}
 ```
 
-It includes de following values:
+#### Props
 
-| value                   | description                                                                                                                                                                                                                 |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ref`                   | Function to get ref from scrollable components inside the scene, and track in the Collapsible Tab View.                                                                                                                     |
-| `onScroll`              | Scroll event, enabled only for the focused route.                                                                                                                                                                           |
-| `scrollEnabled`         | Disable scroll for unfocused routes is optional, but prevents weird/delayed animations if the user changes tabs and quickly start scrolling the new tab, before the animated value starting to track the new focused route. |
-| `contentContainerStyle` | Content container style with `paddingTop` and `minHeight`.                                                                                                                                                                  |
-| `progressViewOffset`    | Needed for the loading indicator to show correctly on android.                                                                                                                                                              |
-| `onMomentumScrollBegin` | Callback to set `isGliding` to `true`.                                                                                                                                                                                      |
-| `onScrollEndDrag`       | Callback to sync the scroll of unfocused routes.                                                                                                                                                                            |
-| `onMomentumScrollEnd`   | Callback to sync the scroll of unfocused routes.                                                                                                                                                                            |
+| prop      | description                                                                           |
+| --------- | ------------------------------------------------------------------------------------- |
+| name      | Name of the tab. Must be key of the `refMap` object provided to the `Tabs.Container`. |
+| {...rest} | `ScrollView` or `FlatList` props.                                                     |
 
-### `createMaterialCollapsibleTopTabNavigator`
+### `useTabsContext`
 
-Same API as the [createMaterialTopTabNavigator (not-collapsible)](https://reactnavigation.org/docs/material-top-tab-navigator#props), with aditional `collapsibleOptions` prop, extending all props of [CollapsibleTabView](#collapsibletabview).
+A hook to access the context.
+
+```tsx
+// iside your component
+const { focusedTab, ...rest } = useTabsContext()
+```
+
+#### Props
+
+| prop             | description                               | type                             |
+| ---------------- | ----------------------------------------- | -------------------------------- | -------- |
+| headerHeight     |                                           | `number`                         |
+| tabBarHeight     |                                           | `number`                         |
+| snapEnabled      |                                           | `boolean`                        |
+| diffClampEnabled |                                           | `boolean`                        |
+| snapThreshold    |                                           | `number`                         |
+| refMap           |                                           | `Record<T, Ref>`                 |
+| scrollYCurrent   | Scroll position of current tab.           | `Animated.SharedValue<number>`   |
+| tabNames         | Tab names, same as the keys of `refMap`   | `Animated.SharedValue<T[]>`      |
+| index            | Current tab index.                        | `Animated.SharedValue<number>`   |
+| scrollY          | Array of the scroll position of each tab. | `Animated.SharedValue<number[]>` |
+| oldAccScrollY    | Previous accumulted scrollY.              | `Animated.SharedValue<number>`   |
+| accScrollY       | Current accumulated scrollY               | `Animated.SharedValue<number>`   |
+| offset           | Offset.                                   | `Animated.SharedValue<number>`   |
+| isScrolling      | If is scrolling.                          | `Animated.SharedValue<boolean    | number>` |
+| focusedTab       | Current focused tab name.                 | `Animated.SharedValue<T>`        |
+| accDiffClamp     | Accumulated diffClamp value.              | `Animated.SharedValue<number>`   |
+| containerHeight? |                                           | ` number`                        |
 
 ## Contributing
 

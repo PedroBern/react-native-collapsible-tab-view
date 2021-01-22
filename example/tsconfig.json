@@ -1,27 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "react-native-collapsible-tab-view": ["../src/index"]
     },
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
-    "lib": ["esnext"],
-    "module": "esnext",
+    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
     "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitUseStrict": false,
-    "noStrictGenericChecks": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
+    "noEmit": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "strict": true,
-    "target": "esnext",
-    "isolatedModules": true
+    "rootDirs": ["src"],
   }
 }

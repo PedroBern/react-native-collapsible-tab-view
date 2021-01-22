@@ -1,95 +1,76 @@
+import React, { ComponentProps } from 'react'
 import {
-  Animated,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
+  FlatList,
+  ScrollView,
+  ListRenderItem,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
+import Animated from 'react-native-reanimated'
 
-export type ScrollableView = {
-  scrollTo: (params: { x?: number; y?: number; animated?: boolean }) => void;
-  scrollToOffset?: never;
-};
+export type ContainerRef = FlatList<any>
 
-type ScrollableList = {
-  scrollTo?: never;
-  scrollToOffset: (params: { offset: number; animated?: boolean }) => void;
-};
+export type RefComponent = FlatList<any> | ScrollView
 
-export type ScrollRef = ScrollableView | ScrollableList;
+export type Ref = React.RefObject<RefComponent>
 
-// TODO:
-// see GetRef notes below
-// interface ScrollableComponent {
-//   new (any): ScrollRef
-// }
+export type TabBarProps<T extends string> = {
+  scrollX: Animated.SharedValue<number>
+  focusedTab: Animated.SharedValue<T>
+  refMap: Record<T, Ref>
+  index: Animated.SharedValue<number>
+  containerRef: React.RefObject<ContainerRef>
+}
 
-// TODO:
-// work to be done in @types/react-native
-// It should be `(instance: ScrollableComponent | null): void` [see above]
-// instead of `(instance: any | null): void`
-// but @types has wrong types for Animated.[FlatList | ScrollView]
-// without class methods definitions. If we were using non Animated components,
-// just a regular FlatList for example, it would work with the commented code
-// above.
-export type GetRef = (instance: any | null) => void;
+export type Props<T extends string> = {
+  containerRef: React.RefObject<ContainerRef>
+  headerHeight?: number
+  tabBarHeight?: number
+  snapEnabled?: boolean
+  diffClampEnabled?: boolean
+  snapThreshold?: number
+  children: React.ReactElement[]
+  HeaderComponent?: React.JSXElementConstructor<TabBarProps<T>>
+  TabBarComponent?: React.JSXElementConstructor<TabBarProps<T>>
+  refMap: Record<T, Ref>
+  headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
+  containerStyle?: ViewStyle
+  cancelTranslation?: boolean
+}
 
-export type CollapsibleContext = {
-  /**
-   * Current focused route.
-   */
-  activeRouteKey: string;
-  /**
-   * Animated value to track scroll position.
-   */
-  scrollY: Animated.Value;
-  /**
-   * Function to build the function a function to get
-   * ref of the scrollable component for a specific route.
-   */
-  buildGetRef: (routeKey: string) => GetRef;
-  headerHeight: number;
-  tabBarHeight: number;
-  containerHeight: number;
-  onMomentumScrollBegin: (
-    event: NativeSyntheticEvent<NativeScrollEvent>
-  ) => void;
-  onScrollBeginDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  onScrollEndDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  onMomentumScrollEnd: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-};
+export type ContextType<T extends string> = {
+  headerHeight: number
+  tabBarHeight: number
+  snapEnabled: boolean
+  diffClampEnabled: boolean
+  snapThreshold: number
+  refMap: Record<T, Ref>
+  scrollYCurrent: Animated.SharedValue<number>
+  tabNames: Animated.SharedValue<T[]>
+  index: Animated.SharedValue<number>
+  scrollY: Animated.SharedValue<number[]>
+  oldAccScrollY: Animated.SharedValue<number>
+  accScrollY: Animated.SharedValue<number>
+  offset: Animated.SharedValue<number>
+  isScrolling: Animated.SharedValue<boolean | number>
+  focusedTab: Animated.SharedValue<T>
+  accDiffClamp: Animated.SharedValue<number>
+  containerHeight?: number
+}
 
-export type CollapsibleScenePropsAndRef = {
-  /**
-   * Disable scroll for unfocused routes is optional,
-   * but prevents weird/delayed animations if the user changes tabs
-   * and quickly start scrolling the new tab, before
-   * the scrollY starting to track the new focused route.
-   */
-  scrollEnabled: boolean;
-  /**
-   * Scroll event, enabled only for the focused route.
-   */
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  /**
-   * Function to get ref from scrollable components
-   * inside the scene, and track in the Tab View.
-   */
-  ref: GetRef;
-  /**
-   * Content container style with `paddingTop` and `minHeight`.
-   */
-  contentContainerStyle: {
-    paddingTop: number;
-    minHeight: number;
-  };
-  /**
-   * Needed for the loading indicator to show correctly on android.
-   */
-  progressViewOffset: number;
-  /**
-   * For use in the Animated ListEmptyComponent.
-   */
-  tabBarHeight: number;
-} & Pick<
-  CollapsibleContext,
-  'onMomentumScrollBegin' | 'onScrollEndDrag' | 'onMomentumScrollEnd'
->;
+export type TabProps<T extends string> = {
+  name: T
+}
+
+export type ScrollViewProps<T extends string> = ComponentProps<
+  typeof Animated.ScrollView
+> &
+  TabProps<T>
+
+export type FlatListProps<R extends any, T extends string> = Omit<
+  ComponentProps<typeof FlatList>,
+  'renderItem'
+> &
+  TabProps<T> & {
+    renderItem: ListRenderItem<R>
+  }

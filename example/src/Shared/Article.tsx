@@ -1,15 +1,7 @@
-import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Animated,
-  RefreshControl,
-} from 'react-native';
-import { CollapsibleScenePropsAndRef } from 'react-native-collapsible-tab-view';
-import useRefresh from './useRefresh';
+import * as React from 'react'
+import { View, Text, Image, StyleSheet } from 'react-native'
+
+import Tabs from './Tabs'
 
 const ArticleContent = () => {
   return (
@@ -46,47 +38,22 @@ const ArticleContent = () => {
         section 1.10.32.
       </Text>
     </>
-  );
-};
-
-export default class Article extends React.Component {
-  render() {
-    return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
-      >
-        <ArticleContent />
-      </ScrollView>
-    );
-  }
+  )
 }
 
-// used in Collapsible TabView examples
-export const AnimatedArticle = React.forwardRef<
-  any,
-  React.PropsWithoutRef<CollapsibleScenePropsAndRef>
->(({ contentContainerStyle, progressViewOffset, ...rest }, ref) => {
-  const [isRefreshing, startRefreshing] = useRefresh();
-
+const Article: React.FC<object> = () => {
   return (
-    <Animated.ScrollView
-      ref={ref}
+    <Tabs.ScrollView
+      name="article"
       style={styles.container}
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={startRefreshing}
-          progressViewOffset={progressViewOffset}
-        />
-      }
-      contentContainerStyle={[styles.content, contentContainerStyle]}
-      {...rest}
+      contentContainerStyle={styles.content}
     >
       <ArticleContent />
-    </Animated.ScrollView>
-  );
-});
+    </Tabs.ScrollView>
+  )
+}
+
+export default Article
 
 const styles = StyleSheet.create({
   container: {
@@ -140,4 +107,4 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginVertical: 8,
   },
-});
+})
