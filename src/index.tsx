@@ -1,13 +1,9 @@
-export { default as CollapsibleTabView } from './CollapsibleTabView';
+import { TabBarProps, Props, RefComponent, ContainerRef } from './types'
 export type {
-  Props as CollapsibleTabViewProps,
-  RenderTabBarProps,
-} from './CollapsibleTabView';
+  TabBarProps,
+  Props as CollapsibleProps,
+  RefComponent,
+  ContainerRef,
+}
 
-export { default as useCollapsibleScene } from './useCollapsibleScene';
-export type { CollapsibleScenePropsAndRef } from './types';
-
-export { createContext } from './CollapsibleTabViewContext';
-
-export { default as MaterialTopTabsCollapsibleTabView } from './MaterialTopTabsCollapsibleTabView';
-export { default as createMaterialCollapsibleTopTabNavigator } from './createMaterialCollapsibleTopTabNavigator';
+export { default as createCollapsibleTabs } from './createCollapsibleTabs'
