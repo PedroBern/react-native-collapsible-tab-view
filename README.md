@@ -163,9 +163,10 @@ export default Example
 ## Scroll on header
 
 If you want to allow scrolling from the header:
-
+  
 - If the `HeaderComponent` **doesn't** contain touchables set `pointerEvents='none'`
 - If `HeaderComponent` **does** contain touchables set `pointerEvents='box-none'` for them to work.
+
   _Note: With this setting any child component that should **not** respond to touches (e.g. `<Image />`) needs to have `pointerEvents` set to `'none'`. Otherwise it can become the target of a touch gesture on iOS devices and thereby preventing scrolling._
 
 ## API reference
