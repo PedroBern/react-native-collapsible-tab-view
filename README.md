@@ -163,7 +163,7 @@ export default Example
 ## Scroll on header
 
 If you want to allow scrolling from the header:
-  
+
 - If the `HeaderComponent` **doesn't** contain touchables set `pointerEvents='none'`
 - If `HeaderComponent` **does** contain touchables set `pointerEvents='box-none'` for them to work.
 
@@ -176,6 +176,8 @@ If you want to allow scrolling from the header:
 Basic usage looks like this:
 
 ```tsx
+import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
+
 type MyTabs = 'tab0' | 'tab1'
 
 const {
@@ -201,7 +203,6 @@ Basic usage looks like this:
 
 ```tsx
 import {
-  CollapsibleProps,
   RefComponent,
   ContainerRef,
   TabBarProps,
