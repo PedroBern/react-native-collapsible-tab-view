@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.0.0...v3.0.1) (2021-01-23)
+
+
+### Bug Fixes
+
+* prevent rerenders on layout ([2e3aceb](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2e3aceb6c734ca533afbe28e1ed6b527de9468e0))
+
 # [3.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v2.0.2...v3.0.0) (2021-01-22)
 
 
