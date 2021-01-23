@@ -133,17 +133,29 @@ const createCollapsibleTabs = <T extends string>() => {
       }
     }, [diffClampEnabled])
 
-    const getHeaderHeight = React.useCallback((event: LayoutChangeEvent) => {
-      setHeaderHeight(event.nativeEvent.layout.height || 0)
-    }, [])
+    const getHeaderHeight = React.useCallback(
+      (event: LayoutChangeEvent) => {
+        const height = event.nativeEvent.layout.height
+        if (headerHeight !== height) setHeaderHeight(height)
+      },
+      [headerHeight]
+    )
 
-    const getTabBarHeight = React.useCallback((event: LayoutChangeEvent) => {
-      setTabBarHeight(event.nativeEvent.layout.height || 0)
-    }, [])
+    const getTabBarHeight = React.useCallback(
+      (event: LayoutChangeEvent) => {
+        const height = event.nativeEvent.layout.height
+        if (tabBarHeight !== height) setTabBarHeight(height)
+      },
+      [tabBarHeight]
+    )
 
-    const onLayout = React.useCallback((e: LayoutChangeEvent) => {
-      setContainerHeight(e.nativeEvent.layout.height || 0)
-    }, [])
+    const onLayout = React.useCallback(
+      (event: LayoutChangeEvent) => {
+        const height = event.nativeEvent.layout.height
+        if (containerHeight !== height) setContainerHeight(height)
+      },
+      [containerHeight]
+    )
 
     return (
       <Context.Provider
