@@ -56,6 +56,7 @@ export type ContextType<T extends string> = {
   focusedTab: Animated.SharedValue<T>
   accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
+  scrollX: Animated.SharedValue<number>
 }
 
 export type TabProps<T extends string> = {

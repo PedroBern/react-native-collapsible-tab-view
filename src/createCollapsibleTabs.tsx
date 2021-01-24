@@ -178,6 +178,7 @@ const createCollapsibleTabs = <T extends string>() => {
           focusedTab,
           accDiffClamp,
           containerHeight,
+          scrollX,
         }}
       >
         <View

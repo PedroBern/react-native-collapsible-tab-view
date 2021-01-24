@@ -306,6 +306,7 @@ const { focusedTab, ...rest } = useTabsContext()
 | tabNames         | Tab names, same as the keys of `refMap`   | `Animated.SharedValue<T[]>`      |
 | index            | Current tab index.                        | `Animated.SharedValue<number>`   |
 | scrollY          | Array of the scroll position of each tab. | `Animated.SharedValue<number[]>` |
+| scrollX          | Scroll x position of the tabs container.  | `Animated.SharedValue<number>`   |
 | oldAccScrollY    | Previous accumulted scrollY.              | `Animated.SharedValue<number>`   |
 | accScrollY       | Current accumulated scrollY               | `Animated.SharedValue<number>`   |
 | offset           | Offset.                                   | `Animated.SharedValue<number>`   |
