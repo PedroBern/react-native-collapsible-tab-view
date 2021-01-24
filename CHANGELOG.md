@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.0.1...v3.1.0) (2021-01-24)
+
+
+### Features
+
+* add scrollX to context ([3f3b829](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/3f3b82911a9137fe9c32012c3c1676a994cde05d))
+
 ## [3.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.0.0...v3.0.1) (2021-01-23)
 
 
