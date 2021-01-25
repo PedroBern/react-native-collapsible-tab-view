@@ -1,5 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  useWindowDimensions,
+} from 'react-native'
 import { TabBarProps } from 'react-native-collapsible-tab-view'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 
@@ -7,8 +13,6 @@ type TabItemProps = {
   name: string
   onPress: () => void
 }
-
-const windowWidth = Dimensions.get('window').width
 
 export const TABBAR_HEIGHT = 48
 
@@ -35,8 +39,17 @@ const TabBar: React.FC<TabBarProps<any>> = ({
   index,
   containerRef,
 }) => {
+  const windowWidth = useWindowDimensions().width
   const [nTabs] = React.useState(Object.keys(refMap).length)
-  const [indicatorWidth] = React.useState(windowWidth / nTabs)
+  const [indicatorWidth, setIndicatorWidth] = React.useState(
+    windowWidth / nTabs
+  )
+
+  React.useEffect(() => {
+    if (indicatorWidth * nTabs !== windowWidth) {
+      setIndicatorWidth(windowWidth / nTabs)
+    }
+  }, [windowWidth, nTabs, indicatorWidth])
 
   const scrollTo = React.useCallback(
     (i: number) => {
