@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.2.0...v3.2.1) (2021-01-25)
+
+
+### Bug Fixes
+
+* replace Dimensions by useWindowDimensions ([d21b4b5](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/d21b4b589bf54cf7e83f821e710b0d2ac0aa2aa0))
+
 # [3.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.1.0...v3.2.0) (2021-01-25)
 
 
