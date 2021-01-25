@@ -48,6 +48,7 @@ const createCollapsibleTabs = <T extends string>() => {
     cancelLazyFazeIn,
   }) => {
     const windowWidth = useWindowDimensions().width
+    const firstRender = React.useRef(true)
 
     const [containerHeight, setContainerHeight] = React.useState<
       number | undefined
@@ -81,10 +82,25 @@ const createCollapsibleTabs = <T extends string>() => {
       [windowWidth]
     )
 
+    const indexDecimal = useDerivedValue(() => {
+      return scrollX.value / windowWidth
+    }, [windowWidth])
+
+    React.useEffect(() => {
+      if (firstRender.current) {
+        firstRender.current = false
+      } else {
+        containerRef.current?.scrollToIndex({
+          animated: false,
+          index: index.value,
+        })
+      }
+    }, [containerRef, index.value, windowWidth])
+
     // derived from scrollX, to calculate the next offset and index
     useAnimatedReaction(
       () => {
-        const nextIndex = Math.round(scrollX.value / windowWidth)
+        const nextIndex = Math.round(indexDecimal.value)
         return nextIndex
       },
       (nextIndex) => {
