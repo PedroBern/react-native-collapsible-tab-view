@@ -14,6 +14,7 @@ import Animated, {
   useAnimatedReaction,
   scrollTo,
   withTiming,
+  runOnJS,
 } from 'react-native-reanimated'
 
 import { Props, ContextType, ScrollViewProps, FlatListProps } from './types'
@@ -21,6 +22,12 @@ import { Props, ContextType, ScrollViewProps, FlatListProps } from './types'
 const windowWidth = Dimensions.get('window').width
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
+
+export const getItemLayout = (_: unknown, index: number) => ({
+  length: windowWidth,
+  offset: windowWidth * index,
+  index,
+})
 
 const createCollapsibleTabs = <T extends string>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
@@ -45,6 +52,8 @@ const createCollapsibleTabs = <T extends string>() => {
     headerContainerStyle,
     cancelTranslation,
     containerStyle,
+    lazy,
+    cancelLazyFazeIn,
   }) => {
     const [containerHeight, setContainerHeight] = React.useState<
       number | undefined
@@ -64,7 +73,8 @@ const createCollapsibleTabs = <T extends string>() => {
     const oldAccScrollY = useSharedValue(0)
     const accDiffClamp = useSharedValue(0)
     const index = useSharedValue(0)
-    const tabNames = useSharedValue(Object.keys(refMap))
+    // @ts-ignore
+    const tabNames = useSharedValue<T[]>(Object.keys(refMap))
     // @ts-ignore
     const focusedTab = useSharedValue<T>(tabNames.value[index.value])
 
@@ -115,10 +125,23 @@ const createCollapsibleTabs = <T extends string>() => {
     )
 
     const renderItem = React.useCallback(
-      ({ index }) => {
-        return children[index]
+      ({ index: i }) => {
+        return lazy ? (
+          <Lazy
+            name={tabNames.value[i]}
+            // todo:
+            // set startMounted to initial scene instead of 0,
+            // to support starting on specific tab
+            startMounted={i === 0}
+            cancelLazyFazeIn={cancelLazyFazeIn}
+          >
+            {children[i]}
+          </Lazy>
+        ) : (
+          children[i]
+        )
       },
-      [children]
+      [children, lazy, tabNames.value, cancelLazyFazeIn]
     )
 
     const stylez = useAnimatedStyle(() => {
@@ -235,9 +258,72 @@ const createCollapsibleTabs = <T extends string>() => {
             pagingEnabled
             onScroll={scrollHandlerX}
             showsHorizontalScrollIndicator={false}
+            getItemLayout={getItemLayout}
           />
         </View>
       </Context.Provider>
+    )
+  }
+
+  const Lazy: React.FC<{
+    name: T
+    startMounted?: boolean
+    cancelLazyFazeIn?: boolean
+    children: React.ReactElement
+  }> = ({ children, name, startMounted, cancelLazyFazeIn }) => {
+    const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
+    const [canMount, setCanMount] = React.useState(!!startMounted)
+    const opacity = useSharedValue(cancelLazyFazeIn ? 1 : 0)
+
+    const allowToMount = React.useCallback(() => {
+      // wait the scene to be at least 50 ms focused, before mouting
+      setTimeout(() => {
+        if (focusedTab.value === name) {
+          setCanMount(true)
+        }
+      }, 50)
+    }, [focusedTab.value, name])
+
+    useAnimatedReaction(
+      () => {
+        return focusedTab.value === name
+      },
+      (focused) => {
+        if (focused && !canMount) {
+          runOnJS(allowToMount)()
+        }
+      },
+      [canMount, focusedTab]
+    )
+
+    useDerivedValue(() => {
+      if (canMount) {
+        const tabIndex = tabNames.value.findIndex((n) => n === name)
+        // @ts-ignore
+        scrollTo(refMap[name], 0, scrollY.value[tabIndex], false)
+        if (!cancelLazyFazeIn) opacity.value = withTiming(1)
+      }
+    }, [canMount, cancelLazyFazeIn])
+
+    const stylez = useAnimatedStyle(() => {
+      return {
+        opacity: opacity.value,
+      }
+    }, [])
+
+    return canMount ? (
+      cancelLazyFazeIn ? (
+        children
+      ) : (
+        <Animated.View
+          pointerEvents="box-none"
+          style={[styles.container, !cancelLazyFazeIn && stylez]}
+        >
+          {children}
+        </Animated.View>
+      )
+    ) : (
+      <ScrollView name={name} />
     )
   }
 
@@ -425,7 +511,7 @@ const createCollapsibleTabs = <T extends string>() => {
     )
   }
 
-  return { FlatList, ScrollView, Container, useTabsContext }
+  return { FlatList, ScrollView, Container, useTabsContext, Lazy }
 }
 
 const styles = StyleSheet.create({

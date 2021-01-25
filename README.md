@@ -45,9 +45,10 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 - Animations and interactions on the UI thread
 - Highly customizable
 - Fully typed with [TypeScript](https://typescriptlang.org)
+- Lazy support with fade-in animation
 - DiffClamp tabs
-- Interpotated tabs
-- Scroll snap (with interpotated tabs)
+- Interpolated tabs
+- Scroll snap (with interpolated tabs)
 - Animated snap (with diffClamp tabs)
 
 ## Installation
@@ -257,6 +258,8 @@ const Example: React.FC<Props> = () => {
 | `headerContainerStyle?` | Styles applied to the header and tabbar container                                              |         |
 | `containerStyle?`       | Styles applied to the view container.                                                          |         |
 | `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                  | `false` |
+| `lazy?`                 | Mount the screen only when it's focused. It has a default fade in animation.                   | `false` |
+| `cancelLazyFadeIn?`     | Cancel the fade in animation if `lazy={true}`                                                  | `false` |
 
 ### `Tabs.ScrollView` and `Tabs.FlatList`
 

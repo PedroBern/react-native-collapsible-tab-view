@@ -36,6 +36,8 @@ export type Props<T extends string> = {
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
   containerStyle?: ViewStyle
   cancelTranslation?: boolean
+  lazy?: boolean
+  cancelLazyFazeIn?: boolean
 }
 
 export type ContextType<T extends string> = {
