@@ -1,10 +1,10 @@
 import React from 'react'
 import {
   FlatList as RNFlatList,
-  Dimensions,
   View,
   StyleSheet,
   LayoutChangeEvent,
+  useWindowDimensions,
 } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -19,15 +19,7 @@ import Animated, {
 
 import { Props, ContextType, ScrollViewProps, FlatListProps } from './types'
 
-const windowWidth = Dimensions.get('window').width
-
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
-
-export const getItemLayout = (_: unknown, index: number) => ({
-  length: windowWidth,
-  offset: windowWidth * index,
-  index,
-})
 
 const createCollapsibleTabs = <T extends string>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
@@ -55,6 +47,8 @@ const createCollapsibleTabs = <T extends string>() => {
     lazy,
     cancelLazyFazeIn,
   }) => {
+    const windowWidth = useWindowDimensions().width
+
     const [containerHeight, setContainerHeight] = React.useState<
       number | undefined
     >(undefined)
@@ -77,6 +71,15 @@ const createCollapsibleTabs = <T extends string>() => {
     const tabNames = useSharedValue<T[]>(Object.keys(refMap))
     // @ts-ignore
     const focusedTab = useSharedValue<T>(tabNames.value[index.value])
+
+    const getItemLayout = React.useCallback(
+      (_: unknown, index: number) => ({
+        length: windowWidth,
+        offset: windowWidth * index,
+        index,
+      }),
+      [windowWidth]
+    )
 
     // derived from scrollX, to calculate the next offset and index
     useAnimatedReaction(
@@ -450,6 +453,8 @@ const createCollapsibleTabs = <T extends string>() => {
 
     const scrollHandler = useScrollHandlerY(name)
 
+    const windowWidth = useWindowDimensions().width
+
     return (
       <AnimatedFlatList
         // @ts-ignore
@@ -487,6 +492,8 @@ const createCollapsibleTabs = <T extends string>() => {
     } = useTabsContext()
 
     const scrollHandler = useScrollHandlerY(name)
+
+    const windowWidth = useWindowDimensions().width
 
     return (
       <Animated.ScrollView
