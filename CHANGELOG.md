@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.1.0...v3.2.0) (2021-01-25)
+
+
+### Features
+
+* add lazy support ([4bfa80b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/4bfa80b481ab97bbbeb90a266257304489111330)), closes [#19](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/19)
+
 # [3.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.0.1...v3.1.0) (2021-01-24)
 
 
