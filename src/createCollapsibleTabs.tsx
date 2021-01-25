@@ -17,11 +17,24 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated'
 
-import { Props, ContextType, ScrollViewProps, FlatListProps } from './types'
+import MaterialTabBar, {
+  TABBAR_HEIGHT,
+  MaterialTabBarProps,
+} from './MaterialTabBar'
+import {
+  CollapsibleProps,
+  ContextType,
+  ScrollViewProps,
+  FlatListProps,
+  TabBarProps,
+} from './types'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
 
-const createCollapsibleTabs = <T extends string>() => {
+const createCollapsibleTabs = <
+  T extends string,
+  TP extends TabBarProps<T> = MaterialTabBarProps<T>
+>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
   function useTabsContext(): ContextType<T> {
@@ -30,22 +43,23 @@ const createCollapsibleTabs = <T extends string>() => {
     return c
   }
 
-  const Container: React.FC<Props<T>> = ({
+  const Container: React.FC<CollapsibleProps<T, TP>> = ({
     containerRef,
     headerHeight: initialHeaderHeight,
-    tabBarHeight: initialTabBarHeight,
+    tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
     snapEnabled = false,
     diffClampEnabled = false,
     snapThreshold = 0.5,
     children,
     HeaderComponent,
-    TabBarComponent,
+    TabBarComponent = MaterialTabBar,
     refMap,
     headerContainerStyle,
     cancelTranslation,
     containerStyle,
     lazy,
     cancelLazyFazeIn,
+    tabBarProps,
   }) => {
     const windowWidth = useWindowDimensions().width
     const firstRender = React.useRef(true)
@@ -221,6 +235,7 @@ const createCollapsibleTabs = <T extends string>() => {
           accDiffClamp,
           containerHeight,
           scrollX,
+          indexDecimal,
         }}
       >
         <View
@@ -231,13 +246,13 @@ const createCollapsibleTabs = <T extends string>() => {
           <Animated.View
             pointerEvents="box-none"
             style={[
-              styles.headerContainer,
+              styles.topContainer,
               headerContainerStyle,
               !cancelTranslation && stylez,
             ]}
           >
             <View
-              style={styles.container}
+              style={[styles.container, styles.headerContainer]}
               onLayout={getHeaderHeight}
               pointerEvents="box-none"
             >
@@ -247,12 +262,12 @@ const createCollapsibleTabs = <T extends string>() => {
                   index={index}
                   refMap={refMap}
                   focusedTab={focusedTab}
-                  scrollX={scrollX}
+                  indexDecimal={indexDecimal}
                 />
               )}
             </View>
             <View
-              style={styles.container}
+              style={[styles.container, styles.tabBarContainer]}
               onLayout={getTabBarHeight}
               pointerEvents="box-none"
             >
@@ -262,7 +277,8 @@ const createCollapsibleTabs = <T extends string>() => {
                   index={index}
                   refMap={refMap}
                   focusedTab={focusedTab}
-                  scrollX={scrollX}
+                  indexDecimal={indexDecimal}
+                  {...tabBarProps}
                 />
               )}
             </View>
@@ -541,10 +557,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerContainer: {
+  topContainer: {
     position: 'absolute',
     zIndex: 100,
     width: '100%',
+  },
+  tabBarContainer: {
+    zIndex: 1,
+  },
+  headerContainer: {
+    zIndex: 2,
   },
 })
 
