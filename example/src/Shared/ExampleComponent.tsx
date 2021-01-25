@@ -10,7 +10,6 @@ import Albums from './Albums'
 import Article from './Article'
 import Contacts from './Contacts'
 import { HEADER_HEIGHT } from './Header'
-import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
 import Tabs, { TabNames } from './Tabs'
 
 type Props = {
@@ -32,9 +31,7 @@ const Example: React.FC<Props> = ({ emptyContacts, ...props }) => {
   return (
     <Tabs.Container
       containerRef={containerRef}
-      TabBarComponent={MaterialTabBar}
       headerHeight={HEADER_HEIGHT}
-      tabBarHeight={TABBAR_HEIGHT}
       refMap={refMap}
       {...props}
     >

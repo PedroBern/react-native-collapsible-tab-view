@@ -19,6 +19,7 @@ import DiffClampSnap from './DiffClampSnap'
 import Lazy from './Lazy'
 import QuickStartDemo from './QuickStartDemo'
 import ScrollOnHeader from './ScrollOnHeader'
+import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
 import { ExampleComponentType } from './types'
 
@@ -28,6 +29,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   DiffClamp,
   DiffClampSnap,
   Lazy,
+  ScrollableTabs,
   // CenteredEmptyList,
   ScrollOnHeader,
   QuickStartDemo,

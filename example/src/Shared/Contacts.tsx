@@ -6,10 +6,11 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { HEADER_HEIGHT } from './Header'
-import { TABBAR_HEIGHT } from './MaterialTabBar'
 import Tabs, { useTabsContext } from './Tabs'
 
 type Item = { name: string; number: number }
+
+const TABBAR_HEIGHT = 48
 
 const CONTACTS: Item[] = [
   { name: 'Marissa Castillo', number: 7766398169 },

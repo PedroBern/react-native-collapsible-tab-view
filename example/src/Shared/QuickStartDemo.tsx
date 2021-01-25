@@ -8,15 +8,12 @@ import {
 } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
-import TabBar from './MaterialTabBar'
-
 type TabNames = 'A' | 'B'
 type HeaderProps = TabProps<TabNames>
 
 const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
 
 const HEADER_HEIGHT = 250
-const TABBAR_HEIGHT = 48
 
 const Example: React.FC = () => {
   const containerRef = useAnimatedRef<ContainerRef>()
@@ -31,10 +28,8 @@ const Example: React.FC = () => {
   return (
     <Tabs.Container
       containerRef={containerRef}
-      TabBarComponent={TabBar}
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT}
-      tabBarHeight={TABBAR_HEIGHT}
       refMap={refMap}
     >
       <ScreenA />
