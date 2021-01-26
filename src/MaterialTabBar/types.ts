@@ -1,5 +1,6 @@
 import {
   LayoutChangeEvent,
+  PressableProps,
   StyleProp,
   TextStyle,
   ViewStyle,
@@ -27,7 +28,8 @@ export type MaterialTabItemProps<T extends string> = {
   labelStyle?: AnimatedTextStyle
   inactiveOpacity?: number
   pressColor?: string
-}
+  pressOpacity?: number
+} & Omit<PressableProps, 'onPress' | 'children'>
 
 export type MaterialTabBarProps<N extends string> = TabBarProps<N> & {
   scrollEnabled?: boolean
