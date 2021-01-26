@@ -96,7 +96,7 @@ const Example: React.FC = () => {
     <Tabs.Container
       containerRef={containerRef}
       HeaderComponent={Header}
-      headerHeight={HEADER_HEIGHT}
+      headerHeight={HEADER_HEIGHT} // optional
       refMap={refMap}
     >
       <ScreenA />
@@ -214,8 +214,6 @@ import { useAnimatedRef } from 'react-native-reanimated'
 
 type MyTabs = 'article' | 'contacts' | 'albums'
 
-// see the examples folder
-const MyTabBar: React.FC<TabBarProps<MyTabs>> = (props) => {...}
 const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
 
 const Example: React.FC<Props> = () => {
@@ -232,9 +230,7 @@ const Example: React.FC<Props> = () => {
     <Tabs.Container
       containerRef={containerRef}
       HeaderComponent={MyHeader}
-      TabBarComponent={MyTabBar}
-      headerHeight={HEADER_HEIGHT}
-      tabBarHeight={TABBAR_HEIGHT}
+      headerHeight={HEADER_HEIGHT} // optional
       refMap={refMap}
     >
       { /* components returning Tabs.ScrollView || Tabs.FlatList */ }
@@ -245,25 +241,25 @@ const Example: React.FC<Props> = () => {
 
 #### Props
 
-| prop                    | description                                                                                    | default          |
-| ----------------------- | ---------------------------------------------------------------------------------------------- | ---------------- |
-| `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                       |                  |
-| `refMap`                | Map of tab names and refs, must be the same order as the container children.                   |                  |
-| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside. |                  |
-| `headerHeight?`         | -                                                                                              |                  |
-| `tabBarHeight?`         | -                                                                                              | `48`             |
-| `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.   | `false`          |
-| `diffClampEnabled?`     | Enable diff clamp.                                                                             | `false`          |
-| `snapThreshold?`        | Percentage of header height to make the snap effect. A number between 0 and 1.                 | `0.5`            |
-| `HeaderComponent?`      | React component to render above the tabbar.                                                    |                  |
-| `TabBarComponent?`      | React component to render above tab scenes.                                                    | `MaterialTabBar` |
-| `headerContainerStyle?` | Styles applied to the header and tabbar container                                              |                  |
-| `containerStyle?`       | Styles applied to the view container.                                                          |                  |
-| `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                  | `false`          |
-| `lazy?`                 | Mount the screen only when it's focused. It has a default fade in animation.                   | `false`          |
-| `cancelLazyFadeIn?`     | Cancel the fade in animation if `lazy={true}`                                                  | `false`          |
-| `tabBarProps?`          | Props passed to the `TabBarComponent`.                                                         |                  |
-| `pagerProps?`           | Props passed to the horizontal FlatList.                                                       |                  |
+| prop                    | description                                                                                      | default          |
+| ----------------------- | ------------------------------------------------------------------------------------------------ | ---------------- |
+| `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                         |                  |
+| `refMap`                | Map of tab names and refs, must be the same order as the container children.                     |                  |
+| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside.   |                  |
+| `headerHeight?`         | If you don't provide the header height, the pager will fade-in after getting it with `onLayout`. |                  |
+| `tabBarHeight?`         | -                                                                                                | `48`             |
+| `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.     | `false`          |
+| `diffClampEnabled?`     | Enable diff clamp.                                                                               | `false`          |
+| `snapThreshold?`        | Percentage of header height to make the snap effect. A number between 0 and 1.                   | `0.5`            |
+| `HeaderComponent?`      | React component to render above the tabbar.                                                      |                  |
+| `TabBarComponent?`      | React component to render above tab scenes.                                                      | `MaterialTabBar` |
+| `headerContainerStyle?` | Styles applied to the header and tabbar container                                                |                  |
+| `containerStyle?`       | Styles applied to the view container.                                                            |                  |
+| `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                    | `false`          |
+| `lazy?`                 | Mount the screen only when it's focused. It has a default fade in animation.                     | `false`          |
+| `cancelLazyFadeIn?`     | Cancel the fade in animation if `lazy={true}`                                                    | `false`          |
+| `tabBarProps?`          | Props passed to the `TabBarComponent`.                                                           |                  |
+| `pagerProps?`           | Props passed to the horizontal FlatList.                                                         |                  |
 
 ### `Tabs.ScrollView` and `Tabs.FlatList`
 
