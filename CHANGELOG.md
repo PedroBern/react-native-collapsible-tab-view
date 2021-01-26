@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.3.0...v3.3.1) (2021-01-26)
+
+
+### Bug Fixes
+
+* prevent not updating translateY if not providing the headerHeight ([71cf7f4](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/71cf7f4cb609d81fd25285949bdce5698369b1be)), closes [#52](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/52)
+
 # [3.3.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.2.1...v3.3.0) (2021-01-26)
 
 
