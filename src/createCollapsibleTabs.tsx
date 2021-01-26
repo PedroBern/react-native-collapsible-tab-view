@@ -68,11 +68,11 @@ const createCollapsibleTabs = <
     const [containerHeight, setContainerHeight] = React.useState<
       number | undefined
     >(undefined)
-    const [tabBarHeight, setTabBarHeight] = React.useState(
-      initialTabBarHeight || 0
+    const [tabBarHeight, setTabBarHeight] = React.useState<number | undefined>(
+      initialTabBarHeight
     )
-    const [headerHeight, setHeaderHeight] = React.useState(
-      initialHeaderHeight || 0
+    const [headerHeight, setHeaderHeight] = React.useState<number | undefined>(
+      initialHeaderHeight
     )
     const isScrolling = useSharedValue(-1)
     const scrollX = useSharedValue(0)
@@ -87,6 +87,10 @@ const createCollapsibleTabs = <
     const tabNames = useSharedValue<T[]>(Object.keys(refMap))
     // @ts-ignore
     const focusedTab = useSharedValue<T>(tabNames.value[index.value])
+    const pagerOpacity = useSharedValue(
+      initialHeaderHeight === undefined ? 0 : 1
+    )
+    const canUpdatePagerOpacity = useSharedValue(false)
 
     const getItemLayout = React.useCallback(
       (_: unknown, index: number) => ({
@@ -149,7 +153,7 @@ const createCollapsibleTabs = <
           const nextValue = accDiffClamp.value + delta
           if (delta > 0) {
             // scrolling down
-            accDiffClamp.value = Math.min(headerHeight, nextValue)
+            accDiffClamp.value = Math.min(headerHeight || 0, nextValue)
           } else if (delta < 0) {
             // scrolling up
             accDiffClamp.value = Math.max(0, nextValue)
@@ -184,7 +188,7 @@ const createCollapsibleTabs = <
           {
             translateY: diffClampEnabled
               ? -accDiffClamp.value
-              : -Math.min(scrollYCurrent.value, headerHeight),
+              : -Math.min(scrollYCurrent.value, headerHeight || 0),
           },
         ],
       }
@@ -193,8 +197,12 @@ const createCollapsibleTabs = <
     const getHeaderHeight = React.useCallback(
       (event: LayoutChangeEvent) => {
         const height = event.nativeEvent.layout.height
-        if (headerHeight !== height) setHeaderHeight(height)
+        if (headerHeight !== height) {
+          setHeaderHeight(height)
+        }
+        canUpdatePagerOpacity.value = true
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [headerHeight]
     )
 
@@ -214,12 +222,36 @@ const createCollapsibleTabs = <
       [containerHeight]
     )
 
+    // fade in the pager if the headerHeight is not defined
+    useAnimatedReaction(
+      () => {
+        return (
+          initialHeaderHeight === undefined &&
+          headerHeight !== undefined &&
+          pagerOpacity.value === 0 &&
+          canUpdatePagerOpacity.value
+        )
+      },
+      (update) => {
+        if (update) {
+          pagerOpacity.value = withTiming(1)
+        }
+      },
+      [headerHeight]
+    )
+
+    const pagerStylez = useAnimatedStyle(() => {
+      return {
+        opacity: pagerOpacity.value,
+      }
+    }, [])
+
     return (
       <Context.Provider
         value={{
           snapEnabled,
-          tabBarHeight,
-          headerHeight,
+          tabBarHeight: tabBarHeight || 0,
+          headerHeight: headerHeight || 0,
           refMap,
           scrollYCurrent,
           // @ts-ignore
@@ -239,7 +271,7 @@ const createCollapsibleTabs = <
           indexDecimal,
         }}
       >
-        <View
+        <Animated.View
           style={[styles.container, containerStyle]}
           onLayout={onLayout}
           pointerEvents="box-none"
@@ -297,8 +329,9 @@ const createCollapsibleTabs = <
             getItemLayout={getItemLayout}
             scrollEventThrottle={16}
             {...pagerProps}
+            style={[pagerStylez, pagerProps?.style]}
           />
-        </View>
+        </Animated.View>
       </Context.Provider>
     )
   }

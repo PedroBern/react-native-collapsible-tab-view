@@ -21,6 +21,7 @@ import QuickStartDemo from './QuickStartDemo'
 import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
+import UndefinedHeaderHeight from './UndefinedHeaderHeight'
 import { ExampleComponentType } from './types'
 
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
@@ -33,6 +34,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   // CenteredEmptyList,
   ScrollOnHeader,
   QuickStartDemo,
+  UndefinedHeaderHeight,
 ]
 
 const ExampleList: React.FC<object> = () => {
