@@ -444,7 +444,7 @@ const createCollapsibleTabs = <
                     accDiffClamp.value = withTiming(headerHeight)
                   }
                 } else {
-                  // todo scroll snap
+                  accDiffClamp.value = withTiming(0)
                 }
               }
             } else {
@@ -479,6 +479,12 @@ const createCollapsibleTabs = <
           ) {
             // sync up
             nextPosition = scrollYCurrent.value
+          } else if (
+            diffClampEnabled &&
+            (accDiffClamp.value > tabScrollY || tabScrollY <= headerHeight)
+          ) {
+            // todo perf if snapEnabled
+            nextPosition = accDiffClamp.value
           } else if (
             tabScrollY < scrollYCurrent.value &&
             tabScrollY < headerHeight
