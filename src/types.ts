@@ -30,6 +30,7 @@ export type CollapsibleProps<
   T extends string,
   TP extends TabBarProps<T> = MaterialTabBarProps<T>
 > = {
+  initialTabName?: T
   containerRef: React.RefObject<ContainerRef>
   headerHeight?: number
   tabBarHeight?: number

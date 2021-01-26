@@ -21,6 +21,7 @@ import QuickStartDemo from './QuickStartDemo'
 import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
+import StartOnSpecificTab from './StartOnSpecificTab'
 import UndefinedHeaderHeight from './UndefinedHeaderHeight'
 import { ExampleComponentType } from './types'
 
@@ -35,6 +36,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   ScrollOnHeader,
   QuickStartDemo,
   UndefinedHeaderHeight,
+  StartOnSpecificTab,
 ]
 
 const ExampleList: React.FC<object> = () => {

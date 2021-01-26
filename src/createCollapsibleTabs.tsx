@@ -44,6 +44,7 @@ const createCollapsibleTabs = <
   }
 
   const Container: React.FC<CollapsibleProps<T, TP>> = ({
+    initialTabName,
     containerRef,
     headerHeight: initialHeaderHeight,
     tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
@@ -75,28 +76,30 @@ const createCollapsibleTabs = <
       initialHeaderHeight
     )
     const isScrolling = useSharedValue(false)
-    const scrollX = useSharedValue(0)
     const scrollYCurrent = useSharedValue(0)
     const scrollY = useSharedValue([...new Array(children.length)].map(() => 0))
     const offset = useSharedValue(0)
     const accScrollY = useSharedValue(0)
     const oldAccScrollY = useSharedValue(0)
     const accDiffClamp = useSharedValue(0)
-    const index = useSharedValue(0)
     // @ts-ignore
     const tabNames = useSharedValue<T[]>(Object.keys(refMap))
-    const pagerOpacity = useSharedValue(
-      initialHeaderHeight === undefined ? 0 : 1
+    const index = useSharedValue(
+      initialTabName ? tabNames.value.findIndex((n) => n === initialTabName) : 0
     )
-    const canUpdatePagerOpacity = useSharedValue(false)
+    const scrollX = useSharedValue(index.value * windowWidth)
+    const pagerOpacity = useSharedValue(
+      initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1
+    )
     const isSwiping = useSharedValue(false)
     const isSnapping = useSharedValue(false)
     const snappingTo = useSharedValue(0)
-
+    const [data] = React.useState(
+      [...new Array(children.length)].map((_, i) => i)
+    )
     const focusedTab = useDerivedValue<T>(() => {
       return tabNames.value[index.value]
     })
-
     const isGliding = useSharedValue(false)
 
     const getItemLayout = React.useCallback(
@@ -114,6 +117,12 @@ const createCollapsibleTabs = <
 
     React.useEffect(() => {
       if (firstRender.current) {
+        if (initialTabName !== undefined && index.value !== 0) {
+          containerRef.current?.scrollToIndex({
+            index: index.value,
+            animated: false,
+          })
+        }
         firstRender.current = false
       } else {
         containerRef.current?.scrollToIndex({
@@ -121,7 +130,8 @@ const createCollapsibleTabs = <
           index: index.value,
         })
       }
-    }, [containerRef, index.value, windowWidth])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [containerRef, index.value, initialTabName, windowWidth])
 
     // derived from scrollX
     // calculate the next offset and index if swiping
@@ -184,10 +194,7 @@ const createCollapsibleTabs = <
         return lazy ? (
           <Lazy
             name={tabNames.value[i]}
-            // todo:
-            // set startMounted to initial scene instead of 0,
-            // to support starting on specific tab
-            startMounted={i === 0}
+            startMounted={i === index.value}
             cancelLazyFadeIn={cancelLazyFadeIn}
           >
             {children[i]}
@@ -196,6 +203,7 @@ const createCollapsibleTabs = <
           children[i]
         )
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [children, lazy, tabNames.value, cancelLazyFadeIn]
     )
 
@@ -217,7 +225,6 @@ const createCollapsibleTabs = <
         if (headerHeight !== height) {
           setHeaderHeight(height)
         }
-        canUpdatePagerOpacity.value = true
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [headerHeight]
@@ -243,10 +250,9 @@ const createCollapsibleTabs = <
     useAnimatedReaction(
       () => {
         return (
-          initialHeaderHeight === undefined &&
+          (initialHeaderHeight === undefined || initialTabName !== undefined) &&
           headerHeight !== undefined &&
-          pagerOpacity.value === 0 &&
-          canUpdatePagerOpacity.value
+          pagerOpacity.value === 0
         )
       },
       (update) => {
@@ -376,7 +382,8 @@ const createCollapsibleTabs = <
           <AnimatedFlatList
             // @ts-ignore
             ref={containerRef}
-            data={[...new Array(children.length)].map((_, i) => i)}
+            initialScrollIndex={index.value}
+            data={data}
             keyExtractor={(item) => item + ''}
             renderItem={renderItem}
             horizontal

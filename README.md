@@ -248,6 +248,7 @@ const Example: React.FC<Props> = () => {
 | `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                         |                  |
 | `refMap`                | Map of tab names and refs, must be the same order as the container children.                     |                  |
 | `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside.   |                  |
+| `initialTabName?`       | Initial tab name.                                                                                |                  |
 | `headerHeight?`         | If you don't provide the header height, the pager will fade-in after getting it with `onLayout`. |                  |
 | `tabBarHeight?`         | -                                                                                                | `48`             |
 | `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.     | `false`          |
