@@ -1,3 +1,11 @@
+# [3.4.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.3.1...v3.4.0) (2021-01-26)
+
+
+### Features
+
+* add fade-in if headerHeight is undefined ([21d9be0](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/21d9be0fabf5ac3a9afbd1e835a5513759d56418))
+* add pressableProps to tab item ([5ff176e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5ff176e825d80e8186a29979f0e3b78fa523f957))
+
 ## [3.3.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.3.0...v3.3.1) (2021-01-26)
 
 
