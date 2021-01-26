@@ -60,6 +60,7 @@ const createCollapsibleTabs = <
     lazy,
     cancelLazyFazeIn,
     tabBarProps,
+    pagerProps,
   }) => {
     const windowWidth = useWindowDimensions().width
     const firstRender = React.useRef(true)
@@ -294,6 +295,8 @@ const createCollapsibleTabs = <
             onScroll={scrollHandlerX}
             showsHorizontalScrollIndicator={false}
             getItemLayout={getItemLayout}
+            scrollEventThrottle={16}
+            {...pagerProps}
           />
         </View>
       </Context.Provider>

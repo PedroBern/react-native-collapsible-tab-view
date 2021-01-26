@@ -172,7 +172,7 @@ If you want to allow scrolling from the header:
 Basic usage looks like this:
 
 ```tsx
-import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
+import { createCollapsibleTabs, TabBarProps } from 'react-native-collapsible-tab-view'
 
 type MyTabs = 'tab0' | 'tab1'
 
@@ -190,6 +190,13 @@ const { useTabsContext, ...Tabs } = createCollapsibleTabs<MyTabs>()
 <Tabs.Container {...props} />
 <Tabs.FlatList name='tab0' {...props} />
 <Tabs.ScrollView name='tab1' {...props} />
+
+// if you want to provide a cutom tab bar
+// TabBarComponent prop of the Tabs.Container
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<
+    MyTabs,
+    TabBarProps<MyTabs> & MyPropsType
+  >()
 
 ```
 
@@ -255,6 +262,8 @@ const Example: React.FC<Props> = () => {
 | `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                  | `false`          |
 | `lazy?`                 | Mount the screen only when it's focused. It has a default fade in animation.                   | `false`          |
 | `cancelLazyFadeIn?`     | Cancel the fade in animation if `lazy={true}`                                                  | `false`          |
+| `tabBarProps?`          | Props passed to the `TabBarComponent`.                                                         |                  |
+| `pagerProps?`           | Props passed to the horizontal FlatList.                                                       |                  |
 
 ### `Tabs.ScrollView` and `Tabs.FlatList`
 

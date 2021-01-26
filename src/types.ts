@@ -5,6 +5,7 @@ import {
   ListRenderItem,
   StyleProp,
   ViewStyle,
+  FlatListProps as RNFlatListProps,
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
@@ -44,6 +45,17 @@ export type CollapsibleProps<
   lazy?: boolean
   cancelLazyFazeIn?: boolean
   tabBarProps?: Omit<TP, keyof TabBarProps<any>>
+  pagerProps?: Omit<
+    RNFlatListProps<number>,
+    | 'data'
+    | 'keyExtractor'
+    | 'renderItem'
+    | 'horizontal'
+    | 'pagingEnabled'
+    | 'onScroll'
+    | 'showsHorizontalScrollIndicator'
+    | 'getItemLayout'
+  >
 }
 
 export type ContextType<T extends string> = {
