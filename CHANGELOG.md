@@ -1,3 +1,16 @@
+# [3.3.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.2.1...v3.3.0) (2021-01-26)
+
+
+### Bug Fixes
+
+* scroll to correct position after window resizing ([02da5a9](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/02da5a97ff38060842e6219adc1f632952f00e2f))
+
+
+### Features
+
+* add default tab bar ([4fa4026](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/4fa4026226ddb0f0a8c293f4c37dc7499798d1c2))
+* add pagerProps ([0f8b17b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0f8b17ba584cca3924236357286e9011f5486018))
+
 ## [3.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.2.0...v3.2.1) (2021-01-25)
 
 
