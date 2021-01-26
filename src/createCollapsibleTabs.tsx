@@ -58,7 +58,7 @@ const createCollapsibleTabs = <
     cancelTranslation,
     containerStyle,
     lazy,
-    cancelLazyFazeIn,
+    cancelLazyFadeIn,
     tabBarProps,
     pagerProps,
   }) => {
@@ -171,7 +171,7 @@ const createCollapsibleTabs = <
             // set startMounted to initial scene instead of 0,
             // to support starting on specific tab
             startMounted={i === 0}
-            cancelLazyFazeIn={cancelLazyFazeIn}
+            cancelLazyFadeIn={cancelLazyFadeIn}
           >
             {children[i]}
           </Lazy>
@@ -179,7 +179,7 @@ const createCollapsibleTabs = <
           children[i]
         )
       },
-      [children, lazy, tabNames.value, cancelLazyFazeIn]
+      [children, lazy, tabNames.value, cancelLazyFadeIn]
     )
 
     const stylez = useAnimatedStyle(() => {
@@ -339,12 +339,12 @@ const createCollapsibleTabs = <
   const Lazy: React.FC<{
     name: T
     startMounted?: boolean
-    cancelLazyFazeIn?: boolean
+    cancelLazyFadeIn?: boolean
     children: React.ReactElement
-  }> = ({ children, name, startMounted, cancelLazyFazeIn }) => {
+  }> = ({ children, name, startMounted, cancelLazyFadeIn }) => {
     const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
-    const opacity = useSharedValue(cancelLazyFazeIn ? 1 : 0)
+    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
 
     const allowToMount = React.useCallback(() => {
       // wait the scene to be at least 50 ms focused, before mouting
@@ -372,9 +372,9 @@ const createCollapsibleTabs = <
         const tabIndex = tabNames.value.findIndex((n) => n === name)
         // @ts-ignore
         scrollTo(refMap[name], 0, scrollY.value[tabIndex], false)
-        if (!cancelLazyFazeIn) opacity.value = withTiming(1)
+        if (!cancelLazyFadeIn) opacity.value = withTiming(1)
       }
-    }, [canMount, cancelLazyFazeIn])
+    }, [canMount, cancelLazyFadeIn])
 
     const stylez = useAnimatedStyle(() => {
       return {
@@ -383,12 +383,12 @@ const createCollapsibleTabs = <
     }, [])
 
     return canMount ? (
-      cancelLazyFazeIn ? (
+      cancelLazyFadeIn ? (
         children
       ) : (
         <Animated.View
           pointerEvents="box-none"
-          style={[styles.container, !cancelLazyFazeIn && stylez]}
+          style={[styles.container, !cancelLazyFadeIn && stylez]}
         >
           {children}
         </Animated.View>

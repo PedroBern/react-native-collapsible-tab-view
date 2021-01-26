@@ -43,7 +43,7 @@ export type CollapsibleProps<
   containerStyle?: ViewStyle
   cancelTranslation?: boolean
   lazy?: boolean
-  cancelLazyFazeIn?: boolean
+  cancelLazyFadeIn?: boolean
   tabBarProps?: Omit<TP, keyof TabBarProps<any>>
   pagerProps?: Omit<
     RNFlatListProps<number>,
