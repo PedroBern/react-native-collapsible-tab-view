@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Pressable } from 'react-native'
+import { StyleSheet, Pressable, Platform } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -20,7 +20,9 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
   style,
   labelStyle,
   inactiveOpacity = 0.7,
-  pressColor = 'transparent',
+  pressColor = '#DDDDDD',
+  pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
+  ...rest
 }) => {
   const stylez = useAnimatedStyle(() => {
     return {
@@ -37,14 +39,17 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
     <Pressable
       onLayout={onLayout}
       style={({ pressed }) => [
-        {
-          backgroundColor: pressed ? pressColor : 'transparent',
-        },
+        { opacity: pressed ? pressOpacity : 1 },
         !scrollEnabled && styles.grow,
         styles.item,
         style,
       ]}
       onPress={() => onPress(index, name)}
+      android_ripple={{
+        borderless: true,
+        color: pressColor,
+      }}
+      {...rest}
     >
       <Animated.Text style={[styles.label, stylez, labelStyle]}>
         {label}
