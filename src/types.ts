@@ -23,6 +23,7 @@ export type TabBarProps<T extends string> = {
   refMap: Record<T, Ref>
   index: Animated.SharedValue<number>
   containerRef: React.RefObject<ContainerRef>
+  onTabPress: (name: T) => void
 }
 
 export type CollapsibleProps<
@@ -72,12 +73,15 @@ export type ContextType<T extends string> = {
   oldAccScrollY: Animated.SharedValue<number>
   accScrollY: Animated.SharedValue<number>
   offset: Animated.SharedValue<number>
-  isScrolling: Animated.SharedValue<boolean | number>
+  isScrolling: Animated.SharedValue<boolean>
   focusedTab: Animated.SharedValue<T>
   accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
   scrollX: Animated.SharedValue<number>
   indexDecimal: Animated.SharedValue<number>
+  isGliding: Animated.SharedValue<boolean>
+  isSnapping: Animated.SharedValue<boolean>
+  snappingTo: Animated.SharedValue<number>
 }
 
 export type TabProps<T extends string> = {
