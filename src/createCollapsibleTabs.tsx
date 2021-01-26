@@ -188,7 +188,7 @@ const createCollapsibleTabs = <
           },
         ],
       }
-    }, [diffClampEnabled])
+    }, [diffClampEnabled, headerHeight])
 
     const getHeaderHeight = React.useCallback(
       (event: LayoutChangeEvent) => {
