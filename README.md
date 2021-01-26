@@ -47,10 +47,12 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 - Highly customizable
 - Fully typed with [TypeScript](https://typescriptlang.org)
 - Lazy support with fade-in animation
-- DiffClamp tabs
-- Interpolated tabs
-- Scroll snap (with interpolated tabs)
-- Animated snap (with diffClamp tabs)
+- DiffClamp header
+- Interpolated header
+- Scroll snap (with interpolated header)
+- Animated snap (with diffClamp header)
+- Scrollable tabs, inspired by the [react-native-tab-view](https://github.com/satya164/react-native-tab-view) tab bar
+- Support horizontal and vertical window
 
 ## Installation
 
