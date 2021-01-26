@@ -5,8 +5,11 @@ import {
   ListRenderItem,
   StyleProp,
   ViewStyle,
+  FlatListProps as RNFlatListProps,
 } from 'react-native'
 import Animated from 'react-native-reanimated'
+
+import { MaterialTabBarProps } from './MaterialTabBar'
 
 export type ContainerRef = FlatList<any>
 
@@ -15,14 +18,17 @@ export type RefComponent = FlatList<any> | ScrollView
 export type Ref = React.RefObject<RefComponent>
 
 export type TabBarProps<T extends string> = {
-  scrollX: Animated.SharedValue<number>
+  indexDecimal: Animated.SharedValue<number>
   focusedTab: Animated.SharedValue<T>
   refMap: Record<T, Ref>
   index: Animated.SharedValue<number>
   containerRef: React.RefObject<ContainerRef>
 }
 
-export type Props<T extends string> = {
+export type CollapsibleProps<
+  T extends string,
+  TP extends TabBarProps<T> = MaterialTabBarProps<T>
+> = {
   containerRef: React.RefObject<ContainerRef>
   headerHeight?: number
   tabBarHeight?: number
@@ -38,6 +44,18 @@ export type Props<T extends string> = {
   cancelTranslation?: boolean
   lazy?: boolean
   cancelLazyFazeIn?: boolean
+  tabBarProps?: Omit<TP, keyof TabBarProps<any>>
+  pagerProps?: Omit<
+    RNFlatListProps<number>,
+    | 'data'
+    | 'keyExtractor'
+    | 'renderItem'
+    | 'horizontal'
+    | 'pagingEnabled'
+    | 'onScroll'
+    | 'showsHorizontalScrollIndicator'
+    | 'getItemLayout'
+  >
 }
 
 export type ContextType<T extends string> = {
@@ -59,6 +77,7 @@ export type ContextType<T extends string> = {
   accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
   scrollX: Animated.SharedValue<number>
+  indexDecimal: Animated.SharedValue<number>
 }
 
 export type TabProps<T extends string> = {

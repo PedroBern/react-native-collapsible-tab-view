@@ -3,6 +3,7 @@
 [![Build Status][build-badge]][build]
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
+[![runs with expo][expo-badge]][expo]
 
 - [Expo app](#expo-app)
 - [Demo](#demo)
@@ -74,16 +75,12 @@ import {
 } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
-// see the examples folder
-import TabBar from './MaterialTabBar'
-
 type TabNames = 'A' | 'B'
 type HeaderProps = TabProps<TabNames>
 
 const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
 
 const HEADER_HEIGHT = 250
-const TABBAR_HEIGHT = 48
 
 const Example: React.FC = () => {
   const containerRef = useAnimatedRef<ContainerRef>()
@@ -98,10 +95,8 @@ const Example: React.FC = () => {
   return (
     <Tabs.Container
       containerRef={containerRef}
-      TabBarComponent={TabBar}
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT}
-      tabBarHeight={TABBAR_HEIGHT}
       refMap={refMap}
     >
       <ScreenA />
@@ -177,7 +172,7 @@ If you want to allow scrolling from the header:
 Basic usage looks like this:
 
 ```tsx
-import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
+import { createCollapsibleTabs, TabBarProps } from 'react-native-collapsible-tab-view'
 
 type MyTabs = 'tab0' | 'tab1'
 
@@ -195,6 +190,13 @@ const { useTabsContext, ...Tabs } = createCollapsibleTabs<MyTabs>()
 <Tabs.Container {...props} />
 <Tabs.FlatList name='tab0' {...props} />
 <Tabs.ScrollView name='tab1' {...props} />
+
+// if you want to provide a cutom tab bar
+// TabBarComponent prop of the Tabs.Container
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<
+    MyTabs,
+    TabBarProps<MyTabs> & MyPropsType
+  >()
 
 ```
 
@@ -243,23 +245,25 @@ const Example: React.FC<Props> = () => {
 
 #### Props
 
-| prop                    | description                                                                                    | default |
-| ----------------------- | ---------------------------------------------------------------------------------------------- | ------- |
-| `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                       |         |
-| `refMap`                | Map of tab names and refs, must be the same order as the container children.                   |         |
-| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside. |         |
-| `headerHeight?`         | -                                                                                              |         |
-| `tabBarHeight?`         | -                                                                                              |         |
-| `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.   | `false` |
-| `diffClampEnabled?`     | Enable diff clamp.                                                                             | `false` |
-| `snapThreshold?`        | Percentage of header height to make the snap effect. A number between 0 and 1.                 | `0.5`   |
-| `HeaderComponent?`      | React component to render above the tabbar.                                                    |         |
-| `TabBarComponent?`      | React component to render above tab scenes.                                                    |         |
-| `headerContainerStyle?` | Styles applied to the header and tabbar container                                              |         |
-| `containerStyle?`       | Styles applied to the view container.                                                          |         |
-| `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                  | `false` |
-| `lazy?`                 | Mount the screen only when it's focused. It has a default fade in animation.                   | `false` |
-| `cancelLazyFadeIn?`     | Cancel the fade in animation if `lazy={true}`                                                  | `false` |
+| prop                    | description                                                                                    | default          |
+| ----------------------- | ---------------------------------------------------------------------------------------------- | ---------------- |
+| `containerRef`          | Must be provided with `useAnimatedRef<ContainerRef>()` .                                       |                  |
+| `refMap`                | Map of tab names and refs, must be the same order as the container children.                   |                  |
+| `children`              | Array of react elements. Each child should have a `Tabs.ScrollView` or `Tabs.FlatList` inside. |                  |
+| `headerHeight?`         | -                                                                                              |                  |
+| `tabBarHeight?`         | -                                                                                              | `48`             |
+| `snapEnabled?`          | Enable snapping. Do scroll snapping if `!diffClampEnabled`, otherwise, do animated snapping.   | `false`          |
+| `diffClampEnabled?`     | Enable diff clamp.                                                                             | `false`          |
+| `snapThreshold?`        | Percentage of header height to make the snap effect. A number between 0 and 1.                 | `0.5`            |
+| `HeaderComponent?`      | React component to render above the tabbar.                                                    |                  |
+| `TabBarComponent?`      | React component to render above tab scenes.                                                    | `MaterialTabBar` |
+| `headerContainerStyle?` | Styles applied to the header and tabbar container                                              |                  |
+| `containerStyle?`       | Styles applied to the view container.                                                          |                  |
+| `cancelTranslation?`    | This will cancel the collapsible effect, and render a static tabbar / header.                  | `false`          |
+| `lazy?`                 | Mount the screen only when it's focused. It has a default fade in animation.                   | `false`          |
+| `cancelLazyFadeIn?`     | Cancel the fade in animation if `lazy={true}`                                                  | `false`          |
+| `tabBarProps?`          | Props passed to the `TabBarComponent`.                                                         |                  |
+| `pagerProps?`           | Props passed to the horizontal FlatList.                                                       |                  |
 
 ### `Tabs.ScrollView` and `Tabs.FlatList`
 
@@ -347,3 +351,5 @@ Remember to add tests for your change if possible.
 [package]: https://www.npmjs.com/package/react-native-collapsible-tab-view
 [license-badge]: https://img.shields.io/npm/l/react-native-collapsible-tab-view.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
+[expo-badge]: https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000
+[expo]: https://github.com/expo/expo

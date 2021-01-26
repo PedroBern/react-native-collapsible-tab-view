@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 
 import Tabs from './Tabs'
 
-const ArticleContent = () => {
+export const ArticleContent = () => {
   return (
     <>
       <View style={styles.author}>

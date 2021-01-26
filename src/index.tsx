@@ -1,9 +1,20 @@
-import { TabBarProps, Props, RefComponent, ContainerRef } from './types'
-export type {
+import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
+import {
   TabBarProps,
-  Props as CollapsibleProps,
+  CollapsibleProps,
   RefComponent,
   ContainerRef,
+} from './types'
+
+export type {
+  TabBarProps,
+  CollapsibleProps,
+  RefComponent,
+  ContainerRef,
+  MaterialTabBarProps,
+  MaterialTabItemProps,
 }
 
 export { default as createCollapsibleTabs } from './createCollapsibleTabs'
+
+export { default as MaterialTabBar } from './MaterialTabBar'
