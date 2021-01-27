@@ -1,3 +1,17 @@
+# [3.5.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.4.0...v3.5.0) (2021-01-27)
+
+
+### Bug Fixes
+
+* correct typo "cancelLazyFazeIn" ([2b8b194](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2b8b1942a84f4fac81f2b5715a005bd288da0421))
+* fix diffClamp tabs sync ([304e8cc](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/304e8ccb14f78ce3eb565699d6e12ec055a8286e))
+* prevent not syncing on tab item press and momentum scrolling ([5c5ff49](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5c5ff49f5e8ae05a1b8f379b44c1063470fae88c))
+
+
+### Features
+
+* add initialTabName prop ([7166592](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/7166592f5258253850722be680ada8197750ef97))
+
 # [3.4.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.3.1...v3.4.0) (2021-01-26)
 
 
