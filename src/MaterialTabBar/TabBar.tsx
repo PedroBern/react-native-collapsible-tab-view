@@ -21,16 +21,15 @@ import { MaterialTabBarProps, ItemLayout } from './types'
 export const TABBAR_HEIGHT = 48
 
 const TabBar: React.FC<MaterialTabBarProps<any>> = ({
-  focusedTab,
   refMap,
   indexDecimal,
-  containerRef,
   scrollEnabled = false,
   indicatorStyle,
   index,
   TabItemComponent = TabItem,
   tabItemProps = {},
   getLabelText = (name) => name.toUpperCase(),
+  onTabPress,
 }) => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -62,33 +61,6 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       )
     }
   }, [scrollEnabled, nTabs, refMap, windowWidth])
-
-  const onTabPress = React.useCallback(
-    (i: number, name: keyof typeof refMap) => {
-      if (name === focusedTab.value) {
-        // @ts-ignore
-        if (refMap[name].current?.scrollTo) {
-          // @ts-ignore
-          refMap[name].current?.scrollTo({
-            x: 0,
-            y: 0,
-            animated: true,
-          })
-          // @ts-ignore
-        } else if (refMap[name].current?.scrollToOffset) {
-          // @ts-ignore
-          refMap[name].current?.scrollToOffset({
-            offset: 0,
-            animated: true,
-          })
-        }
-      } else {
-        containerRef.current?.scrollToIndex({ animated: true, index: i })
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [containerRef, refMap]
-  )
 
   const onTabItemLayout = React.useCallback(
     (event: LayoutChangeEvent) => {

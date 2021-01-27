@@ -23,12 +23,14 @@ export type TabBarProps<T extends string> = {
   refMap: Record<T, Ref>
   index: Animated.SharedValue<number>
   containerRef: React.RefObject<ContainerRef>
+  onTabPress: (name: T) => void
 }
 
 export type CollapsibleProps<
   T extends string,
   TP extends TabBarProps<T> = MaterialTabBarProps<T>
 > = {
+  initialTabName?: T
   containerRef: React.RefObject<ContainerRef>
   headerHeight?: number
   tabBarHeight?: number
@@ -43,7 +45,7 @@ export type CollapsibleProps<
   containerStyle?: ViewStyle
   cancelTranslation?: boolean
   lazy?: boolean
-  cancelLazyFazeIn?: boolean
+  cancelLazyFadeIn?: boolean
   tabBarProps?: Omit<TP, keyof TabBarProps<any>>
   pagerProps?: Omit<
     RNFlatListProps<number>,
@@ -72,12 +74,15 @@ export type ContextType<T extends string> = {
   oldAccScrollY: Animated.SharedValue<number>
   accScrollY: Animated.SharedValue<number>
   offset: Animated.SharedValue<number>
-  isScrolling: Animated.SharedValue<boolean | number>
+  isScrolling: Animated.SharedValue<boolean>
   focusedTab: Animated.SharedValue<T>
   accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
   scrollX: Animated.SharedValue<number>
   indexDecimal: Animated.SharedValue<number>
+  isGliding: Animated.SharedValue<boolean>
+  isSnapping: Animated.SharedValue<boolean>
+  snappingTo: Animated.SharedValue<number>
 }
 
 export type TabProps<T extends string> = {

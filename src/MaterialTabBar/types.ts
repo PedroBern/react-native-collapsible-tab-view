@@ -16,7 +16,7 @@ export type MaterialTabItemProps<T extends string> = {
   name: T
   index: number
   indexDecimal: Animated.SharedValue<number>
-  onPress: (index: number, name: T) => void
+  onPress: (name: T) => void
   onLayout?: (event: LayoutChangeEvent) => void
   scrollEnabled?: boolean
   label: string

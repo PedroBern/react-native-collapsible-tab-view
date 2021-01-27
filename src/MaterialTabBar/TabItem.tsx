@@ -44,7 +44,7 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
         styles.item,
         style,
       ]}
-      onPress={() => onPress(index, name)}
+      onPress={() => onPress(name)}
       android_ripple={{
         borderless: true,
         color: pressColor,

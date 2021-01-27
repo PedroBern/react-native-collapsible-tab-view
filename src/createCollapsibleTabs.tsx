@@ -44,6 +44,7 @@ const createCollapsibleTabs = <
   }
 
   const Container: React.FC<CollapsibleProps<T, TP>> = ({
+    initialTabName,
     containerRef,
     headerHeight: initialHeaderHeight,
     tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
@@ -58,7 +59,7 @@ const createCollapsibleTabs = <
     cancelTranslation,
     containerStyle,
     lazy,
-    cancelLazyFazeIn,
+    cancelLazyFadeIn,
     tabBarProps,
     pagerProps,
   }) => {
@@ -74,23 +75,32 @@ const createCollapsibleTabs = <
     const [headerHeight, setHeaderHeight] = React.useState<number | undefined>(
       initialHeaderHeight
     )
-    const isScrolling = useSharedValue(-1)
-    const scrollX = useSharedValue(0)
+    const isScrolling = useSharedValue(false)
     const scrollYCurrent = useSharedValue(0)
     const scrollY = useSharedValue([...new Array(children.length)].map(() => 0))
     const offset = useSharedValue(0)
     const accScrollY = useSharedValue(0)
     const oldAccScrollY = useSharedValue(0)
     const accDiffClamp = useSharedValue(0)
-    const index = useSharedValue(0)
     // @ts-ignore
     const tabNames = useSharedValue<T[]>(Object.keys(refMap))
-    // @ts-ignore
-    const focusedTab = useSharedValue<T>(tabNames.value[index.value])
-    const pagerOpacity = useSharedValue(
-      initialHeaderHeight === undefined ? 0 : 1
+    const index = useSharedValue(
+      initialTabName ? tabNames.value.findIndex((n) => n === initialTabName) : 0
     )
-    const canUpdatePagerOpacity = useSharedValue(false)
+    const scrollX = useSharedValue(index.value * windowWidth)
+    const pagerOpacity = useSharedValue(
+      initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1
+    )
+    const isSwiping = useSharedValue(false)
+    const isSnapping = useSharedValue(false)
+    const snappingTo = useSharedValue(0)
+    const [data] = React.useState(
+      [...new Array(children.length)].map((_, i) => i)
+    )
+    const focusedTab = useDerivedValue<T>(() => {
+      return tabNames.value[index.value]
+    })
+    const isGliding = useSharedValue(false)
 
     const getItemLayout = React.useCallback(
       (_: unknown, index: number) => ({
@@ -107,6 +117,12 @@ const createCollapsibleTabs = <
 
     React.useEffect(() => {
       if (firstRender.current) {
+        if (initialTabName !== undefined && index.value !== 0) {
+          containerRef.current?.scrollToIndex({
+            index: index.value,
+            animated: false,
+          })
+        }
         firstRender.current = false
       } else {
         containerRef.current?.scrollToIndex({
@@ -114,21 +130,26 @@ const createCollapsibleTabs = <
           index: index.value,
         })
       }
-    }, [containerRef, index.value, windowWidth])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [containerRef, index.value, initialTabName, windowWidth])
 
-    // derived from scrollX, to calculate the next offset and index
+    // derived from scrollX
+    // calculate the next offset and index if swiping
+    // if scrollX changes from tab press,
+    // the same logic must be done, but knowing
+    // the next index in advance
     useAnimatedReaction(
       () => {
-        const nextIndex = Math.round(indexDecimal.value)
+        const nextIndex = isSwiping.value
+          ? Math.round(indexDecimal.value)
+          : null
         return nextIndex
       },
       (nextIndex) => {
-        if (nextIndex !== index.value) {
+        if (nextIndex !== null && nextIndex !== index.value) {
           offset.value =
             scrollY.value[index.value] - scrollY.value[nextIndex] + offset.value
           index.value = nextIndex
-          // @ts-ignore
-          focusedTab.value = tabNames.value[nextIndex]
         }
       }
     )
@@ -138,6 +159,12 @@ const createCollapsibleTabs = <
         onScroll: (event) => {
           const { x } = event.contentOffset
           scrollX.value = x
+        },
+        onBeginDrag: () => {
+          isSwiping.value = true
+        },
+        onMomentumEnd: () => {
+          isSwiping.value = false
         },
       },
       [refMap]
@@ -167,11 +194,8 @@ const createCollapsibleTabs = <
         return lazy ? (
           <Lazy
             name={tabNames.value[i]}
-            // todo:
-            // set startMounted to initial scene instead of 0,
-            // to support starting on specific tab
-            startMounted={i === 0}
-            cancelLazyFazeIn={cancelLazyFazeIn}
+            startMounted={i === index.value}
+            cancelLazyFadeIn={cancelLazyFadeIn}
           >
             {children[i]}
           </Lazy>
@@ -179,7 +203,8 @@ const createCollapsibleTabs = <
           children[i]
         )
       },
-      [children, lazy, tabNames.value, cancelLazyFazeIn]
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [children, lazy, tabNames.value, cancelLazyFadeIn]
     )
 
     const stylez = useAnimatedStyle(() => {
@@ -200,7 +225,6 @@ const createCollapsibleTabs = <
         if (headerHeight !== height) {
           setHeaderHeight(height)
         }
-        canUpdatePagerOpacity.value = true
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [headerHeight]
@@ -226,10 +250,9 @@ const createCollapsibleTabs = <
     useAnimatedReaction(
       () => {
         return (
-          initialHeaderHeight === undefined &&
+          (initialHeaderHeight === undefined || initialTabName !== undefined) &&
           headerHeight !== undefined &&
-          pagerOpacity.value === 0 &&
-          canUpdatePagerOpacity.value
+          pagerOpacity.value === 0
         )
       },
       (update) => {
@@ -245,6 +268,41 @@ const createCollapsibleTabs = <
         opacity: pagerOpacity.value,
       }
     }, [])
+
+    const onTabPress = React.useCallback(
+      (name: T) => {
+        // simplify logic by preventing index change
+        // when is scrolling or gliding.
+        if (!isScrolling.value && !isGliding.value) {
+          const i = tabNames.value.findIndex((n) => n === name)
+          offset.value =
+            scrollY.value[index.value] - scrollY.value[i] + offset.value
+          index.value = i
+          if (name === focusedTab.value) {
+            // @ts-ignore
+            if (refMap[name].current?.scrollTo) {
+              // @ts-ignore
+              refMap[name].current?.scrollTo({
+                x: 0,
+                y: 0,
+                animated: true,
+              })
+              // @ts-ignore
+            } else if (refMap[name].current?.scrollToOffset) {
+              // @ts-ignore
+              refMap[name].current?.scrollToOffset({
+                offset: 0,
+                animated: true,
+              })
+            }
+          } else {
+            containerRef.current?.scrollToIndex({ animated: true, index: i })
+          }
+        }
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [containerRef, refMap]
+    )
 
     return (
       <Context.Provider
@@ -269,6 +327,9 @@ const createCollapsibleTabs = <
           containerHeight,
           scrollX,
           indexDecimal,
+          isGliding,
+          isSnapping,
+          snappingTo,
         }}
       >
         <Animated.View
@@ -296,6 +357,7 @@ const createCollapsibleTabs = <
                   refMap={refMap}
                   focusedTab={focusedTab}
                   indexDecimal={indexDecimal}
+                  onTabPress={onTabPress}
                 />
               )}
             </View>
@@ -311,6 +373,7 @@ const createCollapsibleTabs = <
                   refMap={refMap}
                   focusedTab={focusedTab}
                   indexDecimal={indexDecimal}
+                  onTabPress={onTabPress}
                   {...tabBarProps}
                 />
               )}
@@ -319,7 +382,8 @@ const createCollapsibleTabs = <
           <AnimatedFlatList
             // @ts-ignore
             ref={containerRef}
-            data={[...new Array(children.length)].map((_, i) => i)}
+            initialScrollIndex={index.value}
+            data={data}
             keyExtractor={(item) => item + ''}
             renderItem={renderItem}
             horizontal
@@ -339,12 +403,12 @@ const createCollapsibleTabs = <
   const Lazy: React.FC<{
     name: T
     startMounted?: boolean
-    cancelLazyFazeIn?: boolean
+    cancelLazyFadeIn?: boolean
     children: React.ReactElement
-  }> = ({ children, name, startMounted, cancelLazyFazeIn }) => {
+  }> = ({ children, name, startMounted, cancelLazyFadeIn }) => {
     const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
-    const opacity = useSharedValue(cancelLazyFazeIn ? 1 : 0)
+    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
 
     const allowToMount = React.useCallback(() => {
       // wait the scene to be at least 50 ms focused, before mouting
@@ -372,9 +436,9 @@ const createCollapsibleTabs = <
         const tabIndex = tabNames.value.findIndex((n) => n === name)
         // @ts-ignore
         scrollTo(refMap[name], 0, scrollY.value[tabIndex], false)
-        if (!cancelLazyFazeIn) opacity.value = withTiming(1)
+        if (!cancelLazyFadeIn) opacity.value = withTiming(1)
       }
-    }, [canMount, cancelLazyFazeIn])
+    }, [canMount, cancelLazyFadeIn])
 
     const stylez = useAnimatedStyle(() => {
       return {
@@ -383,12 +447,12 @@ const createCollapsibleTabs = <
     }, [])
 
     return canMount ? (
-      cancelLazyFazeIn ? (
+      cancelLazyFadeIn ? (
         children
       ) : (
         <Animated.View
           pointerEvents="box-none"
-          style={[styles.container, !cancelLazyFazeIn && stylez]}
+          style={[styles.container, !cancelLazyFadeIn && stylez]}
         >
           {children}
         </Animated.View>
@@ -415,7 +479,14 @@ const createCollapsibleTabs = <
       index,
       scrollYCurrent,
       headerHeight,
+      isGliding,
+      isSnapping,
+      snappingTo,
     } = useTabsContext()
+
+    const [tabIndex] = React.useState(
+      tabNames.value.findIndex((n) => n === name)
+    )
 
     const scrollHandler = useAnimatedScrollHandler(
       {
@@ -431,77 +502,98 @@ const createCollapsibleTabs = <
         onBeginDrag: () => {
           isScrolling.value = true
         },
+        onEndDrag: () => {
+          isGliding.value = true
+          isScrolling.value = false
+        },
         onMomentumEnd: () => {
           if (snapEnabled) {
-            if (diffClampEnabled) {
-              if (accDiffClamp.value > 0) {
-                if (scrollYCurrent.value > headerHeight) {
-                  if (accDiffClamp.value <= headerHeight * snapThreshold) {
-                    // snap down
-                    accDiffClamp.value = withTiming(0)
-                  } else if (accDiffClamp.value < headerHeight) {
-                    // snap up
-                    accDiffClamp.value = withTiming(headerHeight)
-                  }
-                } else {
-                  // todo scroll snap
+            if (diffClampEnabled && accDiffClamp.value > 0) {
+              if (scrollYCurrent.value > headerHeight) {
+                if (accDiffClamp.value <= headerHeight * snapThreshold) {
+                  // snap down
+                  isSnapping.value = true
+                  accDiffClamp.value = withTiming(0, undefined, () => {
+                    isSnapping.value = false
+                  })
+                } else if (accDiffClamp.value < headerHeight) {
+                  // snap up
+                  isSnapping.value = true
+                  accDiffClamp.value = withTiming(
+                    headerHeight,
+                    undefined,
+                    () => {
+                      isSnapping.value = false
+                    }
+                  )
                 }
+              } else {
+                isSnapping.value = true
+                accDiffClamp.value = withTiming(0, undefined, () => {
+                  isSnapping.value = false
+                })
               }
             } else {
               if (scrollYCurrent.value <= headerHeight * snapThreshold) {
                 // snap down
+                snappingTo.value = 0
                 // @ts-ignore
                 scrollTo(refMap[name], 0, 0, true)
               } else if (scrollYCurrent.value <= headerHeight) {
                 // snap up
+                snappingTo.value = headerHeight
                 // @ts-ignore
                 scrollTo(refMap[name], 0, headerHeight, true)
               }
+              isSnapping.value = false
             }
           }
-          isScrolling.value = false
+          isGliding.value = false
         },
       },
       [headerHeight, name, diffClampEnabled, snapEnabled]
     )
 
-    // sync unfocused tabs
-    useDerivedValue(() => {
-      if (isScrolling.value === false) {
-        const tabIndex = tabNames.value.findIndex((n) => n === name)
-        const tabScrollY = scrollY.value[tabIndex]
-        if (focusedTab.value !== name) {
+    // sync unfocused scenes
+    useAnimatedReaction(
+      () => {
+        return !isSnapping.value && !isScrolling.value && !isGliding.value
+      },
+      (sync) => {
+        if (sync && focusedTab.value !== name) {
           let nextPosition = null
-          if (
-            !diffClampEnabled &&
-            scrollYCurrent.value <= headerHeight &&
-            tabScrollY > headerHeight
-          ) {
-            // sync up
-            nextPosition = scrollYCurrent.value
-          } else if (
-            tabScrollY < scrollYCurrent.value &&
-            tabScrollY < headerHeight
-          ) {
-            // sync down
-            nextPosition = Math.min(headerHeight, scrollYCurrent.value)
-          } else if (
-            tabScrollY <= headerHeight &&
-            tabScrollY > scrollYCurrent.value &&
-            scrollYCurrent.value < headerHeight
-          ) {
-            // sync up
-            nextPosition = scrollYCurrent.value
+          const focusedScrollY = scrollY.value[index.value]
+          const tabScrollY = scrollY.value[tabIndex]
+          const areEqual = focusedScrollY === tabScrollY
+
+          if (!areEqual) {
+            const currIsOnTop = tabScrollY <= headerHeight + 1
+            const focusedIsOnTop = focusedScrollY <= headerHeight + 1
+            if (diffClampEnabled) {
+              const hasGap = accDiffClamp.value > tabScrollY
+              if (hasGap || currIsOnTop) {
+                nextPosition = accDiffClamp.value
+              }
+            } else if (snapEnabled) {
+              if (focusedIsOnTop) {
+                nextPosition = snappingTo.value
+              } else if (currIsOnTop) {
+                nextPosition = headerHeight
+              }
+            } else if (currIsOnTop || focusedIsOnTop) {
+              nextPosition = Math.min(focusedScrollY, headerHeight)
+            }
           }
+
           if (nextPosition !== null) {
             scrollY.value[tabIndex] = nextPosition
             // @ts-ignore
             scrollTo(refMap[name], 0, nextPosition, false)
           }
         }
-      }
-      return 0
-    })
+      },
+      [diffClampEnabled, snapEnabled, headerHeight]
+    )
 
     return scrollHandler
   }
