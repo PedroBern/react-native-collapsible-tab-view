@@ -1,3 +1,10 @@
+## [3.6.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.6.0...v3.6.1) (2021-01-29)
+
+
+### Bug Fixes
+
+* prevent diffclamp not syncing on tab press ([1ec9dcd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1ec9dcd56386726771d555ce990e7d26fb0c0101))
+
 # [3.6.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.5.0...v3.6.0) (2021-01-29)
 
 
