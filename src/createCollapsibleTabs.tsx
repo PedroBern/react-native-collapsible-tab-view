@@ -609,22 +609,29 @@ const createCollapsibleTabs = <
     return scrollHandler
   }
 
+  const useStyle = () => {
+    const { headerHeight, tabBarHeight, containerHeight } = useTabsContext()
+    const windowWidth = useWindowDimensions().width
+
+    return {
+      _style: { width: windowWidth },
+      _contentContainerStyle: {
+        minHeight: (containerHeight || 0) + headerHeight,
+        paddingTop: headerHeight + tabBarHeight,
+      },
+      _progressViewOffset: headerHeight + tabBarHeight,
+    }
+  }
+
   function FlatList<R>({
     contentContainerStyle,
     style,
     ...rest
   }: FlatListProps<R>): React.ReactElement {
     const name = useTabNameContext()
-    const {
-      refMap,
-      headerHeight,
-      tabBarHeight,
-      containerHeight,
-    } = useTabsContext()
-
+    const { refMap } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
-
-    const windowWidth = useWindowDimensions().width
+    const { _style, _contentContainerStyle, _progressViewOffset } = useStyle()
 
     return (
       <AnimatedFlatList
@@ -632,17 +639,15 @@ const createCollapsibleTabs = <
         ref={refMap[name]}
         bounces={false}
         bouncesZoom={false}
-        style={[{ width: windowWidth }, style]}
+        style={[_style, style]}
         contentContainerStyle={[
-          {
-            minHeight: (containerHeight || 0) + headerHeight,
-            paddingTop: headerHeight + tabBarHeight,
-          },
+          _contentContainerStyle,
           // @ts-ignore
           contentContainerStyle,
         ]}
-        progressViewOffset={headerHeight + tabBarHeight}
+        progressViewOffset={_progressViewOffset}
         onScroll={scrollHandler}
+        scrollEventThrottle={16}
         {...rest}
       />
     )
@@ -655,33 +660,24 @@ const createCollapsibleTabs = <
     ...rest
   }) => {
     const name = useTabNameContext()
-    const {
-      refMap,
-      headerHeight,
-      tabBarHeight,
-      containerHeight,
-    } = useTabsContext()
-
+    const { refMap } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
-
-    const windowWidth = useWindowDimensions().width
+    const { _style, _contentContainerStyle, _progressViewOffset } = useStyle()
 
     return (
       <Animated.ScrollView
         ref={refMap[name] as any}
         bounces={false}
         bouncesZoom={false}
-        style={[{ width: windowWidth }, style]}
+        style={[_style, style]}
         contentContainerStyle={[
-          {
-            minHeight: (containerHeight || 0) + headerHeight,
-            paddingTop: headerHeight + tabBarHeight,
-          },
+          _contentContainerStyle,
           // @ts-ignore
           contentContainerStyle,
         ]}
-        progressViewOffset={headerHeight + tabBarHeight}
+        progressViewOffset={_progressViewOffset}
         onScroll={scrollHandler}
+        scrollEventThrottle={16}
         {...rest}
       >
         {children}
