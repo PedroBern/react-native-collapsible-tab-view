@@ -109,6 +109,7 @@ const createCollapsibleTabs = <
       return tabNames.value[index.value]
     })
     const isGliding = useSharedValue(false)
+    const calculateNextOffset = useSharedValue(0)
 
     const getItemLayout = React.useCallback(
       (_: unknown, index: number) => ({
@@ -155,10 +156,19 @@ const createCollapsibleTabs = <
       },
       (nextIndex) => {
         if (nextIndex !== null && nextIndex !== index.value) {
-          offset.value =
-            scrollY.value[index.value] - scrollY.value[nextIndex] + offset.value
-          index.value = nextIndex
+          calculateNextOffset.value = nextIndex
         }
+      }
+    )
+
+    useAnimatedReaction(
+      () => {
+        return calculateNextOffset.value
+      },
+      (i) => {
+        offset.value =
+          scrollY.value[index.value] - scrollY.value[i] + offset.value
+        index.value = i
       }
     )
 
@@ -286,9 +296,7 @@ const createCollapsibleTabs = <
         // when is scrolling or gliding.
         if (!isScrolling.value && !isGliding.value) {
           const i = tabNames.value.findIndex((n) => n === name)
-          offset.value =
-            scrollY.value[index.value] - scrollY.value[i] + offset.value
-          index.value = i
+          calculateNextOffset.value = i
           if (name === focusedTab.value) {
             // @ts-ignore
             if (refMap[name].current?.scrollTo) {
