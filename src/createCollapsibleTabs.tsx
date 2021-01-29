@@ -109,7 +109,7 @@ const createCollapsibleTabs = <
       return tabNames.value[index.value]
     })
     const isGliding = useSharedValue(false)
-    const calculateNextOffset = useSharedValue(0)
+    const calculateNextOffset = useSharedValue(index.value)
 
     const getItemLayout = React.useCallback(
       (_: unknown, index: number) => ({
@@ -166,9 +166,11 @@ const createCollapsibleTabs = <
         return calculateNextOffset.value
       },
       (i) => {
-        offset.value =
-          scrollY.value[index.value] - scrollY.value[i] + offset.value
-        index.value = i
+        if (i !== index.value) {
+          offset.value =
+            scrollY.value[index.value] - scrollY.value[i] + offset.value
+          index.value = i
+        }
       }
     )
 
