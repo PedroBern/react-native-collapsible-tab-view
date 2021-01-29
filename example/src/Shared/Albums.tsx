@@ -24,7 +24,6 @@ export default class Albums extends React.Component {
   render() {
     return (
       <Tabs.ScrollView
-        name="albums"
         style={styles.container}
         contentContainerStyle={styles.content}
       >

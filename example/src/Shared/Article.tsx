@@ -44,7 +44,6 @@ export const ArticleContent = () => {
 const Article: React.FC<object> = () => {
   return (
     <Tabs.ScrollView
-      name="article"
       style={styles.container}
       contentContainerStyle={styles.content}
     >

@@ -85,19 +85,11 @@ export type ContextType<T extends string> = {
   snappingTo: Animated.SharedValue<number>
 }
 
-export type TabProps<T extends string> = {
-  name: T
-}
+export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
 
-export type ScrollViewProps<T extends string> = ComponentProps<
-  typeof Animated.ScrollView
-> &
-  TabProps<T>
-
-export type FlatListProps<R extends any, T extends string> = Omit<
+export type FlatListProps<R extends any> = Omit<
   ComponentProps<typeof FlatList>,
   'renderItem'
-> &
-  TabProps<T> & {
-    renderItem: ListRenderItem<R>
-  }
+> & {
+  renderItem: ListRenderItem<R>
+}
