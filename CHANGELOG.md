@@ -1,3 +1,10 @@
+# [3.6.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.5.0...v3.6.0) (2021-01-29)
+
+
+### Features
+
+* add tab name context, remove name prop from scrollable components ([c5166d2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/c5166d2a957fb644e039bb357198a06fdbd12323))
+
 # [3.5.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.4.0...v3.5.0) (2021-01-27)
 
 
