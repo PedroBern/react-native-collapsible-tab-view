@@ -40,7 +40,7 @@ const Example: React.FC = () => {
 
 const ScreenB = () => {
   return (
-    <Tabs.ScrollView name="B">
+    <Tabs.ScrollView>
       <View style={[styles.box, styles.boxA]} />
       <View style={[styles.box, styles.boxB]} />
     </Tabs.ScrollView>
@@ -56,7 +56,6 @@ const renderItem: ListRenderItem<number> = ({ index }) => {
 const ScreenA = () => {
   return (
     <Tabs.FlatList
-      name="A"
       data={[0, 1, 2, 3, 4]}
       renderItem={renderItem}
       keyExtractor={(v) => v + ''}
