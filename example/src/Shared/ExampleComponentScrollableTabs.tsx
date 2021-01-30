@@ -4,6 +4,7 @@ import {
   CollapsibleProps,
   RefComponent,
   ContainerRef,
+  MaterialTabBar,
 } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
@@ -55,14 +56,12 @@ const Example: React.FC<Props> = (props) => {
       headerHeight={HEADER_HEIGHT}
       refMap={refMap}
       lazy
-      tabBarProps={{
-        scrollEnabled: true,
-      }}
+      TabBarComponent={(props) => <MaterialTabBar {...props} scrollEnabled />}
       {...props}
     >
       {Object.keys(refMap).map((name) => {
         return (
-          <Tabs.ScrollView key={name} name={name as TabNames}>
+          <Tabs.ScrollView key={name}>
             <ArticleContent />
           </Tabs.ScrollView>
         )

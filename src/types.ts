@@ -35,6 +35,13 @@ export type TabBarProps<T extends ParamList> = {
   onTabPress: (name: T) => void
 }
 
+export type OnTabChangeCallback<T extends ParamList> = (data: {
+  prevIndex: number
+  index: number
+  prevTabName: T
+  tabName: T
+}) => void
+
 export type CollapsibleProps<T extends ParamList> = {
   initialTabName?: T
   containerRef: React.RefObject<ContainerRef>
@@ -63,6 +70,7 @@ export type CollapsibleProps<T extends ParamList> = {
     | 'showsHorizontalScrollIndicator'
     | 'getItemLayout'
   >
+  onIndexChange?: OnTabChangeCallback<T>
 }
 
 export type ContextType<T extends ParamList> = {

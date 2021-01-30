@@ -9,6 +9,7 @@ import {
   RefComponent,
   ContainerRef,
   CollapsibleRef,
+  OnTabChangeCallback,
 } from './types'
 
 export type {
@@ -20,6 +21,7 @@ export type {
   MaterialTabItemProps,
   MaterialTabItem,
   CollapsibleRef,
+  OnTabChangeCallback,
 }
 
 export { default as createCollapsibleTabs } from './createCollapsibleTabs'

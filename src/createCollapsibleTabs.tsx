@@ -72,6 +72,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
         lazy,
         cancelLazyFadeIn,
         pagerProps,
+        onIndexChange,
       },
       ref
     ) => {
@@ -178,6 +179,14 @@ const createCollapsibleTabs = <T extends ParamList>() => {
           if (i !== index.value) {
             offset.value =
               scrollY.value[index.value] - scrollY.value[i] + offset.value
+            if (onIndexChange) {
+              runOnJS(onIndexChange)({
+                prevIndex: index.value,
+                index: i,
+                prevTabName: tabNames.value[index.value],
+                tabName: tabNames.value[i],
+              })
+            }
             index.value = i
           }
         }
