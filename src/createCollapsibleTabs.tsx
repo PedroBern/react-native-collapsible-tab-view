@@ -5,6 +5,7 @@ import {
   StyleSheet,
   LayoutChangeEvent,
   useWindowDimensions,
+  Platform,
 } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -15,6 +16,8 @@ import Animated, {
   scrollTo,
   withTiming,
   runOnJS,
+  withDelay,
+  cancelAnimation,
 } from 'react-native-reanimated'
 
 import MaterialTabBar, {
@@ -30,6 +33,9 @@ import {
 } from './types'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
+
+/** The time one frame takes at 60 fps (16 ms) */
+const ONE_FRAME_MS = 16
 
 const createCollapsibleTabs = <
   T extends string,
@@ -109,6 +115,7 @@ const createCollapsibleTabs = <
       return tabNames.value[index.value]
     })
     const isGliding = useSharedValue(false)
+    const endDrag = useSharedValue(0)
     const calculateNextOffset = useSharedValue(index.value)
 
     const getItemLayout = React.useCallback(
@@ -197,16 +204,22 @@ const createCollapsibleTabs = <
       },
       (delta) => {
         if (delta) {
-          const nextValue = accDiffClamp.value + delta
-          if (delta > 0) {
-            // scrolling down
-            accDiffClamp.value = Math.min(headerHeight || 0, nextValue)
-          } else if (delta < 0) {
-            // scrolling up
-            accDiffClamp.value = Math.max(0, nextValue)
+          if (accScrollY.value <= 0) {
+            // handle overscroll on ios, when being dragged beyond the top border
+            accDiffClamp.value = 0
+          } else {
+            const nextValue = accDiffClamp.value + delta
+            if (delta > 0) {
+              // scrolling down
+              accDiffClamp.value = Math.min(headerHeight || 0, nextValue)
+            } else if (delta < 0) {
+              // scrolling up
+              accDiffClamp.value = Math.max(0, nextValue)
+            }
           }
         }
-      }
+      },
+      []
     )
 
     const renderItem = React.useCallback(
@@ -333,7 +346,6 @@ const createCollapsibleTabs = <
           headerHeight: headerHeight || 0,
           refMap,
           scrollYCurrent,
-          // @ts-ignore
           tabNames,
           index,
           scrollY,
@@ -351,6 +363,7 @@ const createCollapsibleTabs = <
           isGliding,
           isSnapping,
           snappingTo,
+          endDrag,
         }}
       >
         <Animated.View
@@ -503,11 +516,54 @@ const createCollapsibleTabs = <
       isGliding,
       isSnapping,
       snappingTo,
+      endDrag,
     } = useTabsContext()
 
     const [tabIndex] = React.useState(
       tabNames.value.findIndex((n) => n === name)
     )
+
+    const onMomentumEnd = () => {
+      'worklet'
+      if (snapEnabled) {
+        if (diffClampEnabled && accDiffClamp.value > 0) {
+          if (scrollYCurrent.value > headerHeight) {
+            if (accDiffClamp.value <= headerHeight * snapThreshold) {
+              // snap down
+              isSnapping.value = true
+              accDiffClamp.value = withTiming(0, undefined, () => {
+                isSnapping.value = false
+              })
+            } else if (accDiffClamp.value < headerHeight) {
+              // snap up
+              isSnapping.value = true
+              accDiffClamp.value = withTiming(headerHeight, undefined, () => {
+                isSnapping.value = false
+              })
+            }
+          } else {
+            isSnapping.value = true
+            accDiffClamp.value = withTiming(0, undefined, () => {
+              isSnapping.value = false
+            })
+          }
+        } else {
+          if (scrollYCurrent.value <= headerHeight * snapThreshold) {
+            // snap down
+            snappingTo.value = 0
+            // @ts-ignore
+            scrollTo(refMap[name], 0, 0, true)
+          } else if (scrollYCurrent.value <= headerHeight) {
+            // snap up
+            snappingTo.value = headerHeight
+            // @ts-ignore
+            scrollTo(refMap[name], 0, headerHeight, true)
+          }
+          isSnapping.value = false
+        }
+      }
+      isGliding.value = false
+    }
 
     const scrollHandler = useAnimatedScrollHandler(
       {
@@ -522,55 +578,33 @@ const createCollapsibleTabs = <
         },
         onBeginDrag: () => {
           isScrolling.value = true
+          endDrag.value = 0
         },
         onEndDrag: () => {
           isGliding.value = true
           isScrolling.value = false
-        },
-        onMomentumEnd: () => {
-          if (snapEnabled) {
-            if (diffClampEnabled && accDiffClamp.value > 0) {
-              if (scrollYCurrent.value > headerHeight) {
-                if (accDiffClamp.value <= headerHeight * snapThreshold) {
-                  // snap down
-                  isSnapping.value = true
-                  accDiffClamp.value = withTiming(0, undefined, () => {
-                    isSnapping.value = false
-                  })
-                } else if (accDiffClamp.value < headerHeight) {
-                  // snap up
-                  isSnapping.value = true
-                  accDiffClamp.value = withTiming(
-                    headerHeight,
-                    undefined,
-                    () => {
-                      isSnapping.value = false
-                    }
-                  )
+          if (Platform.OS === 'ios') {
+            endDrag.value = 1
+            endDrag.value = withDelay(
+              ONE_FRAME_MS,
+              withTiming(0, { duration: 0 }, (isFinished) => {
+                // if the animation is finished, the onMomentumBegin has
+                // never started, so we need to manually trigger the onMomentumEnd
+                // to make sure we snap
+                if (isFinished) {
+                  isGliding.value = false
+                  onMomentumEnd()
                 }
-              } else {
-                isSnapping.value = true
-                accDiffClamp.value = withTiming(0, undefined, () => {
-                  isSnapping.value = false
-                })
-              }
-            } else {
-              if (scrollYCurrent.value <= headerHeight * snapThreshold) {
-                // snap down
-                snappingTo.value = 0
-                // @ts-ignore
-                scrollTo(refMap[name], 0, 0, true)
-              } else if (scrollYCurrent.value <= headerHeight) {
-                // snap up
-                snappingTo.value = headerHeight
-                // @ts-ignore
-                scrollTo(refMap[name], 0, headerHeight, true)
-              }
-              isSnapping.value = false
-            }
+              })
+            )
           }
-          isGliding.value = false
         },
+        onMomentumBegin: () => {
+          if (Platform.OS === 'ios') {
+            cancelAnimation(endDrag)
+          }
+        },
+        onMomentumEnd,
       },
       [headerHeight, name, diffClampEnabled, snapEnabled]
     )
@@ -647,7 +681,6 @@ const createCollapsibleTabs = <
       <AnimatedFlatList
         // @ts-ignore
         ref={refMap[name]}
-        bounces={false}
         bouncesZoom={false}
         style={[_style, style]}
         contentContainerStyle={[
@@ -677,7 +710,6 @@ const createCollapsibleTabs = <
     return (
       <Animated.ScrollView
         ref={refMap[name] as any}
-        bounces={false}
         bouncesZoom={false}
         style={[_style, style]}
         contentContainerStyle={[

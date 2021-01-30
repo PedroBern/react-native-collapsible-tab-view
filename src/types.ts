@@ -83,6 +83,7 @@ export type ContextType<T extends string> = {
   isGliding: Animated.SharedValue<boolean>
   isSnapping: Animated.SharedValue<boolean>
   snappingTo: Animated.SharedValue<number>
+  endDrag: Animated.SharedValue<number>
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
