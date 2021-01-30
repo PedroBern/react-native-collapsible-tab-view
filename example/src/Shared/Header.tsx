@@ -32,10 +32,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196f3',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 16,
   },
   text: {
     color: 'white',
     fontSize: 24,
+    textAlign: 'center',
   },
 })
 

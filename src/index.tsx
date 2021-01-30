@@ -4,6 +4,7 @@ import {
   CollapsibleProps,
   RefComponent,
   ContainerRef,
+  CollapsibleRef,
 } from './types'
 
 export type {
@@ -13,6 +14,7 @@ export type {
   ContainerRef,
   MaterialTabBarProps,
   MaterialTabItemProps,
+  CollapsibleRef,
 }
 
 export { default as createCollapsibleTabs } from './createCollapsibleTabs'

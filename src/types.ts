@@ -9,15 +9,24 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { MaterialTabBarProps } from './MaterialTabBar'
-
 export type ContainerRef = FlatList<any>
 
 export type RefComponent = FlatList<any> | ScrollView
 
 export type Ref = React.RefObject<RefComponent>
 
-export type TabBarProps<T extends string> = {
+export type ParamList = string | number | symbol
+
+export type RefHandler<T extends ParamList> = {
+  jumpToTab: (name: T) => boolean
+  setIndex: (index: number) => boolean
+  getFocusedTab: () => T
+  getCurrentIndex: () => number
+}
+
+export type CollapsibleRef<T extends ParamList> = RefHandler<T> | undefined
+
+export type TabBarProps<T extends ParamList> = {
   indexDecimal: Animated.SharedValue<number>
   focusedTab: Animated.SharedValue<T>
   refMap: Record<T, Ref>
@@ -26,10 +35,7 @@ export type TabBarProps<T extends string> = {
   onTabPress: (name: T) => void
 }
 
-export type CollapsibleProps<
-  T extends string,
-  TP extends TabBarProps<T> = MaterialTabBarProps<T>
-> = {
+export type CollapsibleProps<T extends ParamList> = {
   initialTabName?: T
   containerRef: React.RefObject<ContainerRef>
   headerHeight?: number
@@ -46,7 +52,6 @@ export type CollapsibleProps<
   cancelTranslation?: boolean
   lazy?: boolean
   cancelLazyFadeIn?: boolean
-  tabBarProps?: Omit<TP, keyof TabBarProps<any>>
   pagerProps?: Omit<
     RNFlatListProps<number>,
     | 'data'
@@ -60,7 +65,7 @@ export type CollapsibleProps<
   >
 }
 
-export type ContextType<T extends string> = {
+export type ContextType<T extends ParamList> = {
   headerHeight: number
   tabBarHeight: number
   snapEnabled: boolean

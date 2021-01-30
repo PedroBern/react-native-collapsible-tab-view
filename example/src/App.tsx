@@ -18,6 +18,7 @@ import DiffClamp from './DiffClamp'
 import DiffClampSnap from './DiffClampSnap'
 import Lazy from './Lazy'
 import QuickStartDemo from './QuickStartDemo'
+import Ref from './Ref'
 import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
@@ -37,6 +38,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   QuickStartDemo,
   UndefinedHeaderHeight,
   StartOnSpecificTab,
+  Ref,
 ]
 
 const ExampleList: React.FC<object> = () => {
