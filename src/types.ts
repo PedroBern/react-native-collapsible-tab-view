@@ -50,7 +50,7 @@ export type CollapsibleProps<T extends ParamList> = {
   snapEnabled?: boolean
   diffClampEnabled?: boolean
   snapThreshold?: number
-  children: React.ReactElement[]
+  children: React.ReactElement[] | React.ReactElement
   HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement
   TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement
   refMap: Record<T, Ref>

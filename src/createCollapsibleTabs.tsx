@@ -35,6 +35,20 @@ const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
 /** The time one frame takes at 60 fps (16 ms) */
 const ONE_FRAME_MS = 16
 
+const init = (children: any) => {
+  if (React.Children.count(children) === 0) {
+    throw new Error('CollapsibleTabs must have at least one child.')
+  }
+  React.Children.forEach(children, (child) => {
+    if (!React.isValidElement(child)) {
+      throw new Error(
+        'CollapsibleTabs children must be array of React Elements.'
+      )
+    }
+  })
+  return true
+}
+
 const createCollapsibleTabs = <T extends ParamList>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
@@ -77,7 +91,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       ref
     ) => {
       const windowWidth = useWindowDimensions().width
-      const firstRender = React.useRef(true)
+      const firstRender = React.useRef(init(children))
 
       const [containerHeight, setContainerHeight] = React.useState<
         number | undefined
@@ -90,9 +104,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       >(initialHeaderHeight)
       const isScrolling = useSharedValue(false)
       const scrollYCurrent = useSharedValue(0)
-      const scrollY = useSharedValue(
-        [...new Array(children.length)].map(() => 0)
-      )
+      const scrollY = useSharedValue(React.Children.map(children, () => 0))
       const offset = useSharedValue(0)
       const accScrollY = useSharedValue(0)
       const oldAccScrollY = useSharedValue(0)
@@ -111,9 +123,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       const isSwiping = useSharedValue(false)
       const isSnapping = useSharedValue(false)
       const snappingTo = useSharedValue(0)
-      const [data] = React.useState(
-        [...new Array(children.length)].map((_, i) => i)
-      )
+      const [data] = React.useState(React.Children.map(children, (_, i) => i))
       const focusedTab = useDerivedValue<T>(() => {
         return tabNames.value[index.value]
       })
@@ -242,10 +252,10 @@ const createCollapsibleTabs = <T extends ParamList>() => {
                   startMounted={i === index.value}
                   cancelLazyFadeIn={cancelLazyFadeIn}
                 >
-                  {children[i]}
+                  {React.Children.toArray(children)[i] as React.ReactElement}
                 </Lazy>
               ) : (
-                children[i]
+                React.Children.toArray(children)[i]
               )}
             </TabNameContext.Provider>
           )
@@ -349,6 +359,8 @@ const createCollapsibleTabs = <T extends ParamList>() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [containerRef, refMap]
       )
+
+      const keyExtractor = React.useCallback((_, index) => index.toString(), [])
 
       React.useImperativeHandle(
         ref,
@@ -454,7 +466,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
               ref={containerRef}
               initialScrollIndex={index.value}
               data={data}
-              keyExtractor={(item) => item + ''}
+              keyExtractor={keyExtractor}
               renderItem={renderItem}
               horizontal
               pagingEnabled
