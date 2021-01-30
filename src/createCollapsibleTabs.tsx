@@ -681,17 +681,17 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     return scrollHandler
   }
 
-  const useStyle = () => {
+  const useCollapsibleStyle = () => {
     const { headerHeight, tabBarHeight, containerHeight } = useTabsContext()
     const windowWidth = useWindowDimensions().width
 
     return {
-      _style: { width: windowWidth },
-      _contentContainerStyle: {
+      style: { width: windowWidth },
+      contentContainerStyle: {
         minHeight: (containerHeight || 0) + headerHeight,
         paddingTop: headerHeight + tabBarHeight,
       },
-      _progressViewOffset: headerHeight + tabBarHeight,
+      progressViewOffset: headerHeight + tabBarHeight,
     }
   }
 
@@ -703,7 +703,11 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     const name = useTabNameContext()
     const { refMap } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
-    const { _style, _contentContainerStyle, _progressViewOffset } = useStyle()
+    const {
+      style: _style,
+      contentContainerStyle: _contentContainerStyle,
+      progressViewOffset,
+    } = useCollapsibleStyle()
 
     return (
       <AnimatedFlatList
@@ -716,7 +720,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
           // @ts-ignore
           contentContainerStyle,
         ]}
-        progressViewOffset={_progressViewOffset}
+        progressViewOffset={progressViewOffset}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         {...rest}
@@ -733,7 +737,10 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     const name = useTabNameContext()
     const { refMap } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
-    const { _style, _contentContainerStyle, _progressViewOffset } = useStyle()
+    const {
+      style: _style,
+      contentContainerStyle: _contentContainerStyle,
+    } = useCollapsibleStyle()
 
     return (
       <Animated.ScrollView
@@ -745,7 +752,6 @@ const createCollapsibleTabs = <T extends ParamList>() => {
           // @ts-ignore
           contentContainerStyle,
         ]}
-        progressViewOffset={_progressViewOffset}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         {...rest}
@@ -755,7 +761,14 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     )
   }
 
-  return { FlatList, ScrollView, Container, useTabsContext, Lazy }
+  return {
+    FlatList,
+    ScrollView,
+    Container,
+    useTabsContext,
+    useCollapsibleStyle,
+    Lazy,
+  }
 }
 
 const styles = StyleSheet.create({
