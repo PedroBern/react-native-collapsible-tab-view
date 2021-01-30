@@ -5,6 +5,8 @@
 [![MIT License][license-badge]][license]
 [![runs with expo][expo-badge]][expo]
 
+> Due to time constraints we weren't able to finish the documentation yet. You can navigate through the code and examples.
+
 - [Expo app](#expo-app)
 - [Demo](#demo)
 - [Features](#features)
