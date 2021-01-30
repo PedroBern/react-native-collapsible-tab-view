@@ -1,3 +1,17 @@
+# [3.7.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.6.3...v3.7.0) (2021-01-30)
+
+### Bug Fixes
+
+- add missing tabbar style prop and improve typing ([826966d](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/826966db89141b04c1521f710608686bcc7f5ff8)), closes [#64](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/64)
+- change keyExtactor to use index and to be useCallback ([95be6c2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/95be6c2ff00bd2ba183126e3e6892e0730e8f0c9))
+- ensure children is not undefined ([bd4f0e2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/bd4f0e20b66198c8607d1dd8d1a52a1f1a2b2f52)), closes [#68](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/68) [#72](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/72)
+
+### Features
+
+- add imperactive ref handler ([a6c20fe](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/a6c20feadb0b08b87eb3c98658e31184a039d4b8)), closes [#71](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/71)
+- add onIndexChange prop ([15a516c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/15a516c21908cf16afd9688c39d10ee34e8e5c35)), closes [#71](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/71)
+- export useCollapsibleStyle hook ([dde28fe](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/dde28fecf0c65ef85dc5c5f54dd26b98fd6e35f0))
+
 ## [3.6.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.6.2...v3.6.3) (2021-01-30)
 
 ### Bug Fixes
