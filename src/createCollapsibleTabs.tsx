@@ -85,7 +85,9 @@ const createCollapsibleTabs = <
     )
     const isScrolling = useSharedValue(false)
     const scrollYCurrent = useSharedValue(0)
-    const scrollY = useSharedValue([...new Array(children.length)].map(() => 0))
+    const scrollY = useSharedValue(
+      [...new Array(children?.length)].map(() => 0)
+    )
     const offset = useSharedValue(0)
     const accScrollY = useSharedValue(0)
     const oldAccScrollY = useSharedValue(0)
@@ -103,7 +105,7 @@ const createCollapsibleTabs = <
     const isSnapping = useSharedValue(false)
     const snappingTo = useSharedValue(0)
     const [data] = React.useState(
-      [...new Array(children.length)].map((_, i) => i)
+      [...new Array(children?.length)].map((_, i) => i)
     )
     const focusedTab = useDerivedValue<T>(() => {
       return tabNames.value[index.value]
@@ -206,10 +208,10 @@ const createCollapsibleTabs = <
                 startMounted={i === index.value}
                 cancelLazyFadeIn={cancelLazyFadeIn}
               >
-                {children[i]}
+                {children?.[i]}
               </Lazy>
             ) : (
-              children[i]
+              children?.[i]
             )}
           </TabNameContext.Provider>
         )
