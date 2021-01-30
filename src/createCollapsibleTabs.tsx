@@ -668,7 +668,6 @@ const createCollapsibleTabs = <
       <AnimatedFlatList
         // @ts-ignore
         ref={refMap[name]}
-        bounces={false}
         bouncesZoom={false}
         style={[_style, style]}
         contentContainerStyle={[
