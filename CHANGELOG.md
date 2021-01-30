@@ -1,3 +1,10 @@
+## [3.6.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.6.1...v3.6.2) (2021-01-30)
+
+
+### Bug Fixes
+
+* start with correct calculateNextOffset.value ([fb405f7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fb405f7b4980d233930bc06fb31bda875732bf0b))
+
 ## [3.6.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.6.0...v3.6.1) (2021-01-29)
 
 
