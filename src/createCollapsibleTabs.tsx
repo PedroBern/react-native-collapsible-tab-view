@@ -218,7 +218,8 @@ const createCollapsibleTabs = <
             }
           }
         }
-      }
+      },
+      []
     )
 
     const renderItem = React.useCallback(
