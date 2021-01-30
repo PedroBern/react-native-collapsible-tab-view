@@ -317,6 +317,8 @@ const createCollapsibleTabs = <
       [containerRef, refMap]
     )
 
+    const keyExtractor = React.useCallback((_, index) => index.toString(), [])
+
     return (
       <Context.Provider
         value={{
@@ -397,7 +399,7 @@ const createCollapsibleTabs = <
             ref={containerRef}
             initialScrollIndex={index.value}
             data={data}
-            keyExtractor={(item) => item + ''}
+            keyExtractor={keyExtractor}
             renderItem={renderItem}
             horizontal
             pagingEnabled
