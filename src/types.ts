@@ -44,11 +44,11 @@ export type CollapsibleProps<T extends ParamList> = {
   diffClampEnabled?: boolean
   snapThreshold?: number
   children: React.ReactElement[]
-  HeaderComponent?: React.JSXElementConstructor<TabBarProps<T>>
-  TabBarComponent?: React.JSXElementConstructor<TabBarProps<T>>
+  HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement
+  TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement
   refMap: Record<T, Ref>
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
-  containerStyle?: ViewStyle
+  containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean
   lazy?: boolean
   cancelLazyFadeIn?: boolean

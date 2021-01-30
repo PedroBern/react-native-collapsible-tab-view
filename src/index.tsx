@@ -1,4 +1,8 @@
-import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
+import {
+  MaterialTabBarProps,
+  MaterialTabItemProps,
+  MaterialTabItem,
+} from './MaterialTabBar'
 import {
   TabBarProps,
   CollapsibleProps,
@@ -14,6 +18,7 @@ export type {
   ContainerRef,
   MaterialTabBarProps,
   MaterialTabItemProps,
+  MaterialTabItem,
   CollapsibleRef,
 }
 

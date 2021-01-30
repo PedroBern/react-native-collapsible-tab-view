@@ -7,12 +7,12 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { TabBarProps } from '../types'
+import { TabBarProps, ParamList } from '../types'
 
 type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
 type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>
 
-export type MaterialTabItemProps<T extends string> = {
+export type MaterialTabItemProps<T extends ParamList> = {
   name: T
   index: number
   indexDecimal: Animated.SharedValue<number>
@@ -31,15 +31,12 @@ export type MaterialTabItemProps<T extends string> = {
   pressOpacity?: number
 } & Omit<PressableProps, 'onPress' | 'children'>
 
-export type MaterialTabBarProps<N extends string> = TabBarProps<N> & {
+export type MaterialTabBarProps<N extends ParamList> = TabBarProps<N> & {
   scrollEnabled?: boolean
   indicatorStyle?: AnimatedStyle
-  TabItemComponent?: React.JSXElementConstructor<MaterialTabItemProps<N>>
+  TabItemComponent?: (props: MaterialTabItemProps<N>) => React.ReactElement
   getLabelText?: (name: N) => string
-  tabItemProps?: Omit<
-    MaterialTabItemProps<N>,
-    'name' | 'indexDecimal' | 'index' | 'label'
-  >
+  style?: StyleProp<ViewStyle>
 }
 
 export type ItemLayout = {

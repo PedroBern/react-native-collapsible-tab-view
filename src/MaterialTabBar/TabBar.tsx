@@ -27,9 +27,9 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   indicatorStyle,
   index,
   TabItemComponent = TabItem,
-  tabItemProps = {},
   getLabelText = (name) => name.toUpperCase(),
   onTabPress,
+  style,
 }) => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -132,7 +132,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
     <Animated.ScrollView
       ref={tabBarRef}
       horizontal
-      style={[styles.root]}
+      style={style}
       contentContainerStyle={[
         styles.contentContainer,
         !scrollEnabled && { width: windowWidth },
@@ -158,7 +158,6 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
             onLayout={scrollEnabled ? onTabItemLayout : undefined}
             scrollEnabled={scrollEnabled}
             indexDecimal={indexDecimal}
-            {...tabItemProps}
           />
         )
       })}
@@ -175,17 +174,6 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
 }
 
 const styles = StyleSheet.create({
-  root: {
-    backgroundColor: 'white',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-  },
   contentContainer: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
