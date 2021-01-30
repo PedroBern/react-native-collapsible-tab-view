@@ -37,7 +37,7 @@ export type CollapsibleProps<
   snapEnabled?: boolean
   diffClampEnabled?: boolean
   snapThreshold?: number
-  children: React.ReactElement[]
+  children: React.ReactElement[] | React.ReactElement
   HeaderComponent?: React.JSXElementConstructor<TabBarProps<T>>
   TabBarComponent?: React.JSXElementConstructor<TabBarProps<T>>
   refMap: Record<T, Ref>
