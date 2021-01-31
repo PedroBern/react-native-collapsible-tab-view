@@ -39,12 +39,11 @@ const Example: React.FC<Props> = (props) => {
   const screenIRef = useAnimatedRef<RefComponent>()
 
   const [refMap] = React.useState({
-    // Specifically non-alphabetical order
+    screenA: screenARef,
     screenB: screenBRef,
     screenC: screenCRef,
-    screenE: screenERef,
-    screenA: screenARef,
     screenD: screenDRef,
+    screenE: screenERef,
     screenF: screenFRef,
     screenG: screenGRef,
     screenH: screenHRef,
