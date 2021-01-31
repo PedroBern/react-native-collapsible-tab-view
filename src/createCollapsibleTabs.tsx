@@ -102,7 +102,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       const [headerHeight, setHeaderHeight] = React.useState<
         number | undefined
       >(initialHeaderHeight)
-      const isScrolling = useSharedValue(false)
+      const isScrolling = useSharedValue(0)
       const scrollYCurrent = useSharedValue(0)
       const scrollY = useSharedValue(React.Children.map(children, () => 0))
       const offset = useSharedValue(0)
@@ -623,15 +623,24 @@ const createCollapsibleTabs = <T extends ParamList>() => {
             scrollY.value[index.value] = y
             oldAccScrollY.value = accScrollY.value
             accScrollY.value = scrollY.value[index.value] + offset.value
+
+            isScrolling.value = 1
+
+            // cancel the animation that is setting this back to 0 if we're still scrolling
+            cancelAnimation(isScrolling)
+
+            // set it back to 0 after a few frames without active scrolling
+            isScrolling.value = withDelay(
+              ONE_FRAME_MS * 3,
+              withTiming(0, { duration: 0 })
+            )
           }
         },
         onBeginDrag: () => {
-          isScrolling.value = true
           endDrag.value = 0
         },
         onEndDrag: () => {
           isGliding.value = true
-          isScrolling.value = false
           if (Platform.OS === 'ios') {
             endDrag.value = 1
             endDrag.value = withDelay(

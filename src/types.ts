@@ -87,7 +87,7 @@ export type ContextType<T extends ParamList> = {
   oldAccScrollY: Animated.SharedValue<number>
   accScrollY: Animated.SharedValue<number>
   offset: Animated.SharedValue<number>
-  isScrolling: Animated.SharedValue<boolean>
+  isScrolling: Animated.SharedValue<number>
   focusedTab: Animated.SharedValue<T>
   accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
