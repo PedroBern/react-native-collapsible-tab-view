@@ -1,3 +1,10 @@
+## [3.7.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.7.0...v3.7.1) (2021-02-01)
+
+### Bug Fixes
+
+- ensure correct tab label ordering ([1c2e65e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1c2e65e0f99fe46c8996f9d189475c4d23dc4ea1)), closes [#77](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/77)
+- handle scroll to top ios ([d96f2e2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/d96f2e2c35d9bc45c229f4fca243dac2cf12cc10)), closes [#66](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/66)
+
 # [3.7.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.6.3...v3.7.0) (2021-01-30)
 
 ### Bug Fixes

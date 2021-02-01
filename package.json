@@ -1,6 +1,6 @@
 {
   "name": "react-native-collapsible-tab-view",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "description": "Collapsible tab view component for React Native",
   "main": "lib/commonjs/index.js",
   "react-native": "lib/module/index.js",
