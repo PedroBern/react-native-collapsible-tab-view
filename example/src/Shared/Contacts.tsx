@@ -1,16 +1,10 @@
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import Animated, {
-  useAnimatedStyle,
-  useDerivedValue,
-} from 'react-native-reanimated'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 
-import { HEADER_HEIGHT } from './Header'
 import Tabs, { useTabsContext } from './Tabs'
 
 type Item = { name: string; number: number }
-
-const TABBAR_HEIGHT = 48
 
 const CONTACTS: Item[] = [
   { name: 'Marissa Castillo', number: 7766398169 },
@@ -91,28 +85,22 @@ const ItemSeparator = () => <View style={styles.separator} />
 
 const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 
-const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
-
 const ListEmptyComponent = () => {
-  const { scrollY, scrollYCurrent } = useTabsContext()
-
-  const translateY = useDerivedValue(() => {
-    return Animated.interpolate(
-      scrollYCurrent.value,
-      [0, PADDING_TOP - TABBAR_HEIGHT],
-      [-(PADDING_TOP - TABBAR_HEIGHT) / 2, 0]
-    )
-  }, [scrollY])
+  const { translateY, headerHeight } = useTabsContext()
 
   const stylez = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateY: translateY.value,
+          translateY: Animated.interpolate(
+            translateY.value,
+            [0, headerHeight],
+            [-headerHeight / 2, -headerHeight]
+          ),
         },
       ],
     }
-  })
+  }, [headerHeight, translateY])
 
   return (
     <Animated.View style={[styles.listEmpty, stylez]}>
@@ -176,5 +164,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 10,
+    zIndex: 0,
   },
 })
