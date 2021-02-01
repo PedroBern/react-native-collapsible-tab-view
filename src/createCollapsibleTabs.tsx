@@ -131,6 +131,12 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       const endDrag = useSharedValue(0)
       const calculateNextOffset = useSharedValue(index.value)
 
+      const translateY = useDerivedValue(() => {
+        return diffClampEnabled
+          ? -accDiffClamp.value
+          : -Math.min(scrollYCurrent.value, headerHeight || 0)
+      }, [diffClampEnabled, headerHeight])
+
       const getItemLayout = React.useCallback(
         (_: unknown, index: number) => ({
           length: windowWidth,
@@ -266,13 +272,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
 
       const stylez = useAnimatedStyle(() => {
         return {
-          transform: [
-            {
-              translateY: diffClampEnabled
-                ? -accDiffClamp.value
-                : -Math.min(scrollYCurrent.value, headerHeight || 0),
-            },
-          ],
+          transform: [{ translateY: translateY.value }],
         }
       }, [diffClampEnabled, headerHeight])
 
@@ -413,6 +413,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
             isSnapping,
             snappingTo,
             endDrag,
+            translateY,
           }}
         >
           <Animated.View

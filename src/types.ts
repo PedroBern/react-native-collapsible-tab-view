@@ -97,6 +97,7 @@ export type ContextType<T extends ParamList> = {
   isSnapping: Animated.SharedValue<boolean>
   snappingTo: Animated.SharedValue<number>
   endDrag: Animated.SharedValue<number>
+  translateY: Animated.SharedValue<number>
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
