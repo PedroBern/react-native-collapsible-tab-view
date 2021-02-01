@@ -5,12 +5,12 @@ import Animated, {
   useDerivedValue,
 } from 'react-native-reanimated'
 
-import { HEADER_HEIGHT } from './Header'
+// import { HEADER_HEIGHT } from './Header'
 import Tabs, { useTabsContext } from './Tabs'
 
 type Item = { name: string; number: number }
 
-const TABBAR_HEIGHT = 48
+// const TABBAR_HEIGHT = 48
 
 const CONTACTS: Item[] = [
   { name: 'Marissa Castillo', number: 7766398169 },
@@ -91,16 +91,20 @@ const ItemSeparator = () => <View style={styles.separator} />
 
 const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 
-const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
+// const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
 
 const ListEmptyComponent = () => {
-  const { scrollY, scrollYCurrent } = useTabsContext()
+  const { headerHeight, scrollY, scrollYCurrent } = useTabsContext()
 
   const translateY = useDerivedValue(() => {
     return Animated.interpolate(
       scrollYCurrent.value,
-      [0, PADDING_TOP - TABBAR_HEIGHT],
-      [-(PADDING_TOP - TABBAR_HEIGHT) / 2, 0]
+      // Manual
+      // [0, PADDING_TOP - TABBAR_HEIGHT],
+      // [-(PADDING_TOP - TABBAR_HEIGHT) / 2, 0]
+      // Derived
+      [0, headerHeight],
+      [-headerHeight / 2, 0]
     )
   }, [scrollY])
 
