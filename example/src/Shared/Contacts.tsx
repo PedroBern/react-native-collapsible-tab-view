@@ -7,6 +7,7 @@ import Animated, {
 
 import { HEADER_HEIGHT } from './Header'
 import Tabs, { useTabsContext } from './Tabs'
+import TabsNavigator from './TabsNavigator'
 
 type Item = { name: string; number: number }
 
@@ -124,8 +125,19 @@ const ListEmptyComponent = () => {
 const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
   return (
     <Tabs.FlatList
-      name="contacts"
       data={emptyContacts ? [] : CONTACTS}
+      keyExtractor={(_, i) => String(i)}
+      renderItem={renderItem}
+      ItemSeparatorComponent={ItemSeparator}
+      ListEmptyComponent={ListEmptyComponent}
+    />
+  )
+}
+
+export const ContactsScreen: React.FC = () => {
+  return (
+    <TabsNavigator.FlatList<Item>
+      data={CONTACTS}
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}

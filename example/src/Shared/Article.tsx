@@ -2,6 +2,7 @@ import * as React from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
 
 import Tabs from './Tabs'
+import TabsNavigator from './TabsNavigator'
 
 export const ArticleContent = () => {
   return (
@@ -44,12 +45,22 @@ export const ArticleContent = () => {
 const Article: React.FC<object> = () => {
   return (
     <Tabs.ScrollView
-      name="article"
       style={styles.container}
       contentContainerStyle={styles.content}
     >
       <ArticleContent />
     </Tabs.ScrollView>
+  )
+}
+
+export const ArticleScreen: React.FC<object> = () => {
+  return (
+    <TabsNavigator.ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+    >
+      <ArticleContent />
+    </TabsNavigator.ScrollView>
   )
 }
 

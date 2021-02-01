@@ -3,6 +3,7 @@ import {
   CollapsibleProps,
   RefComponent,
   ContainerRef,
+  CollapsibleRef,
 } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
@@ -16,30 +17,33 @@ type Props = {
   emptyContacts?: boolean
 } & Partial<CollapsibleProps<TabNames>>
 
-const Example: React.FC<Props> = ({ emptyContacts, ...props }) => {
-  const containerRef = useAnimatedRef<ContainerRef>()
-  const albumsRef = useAnimatedRef<RefComponent>()
-  const articleRef = useAnimatedRef<RefComponent>()
-  const contactsRef = useAnimatedRef<RefComponent>()
+const Example = React.forwardRef<CollapsibleRef<TabNames>, Props>(
+  ({ emptyContacts, ...props }, ref) => {
+    const containerRef = useAnimatedRef<ContainerRef>()
+    const albumsRef = useAnimatedRef<RefComponent>()
+    const articleRef = useAnimatedRef<RefComponent>()
+    const contactsRef = useAnimatedRef<RefComponent>()
 
-  const [refMap] = React.useState({
-    article: articleRef,
-    albums: albumsRef,
-    contacts: contactsRef,
-  })
+    const [refMap] = React.useState({
+      article: articleRef,
+      albums: albumsRef,
+      contacts: contactsRef,
+    })
 
-  return (
-    <Tabs.Container
-      containerRef={containerRef}
-      headerHeight={HEADER_HEIGHT}
-      refMap={refMap}
-      {...props}
-    >
-      <Article />
-      <Albums />
-      <Contacts emptyContacts={emptyContacts} />
-    </Tabs.Container>
-  )
-}
+    return (
+      <Tabs.Container
+        ref={ref}
+        containerRef={containerRef}
+        headerHeight={HEADER_HEIGHT}
+        refMap={refMap}
+        {...props}
+      >
+        <Article />
+        <Albums />
+        <Contacts emptyContacts={emptyContacts} />
+      </Tabs.Container>
+    )
+  }
+)
 
 export default Example

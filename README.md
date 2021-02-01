@@ -5,6 +5,8 @@
 [![MIT License][license-badge]][license]
 [![runs with expo][expo-badge]][expo]
 
+> Due to time constraints we weren't able to finish the documentation yet. You can navigate through the code and examples.
+
 - [Expo app](#expo-app)
 - [Demo](#demo)
 - [Features](#features)
@@ -109,7 +111,7 @@ const Example: React.FC = () => {
 
 const ScreenB = () => {
   return (
-    <Tabs.ScrollView name="B">
+    <Tabs.ScrollView>
       <View style={[styles.box, styles.boxA]} />
       <View style={[styles.box, styles.boxB]} />
     </Tabs.ScrollView>
@@ -125,7 +127,6 @@ const renderItem: ListRenderItem<number> = ({ index }) => {
 const ScreenA = () => {
   return (
     <Tabs.FlatList
-      name="A"
       data={[0, 1, 2, 3, 4]}
       renderItem={renderItem}
       keyExtractor={(v) => v + ''}
@@ -190,8 +191,8 @@ const { useTabsContext, ...Tabs } = createCollapsibleTabs<MyTabs>()
 
 // use like this:
 <Tabs.Container {...props} />
-<Tabs.FlatList name='tab0' {...props} />
-<Tabs.ScrollView name='tab1' {...props} />
+<Tabs.FlatList {...props} />
+<Tabs.ScrollView {...props} />
 
 // if you want to provide a cutom tab bar
 // TabBarComponent prop of the Tabs.Container
@@ -266,28 +267,7 @@ const Example: React.FC<Props> = () => {
 
 ### `Tabs.ScrollView` and `Tabs.FlatList`
 
-Basic usage looks like this:
-
-```tsx
-const ScrollViewScreen: React.FC<object> = () => {
-  return (
-    <Tabs.ScrollView name="myTabName0" {...scrollViewProps}>
-      {children}
-    </Tabs.ScrollView>
-  )
-}
-
-const FlatListScreen: React.FC<object> = () => {
-  return <Tabs.FlatList<ItemType> name="myTabName1" {...flatListProps} />
-}
-```
-
-#### Props
-
-| prop      | description                                                                           |
-| --------- | ------------------------------------------------------------------------------------- |
-| name      | Name of the tab. Must be key of the `refMap` object provided to the `Tabs.Container`. |
-| {...rest} | `ScrollView` or `FlatList` props.                                                     |
+Use just like a regular `ScrollView` or `FlatList`. |
 
 ### `useTabsContext`
 
