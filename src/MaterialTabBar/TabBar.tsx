@@ -71,7 +71,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
           x,
         })
         if (itemsLayoutGathering.current.length === nTabs) {
-          setItemsLayout(itemsLayoutGathering.current)
+          setItemsLayout(itemsLayoutGathering.current.sort((a, b) => a.x - b.x))
         }
       }
     },
