@@ -72,7 +72,7 @@ export type CollapsibleProps<T extends ParamList> = {
   lazy?: boolean
   cancelLazyFadeIn?: boolean
   /**
-   * Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass { scrollEnabled: false }`
+   * Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`
    */
   pagerProps?: Omit<
     RNFlatListProps<number>,

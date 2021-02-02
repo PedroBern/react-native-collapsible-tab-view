@@ -250,7 +250,7 @@ const Example: React.FC<Props> = () => {
 ##### Props
 
 |name|type|default|description|
-|:----:|:----:|:----:|----|
+|:----:|:----:|:----:|:----:|
 |HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|||
 |TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`||
 |cancelLazyFadeIn|`boolean \| undefined`|||
@@ -263,7 +263,7 @@ const Example: React.FC<Props> = () => {
 |initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass { scrollEnabled: false }`|
+|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |refMap|`Record<string, Ref>`|||
 |snapEnabled|`boolean \| undefined`|`false`||
 |snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
@@ -303,7 +303,7 @@ const { focusedTab, ...rest } = useTabsContext()
 ##### Values
 
 |name|type|default|description|
-|:----:|:----:|:----:|----|
+|:----:|:----:|:----:|:----:|
 |accDiffClamp|`SharedValue<number>`|||
 |accScrollY|`SharedValue<number>`|||
 |containerHeight|`number \| undefined`|||
@@ -373,7 +373,7 @@ Any additional props are passed to the pressable component.
 ##### Props
 
 |name|type|default|description|
-|:----:|:----:|:----:|----|
+|:----:|:----:|:----:|:----:|
 |ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| (new (props: { ...; }) => Component<...>) \| undefined`|||
 |inactiveOpacity|`number \| undefined`|`0.7`||
 |index|`number`|||

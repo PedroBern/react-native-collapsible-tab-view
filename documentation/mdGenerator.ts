@@ -62,7 +62,7 @@ function generateProps(props: Props, isHook: boolean) {
   md += '\n'
   md += '|:----:|:----:|'
   md += skipDefaults ? '' : ':----:|'
-  md += skipDescription ? '' : '----|'
+  md += skipDescription ? '' : ':----:|'
   md += '\n'
   md += Object.keys(props)
     .sort()
