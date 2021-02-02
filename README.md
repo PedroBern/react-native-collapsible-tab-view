@@ -12,7 +12,8 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Scroll on header](#scroll-on-header)
+- [Guides](#guides)
+  - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
   - [createCollapsibleTabs](#createcollapsibletabs)
     - [Tabs.Container](#tabscontainer)
@@ -26,8 +27,9 @@
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
 - [Contributing](#contributing)
+  - [Documentation changes](#documentation-changes)
 
-## Expo app
+# Expo app
 
 > If you are looking for the integration with [react-native-tab-view](https://github.com/satya164/react-native-tab-view) and/or [react-navigation](https://github.com/react-navigation/react-navigation), you need to use the [v2](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v2), we are currenlty on v3.
 
@@ -42,7 +44,7 @@ Collapsible Tab View for React Native, with [Reanimated](https://github.com/soft
 
 The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) example app was used as template for the demos.
 
-## Demo
+# Demo
 
 |                                                     Default                                                      |                                                     Snap                                                      |                                                     DiffClamp                                                      |                                                    DiffClamp + Snap                                                     |
 | :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
@@ -50,7 +52,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 
 <!-- todo -->
 
-## Features
+# Features
 
 - Animations and interactions on the UI thread
 - Highly customizable
@@ -63,7 +65,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 - Scrollable tabs, inspired by the [react-native-tab-view](https://github.com/satya164/react-native-tab-view) tab bar
 - Support horizontal and vertical window
 
-## Installation
+# Installation
 
 Open a Terminal in the project root and run:
 
@@ -73,7 +75,7 @@ yarn add react-native-collapsible-tab-view
 
 Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
 
-## Quick Start
+# Quick Start
 
 ```tsx
 import React from 'react'
@@ -165,6 +167,8 @@ export default Example
 
 ```
 
+# Guides
+
 ## Scroll on header
 
 If you want to allow scrolling from the header:
@@ -174,9 +178,9 @@ If you want to allow scrolling from the header:
 
   _Note: With this setting any child component that should **not** respond to touches (e.g. `<Image />`) needs to have `pointerEvents` set to `'none'`. Otherwise it can become the target of a touch gesture on iOS devices and thereby preventing scrolling._
 
-## API reference
+# API reference
 
-### createCollapsibleTabs
+## createCollapsibleTabs
 
 Basic usage looks like this:
 
@@ -208,7 +212,7 @@ use like this:
 ```
 
 
-#### Tabs.Container
+### Tabs.Container
 
 Basic usage looks like this:
 
@@ -247,7 +251,7 @@ const Example: React.FC<Props> = () => {
 }
 ```
 
-##### Props
+#### Props
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
@@ -270,11 +274,11 @@ const Example: React.FC<Props> = () => {
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
 
 
-#### Tabs.Lazy
+### Tabs.Lazy
 
 Typically used internally, but if you want to mix lazy and regular screens you can wrap the lazy ones with this component.
 
-##### Props
+#### Props
 
 |name|type|
 |:----:|:----:|
@@ -282,17 +286,17 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 |startMounted|`boolean \| undefined`|
 
 
-#### Tabs.FlatList
+### Tabs.FlatList
 
 Use like a regular flatlist.
 
 
-#### Tabs.ScrollView
+### Tabs.ScrollView
 
 Use like a regular scrollview.
 
 
-#### useTabsContext
+### useTabsContext
 
 Hook exposing some useful variables.
 
@@ -300,7 +304,7 @@ Hook exposing some useful variables.
 const { focusedTab, ...rest } = useTabsContext()
 ```
 
-##### Values
+#### Values
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
@@ -329,13 +333,13 @@ const { focusedTab, ...rest } = useTabsContext()
 |tabNames|`SharedValue<string[]>`||Tab names, same as the keys of `refMap`.|
 
 
-#### useCollapsibleStyle
+### useCollapsibleStyle
 
 Hook to access some key styles that make the whole think work.
 
 You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
 
-##### Values
+#### Values
 
 |name|type|
 |:----:|:----:|
@@ -345,11 +349,11 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 
 
 
-### Default Tab Bar
+## Default Tab Bar
 
-#### MaterialTabBar
+### MaterialTabBar
 
-##### Props
+#### Props
 
 |name|type|default|
 |:----:|:----:|:----:|
@@ -366,11 +370,11 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 |style|`StyleProp<ViewStyle>`||
 
 
-#### MaterialTabItem
+### MaterialTabItem
 
 Any additional props are passed to the pressable component.
 
-##### Props
+#### Props
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
@@ -391,7 +395,7 @@ Any additional props are passed to the pressable component.
 
 
 
-## Contributing
+# Contributing
 
 While developing, you can run the [example app](/example/README.md) to test your changes.
 
@@ -412,7 +416,7 @@ yarn lint -- --fix
 
 Remember to add tests for your change if possible.
 
-### Documentation changes
+## Documentation changes
 
 Edit the [README_TEMPLATE](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/documentation/README_TEMPLATE.md), or update the docstrings inside the `src` folder, and run:
 

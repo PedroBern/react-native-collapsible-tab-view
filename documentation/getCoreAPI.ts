@@ -8,7 +8,7 @@ const inputFile = path.join(basePath, 'createCollapsibleTabs.tsx')
 const functionName = 'createCollapsibleTabs'
 
 const getCoreAPI = () => {
-  let docs = '### ' + functionName + '\n\n'
+  let docs = '## ' + functionName + '\n\n'
   docs += getFunctionDocstring(inputFile, functionName)
   return docs
 }

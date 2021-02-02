@@ -54,7 +54,7 @@ function generateProps(props: Props, isHook: boolean) {
       .filter((v) => v !== '').length === 0
 
   let md = ''
-  md += `##### ${isHook ? 'Values' : 'Props'}`
+  md += `#### ${isHook ? 'Values' : 'Props'}`
   md += '\n\n'
   md += '|name|type|'
   md += skipDefaults ? '' : 'default|'
@@ -80,7 +80,7 @@ function generateProps(props: Props, isHook: boolean) {
 }
 
 function generateMarkdown(api: API) {
-  let markdownString = '#### ' + api.displayName + '\n\n'
+  let markdownString = '### ' + api.displayName + '\n\n'
   if (api.description) {
     markdownString += api.description + '\n\n'
   }

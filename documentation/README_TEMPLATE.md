@@ -12,7 +12,8 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Scroll on header](#scroll-on-header)
+- [Guides](#guides)
+  - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
   - [createCollapsibleTabs](#createcollapsibletabs)
     - [Tabs.Container](#tabscontainer)
@@ -26,8 +27,9 @@
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
 - [Contributing](#contributing)
+  - [Documentation changes](#documentation-changes)
 
-## Expo app
+# Expo app
 
 > If you are looking for the integration with [react-native-tab-view](https://github.com/satya164/react-native-tab-view) and/or [react-navigation](https://github.com/react-navigation/react-navigation), you need to use the [v2](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v2), we are currenlty on v3.
 
@@ -42,7 +44,7 @@ Collapsible Tab View for React Native, with [Reanimated](https://github.com/soft
 
 The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) example app was used as template for the demos.
 
-## Demo
+# Demo
 
 |                                                     Default                                                      |                                                     Snap                                                      |                                                     DiffClamp                                                      |                                                    DiffClamp + Snap                                                     |
 | :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
@@ -50,7 +52,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 
 <!-- todo -->
 
-## Features
+# Features
 
 - Animations and interactions on the UI thread
 - Highly customizable
@@ -63,7 +65,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 - Scrollable tabs, inspired by the [react-native-tab-view](https://github.com/satya164/react-native-tab-view) tab bar
 - Support horizontal and vertical window
 
-## Installation
+# Installation
 
 Open a Terminal in the project root and run:
 
@@ -73,11 +75,13 @@ yarn add react-native-collapsible-tab-view
 
 Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
 
-## Quick Start
+# Quick Start
 
 ```tsx
 $QUICK_START_CODE
 ```
+
+# Guides
 
 ## Scroll on header
 
@@ -88,17 +92,17 @@ If you want to allow scrolling from the header:
 
   _Note: With this setting any child component that should **not** respond to touches (e.g. `<Image />`) needs to have `pointerEvents` set to `'none'`. Otherwise it can become the target of a touch gesture on iOS devices and thereby preventing scrolling._
 
-## API reference
+# API reference
 
 $CORE_API
 
 $CORE_COMPONENTS_API
 
-### Default Tab Bar
+## Default Tab Bar
 
 $TAB_BAR_API
 
-## Contributing
+# Contributing
 
 While developing, you can run the [example app](/example/README.md) to test your changes.
 
@@ -119,7 +123,7 @@ yarn lint -- --fix
 
 Remember to add tests for your change if possible.
 
-### Documentation changes
+## Documentation changes
 
 Edit the [README_TEMPLATE](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/documentation/README_TEMPLATE.md), or update the docstrings inside the `src` folder, and run:
 
