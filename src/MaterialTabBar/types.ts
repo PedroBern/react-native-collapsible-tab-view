@@ -29,7 +29,8 @@ export type MaterialTabItemProps<T extends ParamList> = {
   inactiveOpacity?: number
   pressColor?: string
   pressOpacity?: number
-} & Omit<PressableProps, 'onPress' | 'children'>
+  pressableProps?: Omit<PressableProps, 'onPress' | 'children'>
+}
 
 export type MaterialTabBarProps<N extends ParamList> = TabBarProps<N> & {
   scrollEnabled?: boolean
