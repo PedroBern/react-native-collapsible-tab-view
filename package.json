@@ -17,7 +17,8 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn",
-    "prepack": "bob build"
+    "prepack": "bob build",
+    "docs": "ts-node ./documentation/buildDocs.ts"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -45,6 +46,7 @@
   "homepage": "https://github.com/PedroBern/react-native-collapsible-tab-view#readme",
   "devDependencies": {
     "@commitlint/config-conventional": "^9.1.1",
+    "@microsoft/tsdoc": "^0.13.0",
     "@react-native-community/bob": "^0.16.2",
     "@release-it/conventional-changelog": "^1.1.4",
     "@types/react": "^16.9.44",
@@ -61,10 +63,12 @@
     "jest": "^26.2.2",
     "prettier": "^2.2.1",
     "react": "~16.11.0",
+    "react-docgen-typescript": "^1.20.5",
     "react-native": "~0.62.2",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-reanimated": "~2.0.0-rc.2",
     "release-it": "^13.6.6",
+    "ts-node": "^9.1.1",
     "typescript": "^3.9.7"
   },
   "peerDependencies": {

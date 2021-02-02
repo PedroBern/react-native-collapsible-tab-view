@@ -28,6 +28,7 @@ import {
   FlatListProps,
   ParamList,
   CollapsibleRef,
+  CollapsibleStyle,
 } from './types'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
@@ -49,9 +50,46 @@ const init = (children: any) => {
   return true
 }
 
+/**
+ * Basic usage looks like this:
+ *
+ * ```tsx
+ * import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
+ *
+ * type MyTabs = 'tab0' | 'tab1'
+ *
+ * const {
+ *  Container,
+ *  FlatList,
+ *  ScrollView,
+ *  useTabsContext
+ *  useTabNameContext,
+ *  useCollapsibleStyle,
+ * } = createCollapsibleTabs<MyTabs>()
+ * ```
+ *
+ * or
+ * ```tsx
+ * const { useTabsContext, , ...Tabs } = createCollapsibleTabs<MyTabs>()
+ * ```
+ *
+ * use like this:
+ * ```tsx
+ * <Tabs.Container {...props} />
+ * <Tabs.FlatList {...props} />
+ * <Tabs.ScrollView {...props} />
+ * ```
+ */
 const createCollapsibleTabs = <T extends ParamList>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
+  /**
+   * Hook exposing some useful variables.
+   *
+   * ```tsx
+   * const { focusedTab, ...rest } = useTabsContext()
+   * ```
+   */
   function useTabsContext(): ContextType<T> {
     const c = React.useContext(Context)
     if (!c) throw new Error('useTabsContext must be inside a Tabs.Container')
@@ -60,12 +98,57 @@ const createCollapsibleTabs = <T extends ParamList>() => {
 
   const TabNameContext = React.createContext<T | undefined>(undefined)
 
+  /**
+   * Access the parent tab screen fron any deep component.
+   *
+   * ```tsx
+   * const tabName = useTabNameContext()
+   * ```
+   */
   function useTabNameContext(): T {
     const c = React.useContext(TabNameContext)
     if (!c) throw new Error('useTabNameContext must be inside a TabNameContext')
     return c
   }
 
+  /**
+   * Basic usage looks like this:
+   *
+   * ```tsx
+   * import {
+   *   RefComponent,
+   *   ContainerRef,
+   *   TabBarProps,
+   * } from 'react-native-collapsible-tab-view'
+   * import { useAnimatedRef } from 'react-native-reanimated'
+   *
+   * type MyTabs = 'article' | 'contacts' | 'albums'
+   *
+   * const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+   *
+   * const Example: React.FC<Props> = () => {
+   *   const containerRef = useAnimatedRef<ContainerRef>()
+   *   const tab0Ref = useAnimatedRef<RefComponent>()
+   *   const tab1Ref = useAnimatedRef<RefComponent>()
+   *
+   *   const [refMap] = React.useState({
+   *     tab0: tab0Ref,
+   *     tab1: tab1Ref,
+   *   })
+   *
+   *   return (
+   *     <Tabs.Container
+   *       containerRef={containerRef}
+   *       HeaderComponent={MyHeader}
+   *       headerHeight={HEADER_HEIGHT} // optional
+   *       refMap={refMap}
+   *     >
+   *       { components returning Tabs.ScrollView || Tabs.FlatList }
+   *     </Tabs.Container>
+   *   )
+   * }
+   * ```
+   */
   const Container = React.forwardRef<CollapsibleRef<T>, CollapsibleProps<T>>(
     (
       {
@@ -483,6 +566,9 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     }
   )
 
+  /**
+   * Typically used internally, but if you want to mix lazy and regular screens you can wrap the lazy ones with this component.
+   */
   const Lazy: React.FC<{
     startMounted?: boolean
     cancelLazyFadeIn?: boolean
@@ -711,7 +797,12 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     return scrollHandler
   }
 
-  const useCollapsibleStyle = () => {
+  /**
+   * Hook to access some key styles that make the whole think work.
+   *
+   * You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+   */
+  function useCollapsibleStyle(): CollapsibleStyle {
     const { headerHeight, tabBarHeight, containerHeight } = useTabsContext()
     const windowWidth = useWindowDimensions().width
 
@@ -725,6 +816,9 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     }
   }
 
+  /**
+   * Use like a regular flatlist.
+   */
   function FlatList<R>({
     contentContainerStyle,
     style,
@@ -758,6 +852,9 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     )
   }
 
+  /**
+   * Use like a regular scrollview.
+   */
   const ScrollView: React.FC<ScrollViewProps> = ({
     contentContainerStyle,
     style,
@@ -792,12 +889,13 @@ const createCollapsibleTabs = <T extends ParamList>() => {
   }
 
   return {
+    Container,
+    Lazy,
     FlatList,
     ScrollView,
-    Container,
     useTabsContext,
+    useTabNameContext,
     useCollapsibleStyle,
-    Lazy,
   }
 }
 

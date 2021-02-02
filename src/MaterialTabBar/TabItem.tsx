@@ -9,6 +9,9 @@ import { MaterialTabItemProps } from './types'
 
 export const TABBAR_HEIGHT = 48
 
+/**
+ * Any additional props are passed to the pressable component.
+ */
 const TabItem: React.FC<MaterialTabItemProps<any>> = ({
   name,
   index,
@@ -72,5 +75,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
 })
+
+export { TabItem as MaterialTabBar }
 
 export default TabItem

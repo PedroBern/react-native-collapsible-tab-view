@@ -180,4 +180,6 @@ const styles = StyleSheet.create({
   },
 })
 
+export { TabBar as MaterialTabBar }
+
 export default TabBar

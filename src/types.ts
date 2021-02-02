@@ -45,10 +45,19 @@ export type OnTabChangeCallback<T extends ParamList> = (data: {
 export type CollapsibleProps<T extends ParamList> = {
   initialTabName?: T
   containerRef: React.RefObject<ContainerRef>
+  /**
+   * Is optional, but will optimize the first render.
+   */
   headerHeight?: number
+  /**
+   * Is optional, but will optimize the first render.
+   */
   tabBarHeight?: number
   snapEnabled?: boolean
   diffClampEnabled?: boolean
+  /**
+   * Percentage of header height to make the snap effect. A number between 0 and 1.
+   */
   snapThreshold?: number
   children: React.ReactElement[] | React.ReactElement
   HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement
@@ -57,8 +66,14 @@ export type CollapsibleProps<T extends ParamList> = {
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
   containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean
+  /**
+   * If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.
+   */
   lazy?: boolean
   cancelLazyFadeIn?: boolean
+  /**
+   * Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`
+   */
   pagerProps?: Omit<
     RNFlatListProps<number>,
     | 'data'
@@ -70,6 +85,9 @@ export type CollapsibleProps<T extends ParamList> = {
     | 'showsHorizontalScrollIndicator'
     | 'getItemLayout'
   >
+  /**
+   * Callback fired when the index changes. It receives the previous and current index and tabnames.
+   */
   onIndexChange?: OnTabChangeCallback<T>
 }
 
@@ -80,7 +98,13 @@ export type ContextType<T extends ParamList> = {
   diffClampEnabled: boolean
   snapThreshold: number
   refMap: Record<T, Ref>
+  /**
+   * Scroll position of current tab.
+   */
   scrollYCurrent: Animated.SharedValue<number>
+  /**
+   * Tab names, same as the keys of `refMap`.
+   */
   tabNames: Animated.SharedValue<T[]>
   index: Animated.SharedValue<number>
   scrollY: Animated.SharedValue<number[]>
@@ -88,14 +112,26 @@ export type ContextType<T extends ParamList> = {
   accScrollY: Animated.SharedValue<number>
   offset: Animated.SharedValue<number>
   isScrolling: Animated.SharedValue<number>
+  /**
+   * Name of the current focused tab.
+   */
   focusedTab: Animated.SharedValue<T>
   accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
+  /**
+   * Scroll x position of the tabs container.
+   */
   scrollX: Animated.SharedValue<number>
   indexDecimal: Animated.SharedValue<number>
   isGliding: Animated.SharedValue<boolean>
   isSnapping: Animated.SharedValue<boolean>
+  /**
+   * Used internally.
+   */
   snappingTo: Animated.SharedValue<number>
+  /**
+   * Used internally.
+   */
   endDrag: Animated.SharedValue<number>
 }
 
@@ -106,4 +142,13 @@ export type FlatListProps<R extends any> = Omit<
   'renderItem'
 > & {
   renderItem: ListRenderItem<R>
+}
+
+export type CollapsibleStyle = {
+  style: { width: number }
+  contentContainerStyle: {
+    minHeight: number
+    paddingTop: number
+  }
+  progressViewOffset: number
 }
