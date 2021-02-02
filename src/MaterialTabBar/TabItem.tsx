@@ -22,7 +22,7 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
   inactiveOpacity = 0.7,
   pressColor = '#DDDDDD',
   pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
-  ...rest
+  pressableProps,
 }) => {
   const stylez = useAnimatedStyle(() => {
     return {
@@ -49,7 +49,7 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
         borderless: true,
         color: pressColor,
       }}
-      {...rest}
+      {...pressableProps}
     >
       <Animated.Text style={[styles.label, stylez, labelStyle]}>
         {label}
@@ -72,5 +72,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
 })
+
+export { TabItem as MaterialTabBar }
 
 export default TabItem
