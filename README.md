@@ -185,7 +185,7 @@ If you want to allow scrolling from the header:
 Basic usage looks like this:
 
 ```tsx
-import { createCollapsibleTabs, } from 'react-native-collapsible-tab-view'
+import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
 
 type MyTabs = 'tab0' | 'tab1'
 
