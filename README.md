@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
 })
 
 export default Example
-
 ```
 
 # Guides
@@ -200,17 +199,18 @@ const {
 ```
 
 or
+
 ```tsx
 const { useTabsContext, , ...Tabs } = createCollapsibleTabs<MyTabs>()
 ```
 
 use like this:
+
 ```tsx
 <Tabs.Container {...props} />
 <Tabs.FlatList {...props} />
 <Tabs.ScrollView {...props} />
 ```
-
 
 ### Tabs.Container
 
@@ -253,26 +253,26 @@ const Example: React.FC<Props> = () => {
 
 #### Props
 
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`||
-|cancelLazyFadeIn|`boolean \| undefined`|||
-|cancelTranslation|`boolean \| undefined`|||
-|containerRef|`RefObject<ContainerRef>`|||
-|containerStyle|`StyleProp<ViewStyle>`|||
-|diffClampEnabled|`boolean \| undefined`|`false`||
-|headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
-|headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-|initialTabName|`string \| undefined`|||
-|lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
-|onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
-|refMap|`Record<string, Ref>`|||
-|snapEnabled|`boolean \| undefined`|`false`||
-|snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
-|tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-
+|         name         |                                                                                                                type                                                                                                                | default |                                                          description                                                          |
+| :------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----: | :---------------------------------------------------------------------------------------------------------------------------: |
+|   HeaderComponent    | `((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined` |         |                                                                                                                               |
+|   TabBarComponent    | `((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined` | `null`  |                                                                                                                               |
+|   cancelLazyFadeIn   |                                                                                                       `boolean \| undefined`                                                                                                       |         |                                                                                                                               |
+|  cancelTranslation   |                                                                                                       `boolean \| undefined`                                                                                                       |         |                                                                                                                               |
+|     containerRef     |                                                                                                     `RefObject<ContainerRef>`                                                                                                      |         |                                                                                                                               |
+|    containerStyle    |                                                                                                       `StyleProp<ViewStyle>`                                                                                                       |         |                                                                                                                               |
+|   diffClampEnabled   |                                                                                                       `boolean \| undefined`                                                                                                       | `false` |                                                                                                                               |
+| headerContainerStyle |                                                                                                `StyleProp<AnimateStyle<ViewStyle>>`                                                                                                |         |                                                                                                                               |
+|     headerHeight     |                                                                                                       `number \| undefined`                                                                                                        |         |                                       Is optional, but will optimize the first render.                                        |
+|    initialTabName    |                                                                                                       `string \| undefined`                                                                                                        |         |                                                                                                                               |
+|         lazy         |                                                                                                       `boolean \| undefined`                                                                                                       |         |             If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.              |
+|   minHeaderHeight    |                                                                                                       `number \| undefined`                                                                                                        |   `0`   |                                             Header minimum height when collapsed                                              |
+|    onIndexChange     |                                                                                             `OnTabChangeCallback<string> \| undefined`                                                                                             |         |                Callback fired when the index changes. It receives the previous and current index and tabnames.                |
+|      pagerProps      |     `Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`      |         | Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }` |
+|        refMap        |                                                                                                       `Record<string, Ref>`                                                                                                        |         |                                                                                                                               |
+|     snapEnabled      |                                                                                                       `boolean \| undefined`                                                                                                       | `false` |                                                                                                                               |
+|    snapThreshold     |                                                                                                       `number \| undefined`                                                                                                        |  `0.5`  |                        Percentage of header height to make the snap effect. A number between 0 and 1.                         |
+|     tabBarHeight     |                                                                                                       `number \| undefined`                                                                                                        |         |                                       Is optional, but will optimize the first render.                                        |
 
 ### Tabs.Lazy
 
@@ -280,21 +280,18 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 
 #### Props
 
-|name|type|
-|:----:|:----:|
-|cancelLazyFadeIn|`boolean \| undefined`|
-|startMounted|`boolean \| undefined`|
-
+|       name       |          type          |
+| :--------------: | :--------------------: |
+| cancelLazyFadeIn | `boolean \| undefined` |
+|   startMounted   | `boolean \| undefined` |
 
 ### Tabs.FlatList
 
 Use like a regular flatlist.
 
-
 ### Tabs.ScrollView
 
 Use like a regular scrollview.
-
 
 ### useTabsContext
 
@@ -306,32 +303,32 @@ const { focusedTab, ...rest } = useTabsContext()
 
 #### Values
 
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|accDiffClamp|`SharedValue<number>`|||
-|accScrollY|`SharedValue<number>`|||
-|containerHeight|`number \| undefined`|||
-|diffClampEnabled|`boolean`|`false`||
-|endDrag|`SharedValue<number>`||Used internally.|
-|focusedTab|`SharedValue<string>`||Name of the current focused tab.|
-|headerHeight|`number`|||
-|index|`SharedValue<number>`|||
-|indexDecimal|`SharedValue<number>`|||
-|isGliding|`SharedValue<boolean>`|||
-|isScrolling|`SharedValue<number>`|||
-|isSnapping|`SharedValue<boolean>`|||
-|offset|`SharedValue<number>`|||
-|oldAccScrollY|`SharedValue<number>`|||
-|refMap|`Record<string, Ref>`|||
-|scrollX|`SharedValue<number>`||Scroll x position of the tabs container.|
-|scrollY|`SharedValue<number[]>`|||
-|scrollYCurrent|`SharedValue<number>`||Scroll position of current tab.|
-|snapEnabled|`boolean`|`false`||
-|snapThreshold|`number`|`0.5`||
-|snappingTo|`SharedValue<number>`||Used internally.|
-|tabBarHeight|`number`|||
-|tabNames|`SharedValue<string[]>`||Tab names, same as the keys of `refMap`.|
-
+|         name         |          type           | default |               description                |
+| :------------------: | :---------------------: | :-----: | :--------------------------------------: |
+|     accDiffClamp     |  `SharedValue<number>`  |         |                                          |
+|      accScrollY      |  `SharedValue<number>`  |         |                                          |
+|   containerHeight    |  `number \| undefined`  |         |                                          |
+|   diffClampEnabled   |        `boolean`        | `false` |                                          |
+|       endDrag        |  `SharedValue<number>`  |         |             Used internally.             |
+|      focusedTab      |  `SharedValue<string>`  |         |     Name of the current focused tab.     |
+|     headerHeight     |        `number`         |         |                                          |
+| headerScrollDistance |  `SharedValue<number>`  |         |                                          |
+|        index         |  `SharedValue<number>`  |         |                                          |
+|     indexDecimal     |  `SharedValue<number>`  |         |                                          |
+|      isGliding       | `SharedValue<boolean>`  |         |                                          |
+|     isScrolling      |  `SharedValue<number>`  |         |                                          |
+|      isSnapping      | `SharedValue<boolean>`  |         |                                          |
+|        offset        |  `SharedValue<number>`  |         |                                          |
+|    oldAccScrollY     |  `SharedValue<number>`  |         |                                          |
+|        refMap        |  `Record<string, Ref>`  |         |                                          |
+|       scrollX        |  `SharedValue<number>`  |         | Scroll x position of the tabs container. |
+|       scrollY        | `SharedValue<number[]>` |         |                                          |
+|    scrollYCurrent    |  `SharedValue<number>`  |         |     Scroll position of current tab.      |
+|     snapEnabled      |        `boolean`        | `false` |                                          |
+|    snapThreshold     |        `number`         |  `0.5`  |                                          |
+|      snappingTo      |  `SharedValue<number>`  |         |             Used internally.             |
+|     tabBarHeight     |        `number`         |         |                                          |
+|       tabNames       | `SharedValue<string[]>` |         | Tab names, same as the keys of `refMap`. |
 
 ### useCollapsibleStyle
 
@@ -341,13 +338,11 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 
 #### Values
 
-|name|type|
-|:----:|:----:|
-|contentContainerStyle|`{ minHeight: number; paddingTop: number; }`|
-|progressViewOffset|`number`|
-|style|`{ width: number; }`|
-
-
+|         name          |                     type                     |
+| :-------------------: | :------------------------------------------: |
+| contentContainerStyle | `{ minHeight: number; paddingTop: number; }` |
+|  progressViewOffset   |                   `number`                   |
+|         style         |             `{ width: number; }`             |
 
 ## Default Tab Bar
 
@@ -355,20 +350,19 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 
 #### Props
 
-|name|type|default|
-|:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`|
-|containerRef|`RefObject<ContainerRef>`||
-|focusedTab|`SharedValue<any>`||
-|getLabelText|`((name: any) => string) \| undefined`|`(name) => name.toUpperCase()`|
-|index|`SharedValue<number>`||
-|indexDecimal|`SharedValue<number>`||
-|indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||
-|onTabPress|`(name: any) => void`||
-|refMap|`Record<any, Ref>`||
-|scrollEnabled|`boolean \| undefined`|`false`|
-|style|`StyleProp<ViewStyle>`||
-
+|       name       |                                                                                                                   type                                                                                                                   |            default             |
+| :--------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------: |
+| TabItemComponent | `((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined` |             `null`             |
+|   containerRef   |                                                                                                        `RefObject<ContainerRef>`                                                                                                         |                                |
+|    focusedTab    |                                                                                                            `SharedValue<any>`                                                                                                            |                                |
+|   getLabelText   |                                                                                                  `((name: any) => string) \| undefined`                                                                                                  | `(name) => name.toUpperCase()` |
+|      index       |                                                                                                          `SharedValue<number>`                                                                                                           |                                |
+|   indexDecimal   |                                                                                                          `SharedValue<number>`                                                                                                           |                                |
+|  indicatorStyle  |                                                                                                   `StyleProp<AnimateStyle<ViewStyle>>`                                                                                                   |                                |
+|    onTabPress    |                                                                                                          `(name: any) => void`                                                                                                           |                                |
+|      refMap      |                                                                                                            `Record<any, Ref>`                                                                                                            |                                |
+|  scrollEnabled   |                                                                                                          `boolean \| undefined`                                                                                                          |            `false`             |
+|      style       |                                                                                                          `StyleProp<ViewStyle>`                                                                                                          |                                |
 
 ### MaterialTabItem
 
@@ -376,24 +370,21 @@ Any additional props are passed to the pressable component.
 
 #### Props
 
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| (new (props: { ...; }) => Component<...>) \| undefined`|||
-|inactiveOpacity|`number \| undefined`|`0.7`||
-|index|`number`|||
-|indexDecimal|`SharedValue<number>`|||
-|label|`string`|||
-|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`|||
-|name|`any`|||
-|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
-|onPress|`(name: any) => void`|||
-|pressColor|`string \| undefined`|`#DDDDDD`||
-|pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
-|scrollEnabled|`boolean \| undefined`|||
-|style|`ViewStyle \| (ViewStyle & false) \| (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) \| (ViewStyle & RecursiveArray<false \| ViewStyle \| RegisteredStyle<...> \| null \| undefined>) \| (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) \| undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
-
-
-
+|      name       |                                                                                                                                                         type                                                                                                                                                          |              default              |                                                               description                                                               |
+| :-------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------: |
+|   ItemElement   | `((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| (new (props: { ...; }) => Component<...>) \| undefined` |                                   |                                                                                                                                         |
+| inactiveOpacity |                                                                                                                                                 `number \| undefined`                                                                                                                                                 |               `0.7`               |                                                                                                                                         |
+|      index      |                                                                                                                                                       `number`                                                                                                                                                        |                                   |                                                                                                                                         |
+|  indexDecimal   |                                                                                                                                                 `SharedValue<number>`                                                                                                                                                 |                                   |                                                                                                                                         |
+|      label      |                                                                                                                                                       `string`                                                                                                                                                        |                                   |                                                                                                                                         |
+|   labelStyle    |                                                                                                                                         `StyleProp<AnimateStyle<TextStyle>>`                                                                                                                                          |                                   |                                                                                                                                         |
+|      name       |                                                                                                                                                         `any`                                                                                                                                                         |                                   |                                                                                                                                         |
+|    onLayout     |                                                                                                             `(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`                                                                                                              |                                   |                        Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.                        |
+|     onPress     |                                                                                                                                                 `(name: any) => void`                                                                                                                                                 |                                   |                                                                                                                                         |
+|   pressColor    |                                                                                                                                                 `string \| undefined`                                                                                                                                                 |             `#DDDDDD`             |                                                                                                                                         |
+|  pressOpacity   |                                                                                                                                                 `number \| undefined`                                                                                                                                                 | `Platform.OS === 'ios' ? 0.2 : 1` |                                                                                                                                         |
+|  scrollEnabled  |                                                                                                                                                `boolean \| undefined`                                                                                                                                                 |                                   |                                                                                                                                         |
+|      style      |                     `ViewStyle \| (ViewStyle & false) \| (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) \| (ViewStyle & RecursiveArray<false \| ViewStyle \| RegisteredStyle<...> \| null \| undefined>) \| (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) \| undefined`                     |                                   | Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles. |
 
 # Contributing
 
