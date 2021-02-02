@@ -16,7 +16,7 @@ type API = {
 
 const escape = (s: any) => {
   if (typeof s === 'string') {
-    return s.replace('|', '\\|').replace('`', '\\`')
+    return s.split('|').join('\\|')
   }
   return s
 }
