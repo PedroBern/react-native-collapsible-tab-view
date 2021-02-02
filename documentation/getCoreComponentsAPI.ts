@@ -6,11 +6,11 @@ const generateMarkdown = require('./mdGenerator')
 
 const options = {
   savePropValueAsString: true,
-  propFilter: (_prop: any, component: any) => {
+  propFilter: (prop: any, component: any) => {
     if (
+      prop.parent ||
       component.name === 'Tabs.FlatList' ||
-      component.name === 'Tabs.ScrollView' ||
-      component.name === 'useTabNameContext'
+      component.name === 'Tabs.ScrollView'
     ) {
       return false
     }
@@ -50,12 +50,18 @@ const getCoreComponents = () => {
   regex = new RegExp('}(?=\n*const styles)', 'mg')
   data = data.replace(regex, '')
 
-  // add hooks as components
-  data += `
-    const UseTabsContext = (c: ContextType<T>) => null,
-    const UseTabNameContext = (c: {name: T}) => null,
-    const UseCollapsibleStyle = (c: CollapsibleStyle) => null,
-  `
+  // replace each hook
+  regex = new RegExp('.*function useTabsContext.*', 'mg')
+  data = data.replace(regex, 'function UseTabsContext(c: ContextType<T>) {')
+
+  regex = new RegExp('.*function useTabNameContext.*', 'mg')
+  data = data.replace(regex, 'function UseTabNameContext(c: {name: T}) {')
+
+  regex = new RegExp('.*function useCollapsibleStyle.*', 'mg')
+  data = data.replace(
+    regex,
+    'function UseCollapsibleStyle(c: CollapsibleStyle) {'
+  )
 
   // export everything
   data +=
@@ -65,7 +71,7 @@ const getCoreComponents = () => {
 }
 
 const getCoreComponentsAPI = () => {
-  const core = getCoreComponents()  
+  const core = getCoreComponents()
   fs.writeFileSync(paths.createCollapsibleTabs_tmp, core)
   const core_docs = docs.parse(paths.createCollapsibleTabs_tmp)
   const md = core_docs.map((c: string) => generateMarkdown(c)).join('\n')

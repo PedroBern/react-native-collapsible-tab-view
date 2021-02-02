@@ -83,6 +83,13 @@ const init = (children: any) => {
 const createCollapsibleTabs = <T extends ParamList>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
+  /**
+   * Hook exposing some useful variables.
+   * 
+   * ```tsx
+   * const { focusedTab, ...rest } = useTabsContext()
+   * ```
+   */
   function useTabsContext(): ContextType<T> {
     const c = React.useContext(Context)
     if (!c) throw new Error('useTabsContext must be inside a Tabs.Container')
@@ -93,6 +100,10 @@ const createCollapsibleTabs = <T extends ParamList>() => {
 
   /**
    * Access the parent tab screen fron any deep component.
+   * 
+   * ```tsx
+   * const tabName = useTabNameContext()
+   * ```
    */
   function useTabNameContext(): T {
     const c = React.useContext(TabNameContext)
@@ -787,12 +798,11 @@ const createCollapsibleTabs = <T extends ParamList>() => {
   }
 
   /**
-   * Hook to access some styles.
-   * 
-   * You can use this to get the progessViewOffset and pass to the
-   * refresh control of scroll view.
+   * Hook to access some key styles that make the whole think work.
+   *
+   * You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
    */
-  const useCollapsibleStyle = (): CollapsibleStyle => {
+  function useCollapsibleStyle(): CollapsibleStyle {
     const { headerHeight, tabBarHeight, containerHeight } = useTabsContext()
     const windowWidth = useWindowDimensions().width
 

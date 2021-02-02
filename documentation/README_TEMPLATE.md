@@ -15,16 +15,16 @@
 - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
   - [createCollapsibleTabs](#createcollapsibletabs)
-  - [Tabs.Container](#tabscontainer)
-  - [Tabs.Lazy](#tabslazy)
-  - [Tabs.FlatList](#tabsflatlist)
-  - [Tabs.ScrollView](#tabsscrollview)
-  - [useTabsContext](#usetabscontext)
-  - [useCollapsibleStyle](#usecollapsiblestyle)
-  - [useTabNameContext](#usetabnamecontext)
-- [Default Tab Bar](#default-tab-bar)
-  - [MaterialTabBar](#materialtabbar)
-  - [MaterialTabItem](#materialtabitem)
+    - [Tabs.Container](#tabscontainer)
+    - [Tabs.Lazy](#tabslazy)
+    - [Tabs.FlatList](#tabsflatlist)
+    - [Tabs.ScrollView](#tabsscrollview)
+    - [useTabsContext](#usetabscontext)
+    - [useCollapsibleStyle](#usecollapsiblestyle)
+    - [useTabNameContext](#usetabnamecontext)
+  - [Default Tab Bar](#default-tab-bar)
+    - [MaterialTabBar](#materialtabbar)
+    - [MaterialTabItem](#materialtabitem)
 - [Contributing](#contributing)
 
 ## Expo app
@@ -94,15 +94,7 @@ $CORE_API
 
 $CORE_COMPONENTS_API
 
-### useTabNameContext
-
-Hook to access the tab name from any deep component.
-
-```tsx
-const tabName = useTabNameContext()
-```
-
-## Default Tab Bar
+### Default Tab Bar
 
 $TAB_BAR_API
 
@@ -129,7 +121,7 @@ Remember to add tests for your change if possible.
 
 ### Documentation changes
 
-Edit the README_TEMPLATE, or update the docstrings inside the `src` folder, and run:
+Edit the [README_TEMPLATE](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/documentation/README_TEMPLATE.md), or update the docstrings inside the `src` folder, and run:
 
 ```sh
 yarn docs

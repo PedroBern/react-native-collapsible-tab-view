@@ -12,6 +12,10 @@ const paths = {
 
 const options = {
   savePropValueAsString: true,
+  propFilter: (prop: any, _component: any) => {
+    if (prop.parent) return false
+    return true
+  },
   componentNameResolver: (exp: any, _source: any) => {
     return 'Material' + exp.escapedName
   },

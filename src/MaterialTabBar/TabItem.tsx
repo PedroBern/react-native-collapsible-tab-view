@@ -9,6 +9,9 @@ import { MaterialTabItemProps } from './types'
 
 export const TABBAR_HEIGHT = 48
 
+/**
+ * Any additional props are passed to the pressable component.
+ */
 const TabItem: React.FC<MaterialTabItemProps<any>> = ({
   name,
   index,
@@ -22,7 +25,7 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
   inactiveOpacity = 0.7,
   pressColor = '#DDDDDD',
   pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
-  pressableProps,
+  ...rest
 }) => {
   const stylez = useAnimatedStyle(() => {
     return {
@@ -49,7 +52,7 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
         borderless: true,
         color: pressColor,
       }}
-      {...pressableProps}
+      {...rest}
     >
       <Animated.Text style={[styles.label, stylez, labelStyle]}>
         {label}

@@ -15,16 +15,16 @@
 - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
   - [createCollapsibleTabs](#createcollapsibletabs)
-  - [Tabs.Container](#tabscontainer)
-  - [Tabs.Lazy](#tabslazy)
-  - [Tabs.FlatList](#tabsflatlist)
-  - [Tabs.ScrollView](#tabsscrollview)
-  - [useTabsContext](#usetabscontext)
-  - [useCollapsibleStyle](#usecollapsiblestyle)
-  - [useTabNameContext](#usetabnamecontext)
-- [Default Tab Bar](#default-tab-bar)
-  - [MaterialTabBar](#materialtabbar)
-  - [MaterialTabItem](#materialtabitem)
+    - [Tabs.Container](#tabscontainer)
+    - [Tabs.Lazy](#tabslazy)
+    - [Tabs.FlatList](#tabsflatlist)
+    - [Tabs.ScrollView](#tabsscrollview)
+    - [useTabsContext](#usetabscontext)
+    - [useCollapsibleStyle](#usecollapsiblestyle)
+    - [useTabNameContext](#usetabnamecontext)
+  - [Default Tab Bar](#default-tab-bar)
+    - [MaterialTabBar](#materialtabbar)
+    - [MaterialTabItem](#materialtabitem)
 - [Contributing](#contributing)
 
 ## Expo app
@@ -208,7 +208,7 @@ use like this:
 ```
 
 
-### Tabs.Container
+#### Tabs.Container
 
 Basic usage looks like this:
 
@@ -247,7 +247,7 @@ const Example: React.FC<Props> = () => {
 }
 ```
 
-#### Props
+##### Props
 
 |name|type|default|description|
 |:----:|:----:|:----:|----|
@@ -261,22 +261,20 @@ const Example: React.FC<Props> = () => {
 |headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
 |headerHeight|`number | undefined`||Is optional, but will optimize the first render.|
 |initialTabName|`string | undefined`|||
-|key|`string | number | null | undefined`|||
 |lazy|`boolean | undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |onIndexChange|`OnTabChangeCallback<string> | undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
 |pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" | "ListEmptyComponent" | "ListFooterComponent" | "ListFooterComponentStyle" | "ListHeaderComponent" | ... 129 more ... | "persistentScrollbar"> | undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass { scrollEnabled: false }`|
-|ref|`((instance: RefHandler<string> | null | undefined) => void) | RefObject<CollapsibleRef<string>> | null | undefined`|||
 |refMap|`Record<string, Ref>`|||
 |snapEnabled|`boolean | undefined`|`false`||
 |snapThreshold|`number | undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
 |tabBarHeight|`number | undefined`||Is optional, but will optimize the first render.|
 
 
-### Tabs.Lazy
+#### Tabs.Lazy
 
 Typically used internally, but if you want to mix lazy and regular screens you can wrap the lazy ones with this component.
 
-#### Props
+##### Props
 
 |name|type|
 |:----:|:----:|
@@ -284,19 +282,25 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 |startMounted|`boolean | undefined`|
 
 
-### Tabs.FlatList
+#### Tabs.FlatList
 
 Use like a regular flatlist.
 
 
-### Tabs.ScrollView
+#### Tabs.ScrollView
 
 Use like a regular scrollview.
 
 
-### useTabsContext
+#### useTabsContext
 
-#### Values
+Hook exposing some useful variables.
+
+```tsx
+const { focusedTab, ...rest } = useTabsContext()
+```
+
+##### Values
 
 |name|type|default|description|
 |:----:|:----:|:----:|----|
@@ -325,9 +329,13 @@ Use like a regular scrollview.
 |tabNames|`SharedValue<string[]>`||Tab names, same as the keys of `refMap`.|
 
 
-### useCollapsibleStyle
+#### useCollapsibleStyle
 
-#### Values
+Hook to access some key styles that make the whole think work.
+
+You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+
+##### Values
 
 |name|type|
 |:----:|:----:|
@@ -337,19 +345,11 @@ Use like a regular scrollview.
 
 
 
-### useTabNameContext
+### Default Tab Bar
 
-Hook to access the tab name from any deep component.
+#### MaterialTabBar
 
-```tsx
-const tabName = useTabNameContext()
-```
-
-## Default Tab Bar
-
-### MaterialTabBar
-
-#### Props
+##### Props
 
 |name|type|default|
 |:----:|:----:|:----:|
@@ -366,26 +366,27 @@ const tabName = useTabNameContext()
 |style|`StyleProp<ViewStyle>`||
 
 
-### MaterialTabItem
+#### MaterialTabItem
 
-#### Props
+Any additional props are passed to the pressable component.
 
-|name|type|default|
-|:----:|:----:|:----:|
-|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string | ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)> | null) | (new (props: { ...; }) => Component<...>) | undefined`||
-|inactiveOpacity|`number | undefined`|`0.7`|
-|index|`number`||
-|indexDecimal|`SharedValue<number>`||
-|label|`string`||
-|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||
-|name|`any`||
-|onLayout|`((event: LayoutChangeEvent) => void) | undefined`||
-|onPress|`(name: any) => void`||
-|pressColor|`string | undefined`|`#DDDDDD`|
-|pressOpacity|`number | undefined`|`Platform.OS === 'ios' ? 0.2 : 1`|
-|pressableProps|`Pick<PressableProps, "onLayout" | "style" | "hitSlop" | "pointerEvents" | "removeClippedSubviews" | "testID" | "nativeID" | "collapsable" | "needsOffscreenAlphaCompositing" | ... 53 more ... | "testOnly_pressed"> | undefined`||
-|scrollEnabled|`boolean | undefined`||
-|style|`ViewStyle | undefined`||
+##### Props
+
+|name|type|default|description|
+|:----:|:----:|:----:|----|
+|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string | ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)> | null) | (new (props: { ...; }) => Component<...>) | undefined`|||
+|inactiveOpacity|`number | undefined`|`0.7`||
+|index|`number`|||
+|indexDecimal|`SharedValue<number>`|||
+|label|`string`|||
+|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`|||
+|name|`any`|||
+|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) | undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
+|onPress|`(name: any) => void`|||
+|pressColor|`string | undefined`|`#DDDDDD`||
+|pressOpacity|`number | undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
+|scrollEnabled|`boolean | undefined`|||
+|style|`ViewStyle | (ViewStyle & false) | (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) | (ViewStyle & RecursiveArray<false | ViewStyle | RegisteredStyle<...> | null | undefined>) | (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) | undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
 
@@ -413,7 +414,7 @@ Remember to add tests for your change if possible.
 
 ### Documentation changes
 
-Edit the README_TEMPLATE, or update the docstrings inside the `src` folder, and run:
+Edit the [README_TEMPLATE](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/documentation/README_TEMPLATE.md), or update the docstrings inside the `src` folder, and run:
 
 ```sh
 yarn docs
