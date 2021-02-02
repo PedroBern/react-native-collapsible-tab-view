@@ -1,5 +1,3 @@
-const escape = require('markdown-escape')
-
 type Prop = {
   defaultValue: null | { value: string }
   description: string
@@ -16,6 +14,13 @@ type API = {
   props: Props
 }
 
+const escape = (s: any) => {
+  if (typeof s === 'string') {
+    return s.replace('|', '\\|').replace('`', '\\`')
+  }
+  return s
+}
+
 function generateProp(
   propName: string,
   prop: Prop,
@@ -24,22 +29,18 @@ function generateProp(
 ) {
   let description = prop.description
 
-  try {
-    if (prop.description && prop.description.indexOf('\n') > -1) {
-      description = prop.description.split('\n').join(' ')
-      description = escape(description.replace(/\s+/gm, ' '))
-    }
-
-    let md = `|${propName}|${escape(prop.type.name)}|`
-    md += skipDefaults
-      ? ''
-      : `${prop.defaultValue ? escape(String(prop.defaultValue.value)) : ''}|`
-    md += skipDescription ? '' : `${description}|`
-    return md
-  } catch (e) {
-    console.log(propName, prop)
-    throw new Error(e)
+  if (prop.description && prop.description.indexOf('\n') > -1) {
+    description = prop.description.split('\n').join(' ')
+    description = description.replace(/\s+/gm, ' ')
   }
+
+  let md = `|${propName}|\`${escape(prop.type.name)}\`|`
+  md += skipDefaults
+    ? ''
+    : `${prop.defaultValue ? '`' + escape(prop.defaultValue.value) + '`' : ''}|`
+  md += skipDescription ? '' : `${escape(description)}|`
+
+  return md
 }
 
 function generateProps(props: Props, isHook: boolean) {
