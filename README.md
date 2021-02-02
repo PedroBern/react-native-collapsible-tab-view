@@ -251,23 +251,23 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|----|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string | ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)>) | undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string | ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)>) | undefined`|`null`||
-|cancelLazyFadeIn|`boolean | undefined`|||
-|cancelTranslation|`boolean | undefined`|||
+|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)>) | undefined`|||
+|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)>) | undefined`|`null`||
+|cancelLazyFadeIn|`boolean \| undefined`|||
+|cancelTranslation|`boolean \| undefined`|||
 |containerRef|`RefObject<ContainerRef>`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
-|diffClampEnabled|`boolean | undefined`|`false`||
+|diffClampEnabled|`boolean \| undefined`|`false`||
 |headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
-|headerHeight|`number | undefined`||Is optional, but will optimize the first render.|
-|initialTabName|`string | undefined`|||
-|lazy|`boolean | undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
-|onIndexChange|`OnTabChangeCallback<string> | undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" | "ListEmptyComponent" | "ListFooterComponent" | "ListFooterComponentStyle" | "ListHeaderComponent" | ... 129 more ... | "persistentScrollbar"> | undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass { scrollEnabled: false }`|
+|headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
+|initialTabName|`string \| undefined`|||
+|lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
+|onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
+|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" | "ListFooterComponent" | "ListFooterComponentStyle" | "ListHeaderComponent" | ... 129 more ... | "persistentScrollbar"> | undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass { scrollEnabled: false }`|
 |refMap|`Record<string, Ref>`|||
-|snapEnabled|`boolean | undefined`|`false`||
-|snapThreshold|`number | undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
-|tabBarHeight|`number | undefined`||Is optional, but will optimize the first render.|
+|snapEnabled|`boolean \| undefined`|`false`||
+|snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
+|tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
 
 
 #### Tabs.Lazy
@@ -278,8 +278,8 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 
 |name|type|
 |:----:|:----:|
-|cancelLazyFadeIn|`boolean | undefined`|
-|startMounted|`boolean | undefined`|
+|cancelLazyFadeIn|`boolean \| undefined`|
+|startMounted|`boolean \| undefined`|
 
 
 #### Tabs.FlatList
@@ -306,7 +306,7 @@ const { focusedTab, ...rest } = useTabsContext()
 |:----:|:----:|:----:|----|
 |accDiffClamp|`SharedValue<number>`|||
 |accScrollY|`SharedValue<number>`|||
-|containerHeight|`number | undefined`|||
+|containerHeight|`number \| undefined`|||
 |diffClampEnabled|`boolean`|`false`||
 |endDrag|`SharedValue<number>`||Used internally.|
 |focusedTab|`SharedValue<string>`||Name of the current focused tab.|
@@ -353,16 +353,16 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 
 |name|type|default|
 |:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string | ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)>) | undefined`|`null`|
+|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)>) | undefined`|`null`|
 |containerRef|`RefObject<ContainerRef>`||
 |focusedTab|`SharedValue<any>`||
-|getLabelText|`((name: any) => string) | undefined`|`(name) => name.toUpperCase()`|
+|getLabelText|`((name: any) => string) \| undefined`|`(name) => name.toUpperCase()`|
 |index|`SharedValue<number>`||
 |indexDecimal|`SharedValue<number>`||
 |indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||
 |onTabPress|`(name: any) => void`||
 |refMap|`Record<any, Ref>`||
-|scrollEnabled|`boolean | undefined`|`false`|
+|scrollEnabled|`boolean \| undefined`|`false`|
 |style|`StyleProp<ViewStyle>`||
 
 
@@ -374,19 +374,19 @@ Any additional props are passed to the pressable component.
 
 |name|type|default|description|
 |:----:|:----:|:----:|----|
-|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string | ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)> | null) | (new (props: { ...; }) => Component<...>) | undefined`|||
-|inactiveOpacity|`number | undefined`|`0.7`||
+|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string | ... | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<...>)> | null) | (new (props: { ...; }) => Component<...>) | undefined`|||
+|inactiveOpacity|`number \| undefined`|`0.7`||
 |index|`number`|||
 |indexDecimal|`SharedValue<number>`|||
 |label|`string`|||
 |labelStyle|`StyleProp<AnimateStyle<TextStyle>>`|||
 |name|`any`|||
-|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) | undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
+|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
 |onPress|`(name: any) => void`|||
-|pressColor|`string | undefined`|`#DDDDDD`||
-|pressOpacity|`number | undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
-|scrollEnabled|`boolean | undefined`|||
-|style|`ViewStyle | (ViewStyle & false) | (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) | (ViewStyle & RecursiveArray<false | ViewStyle | RegisteredStyle<...> | null | undefined>) | (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) | undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+|pressColor|`string \| undefined`|`#DDDDDD`||
+|pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
+|scrollEnabled|`boolean \| undefined`|||
+|style|`ViewStyle \| (ViewStyle & false) | (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) | (ViewStyle & RecursiveArray<false | ViewStyle | RegisteredStyle<...> | null | undefined>) | (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) | undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
 

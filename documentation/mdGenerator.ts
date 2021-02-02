@@ -24,10 +24,10 @@ function generateProp(
 
   if (prop.description && prop.description.indexOf('\n') > -1) {
     description = prop.description.split('\n').join(' ')
-    description = description.replace(/\s+/gm, ' ')
+    description = description.replace(/\s+/gm, ' ').replace('|', '\\|')
   }
 
-  let md = `|${propName}|\`${prop.type.name}\`|`
+  let md = `|${propName}|\`${prop.type.name.replace('|', '\\|')}\`|`
   md += skipDefaults
     ? ''
     : `${prop.defaultValue ? '`' + prop.defaultValue.value + '`' : ''}|`
