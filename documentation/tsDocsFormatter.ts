@@ -29,5 +29,3 @@ class Formatter {
 module.exports = Formatter
 
 export {}
-
-

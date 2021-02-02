@@ -85,7 +85,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
 
   /**
    * Hook exposing some useful variables.
-   * 
+   *
    * ```tsx
    * const { focusedTab, ...rest } = useTabsContext()
    * ```
@@ -100,7 +100,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
 
   /**
    * Access the parent tab screen fron any deep component.
-   * 
+   *
    * ```tsx
    * const tabName = useTabNameContext()
    * ```
