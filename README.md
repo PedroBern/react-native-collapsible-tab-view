@@ -80,12 +80,7 @@ Then, add Reanimated v2, [follow the official installation guide](https://docs.s
 ```tsx
 import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
-import {
-  RefComponent,
-  ContainerRef,
-  createCollapsibleTabs,
-} from 'react-native-collapsible-tab-view'
-import { useAnimatedRef } from 'react-native-reanimated'
+import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
 
 type TabNames = 'A' | 'B'
 
@@ -94,24 +89,17 @@ const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
 const HEADER_HEIGHT = 250
 
 const Example: React.FC = () => {
-  const containerRef = useAnimatedRef<ContainerRef>()
-  const tabARef = useAnimatedRef<RefComponent>()
-  const tabBRef = useAnimatedRef<RefComponent>()
-
-  const [refMap] = React.useState({
-    A: tabARef,
-    B: tabBRef,
-  })
-
   return (
     <Tabs.Container
-      containerRef={containerRef}
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT} // optional
-      refMap={refMap}
     >
-      <ScreenA />
-      <ScreenB />
+      <Tabs.Tab name="A">
+        <ScreenA />
+      </Tabs.Tab>
+      <Tabs.Tab name="B">
+        <ScreenB />
+      </Tabs.Tab>
     </Tabs.Container>
   )
 }
@@ -255,11 +243,10 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`||
+|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`||
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
-|containerRef|`RefObject<ContainerRef>`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
 |diffClampEnabled|`boolean \| undefined`|`false`||
 |headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
@@ -267,11 +254,22 @@ const Example: React.FC<Props> = () => {
 |initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
-|refMap|`Record<string, Ref>`|||
+|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 128 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |snapEnabled|`boolean \| undefined`|`false`||
 |snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
+
+
+### Tabs.Tab
+
+TODO: write docs
+
+#### Props
+
+|name|type|
+|:----:|:----:|
+|name|`string`|
+|options|`TabOptions \| undefined`|
 
 
 ### Tabs.Lazy
@@ -357,7 +355,7 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 
 |name|type|default|
 |:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`|
+|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`|
 |containerRef|`RefObject<ContainerRef>`||
 |focusedTab|`SharedValue<any>`||
 |getLabelText|`((name: any) => string) \| undefined`|`(name) => name.toUpperCase()`|
@@ -365,6 +363,7 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 |indexDecimal|`SharedValue<number>`||
 |indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||
 |onTabPress|`(name: any) => void`||
+|options|`Record<any, TabOptions & { index: number; }>`||
 |refMap|`Record<any, Ref>`||
 |scrollEnabled|`boolean \| undefined`|`false`|
 |style|`StyleProp<ViewStyle>`||
@@ -378,7 +377,7 @@ Any additional props are passed to the pressable component.
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| (new (props: { ...; }) => Component<...>) \| undefined`|||
+|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, any> \| null) \| (new (props: { name: any; indexDecimal: SharedValue<number>; }) => Component<...>) \| undefined`|||
 |inactiveOpacity|`number \| undefined`|`0.7`||
 |index|`number`|||
 |indexDecimal|`SharedValue<number>`|||
@@ -390,7 +389,7 @@ Any additional props are passed to the pressable component.
 |pressColor|`string \| undefined`|`#DDDDDD`||
 |pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
 |scrollEnabled|`boolean \| undefined`|||
-|style|`ViewStyle \| (ViewStyle & false) \| (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) \| (ViewStyle & RecursiveArray<false \| ViewStyle \| RegisteredStyle<...> \| null \| undefined>) \| (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) \| undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+|style|`ViewStyle \| (ViewStyle & false) \| (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) \| (ViewStyle & RecursiveArray<false \| ViewStyle \| RegisteredStyle<...> \| null \| undefined>) \| (ViewStyle & ((state: PressableStateCallbackType) => StyleProp<...>)) \| undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
 

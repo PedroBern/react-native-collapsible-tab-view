@@ -2,9 +2,9 @@ import React from 'react'
 
 import { ParamList, TabOptions } from './types'
 
-export interface TabProps<T extends ParamList> {
+export type TabProps<T extends ParamList> = {
   readonly name: T
-  readonly options: TabOptions
+  readonly options?: TabOptions
   children: React.ReactNode
 }
 
