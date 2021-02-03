@@ -177,14 +177,16 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     ) => {
       const containerRef = useContainerRef()
 
-      const tabs = React.Children.map(children, (element) => {
-        if (!React.isValidElement(element)) return
-        if (element.type !== Tab)
-          throw new Error(
-            'Container children must be wrapped in a <Tabs.Tab ... /> component'
-          )
-        return element.props.name
-      })
+      const tabs = React.useMemo(() => {
+        return React.Children.map(children, (element) => {
+          if (!React.isValidElement(element)) return
+          if (element.type !== Tab)
+            throw new Error(
+              'Container children must be wrapped in a <Tabs.Tab ... /> component'
+            )
+          return element.props.name
+        })
+      }, [children])
 
       const refMap = useRefMap(tabs)
 
