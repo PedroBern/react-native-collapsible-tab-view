@@ -27,3 +27,5 @@ export type {
 export { default as createCollapsibleTabs } from './createCollapsibleTabs'
 
 export { default as MaterialTabBar } from './MaterialTabBar'
+
+export * from './hooks'

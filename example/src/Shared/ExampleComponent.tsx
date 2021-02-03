@@ -1,11 +1,10 @@
 import React from 'react'
 import {
   CollapsibleProps,
-  RefComponent,
-  ContainerRef,
   CollapsibleRef,
+  useContainerRef,
+  useRefMap,
 } from 'react-native-collapsible-tab-view'
-import { useAnimatedRef } from 'react-native-reanimated'
 
 import Albums from './Albums'
 import Article from './Article'
@@ -19,16 +18,8 @@ type Props = {
 
 const Example = React.forwardRef<CollapsibleRef<TabNames>, Props>(
   ({ emptyContacts, ...props }, ref) => {
-    const containerRef = useAnimatedRef<ContainerRef>()
-    const albumsRef = useAnimatedRef<RefComponent>()
-    const articleRef = useAnimatedRef<RefComponent>()
-    const contactsRef = useAnimatedRef<RefComponent>()
-
-    const [refMap] = React.useState({
-      article: articleRef,
-      albums: albumsRef,
-      contacts: contactsRef,
-    })
+    const containerRef = useContainerRef()
+    const refMap = useRefMap(['article', 'albums', 'contacts'])
 
     return (
       <Tabs.Container
