@@ -1,4 +1,3 @@
-import { ParamList } from 'lib/typescript/types'
 import React from 'react'
 import {
   FlatList as RNFlatList,
@@ -30,6 +29,7 @@ import {
   FlatListProps,
   CollapsibleRef,
   CollapsibleStyle,
+  ParamList,
 } from './types'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
