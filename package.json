@@ -45,12 +45,17 @@
   },
   "homepage": "https://github.com/PedroBern/react-native-collapsible-tab-view#readme",
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@commitlint/config-conventional": "^9.1.1",
     "@microsoft/tsdoc": "^0.13.0",
     "@react-native-community/bob": "^0.16.2",
     "@release-it/conventional-changelog": "^1.1.4",
-    "@types/react": "^16.9.44",
-    "@types/react-native": "0.63.4",
+    "@testing-library/jest-native": "^3.4.3",
+    "@testing-library/react-native": "^7.1.0",
+    "@types/jest": "^26.0.20",
+    "@types/react": "^17.0.1",
+    "@types/react-native": "^0.63.46",
+    "@types/react-test-renderer": "^17.0.0",
     "babel-jest": "^26.2.2",
     "babel-preset-react-native": "^4.0.0",
     "commitlint": "^9.1.0",
@@ -61,12 +66,15 @@
     "eslint-plugin-react-native-globals": "^0.1.2",
     "husky": "^4.2.5",
     "jest": "^26.2.2",
+    "jest-expo": "^40.0.2",
+    "metro-react-native-babel-preset": "^0.65.0",
     "prettier": "^2.2.1",
     "react": "~16.11.0",
     "react-docgen-typescript": "^1.20.5",
     "react-native": "~0.62.2",
     "react-native-gesture-handler": "~1.6.0",
-    "react-native-reanimated": "~2.0.0-rc.2",
+    "react-native-reanimated": "2.0.0-rc.2",
+    "react-test-renderer": "^17.0.1",
     "release-it": "^13.6.6",
     "ts-node": "^9.1.1",
     "typescript": "^3.9.7"
@@ -81,13 +89,6 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "yarn lint && yarn typescript"
     }
-  },
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
   },
   "@react-native-community/bob": {
     "source": "src",
