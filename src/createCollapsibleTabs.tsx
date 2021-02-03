@@ -1,3 +1,4 @@
+import { ParamList } from 'lib/typescript/types'
 import React from 'react'
 import {
   FlatList as RNFlatList,
@@ -80,7 +81,7 @@ const init = (children: any) => {
  * <Tabs.ScrollView {...props} />
  * ```
  */
-const createCollapsibleTabs = <T extends string>(tabs: readonly T[]) => {
+const createCollapsibleTabs = <T extends ParamList>(tabs: readonly T[]) => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
   /**

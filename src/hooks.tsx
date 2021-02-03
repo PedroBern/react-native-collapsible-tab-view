@@ -17,7 +17,7 @@ export const useRefMap = (tabIds: readonly ParamList[]) => {
     // this is fine to ignore, our number of tabs shouldn't change
     // eslint-disable-next-line react-hooks/rules-of-hooks
     (refs, tabId) => ({ ...refs, [tabId]: useTabRef() }),
-    {} as Record<string, React.RefObject<RefComponent>>
+    {} as Record<ParamList, React.RefObject<RefComponent>>
   )
 
   const [refMap] = useState(refs)
