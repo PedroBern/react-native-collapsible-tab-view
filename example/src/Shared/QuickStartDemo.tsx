@@ -2,9 +2,9 @@ import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
 import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
 
-const TabNames = ['A', 'B'] as const
+type TabNames = 'A' | 'B'
 
-const { useTabsContext, ...Tabs } = createCollapsibleTabs(TabNames)
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
 
 const HEADER_HEIGHT = 250
 
@@ -14,8 +14,12 @@ const Example: React.FC = () => {
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT} // optional
     >
-      <ScreenA />
-      <ScreenB />
+      <Tabs.Tab name="A">
+        <ScreenA />
+      </Tabs.Tab>
+      <Tabs.Tab name="B">
+        <ScreenB />
+      </Tabs.Tab>
     </Tabs.Container>
   )
 }

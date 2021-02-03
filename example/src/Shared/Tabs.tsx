@@ -10,7 +10,7 @@ export type HeaderProps = TabProps<TabNamesType>
 
 export type TabBarProps = TabProps<TabNamesType>
 
-const { useTabsContext, ...Tabs } = createCollapsibleTabs(TabNames)
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNamesType>()
 
 export default Tabs
 

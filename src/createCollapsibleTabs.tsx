@@ -21,6 +21,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
+import { Tab as TabComponent, TabProps } from './Tab'
 import { useContainerRef, useRefMap } from './hooks'
 import {
   CollapsibleProps,
@@ -81,7 +82,7 @@ const init = (children: any) => {
  * <Tabs.ScrollView {...props} />
  * ```
  */
-const createCollapsibleTabs = <T extends ParamList>(tabs: readonly T[]) => {
+const createCollapsibleTabs = <T extends ParamList>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
   /**
@@ -175,6 +176,16 @@ const createCollapsibleTabs = <T extends ParamList>(tabs: readonly T[]) => {
       ref
     ) => {
       const containerRef = useContainerRef()
+
+      const tabs = React.Children.map(children, (element) => {
+        if (!React.isValidElement(element)) return
+        if (element.type !== Tab)
+          throw new Error(
+            'Container children must be wrapped in a <Tabs.Tab ... /> component'
+          )
+        return element.props.name
+      })
+
       const refMap = useRefMap(tabs)
 
       const windowWidth = useWindowDimensions().width
@@ -892,7 +903,12 @@ const createCollapsibleTabs = <T extends ParamList>(tabs: readonly T[]) => {
     )
   }
 
+  function Tab(props: TabProps<T>) {
+    return <TabComponent {...props} />
+  }
+
   return {
+    Tab,
     Container,
     Lazy,
     FlatList,

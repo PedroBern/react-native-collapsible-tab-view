@@ -22,7 +22,7 @@ const TabNames = [
 
 type TabNamesType = typeof TabNames[number]
 
-const { useTabsContext, ...Tabs } = createCollapsibleTabs(TabNames)
+const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNamesType>()
 
 type Props = Partial<CollapsibleProps<TabNamesType>>
 
@@ -36,9 +36,11 @@ const Example: React.FC<Props> = (props) => {
     >
       {TabNames.map((name) => {
         return (
-          <Tabs.ScrollView key={name}>
-            <ArticleContent />
-          </Tabs.ScrollView>
+          <Tabs.Tab name={name} key={name}>
+            <Tabs.ScrollView>
+              <ArticleContent />
+            </Tabs.ScrollView>
+          </Tabs.Tab>
         )
       })}
     </Tabs.Container>

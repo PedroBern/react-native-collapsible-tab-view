@@ -9,6 +9,8 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
+import { TabProps } from './Tab'
+
 export type ContainerRef = FlatList<any>
 
 export type RefComponent = FlatList<any> | ScrollView
@@ -58,7 +60,7 @@ export type CollapsibleProps<T extends ParamList> = {
    * Percentage of header height to make the snap effect. A number between 0 and 1.
    */
   snapThreshold?: number
-  children: React.ReactElement[] | React.ReactElement
+  children: React.ReactElement<TabProps<T>>[] | React.ReactElement<TabProps<T>>
   HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement
   TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
