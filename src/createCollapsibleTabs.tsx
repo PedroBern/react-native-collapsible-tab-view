@@ -22,7 +22,7 @@ import Animated, {
 
 import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab as TabComponent, TabProps } from './Tab'
-import { useContainerRef, useRefMap } from './hooks'
+import { useContainerRef, useRefMap, useTabOptions } from './hooks'
 import {
   CollapsibleProps,
   ContextType,
@@ -187,6 +187,10 @@ const createCollapsibleTabs = <T extends ParamList>() => {
           return element.props.name
         })
       }, [children])
+
+      const tabOptions = useTabOptions(
+        children as React.ReactElement<TabProps<T>>
+      )
 
       const refMap = useRefMap(tabs)
 
@@ -541,6 +545,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
                     focusedTab={focusedTab}
                     indexDecimal={indexDecimal}
                     onTabPress={onTabPress}
+                    options={tabOptions}
                   />
                 )}
               </View>
@@ -557,6 +562,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
                     focusedTab={focusedTab}
                     indexDecimal={indexDecimal}
                     onTabPress={onTabPress}
+                    options={tabOptions}
                   />
                 )}
               </View>
@@ -905,6 +911,9 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     )
   }
 
+  /**
+   * TODO: write docs
+   */
   function Tab(props: TabProps<T>) {
     return <TabComponent {...props} />
   }

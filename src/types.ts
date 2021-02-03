@@ -35,6 +35,7 @@ export type TabBarProps<T extends ParamList> = {
   index: Animated.SharedValue<number>
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
+  options: FinalTabOptions<T>
 }
 
 export type OnTabChangeCallback<T extends ParamList> = (data: {
@@ -152,3 +153,12 @@ export type CollapsibleStyle = {
   }
   progressViewOffset: number
 }
+
+export type TabOptions = {
+  label?: string
+}
+
+export type FinalTabOptions<T extends ParamList> = Record<
+  T,
+  TabOptions & { index: number }
+>

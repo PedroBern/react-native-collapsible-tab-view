@@ -18,13 +18,13 @@ const Example = React.forwardRef<CollapsibleRef<TabNamesType>, Props>(
   ({ emptyContacts, ...props }, ref) => {
     return (
       <Tabs.Container ref={ref} headerHeight={HEADER_HEIGHT} {...props}>
-        <Tabs.Tab name="article">
+        <Tabs.Tab name="article" options={{ label: 'Article' }}>
           <Article />
         </Tabs.Tab>
-        <Tabs.Tab name="albums">
+        <Tabs.Tab name="albums" options={{ label: 'Albums' }}>
           <Albums />
         </Tabs.Tab>
-        <Tabs.Tab name="contacts">
+        <Tabs.Tab name="contacts" options={{ label: 'Contacts' }}>
           <Contacts emptyContacts={emptyContacts} />
         </Tabs.Tab>
       </Tabs.Container>

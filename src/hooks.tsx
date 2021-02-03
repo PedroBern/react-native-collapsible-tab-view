@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo, Children } from 'react'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
-import { ParamList } from './types'
+import { TabProps } from './Tab'
+import { ParamList, FinalTabOptions } from './types'
 
 export const useContainerRef = () => {
   return useAnimatedRef<ContainerRef>()
@@ -22,4 +23,22 @@ export const useRefMap = (tabIds: readonly ParamList[]) => {
 
   const [refMap] = useState(refs)
   return refMap
+}
+
+export const useTabOptions = <T extends ParamList>(
+  children: React.ReactElement<TabProps<T>>
+) => {
+  const options = useMemo(() => {
+    // @ts-ignore
+    const tabOptions: FinalTabOptions<T> = {}
+    Children.forEach(children, (element, index) => {
+      const { options, name } = element.props
+      tabOptions[name] = {
+        index,
+        ...options,
+      }
+    })
+    return tabOptions
+  }, [children])
+  return options
 }

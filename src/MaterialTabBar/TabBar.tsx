@@ -30,6 +30,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   getLabelText = (name) => name.toUpperCase(),
   onTabPress,
   style,
+  options,
 }) => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -153,7 +154,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
             key={name}
             index={i}
             name={name}
-            label={getLabelText(name)}
+            label={options[name].label || getLabelText(name)}
             onPress={onTabPress}
             onLayout={scrollEnabled ? onTabItemLayout : undefined}
             scrollEnabled={scrollEnabled}

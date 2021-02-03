@@ -65,7 +65,7 @@ const getCoreComponents = () => {
 
   // export everything
   data +=
-    'export { Container, Lazy, FlatList, ScrollView, UseTabsContext, UseCollapsibleStyle }'
+    'export { Container, Tab, Lazy, FlatList, ScrollView, UseTabsContext, UseCollapsibleStyle }'
 
   return data
 }
