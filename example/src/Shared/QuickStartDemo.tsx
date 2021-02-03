@@ -1,28 +1,18 @@
 import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
-import {
-  createCollapsibleTabs,
-  useContainerRef,
-  useRefMap,
-} from 'react-native-collapsible-tab-view'
+import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
 
 const TabNames = ['A', 'B'] as const
-type TabNamesType = typeof TabNames[number]
 
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNamesType>()
+const { useTabsContext, ...Tabs } = createCollapsibleTabs(TabNames)
 
 const HEADER_HEIGHT = 250
 
 const Example: React.FC = () => {
-  const containerRef = useContainerRef()
-  const refMap = useRefMap(TabNames)
-
   return (
     <Tabs.Container
-      containerRef={containerRef}
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT} // optional
-      refMap={refMap}
     >
       <ScreenA />
       <ScreenB />

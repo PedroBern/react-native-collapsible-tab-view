@@ -3,8 +3,6 @@ import {
   createCollapsibleTabs,
   CollapsibleProps,
   MaterialTabBar,
-  useContainerRef,
-  useRefMap,
 } from 'react-native-collapsible-tab-view'
 
 import { ArticleContent } from './Article'
@@ -24,24 +22,19 @@ const TabNames = [
 
 type TabNamesType = typeof TabNames[number]
 
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNamesType>()
+const { useTabsContext, ...Tabs } = createCollapsibleTabs(TabNames)
 
 type Props = Partial<CollapsibleProps<TabNamesType>>
 
 const Example: React.FC<Props> = (props) => {
-  const containerRef = useContainerRef()
-  const refMap = useRefMap(TabNames)
-
   return (
     <Tabs.Container
-      containerRef={containerRef}
       headerHeight={HEADER_HEIGHT}
-      refMap={refMap}
       lazy
       TabBarComponent={(props) => <MaterialTabBar {...props} scrollEnabled />}
       {...props}
     >
-      {Object.keys(refMap).map((name) => {
+      {TabNames.map((name) => {
         return (
           <Tabs.ScrollView key={name}>
             <ArticleContent />

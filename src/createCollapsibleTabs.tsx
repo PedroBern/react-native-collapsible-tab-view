@@ -21,12 +21,12 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
+import { useContainerRef, useRefMap } from './hooks'
 import {
   CollapsibleProps,
   ContextType,
   ScrollViewProps,
   FlatListProps,
-  ParamList,
   CollapsibleRef,
   CollapsibleStyle,
 } from './types'
@@ -80,7 +80,7 @@ const init = (children: any) => {
  * <Tabs.ScrollView {...props} />
  * ```
  */
-const createCollapsibleTabs = <T extends ParamList>() => {
+const createCollapsibleTabs = <T extends string>(tabs: readonly T[]) => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
   /**
@@ -153,7 +153,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     (
       {
         initialTabName,
-        containerRef,
+        //containerRef,
         headerHeight: initialHeaderHeight,
         tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
         snapEnabled = false,
@@ -162,7 +162,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
         children,
         HeaderComponent,
         TabBarComponent = MaterialTabBar,
-        refMap,
+        //refMap,
         headerContainerStyle,
         cancelTranslation,
         containerStyle,
@@ -173,6 +173,9 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       },
       ref
     ) => {
+      const containerRef = useContainerRef()
+      const refMap = useRefMap(tabs)
+
       const windowWidth = useWindowDimensions().width
       const firstRender = React.useRef(init(children))
 

@@ -44,7 +44,6 @@ export type OnTabChangeCallback<T extends ParamList> = (data: {
 
 export type CollapsibleProps<T extends ParamList> = {
   initialTabName?: T
-  containerRef: React.RefObject<ContainerRef>
   /**
    * Is optional, but will optimize the first render.
    */
@@ -62,7 +61,6 @@ export type CollapsibleProps<T extends ParamList> = {
   children: React.ReactElement[] | React.ReactElement
   HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement
   TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement
-  refMap: Record<T, Ref>
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
   containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean
