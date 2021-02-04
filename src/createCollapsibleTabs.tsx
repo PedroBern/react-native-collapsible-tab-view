@@ -31,6 +31,8 @@ import {
   CollapsibleRef,
   CollapsibleStyle,
   TabName,
+  Ref,
+  RefComponent,
 } from './types'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
@@ -50,6 +52,17 @@ const init = (children: any) => {
     }
   })
   return true
+}
+
+function scrollToImpl<T extends RefComponent>(
+  ref: Ref<T> | undefined,
+  x: number,
+  y: number,
+  animated: boolean
+): void {
+  if (!ref) return
+  //@ts-expect-error: reanimated typescript types do not accept FlatList for `scrollTo`, but it does work
+  scrollTo(ref, x, y, animated)
 }
 
 /**
@@ -203,7 +216,6 @@ const createCollapsibleTabs = <T extends TabName>() => {
       const accScrollY = useSharedValue(0)
       const oldAccScrollY = useSharedValue(0)
       const accDiffClamp = useSharedValue(0)
-      // @ts-ignore
       const tabNames = useSharedValue<T[]>(tabNamesArray)
       const index = useSharedValue(
         initialTabName
@@ -434,16 +446,13 @@ const createCollapsibleTabs = <T extends TabName>() => {
             if (name === focusedTab.value) {
               const ref = getRef(name)
               if (ref?.current && 'scrollTo' in ref.current) {
-                // @ts-ignore
                 ref.current?.scrollTo({
                   x: 0,
                   y: 0,
                   animated: true,
                 })
-                // @ts-ignore
-              } else if (ref?.current?.scrollToOffset) {
-                // @ts-ignore
-                ref.current?.scrollToOffset({
+              } else if (ref?.current && 'scrollToOffset' in ref.current) {
+                ref.current.scrollToOffset({
                   offset: 0,
                   animated: true,
                 })
@@ -568,7 +577,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
               </View>
             </Animated.View>
             <AnimatedFlatList
-              // @ts-ignore
+              // @ts-expect-error problem with reanimated types, they're missing `ref`
               ref={containerRef}
               initialScrollIndex={index.value}
               data={data}
@@ -629,8 +638,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
       if (canMount) {
         const tabIndex = tabNames.value.findIndex((n) => n === name)
         if (ref) {
-          //@ts-ignore
-          scrollTo(ref, 0, scrollY.value[tabIndex], false)
+          scrollToImpl(ref, 0, scrollY.value[tabIndex], false)
         }
         if (!cancelLazyFadeIn) opacity.value = withTiming(1)
       }
@@ -716,13 +724,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
           if (scrollYCurrent.value <= headerHeight * snapThreshold) {
             // snap down
             snappingTo.value = 0
-            // @ts-ignore
-            scrollTo(getRef(name), 0, 0, true)
+            scrollToImpl(getRef(name), 0, 0, true)
           } else if (scrollYCurrent.value <= headerHeight) {
             // snap up
             snappingTo.value = headerHeight
-            // @ts-ignore
-            scrollTo(getRef(name), 0, headerHeight, true)
+            scrollToImpl(getRef(name), 0, headerHeight, true)
           }
           isSnapping.value = false
         }
@@ -816,8 +822,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
           if (nextPosition !== null) {
             scrollY.value[tabIndex] = nextPosition
-            // @ts-ignore
-            scrollTo(getRef(name), 0, nextPosition, false)
+            scrollToImpl(getRef(name), 0, nextPosition, false)
           }
         }
       },
@@ -865,15 +870,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
     return (
       <AnimatedFlatList
-        // @ts-ignore
+        // @ts-expect-error problem with reanimated types, they're missing `ref`
         ref={setRef(name)}
         bouncesZoom={false}
         style={[_style, style]}
-        contentContainerStyle={[
-          _contentContainerStyle,
-          // @ts-ignore
-          contentContainerStyle,
-        ]}
+        contentContainerStyle={[_contentContainerStyle, contentContainerStyle]}
         progressViewOffset={progressViewOffset}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
@@ -906,8 +907,8 @@ const createCollapsibleTabs = <T extends TabName>() => {
         style={[_style, style]}
         contentContainerStyle={[
           _contentContainerStyle,
-          // @ts-ignore
-          contentContainerStyle,
+          // TODO: investigate types
+          contentContainerStyle as any,
         ]}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
