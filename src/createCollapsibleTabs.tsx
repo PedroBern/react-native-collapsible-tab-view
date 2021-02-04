@@ -155,6 +155,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
         initialTabName,
         containerRef,
         headerHeight: initialHeaderHeight,
+        minHeaderHeight = 0,
         tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
         snapEnabled = false,
         diffClampEnabled = false,
@@ -213,6 +214,9 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       const isGliding = useSharedValue(false)
       const endDrag = useSharedValue(0)
       const calculateNextOffset = useSharedValue(index.value)
+      const headerScrollDistance = useDerivedValue(() => {
+        return headerHeight !== undefined ? headerHeight - minHeaderHeight : 0
+      }, [headerHeight, minHeaderHeight])
 
       const getItemLayout = React.useCallback(
         (_: unknown, index: number) => ({
@@ -313,9 +317,13 @@ const createCollapsibleTabs = <T extends ParamList>() => {
               accDiffClamp.value = 0
             } else {
               const nextValue = accDiffClamp.value + delta
+
               if (delta > 0) {
                 // scrolling down
-                accDiffClamp.value = Math.min(headerHeight || 0, nextValue)
+                accDiffClamp.value = Math.min(
+                  headerScrollDistance.value,
+                  nextValue
+                )
               } else if (delta < 0) {
                 // scrolling up
                 accDiffClamp.value = Math.max(0, nextValue)
@@ -353,11 +361,11 @@ const createCollapsibleTabs = <T extends ParamList>() => {
             {
               translateY: diffClampEnabled
                 ? -accDiffClamp.value
-                : -Math.min(scrollYCurrent.value, headerHeight || 0),
+                : -Math.min(scrollYCurrent.value, headerScrollDistance.value),
             },
           ],
         }
-      }, [diffClampEnabled, headerHeight])
+      }, [diffClampEnabled])
 
       const getHeaderHeight = React.useCallback(
         (event: LayoutChangeEvent) => {
@@ -476,6 +484,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
             snapEnabled,
             tabBarHeight: tabBarHeight || 0,
             headerHeight: headerHeight || 0,
+            headerScrollDistance,
             refMap,
             scrollYCurrent,
             tabNames,
@@ -648,6 +657,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       index,
       scrollYCurrent,
       headerHeight,
+      headerScrollDistance,
       isGliding,
       isSnapping,
       snappingTo,
@@ -662,19 +672,26 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       'worklet'
       if (snapEnabled) {
         if (diffClampEnabled && accDiffClamp.value > 0) {
-          if (scrollYCurrent.value > headerHeight) {
-            if (accDiffClamp.value <= headerHeight * snapThreshold) {
+          if (scrollYCurrent.value > headerScrollDistance.value) {
+            if (
+              accDiffClamp.value <=
+              headerScrollDistance.value * snapThreshold
+            ) {
               // snap down
               isSnapping.value = true
               accDiffClamp.value = withTiming(0, undefined, () => {
                 isSnapping.value = false
               })
-            } else if (accDiffClamp.value < headerHeight) {
+            } else if (accDiffClamp.value < headerScrollDistance.value) {
               // snap up
               isSnapping.value = true
-              accDiffClamp.value = withTiming(headerHeight, undefined, () => {
-                isSnapping.value = false
-              })
+              accDiffClamp.value = withTiming(
+                headerScrollDistance.value,
+                undefined,
+                () => {
+                  isSnapping.value = false
+                }
+              )
             }
           } else {
             isSnapping.value = true
@@ -683,16 +700,19 @@ const createCollapsibleTabs = <T extends ParamList>() => {
             })
           }
         } else {
-          if (scrollYCurrent.value <= headerHeight * snapThreshold) {
+          if (
+            scrollYCurrent.value <=
+            headerScrollDistance.value * snapThreshold
+          ) {
             // snap down
             snappingTo.value = 0
             // @ts-ignore
             scrollTo(refMap[name], 0, 0, true)
-          } else if (scrollYCurrent.value <= headerHeight) {
+          } else if (scrollYCurrent.value <= headerScrollDistance.value) {
             // snap up
-            snappingTo.value = headerHeight
+            snappingTo.value = headerScrollDistance.value
             // @ts-ignore
-            scrollTo(refMap[name], 0, headerHeight, true)
+            scrollTo(refMap[name], 0, headerScrollDistance.value, true)
           }
           isSnapping.value = false
         }
@@ -750,7 +770,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
         },
         onMomentumEnd,
       },
-      [headerHeight, name, diffClampEnabled, snapEnabled]
+      [name, diffClampEnabled, snapEnabled]
     )
 
     // sync unfocused scenes
@@ -766,8 +786,10 @@ const createCollapsibleTabs = <T extends ParamList>() => {
           const areEqual = focusedScrollY === tabScrollY
 
           if (!areEqual) {
-            const currIsOnTop = tabScrollY <= headerHeight + 1
-            const focusedIsOnTop = focusedScrollY <= headerHeight + 1
+            const currIsOnTop = tabScrollY <= headerScrollDistance.value + 1
+            const focusedIsOnTop =
+              focusedScrollY <= headerScrollDistance.value + 1
+
             if (diffClampEnabled) {
               const hasGap = accDiffClamp.value > tabScrollY
               if (hasGap || currIsOnTop) {
@@ -780,7 +802,10 @@ const createCollapsibleTabs = <T extends ParamList>() => {
                 nextPosition = headerHeight
               }
             } else if (currIsOnTop || focusedIsOnTop) {
-              nextPosition = Math.min(focusedScrollY, headerHeight)
+              nextPosition = Math.min(
+                focusedScrollY,
+                headerScrollDistance.value
+              )
             }
           }
 
@@ -791,7 +816,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
           }
         }
       },
-      [diffClampEnabled, snapEnabled, headerHeight]
+      [diffClampEnabled, snapEnabled]
     )
 
     return scrollHandler

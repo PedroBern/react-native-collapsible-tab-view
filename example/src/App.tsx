@@ -17,6 +17,7 @@ import Default from './Default'
 import DiffClamp from './DiffClamp'
 import DiffClampSnap from './DiffClampSnap'
 import Lazy from './Lazy'
+import MinHeaderHeight from './MinHeaderHeight'
 import OnIndexChange from './OnIndexChange'
 import QuickStartDemo from './QuickStartDemo'
 import Ref from './Ref'
@@ -41,6 +42,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   StartOnSpecificTab,
   Ref,
   OnIndexChange,
+  MinHeaderHeight,
 ]
 
 const ExampleList: React.FC<object> = () => {

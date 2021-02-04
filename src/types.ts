@@ -53,6 +53,10 @@ export type CollapsibleProps<T extends ParamList> = {
    * Is optional, but will optimize the first render.
    */
   tabBarHeight?: number
+  /**
+   * Header minimum height when collapsed
+   */
+  minHeaderHeight?: number
   snapEnabled?: boolean
   diffClampEnabled?: boolean
   /**
@@ -93,6 +97,7 @@ export type CollapsibleProps<T extends ParamList> = {
 
 export type ContextType<T extends ParamList> = {
   headerHeight: number
+  headerScrollDistance: Animated.SharedValue<number>
   tabBarHeight: number
   snapEnabled: boolean
   diffClampEnabled: boolean
