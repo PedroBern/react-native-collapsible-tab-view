@@ -18,6 +18,7 @@ import DiffClamp from './DiffClamp'
 import DiffClampSnap from './DiffClampSnap'
 import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
+import MinHeaderHeight from './MinHeaderHeight'
 import OnIndexChange from './OnIndexChange'
 import QuickStartDemo from './QuickStartDemo'
 import Ref from './Ref'
@@ -43,6 +44,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Ref,
   OnIndexChange,
   DynamicTabs,
+  MinHeaderHeight,
 ]
 
 const ExampleList: React.FC<object> = () => {

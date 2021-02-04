@@ -253,6 +253,7 @@ const Example: React.FC<Props> = () => {
 |headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
 |initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
+|minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
 |onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
 |pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 128 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |refMap|`Record<string, Ref>`|||
@@ -314,6 +315,7 @@ const { focusedTab, ...rest } = useTabsContext()
 |endDrag|`SharedValue<number>`||Used internally.|
 |focusedTab|`SharedValue<string>`||Name of the current focused tab.|
 |headerHeight|`number`|||
+|headerScrollDistance|`SharedValue<number>`|||
 |index|`SharedValue<number>`|||
 |indexDecimal|`SharedValue<number>`|||
 |isGliding|`SharedValue<boolean>`|||
