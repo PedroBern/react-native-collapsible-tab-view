@@ -20,10 +20,6 @@ export type MaterialTabItemProps<T extends ParamList> = {
   onLayout?: (event: LayoutChangeEvent) => void
   scrollEnabled?: boolean
   label: string
-  ItemElement?: React.JSXElementConstructor<{
-    name: T
-    indexDecimal: Animated.SharedValue<number>
-  }>
   style?: StyleProp<ViewStyle>
   /**
    * Style to apply to the tab item label

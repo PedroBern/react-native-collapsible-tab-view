@@ -255,8 +255,8 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`||
+|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`||
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerRef|`RefObject<ContainerRef>`|||
@@ -267,7 +267,7 @@ const Example: React.FC<Props> = () => {
 |initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 128 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |refMap|`Record<string, Ref>`|||
 |snapEnabled|`boolean \| undefined`|`false`||
 |snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
@@ -396,7 +396,7 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`|React component to render as tab bar item|
+|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`|React component to render as tab bar item|
 |activeColor|`string \| undefined`||Color applied to the label when active|
 |containerRef|`RefObject<ContainerRef>`|||
 |contentContainerStyle|`StyleProp<ViewStyle>`||Style to apply to the inner container for tabs|
@@ -422,7 +422,6 @@ Any additional props are passed to the pressable component.
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| (new (props: { ...; }) => Component<...>) \| undefined`|||
 |activeColor|`string \| undefined`|`null`|Color applied to the label when active|
 |inactiveColor|`string \| undefined`|`null`|Color applied to the label when inactive|
 |inactiveOpacity|`number \| undefined`|`0.7`||
