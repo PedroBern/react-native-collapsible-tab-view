@@ -257,6 +257,17 @@ const createCollapsibleTabs = <T extends TabName>() => {
         return scrollX.value / windowWidth
       }, [windowWidth])
 
+      // handle window resize
+      React.useEffect(() => {
+        if (!firstRender.current) {
+          containerRef.current?.scrollToIndex({
+            index: index.value,
+            animated: false,
+          })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [windowWidth])
+
       React.useEffect(() => {
         if (firstRender.current) {
           if (initialTabName !== undefined && index.value !== 0) {
@@ -268,7 +279,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
           firstRender.current = false
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [containerRef, index.value, initialTabName, windowWidth])
+      }, [containerRef, initialTabName, windowWidth])
 
       // derived from scrollX
       // calculate the next offset and index if swiping
