@@ -3,7 +3,7 @@ import { CollapsibleRef } from 'react-native-collapsible-tab-view'
 
 import ExampleComponent from './Shared/ExampleComponent'
 import { buildHeader } from './Shared/Header'
-import { TabNames } from './Shared/Tabs'
+import { TabNamesType } from './Shared/Tabs'
 import { ExampleComponentType } from './types'
 
 const title = 'Ref example "jumpToTab" after 1 second'
@@ -11,7 +11,7 @@ const title = 'Ref example "jumpToTab" after 1 second'
 const Header = buildHeader(title)
 
 const RefExample: ExampleComponentType = () => {
-  const ref = React.useRef<CollapsibleRef<TabNames>>()
+  const ref = React.useRef<CollapsibleRef<TabNamesType>>()
 
   React.useEffect(() => {
     const timer = setTimeout(() => {

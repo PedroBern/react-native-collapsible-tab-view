@@ -30,12 +30,13 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   getLabelText = (name) => name.toUpperCase(),
   onTabPress,
   style,
-  options,
+  tabProps,
 }) => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
   const isFirstRender = React.useRef(true)
-  const [nTabs] = React.useState(Object.keys(refMap).length)
+  const tabKeys = React.useMemo(() => Object.keys(refMap), [refMap])
+  const [nTabs] = React.useState(tabKeys.length)
   const itemsLayoutGathering = React.useRef<ItemLayout[]>([])
   const tabsOffset = useSharedValue(0)
   const isScrolling = useSharedValue(false)
@@ -43,7 +44,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   const [itemsLayout, setItemsLayout] = React.useState<ItemLayout[]>(
     scrollEnabled
       ? []
-      : Object.keys(refMap).map((_, i) => {
+      : tabKeys.map((_, i) => {
           const tabWidth = windowWidth / nTabs
           return { width: tabWidth, x: i * tabWidth }
         })
@@ -56,12 +57,12 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       // update items width on window resizing
       const tabWidth = windowWidth / nTabs
       setItemsLayout(
-        Object.keys(refMap).map((_, i) => {
+        tabKeys.map((_, i) => {
           return { width: tabWidth, x: i * tabWidth }
         })
       )
     }
-  }, [scrollEnabled, nTabs, refMap, windowWidth])
+  }, [scrollEnabled, nTabs, tabKeys, windowWidth])
 
   const onTabItemLayout = React.useCallback(
     (event: LayoutChangeEvent) => {
@@ -148,13 +149,13 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       scrollEnabled={scrollEnabled}
       onScroll={scrollEnabled ? onScroll : undefined}
     >
-      {Object.keys(refMap).map((name, i) => {
+      {tabKeys.map((name, i) => {
         return (
           <TabItemComponent
             key={name}
             index={i}
             name={name}
-            label={options[name].label || getLabelText(name)}
+            label={tabProps.get(name)?.label || getLabelText(name)}
             onPress={onTabPress}
             onLayout={scrollEnabled ? onTabItemLayout : undefined}
             scrollEnabled={scrollEnabled}

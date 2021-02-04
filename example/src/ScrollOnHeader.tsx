@@ -10,10 +10,10 @@ const title = 'Scroll On Header'
 
 const HEADER_HEIGHT = 400
 
-const NewHeader: React.FC<HeaderProps> = () => {
+const NewHeader: React.FC<HeaderProps> = (props) => {
   return (
     <View pointerEvents="none">
-      <Header height={HEADER_HEIGHT} title={title} />
+      <Header height={HEADER_HEIGHT} title={title} {...props} />
     </View>
   )
 }

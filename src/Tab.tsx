@@ -1,13 +1,18 @@
 import React from 'react'
 
-import { ParamList, TabOptions } from './types'
+import { TabName } from './types'
 
-export type TabProps<T extends ParamList> = {
+export type TabProps<T extends TabName> = {
   readonly name: T
-  readonly options?: TabOptions
+  label?: string
   children: React.ReactNode
 }
 
-export function Tab<T extends ParamList>({ children }: TabProps<T>) {
+/**
+ * This is just a wrapper component so we can capture its props,
+ * which React will make available to us
+ * @param param0 props
+ */
+export function Tab<T extends TabName>({ children }: TabProps<T>) {
   return <>{children}</>
 }

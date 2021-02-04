@@ -22,7 +22,7 @@ import Animated, {
 
 import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab as TabComponent, TabProps } from './Tab'
-import { useContainerRef, useRefMap, useTabOptions } from './hooks'
+import { useContainerRef, useRefMap, useTabProps } from './hooks'
 import {
   CollapsibleProps,
   ContextType,
@@ -30,7 +30,7 @@ import {
   FlatListProps,
   CollapsibleRef,
   CollapsibleStyle,
-  ParamList,
+  TabName,
 } from './types'
 
 const AnimatedFlatList = Animated.createAnimatedComponent(RNFlatList)
@@ -82,7 +82,7 @@ const init = (children: any) => {
  * <Tabs.ScrollView {...props} />
  * ```
  */
-const createCollapsibleTabs = <T extends ParamList>() => {
+const createCollapsibleTabs = <T extends TabName>() => {
   const Context = React.createContext<ContextType<T> | undefined>(undefined)
 
   /**
@@ -177,22 +177,11 @@ const createCollapsibleTabs = <T extends ParamList>() => {
     ) => {
       const containerRef = useContainerRef()
 
-      const tabs = React.useMemo(() => {
-        return React.Children.map(children, (element) => {
-          if (!React.isValidElement(element)) return
-          if (element.type !== Tab)
-            throw new Error(
-              'Container children must be wrapped in a <Tabs.Tab ... /> component'
-            )
-          return element.props.name
-        })
-      }, [children])
-
-      const tabOptions = useTabOptions(
-        children as React.ReactElement<TabProps<T>>
-      )
-
-      const refMap = useRefMap(tabs)
+      const tabProps = useTabProps(children, Tab)
+      const tabNamesArray = React.useMemo(() => [...tabProps.keys()], [
+        tabProps,
+      ])
+      const refMap = useRefMap(tabNamesArray)
 
       const windowWidth = useWindowDimensions().width
       const firstRender = React.useRef(init(children))
@@ -214,7 +203,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
       const oldAccScrollY = useSharedValue(0)
       const accDiffClamp = useSharedValue(0)
       // @ts-ignore
-      const tabNames = useSharedValue<T[]>(Object.keys(refMap))
+      const tabNames = useSharedValue<T[]>(tabNamesArray)
       const index = useSharedValue(
         initialTabName
           ? tabNames.value.findIndex((n) => n === initialTabName)
@@ -319,6 +308,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
             isSwiping.value = false
           },
         },
+        // TODO: use empty array?
         [refMap]
       )
 
@@ -545,7 +535,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
                     focusedTab={focusedTab}
                     indexDecimal={indexDecimal}
                     onTabPress={onTabPress}
-                    options={tabOptions}
+                    tabProps={tabProps}
                   />
                 )}
               </View>
@@ -562,7 +552,7 @@ const createCollapsibleTabs = <T extends ParamList>() => {
                     focusedTab={focusedTab}
                     indexDecimal={indexDecimal}
                     onTabPress={onTabPress}
-                    options={tabOptions}
+                    tabProps={tabProps}
                   />
                 )}
               </View>

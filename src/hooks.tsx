@@ -2,43 +2,47 @@ import { useState, useMemo, Children } from 'react'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
-import { TabProps } from './Tab'
-import { ParamList, FinalTabOptions } from './types'
+import { TabName, TabReactElement, TabsWithProps } from './types'
 
-export const useContainerRef = () => {
+export function useContainerRef() {
   return useAnimatedRef<ContainerRef>()
 }
 
-export const useTabRef = () => {
+export function useTabRef() {
   return useAnimatedRef<RefComponent>()
 }
 
-export const useRefMap = (tabIds: readonly ParamList[]) => {
+export function useRefMap(tabIds: readonly TabName[]) {
   const refs = tabIds.reduce(
     // this is fine to ignore, our number of tabs shouldn't change
     // eslint-disable-next-line react-hooks/rules-of-hooks
     (refs, tabId) => ({ ...refs, [tabId]: useTabRef() }),
-    {} as Record<ParamList, React.RefObject<RefComponent>>
+    {} as Record<TabName, React.RefObject<RefComponent>>
   )
 
   const [refMap] = useState(refs)
   return refMap
 }
 
-export const useTabOptions = <T extends ParamList>(
-  children: React.ReactElement<TabProps<T>>
-) => {
+export function useTabProps<T extends TabName>(
+  children: TabReactElement<T>[] | TabReactElement<T>,
+  tabType: Function
+) {
   const options = useMemo(() => {
-    // @ts-ignore
-    const tabOptions: FinalTabOptions<T> = {}
+    const tabOptions: TabsWithProps<T> = new Map()
     Children.forEach(children, (element, index) => {
-      const { options, name } = element.props
-      tabOptions[name] = {
+      if (element.type !== tabType)
+        throw new Error(
+          'Container children must be wrapped in a <Tabs.Tab ... /> component'
+        )
+      const { name, ...options } = element.props
+      tabOptions.set(name, {
         index,
+        name,
         ...options,
-      }
+      })
     })
     return tabOptions
-  }, [children])
+  }, [children, tabType])
   return options
 }

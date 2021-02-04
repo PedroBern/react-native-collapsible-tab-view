@@ -17,35 +17,38 @@ export type RefComponent = FlatList<any> | ScrollView
 
 export type Ref = React.RefObject<RefComponent>
 
-export type ParamList = string | number | symbol
+export type TabName = string | number | symbol
 
-export type RefHandler<T extends ParamList> = {
+export type RefHandler<T extends TabName> = {
   jumpToTab: (name: T) => boolean
   setIndex: (index: number) => boolean
   getFocusedTab: () => T
   getCurrentIndex: () => number
 }
 
-export type CollapsibleRef<T extends ParamList> = RefHandler<T> | undefined
+export type CollapsibleRef<T extends TabName> = RefHandler<T> | undefined
 
-export type TabBarProps<T extends ParamList> = {
+export type TabBarProps<T extends TabName> = {
   indexDecimal: Animated.SharedValue<number>
   focusedTab: Animated.SharedValue<T>
   refMap: Record<T, Ref>
   index: Animated.SharedValue<number>
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
-  options: FinalTabOptions<T>
+  tabProps: TabsWithProps<T>
+  //options: FinalTabOptions<T>
 }
 
-export type OnTabChangeCallback<T extends ParamList> = (data: {
+export type OnTabChangeCallback<T extends TabName> = (data: {
   prevIndex: number
   index: number
   prevTabName: T
   tabName: T
 }) => void
 
-export type CollapsibleProps<T extends ParamList> = {
+export type TabReactElement<T extends TabName> = React.ReactElement<TabProps<T>>
+
+export type CollapsibleProps<T extends TabName> = {
   initialTabName?: T
   /**
    * Is optional, but will optimize the first render.
@@ -61,9 +64,9 @@ export type CollapsibleProps<T extends ParamList> = {
    * Percentage of header height to make the snap effect. A number between 0 and 1.
    */
   snapThreshold?: number
-  children: React.ReactElement<TabProps<T>>[] | React.ReactElement<TabProps<T>>
-  HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement
-  TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement
+  children: TabReactElement<T>[] | TabReactElement<T>
+  HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement | null
+  TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement | null
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
   containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean
@@ -92,7 +95,7 @@ export type CollapsibleProps<T extends ParamList> = {
   onIndexChange?: OnTabChangeCallback<T>
 }
 
-export type ContextType<T extends ParamList> = {
+export type ContextType<T extends TabName> = {
   headerHeight: number
   tabBarHeight: number
   snapEnabled: boolean
@@ -154,11 +157,7 @@ export type CollapsibleStyle = {
   progressViewOffset: number
 }
 
-export type TabOptions = {
-  label?: string
-}
-
-export type FinalTabOptions<T extends ParamList> = Record<
+export type TabsWithProps<T extends TabName> = Map<
   T,
-  TabOptions & { index: number }
+  TabProps<T> & { index: number }
 >

@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { TabBarProps } from 'react-native-collapsible-tab-view'
 
-import { TabNames } from './Tabs'
+import { TabNamesType } from './Tabs'
 
 type Props = {
   title: string
@@ -14,7 +14,7 @@ export const HEADER_HEIGHT = 250
 export const Header = ({
   title,
   height = HEADER_HEIGHT,
-}: TabBarProps<TabNames> & Props) => {
+}: TabBarProps<TabNamesType> & Props) => {
   return (
     <View style={[styles.root, { height }]}>
       <Text style={styles.text}>{title}</Text>
