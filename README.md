@@ -255,8 +255,8 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`||
+|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`||
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerRef|`RefObject<ContainerRef>`|||
@@ -267,7 +267,7 @@ const Example: React.FC<Props> = () => {
 |initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 129 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 128 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |refMap|`Record<string, Ref>`|||
 |snapEnabled|`boolean \| undefined`|`false`||
 |snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
@@ -353,21 +353,65 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 
 ### MaterialTabBar
 
+Basic usage looks like this:
+```tsx
+import {
+  RefComponent,
+  ContainerRef,
+  TabBarProps,
+} from 'react-native-collapsible-tab-view'
+import { useAnimatedRef } from 'react-native-reanimated'
+type MyTabs = 'article' | 'contacts' | 'albums'
+const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+const Example: React.FC<Props> = () => {
+  const containerRef = useAnimatedRef<ContainerRef>();
+  const tab0Ref = useAnimatedRef<RefComponent>();
+  const tab1Ref = useAnimatedRef<RefComponent>();
+  const [refMap] = React.useState({
+    tab0: tab0Ref,
+    tab1: tab1Ref,
+  });
+  return (
+    <Tabs.Container
+      containerRef={containerRef}
+      HeaderComponent={MyHeader}
+      headerHeight={HEADER_HEIGHT} // optional
+      refMap={refMap}
+      TabBarComponent={(props) => (
+        <MaterialTabBar
+          {...props}
+          activeColor="red"
+          inactiveColor="yellow"
+          labelStyle={{ fontSize: 14 }}
+        />
+      )}
+    >
+      {components returning Tabs.ScrollView || Tabs.FlatList}
+    </Tabs.Container>
+  );
+};
+```
+
 #### Props
 
-|name|type|default|
-|:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`|
-|containerRef|`RefObject<ContainerRef>`||
-|focusedTab|`SharedValue<any>`||
-|getLabelText|`((name: any) => string) \| undefined`|`(name) => name.toUpperCase()`|
-|index|`SharedValue<number>`||
-|indexDecimal|`SharedValue<number>`||
-|indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||
-|onTabPress|`(name: any) => void`||
-|refMap|`Record<any, Ref>`||
-|scrollEnabled|`boolean \| undefined`|`false`|
-|style|`StyleProp<ViewStyle>`||
+|name|type|default|description|
+|:----:|:----:|:----:|:----:|
+|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`|React component to render as tab bar item|
+|activeColor|`string \| undefined`||Color applied to the label when active|
+|containerRef|`RefObject<ContainerRef>`|||
+|contentContainerStyle|`StyleProp<ViewStyle>`||Style to apply to the inner container for tabs|
+|focusedTab|`SharedValue<any>`|||
+|getLabelText|`((name: any) => string) \| undefined`|`(name) => name.toUpperCase()`|Function to compute the tab item label text|
+|inactiveColor|`string \| undefined`||Color applied to the label when inactive|
+|index|`SharedValue<number>`|||
+|indexDecimal|`SharedValue<number>`|||
+|indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||Style to apply to the active indicator.|
+|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
+|onTabPress|`(name: any) => void`|||
+|refMap|`Record<any, Ref>`|||
+|scrollEnabled|`boolean \| undefined`|`false`|Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic|
+|style|`StyleProp<ViewStyle>`||Style to apply to the tab bar container.|
+|tabStyle|`StyleProp<ViewStyle>`||Style to apply to the individual tab items in the tab bar.|
 
 
 ### MaterialTabItem
@@ -378,19 +422,20 @@ Any additional props are passed to the pressable component.
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|ItemElement|`((props: { name: any; indexDecimal: SharedValue<number>; }) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| (new (props: { ...; }) => Component<...>) \| undefined`|||
+|activeColor|`string \| undefined`|`null`|Color applied to the label when active|
+|inactiveColor|`string \| undefined`|`null`|Color applied to the label when inactive|
 |inactiveOpacity|`number \| undefined`|`0.7`||
 |index|`number`|||
 |indexDecimal|`SharedValue<number>`|||
 |label|`string`|||
-|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`|||
+|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
 |name|`any`|||
 |onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
 |onPress|`(name: any) => void`|||
 |pressColor|`string \| undefined`|`#DDDDDD`||
 |pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
 |scrollEnabled|`boolean \| undefined`|||
-|style|`ViewStyle \| (ViewStyle & false) \| (ViewStyle & number & { __registeredStyleBrand: ViewStyle; }) \| (ViewStyle & RecursiveArray<false \| ViewStyle \| RegisteredStyle<...> \| null \| undefined>) \| (ViewStyle & ((state: Readonly<...>) => StyleProp<...>)) \| undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+|style|`false \| ViewStyle \| RegisteredStyle<ViewStyle> \| RecursiveArray<false \| ViewStyle \| RegisteredStyle<ViewStyle> \| null \| undefined> \| ... 15 more ... \| undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
 

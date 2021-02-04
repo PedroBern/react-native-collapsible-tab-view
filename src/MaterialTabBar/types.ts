@@ -20,23 +20,65 @@ export type MaterialTabItemProps<T extends ParamList> = {
   onLayout?: (event: LayoutChangeEvent) => void
   scrollEnabled?: boolean
   label: string
-  ItemElement?: React.JSXElementConstructor<{
-    name: T
-    indexDecimal: Animated.SharedValue<number>
-  }>
-  style?: ViewStyle
+  style?: StyleProp<ViewStyle>
+  /**
+   * Style to apply to the tab item label
+   */
   labelStyle?: AnimatedTextStyle
   inactiveOpacity?: number
   pressColor?: string
   pressOpacity?: number
+  /**
+   * Color applied to the label when active
+   */
+  activeColor?: string
+  /**
+   * Color applied to the label when inactive
+   */
+  inactiveColor?: string
 } & Omit<PressableProps, 'onPress' | 'children'>
 
 export type MaterialTabBarProps<N extends ParamList> = TabBarProps<N> & {
+  /**
+   * Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic
+   */
   scrollEnabled?: boolean
+  /**
+   * Style to apply to the active indicator.
+   */
   indicatorStyle?: AnimatedStyle
+  /**
+   * React component to render as tab bar item
+   */
   TabItemComponent?: (props: MaterialTabItemProps<N>) => React.ReactElement
+  /**
+   * Function to compute the tab item label text
+   */
   getLabelText?: (name: N) => string
+  /**
+   * Style to apply to the tab bar container.
+   */
   style?: StyleProp<ViewStyle>
+  /**
+   * Style to apply to the inner container for tabs
+   */
+  contentContainerStyle?: StyleProp<ViewStyle>
+  /**
+   * Style to apply to the individual tab items in the tab bar.
+   */
+  tabStyle?: StyleProp<ViewStyle>
+  /**
+   * Style to apply to the tab item label
+   */
+  labelStyle?: AnimatedTextStyle
+  /**
+   * Color applied to the label when active
+   */
+  activeColor?: string
+  /**
+   * Color applied to the label when inactive
+   */
+  inactiveColor?: string
 }
 
 export type ItemLayout = {
