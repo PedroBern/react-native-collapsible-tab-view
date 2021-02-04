@@ -212,7 +212,10 @@ const createCollapsibleTabs = <T extends TabName>() => {
       >(initialHeaderHeight)
       const isScrolling = useSharedValue(0)
       const scrollYCurrent = useSharedValue(0)
-      const scrollY = useSharedValue(React.Children.map(children, () => 0))
+      const scrollY = useSharedValue(
+        tabNamesArray.map(() => 0),
+        false
+      )
       const offset = useSharedValue(0)
       const accScrollY = useSharedValue(0)
       const oldAccScrollY = useSharedValue(0)
@@ -612,6 +615,8 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const name = React.useContext(TabNameContext)
     const { focusedTab, getRef, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
+    const [afterMount, setAfterMount] = React.useState(!!startMounted)
+
     const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
 
     const allowToMount = React.useCallback(() => {
@@ -619,6 +624,10 @@ const createCollapsibleTabs = <T extends TabName>() => {
       setTimeout(() => {
         if (focusedTab.value === name) {
           setCanMount(true)
+          // we need to wait for the children rendering to complete so that we can scroll properly
+          setTimeout(() => {
+            setAfterMount(true)
+          }, 10)
         }
       }, 50)
     }, [focusedTab.value, name])
@@ -635,12 +644,10 @@ const createCollapsibleTabs = <T extends TabName>() => {
       [canMount, focusedTab]
     )
 
-    const ref = React.useMemo(() => {
-      return name ? getRef(name) : null
-    }, [getRef, name])
+    const ref = name ? getRef(name) : null
 
     useDerivedValue(() => {
-      if (canMount) {
+      if (afterMount) {
         const tabIndex = tabNames.value.findIndex((n) => n === name)
         if (ref) {
           scrollToImpl(ref, 0, scrollY.value[tabIndex], false)
@@ -648,7 +655,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         if (!cancelLazyFadeIn && opacity.value !== 1)
           opacity.value = withTiming(1)
       }
-    }, [ref, canMount, cancelLazyFadeIn])
+    }, [ref, cancelLazyFadeIn, opacity, name, afterMount])
 
     const stylez = useAnimatedStyle(() => {
       return {
@@ -698,6 +705,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const [tabIndex] = React.useState(
       tabNames.value.findIndex((n) => n === name)
     )
+    const ref = getRef(name)
 
     const onMomentumEnd = () => {
       'worklet'
@@ -727,11 +735,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
           if (scrollYCurrent.value <= headerHeight * snapThreshold) {
             // snap down
             snappingTo.value = 0
-            scrollToImpl(getRef(name), 0, 0, true)
+            scrollToImpl(ref, 0, 0, true)
           } else if (scrollYCurrent.value <= headerHeight) {
             // snap up
             snappingTo.value = headerHeight
-            scrollToImpl(getRef(name), 0, headerHeight, true)
+            scrollToImpl(ref, 0, headerHeight, true)
           }
           isSnapping.value = false
         }
@@ -789,7 +797,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         },
         onMomentumEnd,
       },
-      [headerHeight, name, diffClampEnabled, snapEnabled]
+      [headerHeight, ref, name, diffClampEnabled, snapEnabled]
     )
 
     // sync unfocused scenes
@@ -825,12 +833,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
           if (nextPosition !== null) {
             scrollY.value[tabIndex] = nextPosition
-            console.log(nextPosition, tabIndex, name, !!getRef(name))
-            scrollToImpl(getRef(name), 0, nextPosition, false)
+            scrollToImpl(ref, 0, nextPosition, false)
           }
         }
       },
-      [diffClampEnabled, snapEnabled, headerHeight]
+      [diffClampEnabled, ref, snapEnabled, headerHeight]
     )
 
     return scrollHandler

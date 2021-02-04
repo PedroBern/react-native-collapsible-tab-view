@@ -25,7 +25,6 @@ export function useAnimatedDynamicRefs(): [
     return ref
   }
   function getRef<T extends RefComponent>(key: TabName) {
-    'worklet'
     return map[key] as Ref<T>
   }
 
