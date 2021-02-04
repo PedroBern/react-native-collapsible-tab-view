@@ -612,7 +612,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const name = React.useContext(TabNameContext)
     const { focusedTab, getRef, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
-    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0, false)
+    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
 
     const allowToMount = React.useCallback(() => {
       // wait the scene to be at least 50 ms focused, before mounting
@@ -635,24 +635,26 @@ const createCollapsibleTabs = <T extends TabName>() => {
       [canMount, focusedTab]
     )
 
+    const ref = React.useMemo(() => {
+      return name ? getRef(name) : null
+    }, [getRef, name])
+
     useDerivedValue(() => {
       if (canMount) {
         const tabIndex = tabNames.value.findIndex((n) => n === name)
         if (ref) {
           scrollToImpl(ref, 0, scrollY.value[tabIndex], false)
         }
-        if (!cancelLazyFadeIn) opacity.value = withTiming(1)
+        if (!cancelLazyFadeIn && opacity.value !== 1)
+          opacity.value = withTiming(1)
       }
-    }, [canMount, cancelLazyFadeIn])
+    }, [ref, canMount, cancelLazyFadeIn])
 
     const stylez = useAnimatedStyle(() => {
       return {
         opacity: opacity.value,
       }
     }, [])
-
-    if (!name) return null
-    const ref = getRef(name)
 
     return canMount ? (
       cancelLazyFadeIn ? (
@@ -823,6 +825,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
           if (nextPosition !== null) {
             scrollY.value[tabIndex] = nextPosition
+            console.log(nextPosition, tabIndex, name, !!getRef(name))
             scrollToImpl(getRef(name), 0, nextPosition, false)
           }
         }
