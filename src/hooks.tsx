@@ -2,7 +2,7 @@ import { useState, useMemo, Children } from 'react'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
-import { TabName, TabReactElement, TabsWithProps } from './types'
+import { Ref, TabName, TabReactElement, TabsWithProps } from './types'
 
 export function useContainerRef() {
   return useAnimatedRef<ContainerRef>()
@@ -12,16 +12,24 @@ export function useTabRef() {
   return useAnimatedRef<RefComponent>()
 }
 
-export function useRefMap(tabIds: readonly TabName[]) {
-  const refs = tabIds.reduce(
-    // this is fine to ignore, our number of tabs shouldn't change
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    (refs, tabId) => ({ ...refs, [tabId]: useTabRef() }),
-    {} as Record<TabName, React.RefObject<RefComponent>>
-  )
+export function useAnimatedDynamicRefs(): [
+  <T extends RefComponent>(key: TabName) => undefined | Ref<T>,
+  <T extends RefComponent>(key: TabName) => Ref<T>
+] {
+  const [map] = useState<Record<TabName, Ref<RefComponent>>>({})
 
-  const [refMap] = useState(refs)
-  return refMap
+  function setRef<T extends RefComponent>(key: TabName) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const ref = useAnimatedRef<T>()
+    map[key] = ref
+    return ref
+  }
+  function getRef<T extends RefComponent>(key: TabName) {
+    'worklet'
+    return map[key] as Ref<T>
+  }
+
+  return [getRef, setRef]
 }
 
 export function useTabProps<T extends TabName>(

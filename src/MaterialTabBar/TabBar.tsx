@@ -21,7 +21,7 @@ import { MaterialTabBarProps, ItemLayout } from './types'
 export const TABBAR_HEIGHT = 48
 
 const TabBar: React.FC<MaterialTabBarProps<any>> = ({
-  refMap,
+  tabNames,
   indexDecimal,
   scrollEnabled = false,
   indicatorStyle,
@@ -35,8 +35,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
   const isFirstRender = React.useRef(true)
-  const tabKeys = React.useMemo(() => Object.keys(refMap), [refMap])
-  const [nTabs] = React.useState(tabKeys.length)
+  const [nTabs] = React.useState(tabNames.length)
   const itemsLayoutGathering = React.useRef<ItemLayout[]>([])
   const tabsOffset = useSharedValue(0)
   const isScrolling = useSharedValue(false)
@@ -44,7 +43,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   const [itemsLayout, setItemsLayout] = React.useState<ItemLayout[]>(
     scrollEnabled
       ? []
-      : tabKeys.map((_, i) => {
+      : tabNames.map((_, i) => {
           const tabWidth = windowWidth / nTabs
           return { width: tabWidth, x: i * tabWidth }
         })
@@ -57,12 +56,12 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       // update items width on window resizing
       const tabWidth = windowWidth / nTabs
       setItemsLayout(
-        tabKeys.map((_, i) => {
+        tabNames.map((_, i) => {
           return { width: tabWidth, x: i * tabWidth }
         })
       )
     }
-  }, [scrollEnabled, nTabs, tabKeys, windowWidth])
+  }, [scrollEnabled, nTabs, tabNames, windowWidth])
 
   const onTabItemLayout = React.useCallback(
     (event: LayoutChangeEvent) => {
@@ -149,7 +148,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       scrollEnabled={scrollEnabled}
       onScroll={scrollEnabled ? onScroll : undefined}
     >
-      {tabKeys.map((name, i) => {
+      {tabNames.map((name, i) => {
         return (
           <TabItemComponent
             key={name}

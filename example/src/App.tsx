@@ -16,6 +16,7 @@ import CenteredEmptyList from './CenteredEmptyList'
 import Default from './Default'
 import DiffClamp from './DiffClamp'
 import DiffClampSnap from './DiffClampSnap'
+import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
 import OnIndexChange from './OnIndexChange'
 import QuickStartDemo from './QuickStartDemo'
@@ -41,6 +42,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   StartOnSpecificTab,
   Ref,
   OnIndexChange,
+  DynamicTabs,
 ]
 
 const ExampleList: React.FC<object> = () => {

@@ -1,11 +1,10 @@
 import React, { ComponentProps } from 'react'
 import {
   FlatList,
-  ScrollView,
+  FlatListProps as RNFlatListProps,
   ListRenderItem,
   StyleProp,
   ViewStyle,
-  FlatListProps as RNFlatListProps,
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
@@ -13,11 +12,11 @@ import { TabProps } from './Tab'
 
 export type ContainerRef = FlatList<any>
 
-export type RefComponent = FlatList<any> | ScrollView
+export type RefComponent = FlatList<any> | Animated.ScrollView
 
-export type Ref = React.RefObject<RefComponent>
+export type Ref<T extends RefComponent> = React.RefObject<T>
 
-export type TabName = string | number | symbol
+export type TabName = string | number
 
 export type RefHandler<T extends TabName> = {
   jumpToTab: (name: T) => boolean
@@ -31,7 +30,7 @@ export type CollapsibleRef<T extends TabName> = RefHandler<T> | undefined
 export type TabBarProps<T extends TabName> = {
   indexDecimal: Animated.SharedValue<number>
   focusedTab: Animated.SharedValue<T>
-  refMap: Record<T, Ref>
+  tabNames: T[]
   index: Animated.SharedValue<number>
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
@@ -39,12 +38,16 @@ export type TabBarProps<T extends TabName> = {
   //options: FinalTabOptions<T>
 }
 
-export type OnTabChangeCallback<T extends TabName> = (data: {
+export type IndexChangeEventData<T extends TabName> = {
   prevIndex: number
   index: number
   prevTabName: T
   tabName: T
-}) => void
+}
+
+export type OnTabChangeCallback<T extends TabName> = (
+  data: IndexChangeEventData<T>
+) => void
 
 export type TabReactElement<T extends TabName> = React.ReactElement<TabProps<T>>
 
@@ -101,7 +104,10 @@ export type ContextType<T extends TabName> = {
   snapEnabled: boolean
   diffClampEnabled: boolean
   snapThreshold: number
-  refMap: Record<T, Ref>
+  getRef: <TComponent extends RefComponent>(
+    key: T
+  ) => Ref<TComponent> | undefined
+  setRef: <TComponent extends RefComponent>(key: T) => Ref<TComponent>
   /**
    * Scroll position of current tab.
    */
