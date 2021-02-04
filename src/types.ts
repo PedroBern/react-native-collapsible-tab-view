@@ -108,7 +108,10 @@ export type ContextType<T extends TabName> = {
   getRef: <TComponent extends RefComponent>(
     key: T
   ) => Ref<TComponent> | undefined
-  setRef: <TComponent extends RefComponent>(key: T) => Ref<TComponent>
+  setRef: <TComponent extends RefComponent>(
+    key: T,
+    ref: React.RefObject<TComponent>
+  ) => Ref<TComponent>
   /**
    * Scroll position of current tab.
    */

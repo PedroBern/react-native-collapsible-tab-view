@@ -14,13 +14,14 @@ export function useTabRef() {
 
 export function useAnimatedDynamicRefs(): [
   <T extends RefComponent>(key: TabName) => undefined | Ref<T>,
-  <T extends RefComponent>(key: TabName) => Ref<T>
+  <T extends RefComponent>(key: TabName, ref: React.RefObject<T>) => Ref<T>
 ] {
   const [map] = useState<Record<TabName, Ref<RefComponent>>>({})
 
-  function setRef<T extends RefComponent>(key: TabName) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const ref = useAnimatedRef<T>()
+  function setRef<T extends RefComponent>(
+    key: TabName,
+    ref: React.RefObject<T>
+  ) {
     map[key] = ref
     return ref
   }

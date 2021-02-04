@@ -6,6 +6,7 @@ import {
   LayoutChangeEvent,
   useWindowDimensions,
   Platform,
+  FlatList,
 } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -18,6 +19,7 @@ import Animated, {
   runOnJS,
   withDelay,
   cancelAnimation,
+  useAnimatedRef,
 } from 'react-native-reanimated'
 
 import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
@@ -883,6 +885,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
   }: FlatListProps<R>): React.ReactElement {
     const name = useTabNameContext()
     const { setRef } = useTabsContext()
+    const ref = useAnimatedRef<FlatList<any>>()
     const scrollHandler = useScrollHandlerY(name)
     const {
       style: _style,
@@ -890,10 +893,14 @@ const createCollapsibleTabs = <T extends TabName>() => {
       progressViewOffset,
     } = useCollapsibleStyle()
 
+    React.useEffect(() => {
+      setRef(name, ref)
+    }, [name, ref, setRef])
+
     return (
       <AnimatedFlatList
         // @ts-expect-error problem with reanimated types, they're missing `ref`
-        ref={setRef(name)}
+        ref={ref}
         bouncesZoom={false}
         style={[_style, style]}
         contentContainerStyle={[_contentContainerStyle, contentContainerStyle]}
@@ -915,6 +922,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     ...rest
   }) => {
     const name = useTabNameContext()
+    const ref = useAnimatedRef<Animated.ScrollView>()
     const { setRef } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
     const {
@@ -922,9 +930,13 @@ const createCollapsibleTabs = <T extends TabName>() => {
       contentContainerStyle: _contentContainerStyle,
     } = useCollapsibleStyle()
 
+    React.useEffect(() => {
+      setRef(name, ref)
+    }, [name, ref, setRef])
+
     return (
       <Animated.ScrollView
-        ref={setRef(name)}
+        ref={ref}
         bouncesZoom={false}
         style={[_style, style]}
         contentContainerStyle={[
