@@ -3,6 +3,14 @@ const fs = require('fs')
 
 const Formatter = require('./tsDocsFormatter')
 
+/**
+ * 
+ * Returns the docstring of a specific function.
+ * 
+ * @param inputFile 
+ * @param functionName 
+ * @param raw 
+ */
 function getFunctionDocstring(
   inputFile: string,
   functionName: string,
@@ -10,23 +18,19 @@ function getFunctionDocstring(
 ): void {
   const inputBuffer: string = fs.readFileSync(inputFile).toString()
 
-  // need to skip empty lines between docstring and function name
-  // the regex is wrong
   const regex = new RegExp(
-    '\\/\\*\\*\n.*(const|function) ' + functionName,
+    '\n(\\/\\*\\*\n.*)(const|function) ' + functionName,
     'gms'
   )
-  let docstring = inputBuffer.match(regex)
-  if (!docstring) {
-    console.log(docstring)
+  const matches = inputBuffer.match(regex)
+  if (!matches) {
+    console.log(matches)
     const errorMessage = 'Function not found for ' + functionName
     console.log(errorMessage)
     throw new Error('Function not found for ')
   }
-  docstring = docstring[0].split('\n')
-  docstring.pop()
-  // @ts-ignore
-  docstring = docstring.join('\n')
+
+  const docstring = matches[0]
 
   // @ts-ignore
   if (raw) return docstring
