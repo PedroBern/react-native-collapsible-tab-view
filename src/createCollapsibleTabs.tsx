@@ -60,6 +60,7 @@ function scrollToImpl<T extends RefComponent>(
   y: number,
   animated: boolean
 ): void {
+  'worklet'
   if (!ref) return
   //@ts-expect-error: reanimated typescript types do not accept FlatList for `scrollTo`, but it does work
   scrollTo(ref, x, y, animated)
@@ -611,7 +612,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const name = React.useContext(TabNameContext)
     const { focusedTab, getRef, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
-    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
+    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0, false)
 
     const allowToMount = React.useCallback(() => {
       // wait the scene to be at least 50 ms focused, before mounting
