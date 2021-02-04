@@ -127,18 +127,21 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
 
   const cancelNextScrollSync = useSharedValue(index.value)
 
-  const onScroll = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      tabsOffset.value = event.contentOffset.x
+  const onScroll = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        tabsOffset.value = event.contentOffset.x
+      },
+      onBeginDrag: () => {
+        isScrolling.value = true
+        cancelNextScrollSync.value = index.value
+      },
+      onMomentumEnd: () => {
+        isScrolling.value = false
+      },
     },
-    onBeginDrag: () => {
-      isScrolling.value = true
-      cancelNextScrollSync.value = index.value
-    },
-    onMomentumEnd: () => {
-      isScrolling.value = false
-    },
-  })
+    []
+  )
 
   const currentIndexToSync = useSharedValue(index.value)
   const targetIndexToSync = useSharedValue(index.value)
@@ -153,7 +156,8 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
         targetIndexToSync.value = nextIndex
         currentIndexToSync.value = withTiming(nextIndex)
       }
-    }
+    },
+    [scrollEnabled]
   )
 
   useAnimatedReaction(
@@ -174,7 +178,6 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
     },
     [scrollEnabled, itemsLayout, nTabs]
   )
-
   return (
     <Animated.ScrollView
       ref={tabBarRef}
@@ -194,6 +197,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       overScrollMode="never"
       scrollEnabled={scrollEnabled}
       onScroll={scrollEnabled ? onScroll : undefined}
+      scrollEventThrottle={16}
     >
       {tabNames.map((name, i) => {
         return (
