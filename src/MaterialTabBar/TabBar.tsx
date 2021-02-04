@@ -20,6 +20,47 @@ import { MaterialTabBarProps, ItemLayout } from './types'
 
 export const TABBAR_HEIGHT = 48
 
+/**
+ * Basic usage looks like this:
+ * ```tsx
+ * import {
+ *  RefComponent,
+ *  ContainerRef,
+ *  TabBarProps,
+ * } from 'react-native-collapsible-tab-view'
+ * import { useAnimatedRef } from 'react-native-reanimated'
+ * type MyTabs = 'article' | 'contacts' | 'albums'
+ * const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+ * const Example: React.FC<Props> = () => {
+ *  const containerRef = useAnimatedRef<ContainerRef>();
+ *  const tab0Ref = useAnimatedRef<RefComponent>();
+ *  const tab1Ref = useAnimatedRef<RefComponent>();
+ *  const [refMap] = React.useState({
+ *    tab0: tab0Ref,
+ *    tab1: tab1Ref,
+ *  });
+ *  return (
+ *    <Tabs.Container
+ *      containerRef={containerRef}
+ *      HeaderComponent={MyHeader}
+ *      headerHeight={HEADER_HEIGHT} // optional
+ *      refMap={refMap}
+ *      TabBarComponent={(props) => (
+ *        <MaterialTabBar
+ *          {...props}
+ *          activeColor="red"
+ *          inactiveColor="yellow"
+ *          labelStyle={{ fontSize: 14 }}
+ *        />
+ *      )}
+ *    >
+ *      {components returning Tabs.ScrollView || Tabs.FlatList}
+ *    </Tabs.Container>
+ *  );
+ * };
+ * ```
+ */
+
 const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   refMap,
   indexDecimal,
@@ -30,6 +71,11 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   getLabelText = (name) => name.toUpperCase(),
   onTabPress,
   style,
+  contentContainerStyle,
+  labelStyle,
+  inactiveColor,
+  activeColor,
+  tabStyle,
 }) => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -136,6 +182,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       contentContainerStyle={[
         styles.contentContainer,
         !scrollEnabled && { width: windowWidth },
+        contentContainerStyle,
       ]}
       keyboardShouldPersistTaps="handled"
       bounces={false}
@@ -158,6 +205,10 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
             onLayout={scrollEnabled ? onTabItemLayout : undefined}
             scrollEnabled={scrollEnabled}
             indexDecimal={indexDecimal}
+            labelStyle={labelStyle}
+            activeColor={activeColor}
+            inactiveColor={inactiveColor}
+            style={tabStyle}
           />
         )
       })}
