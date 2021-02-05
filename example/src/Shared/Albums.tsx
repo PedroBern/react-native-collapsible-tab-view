@@ -20,6 +20,10 @@ const albumsContent = (n = 8) =>
     <Image key={i} source={source} style={styles.cover} />
   ))
 
+export const AlbumsContent = () => {
+  return <View style={styles.content}>{albumsContent()}</View>
+}
+
 export default class Albums extends React.Component {
   render() {
     return (
@@ -27,7 +31,7 @@ export default class Albums extends React.Component {
         style={styles.container}
         contentContainerStyle={styles.content}
       >
-        <View style={styles.content}>{albumsContent()}</View>
+        <AlbumsContent />
       </Tabs.ScrollView>
     )
   }

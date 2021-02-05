@@ -3,11 +3,11 @@ import { Text, View, StyleSheet } from 'react-native'
 import {
   createCollapsibleTabs,
   MaterialTabBar,
-  TabBarProps,
 } from 'react-native-collapsible-tab-view'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { IndexChangeEventData } from '../../src/types'
+import { AlbumsContent } from './Shared/Albums'
 import { ArticleContent } from './Shared/Article'
 import { HEADER_HEIGHT } from './Shared/Header'
 import { ExampleComponentType } from './types'
@@ -25,9 +25,13 @@ function shuffleArray<T>(array: T[]) {
   return shuffled
 }
 
+const ComponentTypes = [<ArticleContent />, <AlbumsContent />]
+
 const DynamicTabs: ExampleComponentType = () => {
-  const [lastTabIndex, setLastTabIndex] = React.useState(0)
-  const [tabs, setTabs] = React.useState(['Default Tab'])
+  const [lastTabIndex, setLastTabIndex] = React.useState(1)
+  const [tabs, setTabs] = React.useState([
+    { name: 'Default Tab', component: ComponentTypes[0] },
+  ])
 
   const [currentTab, setCurrentTab] = React.useState<
     IndexChangeEventData<string>
@@ -35,7 +39,13 @@ const DynamicTabs: ExampleComponentType = () => {
 
   const addTab = React.useCallback(() => {
     const newIndex = lastTabIndex + 1
-    setTabs((t) => [...t, `New Tab #${newIndex}`])
+    setTabs((t) => [
+      ...t,
+      {
+        name: `New Tab #${newIndex}`,
+        component: ComponentTypes[lastTabIndex % ComponentTypes.length],
+      },
+    ])
     setLastTabIndex(newIndex)
   }, [lastTabIndex])
 
@@ -54,7 +64,7 @@ const DynamicTabs: ExampleComponentType = () => {
     })
   }, [currentTab])
 
-  const HeaderComponent = (props: TabBarProps<string>) => {
+  const HeaderComponent = () => {
     return (
       <View style={styles.header}>
         <TouchableOpacity onPress={addTab}>
@@ -87,12 +97,12 @@ const DynamicTabs: ExampleComponentType = () => {
       onIndexChange={setCurrentTab}
       TabBarComponent={TabBarComponent}
     >
-      {tabs.map((name) => {
+      {tabs.map((tab) => {
         return (
-          <Tabs.Tab name={name} key={name}>
+          <Tabs.Tab name={tab.name} key={tab.name}>
             <Tabs.ScrollView>
-              <Text style={styles.listInner}>{name}</Text>
-              <ArticleContent />
+              <Text style={styles.listInner}>{tab.name}</Text>
+              {tab.component}
             </Tabs.ScrollView>
           </Tabs.Tab>
         )
