@@ -14,6 +14,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
+import { TabName } from '../types'
 import Indicator from './Indicator'
 import TabItem from './TabItem'
 import { MaterialTabBarProps, ItemLayout } from './types'
@@ -60,15 +61,14 @@ export const TABBAR_HEIGHT = 48
  * };
  * ```
  */
-
-const TabBar: React.FC<MaterialTabBarProps<any>> = ({
+const TabBar = <T extends TabName = any>({
   tabNames,
   indexDecimal,
   scrollEnabled = false,
   indicatorStyle,
   index,
   TabItemComponent = TabItem,
-  getLabelText = (name) => name.toUpperCase(),
+  getLabelText = (name) => String(name).toUpperCase(),
   onTabPress,
   style,
   tabProps,
@@ -77,7 +77,7 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
   inactiveColor,
   activeColor,
   tabStyle,
-}) => {
+}: MaterialTabBarProps<T>): React.ReactElement => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
   const isFirstRender = React.useRef(true)

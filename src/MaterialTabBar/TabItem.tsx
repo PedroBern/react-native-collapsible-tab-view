@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated'
 
+import { TabName } from '../types'
 import { MaterialTabItemProps } from './types'
 
 export const TABBAR_HEIGHT = 48
@@ -13,7 +14,7 @@ const DEFAULT_COLOR = 'rgba(0, 0, 0, 1)'
 /**
  * Any additional props are passed to the pressable component.
  */
-const TabItem: React.FC<MaterialTabItemProps<any>> = ({
+const TabItem = <T extends TabName = any>({
   name,
   index,
   onPress,
@@ -29,7 +30,7 @@ const TabItem: React.FC<MaterialTabItemProps<any>> = ({
   pressColor = '#DDDDDD',
   pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
   ...rest
-}) => {
+}: MaterialTabItemProps<T>): React.ReactElement => {
   const stylez = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
