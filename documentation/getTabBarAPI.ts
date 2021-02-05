@@ -31,14 +31,12 @@ const getTabBarAPI = () => {
   const TabItemDocs = docs.parse(paths.TabItem)
 
   md += tabBarDocs
-    .map((c: any) =>
-      c.displayName.indexOf('FunctionComponent') === -1
-        ? generateMarkdown(c)
-        : ''
+    .map((c: { displayName: string }) =>
+      c.displayName.match(/function/i) === null ? generateMarkdown(c) : ''
     )
     .join('\n')
-  md += TabItemDocs.map((c: any) =>
-    c.displayName.indexOf('FunctionComponent') === -1 ? generateMarkdown(c) : ''
+  md += TabItemDocs.map((c: { displayName: string }) =>
+    c.displayName.match(/function/i) === null ? generateMarkdown(c) : ''
   ).join('\n')
 
   return md
