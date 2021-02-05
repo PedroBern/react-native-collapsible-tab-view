@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   },
   appbar: {
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    zIndex: 1,
   },
   content: {
     flexDirection: 'row',
