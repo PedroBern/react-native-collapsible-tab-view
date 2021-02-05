@@ -181,7 +181,12 @@ const TabBar = <T extends TabName = any>({
       return currentIndexToSync.value === targetIndexToSync.value
     },
     (canSync) => {
-      if (canSync && scrollEnabled && itemsLayout.length === nTabs) {
+      if (
+        canSync &&
+        scrollEnabled &&
+        itemsLayout.length === nTabs &&
+        itemsLayout[index.value]
+      ) {
         const halfTab = itemsLayout[index.value].width / 2
         const offset = itemsLayout[index.value].x
         if (
