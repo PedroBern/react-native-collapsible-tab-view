@@ -53,13 +53,18 @@ const DynamicTabs: ExampleComponentType = () => {
     )
   }
 
+  const TabBarComponent = React.useCallback(
+    (props) => <MaterialTabBar {...props} scrollEnabled />,
+    []
+  )
+
   return (
     <Tabs.Container
       headerHeight={HEADER_HEIGHT}
       HeaderComponent={HeaderComponent}
       lazy
       onIndexChange={setCurrentTab}
-      TabBarComponent={(props) => <MaterialTabBar {...props} scrollEnabled />}
+      TabBarComponent={TabBarComponent}
     >
       {tabs.map((name) => {
         return (
