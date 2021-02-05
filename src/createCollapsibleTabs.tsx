@@ -20,6 +20,7 @@ import Animated, {
   withDelay,
   cancelAnimation,
   useAnimatedRef,
+  Extrapolate,
 } from 'react-native-reanimated'
 
 import MaterialTabBar, { TABBAR_HEIGHT } from './MaterialTabBar'
@@ -216,6 +217,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         tabNamesArray.map(() => 0),
         false
       )
+      const contentHeight = useSharedValue(0)
       const offset = useSharedValue(0)
       const accScrollY = useSharedValue(0)
       const oldAccScrollY = useSharedValue(0)
@@ -380,21 +382,16 @@ const createCollapsibleTabs = <T extends TabName>() => {
         },
         (delta) => {
           if (delta) {
-            if (scrollYCurrent.value <= 0) {
-              // handle overscroll on ios, when being dragged beyond the top border
-              accDiffClamp.value = 0
-            } else {
-              const nextValue = accDiffClamp.value + delta
-              if (delta > 0) {
-                // scrolling down
-                accDiffClamp.value = Math.min(
-                  headerScrollDistance.value,
-                  nextValue
-                )
-              } else if (delta < 0) {
-                // scrolling up
-                accDiffClamp.value = Math.max(0, nextValue)
-              }
+            const nextValue = accDiffClamp.value + delta
+            if (delta > 0) {
+              // scrolling down
+              accDiffClamp.value = Math.min(
+                headerScrollDistance.value,
+                nextValue
+              )
+            } else if (delta < 0) {
+              // scrolling up
+              accDiffClamp.value = Math.max(0, nextValue)
             }
           }
         },
@@ -577,6 +574,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
             isSnapping,
             snappingTo,
             endDrag,
+            contentHeight,
           }}
         >
           <Animated.View
@@ -756,6 +754,8 @@ const createCollapsibleTabs = <T extends TabName>() => {
       isSnapping,
       snappingTo,
       endDrag,
+      contentHeight,
+      containerHeight,
     } = useTabsContext()
 
     const [tabIndex] = React.useState(
@@ -817,8 +817,13 @@ const createCollapsibleTabs = <T extends TabName>() => {
         onScroll: (event) => {
           if (focusedTab.value === name) {
             const { y } = event.contentOffset
-            scrollYCurrent.value = y
-            scrollY.value[index.value] = y
+            scrollYCurrent.value = Animated.interpolate(
+              y,
+              [0, contentHeight.value - (containerHeight || 0)],
+              [0, contentHeight.value - (containerHeight || 0)],
+              Extrapolate.CLAMP
+            )
+            scrollY.value[index.value] = scrollYCurrent.value
             oldAccScrollY.value = accScrollY.value
             accScrollY.value = scrollY.value[index.value] + offset.value
 
@@ -864,7 +869,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         },
         onMomentumEnd,
       },
-      [refMap, name, diffClampEnabled, snapEnabled]
+      [refMap, name, diffClampEnabled, snapEnabled, containerHeight]
     )
 
     // sync unfocused scenes
@@ -943,7 +948,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     ...rest
   }: FlatListProps<R>): React.ReactElement {
     const name = useTabNameContext()
-    const { setRef } = useTabsContext()
+    const { setRef, contentHeight } = useTabsContext()
     const ref = useAnimatedRef<FlatList<any>>()
     const scrollHandler = useScrollHandlerY(name)
     const {
@@ -956,6 +961,13 @@ const createCollapsibleTabs = <T extends TabName>() => {
       setRef(name, ref)
     }, [name, ref, setRef])
 
+    const scrollContentSizeChange = React.useCallback(
+      (_: number, h: number) => {
+        contentHeight.value = h
+      },
+      [contentHeight]
+    )
+
     return (
       <AnimatedFlatList
         // @ts-expect-error problem with reanimated types, they're missing `ref`
@@ -965,6 +977,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         contentContainerStyle={[_contentContainerStyle, contentContainerStyle]}
         progressViewOffset={progressViewOffset}
         onScroll={scrollHandler}
+        onContentSizeChange={scrollContentSizeChange}
         scrollEventThrottle={16}
         {...rest}
       />
@@ -982,7 +995,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
   }) => {
     const name = useTabNameContext()
     const ref = useAnimatedRef<Animated.ScrollView>()
-    const { setRef } = useTabsContext()
+    const { setRef, contentHeight } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
     const {
       style: _style,
@@ -992,6 +1005,13 @@ const createCollapsibleTabs = <T extends TabName>() => {
     React.useEffect(() => {
       setRef(name, ref)
     }, [name, ref, setRef])
+
+    const scrollContentSizeChange = React.useCallback(
+      (_: number, h: number) => {
+        contentHeight.value = h
+      },
+      [contentHeight]
+    )
 
     return (
       <Animated.ScrollView
@@ -1004,6 +1024,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
           contentContainerStyle as any,
         ]}
         onScroll={scrollHandler}
+        onContentSizeChange={scrollContentSizeChange}
         scrollEventThrottle={16}
         {...rest}
       >

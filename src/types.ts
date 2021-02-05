@@ -150,6 +150,8 @@ export type ContextType<T extends TabName> = {
    * Used internally.
    */
   endDrag: Animated.SharedValue<number>
+
+  contentHeight: Animated.SharedValue<number>
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
