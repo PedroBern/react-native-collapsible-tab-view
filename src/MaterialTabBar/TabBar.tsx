@@ -89,7 +89,6 @@ const TabBar = <T extends TabName = any>({
 
   const nTabs = tabNames.length
 
-  console.log(tabNames)
   const [itemsLayout, setItemsLayout] = React.useState<ItemLayout[]>(
     scrollEnabled
       ? []
@@ -260,4 +259,3 @@ const styles = StyleSheet.create({
 export { TabBar as MaterialTabBar }
 
 export default TabBar
- 

@@ -637,17 +637,24 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const { focusedTab, getRef, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
     const [afterMount, setAfterMount] = React.useState(!!startMounted)
+    const isSelfMounted = React.useRef(true)
 
     const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
+
+    React.useEffect(() => {
+      return () => {
+        isSelfMounted.current = false
+      }
+    }, [])
 
     const allowToMount = React.useCallback(() => {
       // wait the scene to be at least 50 ms focused, before mounting
       setTimeout(() => {
         if (focusedTab.value === name) {
-          setCanMount(true)
+          if (isSelfMounted.current) setCanMount(true)
           // we need to wait for the children rendering to complete so that we can scroll properly
           setTimeout(() => {
-            setAfterMount(true)
+            if (isSelfMounted.current)  setAfterMount(true)
           }, 10)
         }
       }, 50)
