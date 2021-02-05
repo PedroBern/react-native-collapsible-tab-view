@@ -199,7 +199,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         tabProps,
       ])
 
-      const [getRef, setRef] = useAnimatedDynamicRefs()
+      const [refMap, setRef] = useAnimatedDynamicRefs()
 
       const windowWidth = useWindowDimensions().width
       const firstRender = React.useRef(init(children))
@@ -470,7 +470,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
             const i = tabNames.value.findIndex((n) => n === name)
             calculateNextOffset.value = i
             if (name === focusedTab.value) {
-              const ref = getRef(name)
+              const ref = refMap[name]
               if (ref?.current && 'scrollTo' in ref.current) {
                 ref.current?.scrollTo({
                   x: 0,
@@ -489,7 +489,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
           }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [containerRef, getRef]
+        [containerRef, refMap]
       )
 
       React.useEffect(() => {
@@ -531,7 +531,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
             snapEnabled,
             tabBarHeight: tabBarHeight || 0,
             headerHeight: headerHeight || 0,
-            getRef,
+            refMap,
             setRef,
             headerScrollDistance,
             scrollYCurrent,
@@ -634,7 +634,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     children: React.ReactElement
   }> = ({ children, startMounted, cancelLazyFadeIn }) => {
     const name = useTabNameContext()
-    const { focusedTab, getRef, scrollY, tabNames } = useTabsContext()
+    const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
     const [afterMount, setAfterMount] = React.useState(!!startMounted)
     const isSelfMounted = React.useRef(true)
@@ -675,7 +675,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
       [canMount, focusedTab]
     )
 
-    const ref = name ? getRef(name) : null
+    const ref = name ? refMap[name] : null
 
     useDerivedValue(() => {
       if (afterMount) {
@@ -718,7 +718,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
       snapEnabled,
       snapThreshold,
       diffClampEnabled,
-      getRef,
+      refMap,
       oldAccScrollY,
       accScrollY,
       offset,
@@ -737,7 +737,6 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const [tabIndex] = React.useState(
       tabNames.value.findIndex((n) => n === name)
     )
-    const ref = getRef(name)
 
     const onMomentumEnd = () => {
       'worklet'
@@ -777,11 +776,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
           ) {
             // snap down
             snappingTo.value = 0
-            scrollToImpl(ref, 0, 0, true)
+            scrollToImpl(refMap[name], 0, 0, true)
           } else if (scrollYCurrent.value <= headerScrollDistance.value) {
             // snap up
             snappingTo.value = headerScrollDistance.value
-            scrollToImpl(ref, 0, headerScrollDistance.value, true)
+            scrollToImpl(refMap[name], 0, headerScrollDistance.value, true)
           }
           isSnapping.value = false
         }
@@ -839,7 +838,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
         },
         onMomentumEnd,
       },
-      [ref, name, diffClampEnabled, snapEnabled]
+      [refMap, name, diffClampEnabled, snapEnabled]
     )
 
     // sync unfocused scenes
@@ -880,11 +879,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
           if (nextPosition !== null) {
             scrollY.value[tabIndex] = nextPosition
-            scrollToImpl(ref, 0, nextPosition, false)
+            scrollToImpl(refMap[name], 0, nextPosition, false)
           }
         }
       },
-      [diffClampEnabled, ref, snapEnabled]
+      [diffClampEnabled, refMap, snapEnabled]
     )
 
     return scrollHandler

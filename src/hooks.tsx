@@ -1,4 +1,4 @@
-import { useState, useMemo, Children } from 'react'
+import { useMemo, Children, useState, useCallback } from 'react'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
 
@@ -13,23 +13,20 @@ export function useTabRef() {
 }
 
 export function useAnimatedDynamicRefs(): [
-  <T extends RefComponent>(key: TabName) => undefined | Ref<T>,
+  Record<TabName, Ref<RefComponent>>,
   <T extends RefComponent>(key: TabName, ref: React.RefObject<T>) => Ref<T>
 ] {
-  const [map] = useState<Record<TabName, Ref<RefComponent>>>({})
-
-  function setRef<T extends RefComponent>(
+  const [map, setMap] = useState<Record<TabName, Ref<RefComponent>>>({})
+  const setRef = useCallback(function <T extends RefComponent>(
     key: TabName,
     ref: React.RefObject<T>
   ) {
-    map[key] = ref
+    setMap((map) => ({ ...map, [key]: ref }))
     return ref
-  }
-  function getRef<T extends RefComponent>(key: TabName) {
-    return map[key] as Ref<T>
-  }
+  },
+  [])
 
-  return [getRef, setRef]
+  return [map, setRef]
 }
 
 export function useTabProps<T extends TabName>(

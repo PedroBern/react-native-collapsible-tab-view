@@ -110,9 +110,7 @@ export type ContextType<T extends TabName> = {
   snapEnabled: boolean
   diffClampEnabled: boolean
   snapThreshold: number
-  getRef: <TComponent extends RefComponent>(
-    key: T
-  ) => Ref<TComponent> | undefined
+  refMap: Record<TabName, Ref<RefComponent>>
   setRef: <TComponent extends RefComponent>(
     key: T,
     ref: React.RefObject<TComponent>
