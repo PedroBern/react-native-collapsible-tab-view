@@ -835,6 +835,8 @@ const createCollapsibleTabs = <T extends TabName>() => {
           }
         },
         onBeginDrag: () => {
+          cancelAnimation(accDiffClamp)
+          isSnapping.value = false
           endDrag.value = 0
         },
         onEndDrag: () => {
