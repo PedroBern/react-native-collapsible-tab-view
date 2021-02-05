@@ -379,6 +379,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
       const renderItem = React.useCallback(
         ({ index: i }) => {
+          if (!tabNames.value[i]) return null
           return (
             <TabNameContext.Provider value={tabNames.value[i]}>
               {lazy ? (
@@ -632,9 +633,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     cancelLazyFadeIn?: boolean
     children: React.ReactElement
   }> = ({ children, startMounted, cancelLazyFadeIn }) => {
-    // we don't use `useTabNameContext()` here because the context can disappear from underneath us
-    // when the tab page is being unmounted (with dynamic tabs)
-    const name = React.useContext(TabNameContext)
+    const name = useTabNameContext()
     const { focusedTab, getRef, scrollY, tabNames } = useTabsContext()
     const [canMount, setCanMount] = React.useState(!!startMounted)
     const [afterMount, setAfterMount] = React.useState(!!startMounted)
