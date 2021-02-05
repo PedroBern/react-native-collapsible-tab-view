@@ -243,8 +243,8 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`||
+|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| undefined`|`null`||
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
@@ -255,8 +255,7 @@ const Example: React.FC<Props> = () => {
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
 |onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "ItemSeparatorComponent" \| "ListEmptyComponent" \| "ListFooterComponent" \| "ListFooterComponentStyle" \| "ListHeaderComponent" \| ... 128 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
-|refMap|`Record<string, Ref>`|||
+|pagerProps|`Pick<FlatListProps<number>, "scrollEnabled" \| "indicatorStyle" \| "style" \| "hitSlop" \| "onLayout" \| "pointerEvents" \| "removeClippedSubviews" \| "testID" \| ... 126 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |snapEnabled|`boolean \| undefined`|`false`||
 |snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
@@ -264,14 +263,25 @@ const Example: React.FC<Props> = () => {
 
 ### Tabs.Tab
 
-TODO: write docs
+Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
+
+```tsx
+<Tabs.Container ...>
+  <Tabs.Tab name="A" label="First Tab">
+   <ScreenA />
+  </Tabs.Tab>
+  <Tabs.Tab name="B">
+   <ScreenA />
+  </Tabs.Tab>
+</Tabs.Container>
+```
 
 #### Props
 
 |name|type|
 |:----:|:----:|
+|label|`string \| undefined`|
 |name|`string`|
-|options|`TabOptions \| undefined`|
 
 
 ### Tabs.Lazy
@@ -311,6 +321,7 @@ const { focusedTab, ...rest } = useTabsContext()
 |accDiffClamp|`SharedValue<number>`|||
 |accScrollY|`SharedValue<number>`|||
 |containerHeight|`number \| undefined`|||
+|contentHeight|`SharedValue<number>`|||
 |diffClampEnabled|`boolean`|`false`||
 |endDrag|`SharedValue<number>`||Used internally.|
 |focusedTab|`SharedValue<string>`||Name of the current focused tab.|
@@ -323,10 +334,11 @@ const { focusedTab, ...rest } = useTabsContext()
 |isSnapping|`SharedValue<boolean>`|||
 |offset|`SharedValue<number>`|||
 |oldAccScrollY|`SharedValue<number>`|||
-|refMap|`Record<string, Ref>`|||
+|refMap|`Record<ReactText, Ref<RefComponent>>`|||
 |scrollX|`SharedValue<number>`||Scroll x position of the tabs container.|
 |scrollY|`SharedValue<number[]>`|||
 |scrollYCurrent|`SharedValue<number>`||Scroll position of current tab.|
+|setRef|`<TComponent extends RefComponent>(key: string, ref: RefObject<TComponent>) => Ref<TComponent>`|||
 |snapEnabled|`boolean`|`false`||
 |snapThreshold|`number`|`0.5`||
 |snappingTo|`SharedValue<number>`||Used internally.|
@@ -397,21 +409,22 @@ const Example: React.FC<Props> = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<any>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)>) \| undefined`|`null`|React component to render as tab bar item|
+|TabItemComponent|`((props: MaterialTabItemProps<T>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`|React component to render as tab bar item|
 |activeColor|`string \| undefined`||Color applied to the label when active|
 |containerRef|`RefObject<ContainerRef>`|||
 |contentContainerStyle|`StyleProp<ViewStyle>`||Style to apply to the inner container for tabs|
-|focusedTab|`SharedValue<any>`|||
-|getLabelText|`((name: any) => string) \| undefined`|`(name) => name.toUpperCase()`|Function to compute the tab item label text|
+|focusedTab|`SharedValue<T>`|||
+|getLabelText|`((name: T) => string) \| undefined`|`(name) => String(name).toUpperCase()`|Function to compute the tab item label text|
 |inactiveColor|`string \| undefined`||Color applied to the label when inactive|
 |index|`SharedValue<number>`|||
 |indexDecimal|`SharedValue<number>`|||
 |indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||Style to apply to the active indicator.|
 |labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
-|onTabPress|`(name: any) => void`|||
-|refMap|`Record<any, Ref>`|||
+|onTabPress|`(name: T) => void`|||
 |scrollEnabled|`boolean \| undefined`|`false`|Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic|
 |style|`StyleProp<ViewStyle>`||Style to apply to the tab bar container.|
+|tabNames|`T[]`|||
+|tabProps|`TabsWithProps<T>`|||
 |tabStyle|`StyleProp<ViewStyle>`||Style to apply to the individual tab items in the tab bar.|
 
 
@@ -430,9 +443,9 @@ Any additional props are passed to the pressable component.
 |indexDecimal|`SharedValue<number>`|||
 |label|`string`|||
 |labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
-|name|`any`|||
+|name|`T`|||
 |onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
-|onPress|`(name: any) => void`|||
+|onPress|`(name: T) => void`|||
 |pressColor|`string \| undefined`|`#DDDDDD`||
 |pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
 |scrollEnabled|`boolean \| undefined`|||
