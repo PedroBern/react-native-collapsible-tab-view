@@ -205,35 +205,21 @@ use like this:
 Basic usage looks like this:
 
 ```tsx
-import {
-   RefComponent,
-   ContainerRef,
-   TabBarProps,
-} from 'react-native-collapsible-tab-view'
-import { useAnimatedRef } from 'react-native-reanimated'
+import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
 
-type MyTabs = 'article' | 'contacts' | 'albums'
+type TabNames = 'A' | 'B'
 
-const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+const Tabs = createCollapsibleTabs<TabNames>()
 
-const Example: React.FC<Props> = () => {
-   const containerRef = useAnimatedRef<ContainerRef>()
-   const tab0Ref = useAnimatedRef<RefComponent>()
-   const tab1Ref = useAnimatedRef<RefComponent>()
-
-   const [refMap] = React.useState({
-     tab0: tab0Ref,
-     tab1: tab1Ref,
-   })
-
+const Example = () => {
    return (
-     <Tabs.Container
-       containerRef={containerRef}
-       HeaderComponent={MyHeader}
-       headerHeight={HEADER_HEIGHT} // optional
-       refMap={refMap}
-     >
-       { components returning Tabs.ScrollView || Tabs.FlatList }
+     <Tabs.Container HeaderComponent={MyHeader}>
+       <Tabs.Tab name="A">
+         <ScreenA />
+       </Tabs.Tab>
+       <Tabs.Tab name="B">
+         <ScreenB />
+       </Tabs.Tab>
      </Tabs.Container>
    )
 }
@@ -367,42 +353,22 @@ You can use this to get the progessViewOffset and pass to the refresh control of
 ### MaterialTabBar
 
 Basic usage looks like this:
+
 ```tsx
-import {
-  RefComponent,
-  ContainerRef,
-  TabBarProps,
-} from 'react-native-collapsible-tab-view'
-import { useAnimatedRef } from 'react-native-reanimated'
-type MyTabs = 'article' | 'contacts' | 'albums'
-const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
-const Example: React.FC<Props> = () => {
-  const containerRef = useAnimatedRef<ContainerRef>();
-  const tab0Ref = useAnimatedRef<RefComponent>();
-  const tab1Ref = useAnimatedRef<RefComponent>();
-  const [refMap] = React.useState({
-    tab0: tab0Ref,
-    tab1: tab1Ref,
-  });
-  return (
-    <Tabs.Container
-      containerRef={containerRef}
-      HeaderComponent={MyHeader}
-      headerHeight={HEADER_HEIGHT} // optional
-      refMap={refMap}
-      TabBarComponent={(props) => (
-        <MaterialTabBar
-          {...props}
-          activeColor="red"
-          inactiveColor="yellow"
-          labelStyle={{ fontSize: 14 }}
-        />
-      )}
-    >
-      {components returning Tabs.ScrollView || Tabs.FlatList}
-    </Tabs.Container>
-  );
-};
+<Tabs.Container
+   ...
+   TabBarComponent={(props) => (
+     <MaterialTabBar
+       {...props}
+       activeColor="red"
+       inactiveColor="yellow"
+       inactiveOpacity={1}
+       labelStyle={{ fontSize: 14 }}
+     />
+   )}
+>
+   {...}
+</Tabs.Container>
 ```
 
 #### Props

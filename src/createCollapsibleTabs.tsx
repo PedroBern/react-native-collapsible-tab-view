@@ -134,35 +134,21 @@ const createCollapsibleTabs = <T extends TabName>() => {
    * Basic usage looks like this:
    *
    * ```tsx
-   * import {
-   *   RefComponent,
-   *   ContainerRef,
-   *   TabBarProps,
-   * } from 'react-native-collapsible-tab-view'
-   * import { useAnimatedRef } from 'react-native-reanimated'
+   * import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
    *
-   * type MyTabs = 'article' | 'contacts' | 'albums'
+   * type TabNames = 'A' | 'B'
    *
-   * const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
+   * const Tabs = createCollapsibleTabs<TabNames>()
    *
-   * const Example: React.FC<Props> = () => {
-   *   const containerRef = useAnimatedRef<ContainerRef>()
-   *   const tab0Ref = useAnimatedRef<RefComponent>()
-   *   const tab1Ref = useAnimatedRef<RefComponent>()
-   *
-   *   const [refMap] = React.useState({
-   *     tab0: tab0Ref,
-   *     tab1: tab1Ref,
-   *   })
-   *
+   * const Example = () => {
    *   return (
-   *     <Tabs.Container
-   *       containerRef={containerRef}
-   *       HeaderComponent={MyHeader}
-   *       headerHeight={HEADER_HEIGHT} // optional
-   *       refMap={refMap}
-   *     >
-   *       { components returning Tabs.ScrollView || Tabs.FlatList }
+   *     <Tabs.Container HeaderComponent={MyHeader}>
+   *       <Tabs.Tab name="A">
+   *         <ScreenA />
+   *       </Tabs.Tab>
+   *       <Tabs.Tab name="B">
+   *         <ScreenB />
+   *       </Tabs.Tab>
    *     </Tabs.Container>
    *   )
    * }
@@ -172,7 +158,6 @@ const createCollapsibleTabs = <T extends TabName>() => {
     (
       {
         initialTabName,
-        //containerRef,
         headerHeight: initialHeaderHeight,
         minHeaderHeight = 0,
         tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
@@ -182,7 +167,6 @@ const createCollapsibleTabs = <T extends TabName>() => {
         children,
         HeaderComponent,
         TabBarComponent = MaterialTabBar,
-        //refMap,
         headerContainerStyle,
         cancelTranslation,
         containerStyle,
@@ -1035,7 +1019,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
 
   /**
    * Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
-   * 
+   *
    * ```tsx
    * <Tabs.Container ...>
    *  <Tabs.Tab name="A" label="First Tab">
