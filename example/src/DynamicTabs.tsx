@@ -16,6 +16,15 @@ const title = 'Adding and removing tabs dynamically'
 
 const { useTabsContext, ...Tabs } = createCollapsibleTabs<string>()
 
+function shuffleArray<T>(array: T[]) {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
 const DynamicTabs: ExampleComponentType = () => {
   const [lastTabIndex, setLastTabIndex] = React.useState(0)
   const [tabs, setTabs] = React.useState(['Default Tab'])
@@ -38,6 +47,13 @@ const DynamicTabs: ExampleComponentType = () => {
     })
   }, [currentTab])
 
+  const shuffleTabs = React.useCallback(() => {
+    if (!currentTab) return
+    setTabs((t) => {
+      return [...shuffleArray(t)]
+    })
+  }, [currentTab])
+
   const HeaderComponent = (props: TabBarProps<string>) => {
     return (
       <View style={styles.header}>
@@ -45,9 +61,14 @@ const DynamicTabs: ExampleComponentType = () => {
           <Text style={styles.buttonText}>Add new Tab</Text>
         </TouchableOpacity>
         {tabs.length > 1 && (
-          <TouchableOpacity onPress={removeTab}>
-            <Text style={styles.buttonText}>Remove this tab</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity onPress={shuffleTabs}>
+              <Text style={styles.buttonText}>Shuffle tabs</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={removeTab}>
+              <Text style={styles.buttonText}>Remove this tab</Text>
+            </TouchableOpacity>
+          </>
         )}
       </View>
     )
