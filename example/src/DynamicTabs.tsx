@@ -9,9 +9,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { IndexChangeEventData } from '../../src/types'
 import { AlbumsContent } from './Shared/Albums'
 import { ArticleContent } from './Shared/Article'
-import { HEADER_HEIGHT } from './Shared/Header'
 import { ExampleComponentType } from './types'
 
+const HEADER_HEIGHT = 200
 const title = 'Adding and removing tabs dynamically'
 
 const { useTabsContext, ...Tabs } = createCollapsibleTabs<string>()
@@ -117,7 +117,7 @@ export default DynamicTabs
 
 const styles = StyleSheet.create({
   header: {
-    height: 200,
+    height: HEADER_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#2196f3',
