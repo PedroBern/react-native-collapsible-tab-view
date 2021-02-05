@@ -9,10 +9,6 @@ export function useContainerRef() {
   return useAnimatedRef<ContainerRef>()
 }
 
-export function useTabRef() {
-  return useAnimatedRef<RefComponent>()
-}
-
 export function useAnimatedDynamicRefs(): [
   Record<TabName, Ref<RefComponent>>,
   <T extends RefComponent>(key: TabName, ref: React.RefObject<T>) => Ref<T>
