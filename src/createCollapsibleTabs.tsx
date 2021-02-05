@@ -671,7 +671,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     useDerivedValue(() => {
       if (afterMount) {
         const tabIndex = tabNames.value.findIndex((n) => n === name)
-        if (ref) {
+        if (ref && tabIndex >= 0) {
           scrollToImpl(ref, 0, scrollY.value[tabIndex], false)
         }
         if (!cancelLazyFadeIn && opacity.value !== 1)
