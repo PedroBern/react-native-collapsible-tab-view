@@ -639,7 +639,10 @@ const createCollapsibleTabs = <T extends TabName>() => {
     const [afterMount, setAfterMount] = React.useState(!!startMounted)
     const isSelfMounted = React.useRef(true)
 
-    const opacity = useSharedValue(cancelLazyFadeIn ? 1 : 0)
+    const opacity = useSharedValue(
+      cancelLazyFadeIn || startMounted ? 1 : 0,
+      false
+    )
 
     React.useEffect(() => {
       return () => {
@@ -654,7 +657,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
           if (isSelfMounted.current) setCanMount(true)
           // we need to wait for the children rendering to complete so that we can scroll properly
           setTimeout(() => {
-            if (isSelfMounted.current)  setAfterMount(true)
+            if (isSelfMounted.current) setAfterMount(true)
           }, 10)
         }
       }, 50)
