@@ -81,11 +81,15 @@ const TabBar = <T extends TabName = any>({
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
   const isFirstRender = React.useRef(true)
-  const [nTabs] = React.useState(tabNames.length)
-  const itemsLayoutGathering = React.useRef<ItemLayout[]>([])
+  const [itemsLayoutGathering, setItemsLayoutGathering] = React.useState(
+    new Map<T, ItemLayout>()
+  )
   const tabsOffset = useSharedValue(0)
   const isScrolling = useSharedValue(false)
 
+  const nTabs = tabNames.length
+
+  console.log(tabNames)
   const [itemsLayout, setItemsLayout] = React.useState<ItemLayout[]>(
     scrollEnabled
       ? []
@@ -110,20 +114,33 @@ const TabBar = <T extends TabName = any>({
   }, [scrollEnabled, nTabs, tabNames, windowWidth])
 
   const onTabItemLayout = React.useCallback(
-    (event: LayoutChangeEvent) => {
-      if (scrollEnabled && itemsLayout.length < nTabs) {
+    (event: LayoutChangeEvent, name: T) => {
+      if (scrollEnabled) {
+        if (!event.nativeEvent?.layout) return
         const { width, x } = event.nativeEvent.layout
-        itemsLayoutGathering.current.push({
-          width,
-          x,
+        setItemsLayoutGathering((itemsLayoutGathering) => {
+          const update = new Map(itemsLayoutGathering)
+          return update.set(name, {
+            width,
+            x,
+          })
         })
-        if (itemsLayoutGathering.current.length === nTabs) {
-          setItemsLayout(itemsLayoutGathering.current.sort((a, b) => a.x - b.x))
-        }
       }
     },
-    [scrollEnabled, itemsLayout.length, nTabs]
+    [scrollEnabled]
   )
+
+  React.useEffect(() => {
+    // pick out the layouts for the tabs we know about (in case they changed dynamically)
+    const layout = [...itemsLayoutGathering.entries()]
+      .filter(([tabName]) => tabNames.includes(tabName))
+      .map(([, layout]) => layout)
+      .sort((a, b) => a.x - b.x)
+
+    if (layout.length === tabNames.length) {
+      setItemsLayout(layout)
+    }
+  }, [itemsLayoutGathering, tabNames])
 
   const cancelNextScrollSync = useSharedValue(index.value)
 
@@ -207,7 +224,11 @@ const TabBar = <T extends TabName = any>({
             name={name}
             label={tabProps.get(name)?.label || getLabelText(name)}
             onPress={onTabPress}
-            onLayout={scrollEnabled ? onTabItemLayout : undefined}
+            onLayout={
+              scrollEnabled
+                ? (event) => onTabItemLayout(event, name)
+                : undefined
+            }
             scrollEnabled={scrollEnabled}
             indexDecimal={indexDecimal}
             labelStyle={labelStyle}
@@ -239,3 +260,4 @@ const styles = StyleSheet.create({
 export { TabBar as MaterialTabBar }
 
 export default TabBar
+ 
