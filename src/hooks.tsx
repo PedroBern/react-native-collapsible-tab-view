@@ -1,6 +1,7 @@
 import { useMemo, Children, useState, useCallback } from 'react'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import { useAnimatedRef } from 'react-native-reanimated'
+import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { Ref, TabName, TabReactElement, TabsWithProps } from './types'
 
@@ -32,7 +33,7 @@ export function useAnimatedDynamicRefs(): [
 export function useTabProps<T extends TabName>(
   children: TabReactElement<T>[] | TabReactElement<T>,
   tabType: Function
-) {
+): [TabsWithProps<T>, T[]] {
   const options = useMemo(() => {
     const tabOptions: TabsWithProps<T> = new Map()
     Children.forEach(children, (element, index) => {
@@ -40,7 +41,8 @@ export function useTabProps<T extends TabName>(
         throw new Error(
           'Container children must be wrapped in a <Tabs.Tab ... /> component'
         )
-      const { name, ...options } = element.props
+      // make sure children is excluded otherwise our props will mutate too much
+      const { name, children, ...options } = element.props
       tabOptions.set(name, {
         index,
         name,
@@ -49,5 +51,14 @@ export function useTabProps<T extends TabName>(
     })
     return tabOptions
   }, [children, tabType])
-  return options
+  const optionEntries = [...options.entries()]
+  const optionKeys = [...options.keys()]
+
+  const memoizedOptions = useDeepCompareMemo(() => options, [optionEntries])
+
+  const memoizedTabNames = useDeepCompareMemo(() => [...options.keys()], [
+    optionKeys,
+  ])
+
+  return [memoizedOptions, memoizedTabNames]
 }

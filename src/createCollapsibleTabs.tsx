@@ -194,10 +194,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     ) => {
       const containerRef = useContainerRef()
 
-      const tabProps = useTabProps(children, Tab)
-      const tabNamesArray = React.useMemo(() => [...tabProps.keys()], [
-        tabProps,
-      ])
+      const [tabProps, tabNamesArray] = useTabProps(children, Tab)
 
       const [refMap, setRef] = useAnimatedDynamicRefs()
 
@@ -277,6 +274,15 @@ const createCollapsibleTabs = <T extends TabName>() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [windowWidth])
 
+      const afterRender = useSharedValue(0)
+      React.useEffect(() => {
+        if (!firstRender.current) pagerOpacity.value = 0
+        afterRender.value = withDelay(
+          ONE_FRAME_MS * 5,
+          withTiming(1, { duration: 0 })
+        )
+      }, [afterRender, pagerOpacity, tabNamesArray])
+
       React.useEffect(() => {
         if (firstRender.current) {
           if (initialTabName !== undefined && index.value !== 0) {
@@ -289,6 +295,25 @@ const createCollapsibleTabs = <T extends TabName>() => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [containerRef, initialTabName, windowWidth])
+
+      // the purpose of this is to scroll to the proper position if dynamic tabs are changing
+      useAnimatedReaction(
+        () => {
+          return afterRender.value === 1
+        },
+        (trigger) => {
+          if (trigger) {
+            afterRender.value = 0
+            tabNamesArray.forEach((name) => {
+              'worklet'
+              scrollToImpl(refMap[name], 0, scrollY.value[index.value], false)
+            })
+
+            pagerOpacity.value = withTiming(1)
+          }
+        },
+        [tabNamesArray, refMap, afterRender]
+      )
 
       // derived from scrollX
       // calculate the next offset and index if swiping

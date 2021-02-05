@@ -98,5 +98,7 @@
       "typescript"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "use-deep-compare": "^1.1.0"
+  }
 }

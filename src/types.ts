@@ -172,5 +172,5 @@ export type CollapsibleStyle = {
 
 export type TabsWithProps<T extends TabName> = Map<
   T,
-  TabProps<T> & { index: number }
+  Omit<TabProps<T>, 'children'> & { index: number }
 >
