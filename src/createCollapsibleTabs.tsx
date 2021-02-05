@@ -380,12 +380,11 @@ const createCollapsibleTabs = <T extends TabName>() => {
         },
         (delta) => {
           if (delta) {
-            if (accScrollY.value <= 0) {
+            if (scrollYCurrent.value <= 0) {
               // handle overscroll on ios, when being dragged beyond the top border
               accDiffClamp.value = 0
             } else {
               const nextValue = accDiffClamp.value + delta
-
               if (delta > 0) {
                 // scrolling down
                 accDiffClamp.value = Math.min(
