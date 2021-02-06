@@ -1,16 +1,20 @@
+import { API, OverrideProps, Prop } from './types'
+
 const fs = require('fs')
 const path = require('path')
 const docgen = require('react-docgen-typescript')
 
 const generateMarkdown = require('./mdGenerator')
+const { maybeOverrideProps } = require('./utils')
 
 const options = {
   savePropValueAsString: true,
-  propFilter: (prop: any, component: any) => {
+  propFilter: (prop: Prop, component: any) => {
     if (
       prop.parent ||
       component.name === 'Tabs.FlatList' ||
-      component.name === 'Tabs.ScrollView'
+      component.name === 'Tabs.ScrollView' ||
+      prop.name.startsWith('_')
     ) {
       return false
     }
@@ -35,6 +39,39 @@ const paths = {
     basePath,
     'createCollapsibleTabs_tmp.tsx'
   ),
+}
+
+const overrideProps: OverrideProps = {
+  'Tabs.Container': {
+    HeaderComponent: {
+      type: {
+        name:
+          '((props: TabBarProps<T>) => React.ReactElement) | null | undefined',
+      },
+      defaultValue: null,
+    },
+    TabBarComponent: {
+      type: {
+        name:
+          '((props: TabBarProps<T>) => React.ReactElement) | null | undefined',
+      },
+      defaultValue: { value: 'MaterialTabBar' },
+    },
+    pagerProps: {
+      type: {
+        name:
+          "Omit<FlatListProps<number>, 'data' | 'keyExtractor' | 'renderItem' | 'horizontal' | 'pagingEnabled' | 'onScroll' | 'showsHorizontalScrollIndicator' | 'getItemLayout'>",
+      },
+      defaultValue: null,
+    },
+    onIndexChange: {
+      type: {
+        name:
+          '(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void',
+      },
+      defaultValue: null,
+    },
+  },
 }
 
 // copy createCollapsibleTabs
@@ -74,7 +111,13 @@ const getCoreComponentsAPI = () => {
   const core = getCoreComponents()
   fs.writeFileSync(paths.createCollapsibleTabs_tmp, core)
   const core_docs = docs.parse(paths.createCollapsibleTabs_tmp)
-  const md = core_docs.map((c: string) => generateMarkdown(c)).join('\n')
+
+  const md = core_docs
+    .map((c: API) => {
+      return generateMarkdown(maybeOverrideProps(c, overrideProps))
+    })
+    .join('\n')
+
   fs.unlink(paths.createCollapsibleTabs_tmp, (err: any) => {
     if (err) throw err
   })
