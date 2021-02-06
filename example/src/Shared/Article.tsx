@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
-
-import Tabs from './Tabs'
+import * as Tabs from 'react-native-collapsible-tab-view'
 
 export const ArticleContent = () => {
   return (

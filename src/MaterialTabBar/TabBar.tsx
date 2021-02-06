@@ -15,8 +15,8 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { TabName } from '../types'
-import Indicator from './Indicator'
-import TabItem from './TabItem'
+import { Indicator } from './Indicator'
+import { MaterialTabItem } from './TabItem'
 import { MaterialTabBarProps, ItemLayout } from './types'
 
 export const TABBAR_HEIGHT = 48
@@ -47,7 +47,7 @@ const TabBar = <T extends TabName = any>({
   scrollEnabled = false,
   indicatorStyle,
   index,
-  TabItemComponent = TabItem,
+  TabItemComponent = MaterialTabItem,
   getLabelText = (name) => String(name).toUpperCase(),
   onTabPress,
   style,
@@ -242,5 +242,3 @@ const styles = StyleSheet.create({
 })
 
 export { TabBar as MaterialTabBar }
-
-export default TabBar

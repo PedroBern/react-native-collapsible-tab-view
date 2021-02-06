@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import * as Tabs from 'react-native-collapsible-tab-view'
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated'
 
 // import { HEADER_HEIGHT } from './Header'
-import Tabs, { useTabsContext } from './Tabs'
 
 type Item = { name: string; number: number }
 
@@ -94,7 +94,7 @@ const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 // const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
 
 const ListEmptyComponent = () => {
-  const { headerHeight, scrollY, scrollYCurrent } = useTabsContext()
+  const { headerHeight, scrollY, scrollYCurrent } = Tabs.useTabsContext()
 
   const translateY = useDerivedValue(() => {
     return Animated.interpolate(

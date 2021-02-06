@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  createCollapsibleTabs,
-  CollapsibleProps,
-  MaterialTabBar,
-} from 'react-native-collapsible-tab-view'
+import * as Tabs from 'react-native-collapsible-tab-view'
 
 import { ArticleContent } from './Article'
 import { HEADER_HEIGHT } from './Header'
@@ -20,18 +16,16 @@ const TabNames = [
   'screenI',
 ] as const
 
-type TabNamesType = typeof TabNames[number]
-
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNamesType>()
-
-type Props = Partial<CollapsibleProps<TabNamesType>>
+type Props = Partial<Tabs.CollapsibleProps>
 
 const Example: React.FC<Props> = (props) => {
   return (
     <Tabs.Container
       headerHeight={HEADER_HEIGHT}
       lazy
-      TabBarComponent={(props) => <MaterialTabBar {...props} scrollEnabled />}
+      TabBarComponent={(props) => (
+        <Tabs.MaterialTabBar {...props} scrollEnabled />
+      )}
       {...props}
     >
       {TabNames.map((name) => {

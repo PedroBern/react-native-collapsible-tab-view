@@ -189,4 +189,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ExampleList
+export { ExampleList as App }

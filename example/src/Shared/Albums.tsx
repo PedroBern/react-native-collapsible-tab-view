@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Image, Dimensions, StyleSheet, View } from 'react-native'
-
-import Tabs from './Tabs'
+import * as Tabs from 'react-native-collapsible-tab-view'
 
 const COVERS = [
   require('../../assets/album-art-1.jpg'),

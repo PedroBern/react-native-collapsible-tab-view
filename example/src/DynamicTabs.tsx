@@ -1,20 +1,15 @@
 import React from 'react'
 import { Text, View, StyleSheet } from 'react-native'
-import {
-  createCollapsibleTabs,
-  MaterialTabBar,
-} from 'react-native-collapsible-tab-view'
+import * as Tabs from 'react-native-collapsible-tab-view'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import { IndexChangeEventData } from '../../src/types'
+import { IndexChangeEventData, TabName } from '../../src/types'
 import { AlbumsContent } from './Shared/Albums'
 import { ArticleContent } from './Shared/Article'
 import { ExampleComponentType } from './types'
 
 const HEADER_HEIGHT = 200
 const title = 'Adding and removing tabs dynamically'
-
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<string>()
 
 function shuffleArray<T>(array: T[]) {
   const shuffled = [...array]
@@ -34,7 +29,7 @@ const DynamicTabs: ExampleComponentType = () => {
   ])
 
   const [currentTab, setCurrentTab] = React.useState<
-    IndexChangeEventData<string>
+    IndexChangeEventData<TabName>
   >()
 
   const addTab = React.useCallback(() => {
@@ -85,7 +80,7 @@ const DynamicTabs: ExampleComponentType = () => {
   }
 
   const TabBarComponent = React.useCallback(
-    (props) => <MaterialTabBar {...props} scrollEnabled />,
+    (props) => <Tabs.MaterialTabBar {...props} scrollEnabled />,
     []
   )
 

@@ -84,6 +84,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export { TabItem as MaterialTabBar }
-
-export default TabItem
+export { TabItem as MaterialTabItem }

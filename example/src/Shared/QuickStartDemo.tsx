@@ -1,10 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
-import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
-
-type TabNames = 'A' | 'B'
-
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
+import * as Tabs from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
 

@@ -19,16 +19,18 @@ export type Ref<T extends RefComponent> = React.RefObject<T>
 
 export type TabName = string | number
 
-export type RefHandler<T extends TabName> = {
+export type RefHandler<T extends TabName = TabName> = {
   jumpToTab: (name: T) => boolean
   setIndex: (index: number) => boolean
   getFocusedTab: () => T
   getCurrentIndex: () => number
 }
 
-export type CollapsibleRef<T extends TabName> = RefHandler<T> | undefined
+export type CollapsibleRef<T extends TabName = TabName> =
+  | RefHandler<T>
+  | undefined
 
-export type TabBarProps<T extends TabName> = {
+export type TabBarProps<T extends TabName = TabName> = {
   indexDecimal: Animated.SharedValue<number>
   focusedTab: Animated.SharedValue<T>
   tabNames: T[]
@@ -38,21 +40,23 @@ export type TabBarProps<T extends TabName> = {
   tabProps: TabsWithProps<T>
 }
 
-export type IndexChangeEventData<T extends TabName> = {
+export type IndexChangeEventData<T extends TabName = TabName> = {
   prevIndex: number
   index: number
   prevTabName: T
   tabName: T
 }
 
-export type OnTabChangeCallback<T extends TabName> = (
+export type OnTabChangeCallback<T extends TabName = TabName> = (
   data: IndexChangeEventData<T>
 ) => void
 
-export type TabReactElement<T extends TabName> = React.ReactElement<TabProps<T>>
+export type TabReactElement<T extends TabName = TabName> = React.ReactElement<
+  TabProps<T>
+>
 
-export type CollapsibleProps<T extends TabName> = {
-  initialTabName?: T
+export type CollapsibleProps = {
+  initialTabName?: TabName
   /**
    * Is optional, but will optimize the first render.
    */
@@ -71,9 +75,9 @@ export type CollapsibleProps<T extends TabName> = {
    * Percentage of header height to make the snap effect. A number between 0 and 1.
    */
   snapThreshold?: number
-  children: TabReactElement<T>[] | TabReactElement<T>
-  HeaderComponent?: (props: TabBarProps<T>) => React.ReactElement | null
-  TabBarComponent?: (props: TabBarProps<T>) => React.ReactElement | null
+  children: TabReactElement<TabName>[] | TabReactElement<TabName>
+  HeaderComponent?: (props: TabBarProps<TabName>) => React.ReactElement | null
+  TabBarComponent?: (props: TabBarProps<TabName>) => React.ReactElement | null
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
   containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean
@@ -99,10 +103,10 @@ export type CollapsibleProps<T extends TabName> = {
   /**
    * Callback fired when the index changes. It receives the previous and current index and tabnames.
    */
-  onIndexChange?: OnTabChangeCallback<T>
+  onIndexChange?: OnTabChangeCallback<TabName>
 }
 
-export type ContextType<T extends TabName> = {
+export type ContextType<T extends TabName = TabName> = {
   headerHeight: number
   tabBarHeight: number
   snapEnabled: boolean
@@ -179,7 +183,7 @@ export type CollapsibleStyle = {
   progressViewOffset: number
 }
 
-export type TabsWithProps<T extends TabName> = Map<
+export type TabsWithProps<T extends TabName = TabName> = Map<
   T,
   Omit<TabProps<T>, 'children'> & { index: number }
 >

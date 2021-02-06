@@ -9,9 +9,18 @@ export type TabProps<T extends TabName> = {
 }
 
 /**
- * This is just a wrapper component so we can capture its props,
- * which React will make available to us
- * @param param0 props
+ * Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
+ *
+ * ```tsx
+ * <Tabs.Container ...>
+ *  <Tabs.Tab name="A" label="First Tab">
+ *   <ScreenA />
+ *  </Tabs.Tab>
+ *  <Tabs.Tab name="B">
+ *   <ScreenA />
+ *  </Tabs.Tab>
+ * </Tabs.Container>
+ * ```
  */
 export function Tab<T extends TabName>({ children }: TabProps<T>) {
   return <>{children}</>

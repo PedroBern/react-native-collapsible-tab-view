@@ -24,6 +24,11 @@ export type {
   OnTabChangeCallback,
 }
 
-export { default as createCollapsibleTabs } from './createCollapsibleTabs'
+export { Container } from './Container'
+export { FlatList } from './FlatList'
+export { ScrollView } from './ScrollView'
+export { Lazy } from './Lazy'
+export { Tab } from './Tab'
+export { useTabsContext, useTabNameContext } from './hooks'
 
-export { default as MaterialTabBar } from './MaterialTabBar'
+export { MaterialTabBar } from './MaterialTabBar'
