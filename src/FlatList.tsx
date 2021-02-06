@@ -1,11 +1,11 @@
 import React from 'react'
 import { FlatList as RNFlatList } from 'react-native'
-import { useAnimatedRef } from 'react-native-reanimated'
 
 import { AnimatedFlatList } from './helpers'
 import {
   useCollapsibleStyle,
   useScrollHandlerY,
+  useSharedAnimatedRef,
   useTabNameContext,
   useTabsContext,
 } from './hooks'
@@ -14,14 +14,14 @@ import { FlatListProps } from './types'
 /**
  * Use like a regular flatlist.
  */
-export function FlatList<R>({
-  contentContainerStyle,
-  style,
-  ...rest
-}: FlatListProps<R>): React.ReactElement {
+function FlatListImpl<R>(
+  { contentContainerStyle, style, ...rest }: FlatListProps<R>,
+  passRef: React.Ref<RNFlatList>
+): React.ReactElement {
   const name = useTabNameContext()
   const { _setRef: setRef, _contentHeight: contentHeight } = useTabsContext()
-  const ref = useAnimatedRef<RNFlatList<any>>()
+  const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
+
   const scrollHandler = useScrollHandlerY(name)
   const {
     style: _style,
@@ -55,3 +55,7 @@ export function FlatList<R>({
     />
   )
 }
+
+export const FlatList = React.forwardRef(FlatListImpl) as <T>(
+  p: FlatListProps<T> & { ref?: React.Ref<RNFlatList> }
+) => React.ReactElement

@@ -1,10 +1,11 @@
 import React from 'react'
-import { ScrollViewProps } from 'react-native'
-import Animated, { useAnimatedRef } from 'react-native-reanimated'
+import { ScrollViewProps, ScrollView as RNScrollView } from 'react-native'
+import Animated from 'react-native-reanimated'
 
 import {
   useCollapsibleStyle,
   useScrollHandlerY,
+  useSharedAnimatedRef,
   useTabNameContext,
   useTabsContext,
 } from './hooks'
@@ -12,14 +13,12 @@ import {
 /**
  * Use like a regular scrollview.
  */
-export const ScrollView: React.FC<ScrollViewProps> = ({
-  contentContainerStyle,
-  style,
-  children,
-  ...rest
-}) => {
+export const ScrollView = React.forwardRef<
+  RNScrollView,
+  React.PropsWithChildren<ScrollViewProps>
+>(({ contentContainerStyle, style, children, ...rest }, passRef) => {
   const name = useTabNameContext()
-  const ref = useAnimatedRef<Animated.ScrollView>()
+  const ref = useSharedAnimatedRef<RNScrollView>(passRef)
   const { _setRef: setRef, _contentHeight: contentHeight } = useTabsContext()
   const scrollHandler = useScrollHandlerY(name)
   const {
@@ -40,6 +39,7 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
 
   return (
     <Animated.ScrollView
+      //@ts-expect-error type errors
       ref={ref}
       bouncesZoom={false}
       style={[_style, style]}
@@ -56,4 +56,4 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
       {children}
     </Animated.ScrollView>
   )
-}
+})

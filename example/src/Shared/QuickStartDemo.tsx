@@ -1,5 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, ListRenderItem } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ListRenderItem,
+  ScrollView,
+  FlatList,
+} from 'react-native'
 import * as Tabs from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
@@ -9,6 +15,17 @@ const Header = () => {
 }
 
 const Example: React.FC = () => {
+  const ref = React.useRef<ScrollView>(null)
+  const ref2 = React.useRef<FlatList>(null)
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      //console.log(ref.current?.scrollToEnd)
+      ref.current?.scrollToEnd()
+      ref2.current?.scrollToEnd()
+    }, 1000)
+  }, [ref])
+
   const renderItem: ListRenderItem<number> = React.useCallback(({ index }) => {
     return (
       <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
@@ -22,13 +39,14 @@ const Example: React.FC = () => {
     >
       <Tabs.Tab name="A">
         <Tabs.FlatList
+          ref={ref2}
           data={[0, 1, 2, 3, 4]}
           renderItem={renderItem}
           keyExtractor={(v) => v + ''}
         />
       </Tabs.Tab>
       <Tabs.Tab name="B">
-        <Tabs.ScrollView>
+        <Tabs.ScrollView ref={ref}>
           <View style={[styles.box, styles.boxA]} />
           <View style={[styles.box, styles.boxB]} />
         </Tabs.ScrollView>

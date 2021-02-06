@@ -1,4 +1,12 @@
-import { useMemo, Children, useState, useCallback, useContext } from 'react'
+import {
+  useMemo,
+  Children,
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+  MutableRefObject,
+} from 'react'
 import { Platform, useWindowDimensions } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import {
@@ -304,4 +312,30 @@ export const useScrollHandlerY = (name: TabName) => {
   )
 
   return scrollHandler
+}
+
+//(parameter) passRef: ((instance: RNScrollView | null) => void) | React.MutableRefObject<RNScrollView | null> | null
+type ForwardRefType<T> =
+  | ((instance: T | null) => void)
+  | MutableRefObject<T | null>
+  | null
+
+export function useSharedAnimatedRef<T extends RefComponent>(
+  outerRef: ForwardRefType<T>
+) {
+  const ref = useAnimatedRef<T>()
+
+  // this executes on every render
+  useEffect(() => {
+    if (!outerRef) {
+      return
+    }
+    if (typeof outerRef === 'function') {
+      outerRef(ref.current)
+    } else {
+      outerRef.current = ref.current
+    }
+  })
+
+  return ref
 }
