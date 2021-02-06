@@ -162,7 +162,10 @@ export type ContextType<T extends TabName = TabName> = {
   _isSnapping: Animated.SharedValue<boolean>
   _snappingTo: Animated.SharedValue<number>
   _endDrag: Animated.SharedValue<number>
-  _contentHeight: Animated.SharedValue<number>
+  _contentHeights: Record<string, number>
+  _setContentHeights: React.Dispatch<
+    React.SetStateAction<Record<string, number>>
+  >
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>

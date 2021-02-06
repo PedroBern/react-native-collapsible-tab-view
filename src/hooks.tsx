@@ -123,6 +123,26 @@ export function useCollapsibleStyle(): CollapsibleStyle {
   }
 }
 
+export function useUpdateScrollViewContentSize({
+  setContentHeights,
+  name,
+}: {
+  name: TabName
+  setContentHeights: ContextType['_setContentHeights']
+}) {
+  const scrollContentSizeChange = useCallback(
+    (_: number, h: number) => {
+      setContentHeights((contentHeights) => ({
+        ...contentHeights,
+        [name]: h,
+      }))
+    },
+    [name, setContentHeights]
+  )
+
+  return scrollContentSizeChange
+}
+
 export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
@@ -146,7 +166,7 @@ export const useScrollHandlerY = (name: TabName) => {
     _isSnapping: isSnapping,
     _snappingTo: snappingTo,
     _endDrag: endDrag,
-    _contentHeight: contentHeight,
+    _contentHeights: contentHeights,
   } = useTabsContext()
 
   const [tabIndex] = useState(tabNames.value.findIndex((n) => n === name))
@@ -210,12 +230,21 @@ export const useScrollHandlerY = (name: TabName) => {
       onScroll: (event) => {
         if (focusedTab.value === name) {
           const { y } = event.contentOffset
+          let contentHeight = contentHeights[name]
+          if (contentHeight == null) {
+            console.log(
+              `contentHeight for tab ${name} was undefined. This may be a bug with reanimated. Please open an issue if you see this error`
+            )
+            // try not to fail
+            contentHeight = Number.MAX_VALUE
+          }
           scrollYCurrent.value = interpolate(
             y,
-            [0, contentHeight.value - (containerHeight || 0)],
-            [0, contentHeight.value - (containerHeight || 0)],
+            [0, contentHeight - (containerHeight || 0)],
+            [0, contentHeight - (containerHeight || 0)],
             Extrapolate.CLAMP
           )
+
           scrollY.value[index.value] = scrollYCurrent.value
           oldAccScrollY.value = accScrollY.value
           accScrollY.value = scrollY.value[index.value] + offset.value
@@ -262,7 +291,14 @@ export const useScrollHandlerY = (name: TabName) => {
       },
       onMomentumEnd,
     },
-    [refMap, name, diffClampEnabled, snapEnabled, containerHeight]
+    [
+      refMap,
+      name,
+      diffClampEnabled,
+      snapEnabled,
+      containerHeight,
+      contentHeights,
+    ]
   )
 
   // sync unfocused scenes

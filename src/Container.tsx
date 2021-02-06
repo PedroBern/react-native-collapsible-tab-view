@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   LayoutChangeEvent,
   StyleSheet,
@@ -109,7 +109,12 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       tabNamesArray.map(() => 0),
       false
     )
-    const contentHeight = useSharedValue(0)
+
+    // note(@andreialecu): this was an useSharedValue but it was behaving erratically in the scroll handler
+    // by missing updates and showing stale values inside the handler. Only normal state seems to work.
+    // this may be a reanimated 2 bug
+    const [contentHeights, setContentHeights] = useState({})
+
     const offset = useSharedValue(0)
     const accScrollY = useSharedValue(0)
     const oldAccScrollY = useSharedValue(0)
@@ -460,7 +465,8 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           _isSnapping: isSnapping,
           _snappingTo: snappingTo,
           _endDrag: endDrag,
-          _contentHeight: contentHeight,
+          _contentHeights: contentHeights,
+          _setContentHeights: setContentHeights,
         }}
       >
         <Animated.View

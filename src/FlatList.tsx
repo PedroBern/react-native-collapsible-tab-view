@@ -8,6 +8,7 @@ import {
   useScrollHandlerY,
   useTabNameContext,
   useTabsContext,
+  useUpdateScrollViewContentSize,
 } from './hooks'
 import { FlatListProps } from './types'
 
@@ -20,7 +21,10 @@ export function FlatList<R>({
   ...rest
 }: FlatListProps<R>): React.ReactElement {
   const name = useTabNameContext()
-  const { _setRef: setRef, _contentHeight: contentHeight } = useTabsContext()
+  const {
+    _setRef: setRef,
+    _setContentHeights: setContentHeights,
+  } = useTabsContext()
   const ref = useAnimatedRef<RNFlatList<any>>()
   const scrollHandler = useScrollHandlerY(name)
   const {
@@ -33,12 +37,10 @@ export function FlatList<R>({
     setRef(name, ref)
   }, [name, ref, setRef])
 
-  const scrollContentSizeChange = React.useCallback(
-    (_: number, h: number) => {
-      contentHeight.value = h
-    },
-    [contentHeight]
-  )
+  const scrollContentSizeChange = useUpdateScrollViewContentSize({
+    name,
+    setContentHeights,
+  })
 
   return (
     <AnimatedFlatList

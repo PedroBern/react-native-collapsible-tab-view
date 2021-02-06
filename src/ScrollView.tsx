@@ -7,6 +7,7 @@ import {
   useScrollHandlerY,
   useTabNameContext,
   useTabsContext,
+  useUpdateScrollViewContentSize,
 } from './hooks'
 
 /**
@@ -20,7 +21,10 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
 }) => {
   const name = useTabNameContext()
   const ref = useAnimatedRef<Animated.ScrollView>()
-  const { _setRef: setRef, _contentHeight: contentHeight } = useTabsContext()
+  const {
+    _setRef: setRef,
+    _setContentHeights: setContentHeights,
+  } = useTabsContext()
   const scrollHandler = useScrollHandlerY(name)
   const {
     style: _style,
@@ -31,12 +35,10 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
     setRef(name, ref)
   }, [name, ref, setRef])
 
-  const scrollContentSizeChange = React.useCallback(
-    (_: number, h: number) => {
-      contentHeight.value = h
-    },
-    [contentHeight]
-  )
+  const scrollContentSizeChange = useUpdateScrollViewContentSize({
+    name,
+    setContentHeights,
+  })
 
   return (
     <Animated.ScrollView
