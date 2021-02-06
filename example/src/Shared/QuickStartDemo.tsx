@@ -24,7 +24,7 @@ const Example: React.FC = () => {
         <Tabs.FlatList
           data={[0, 1, 2, 3, 4]}
           renderItem={renderItem}
-          //keyExtractor={(v) => v + ''}
+          keyExtractor={(v) => v + ''}
         />
       </Tabs.Tab>
       <Tabs.Tab name="B">
