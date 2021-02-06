@@ -4,6 +4,7 @@ import { useAnimatedRef } from 'react-native-reanimated'
 
 import { AnimatedFlatList } from './helpers'
 import {
+  useChainCallback,
   useCollapsibleStyle,
   useScrollHandlerY,
   useTabNameContext,
@@ -17,9 +18,10 @@ import { FlatListProps } from './types'
  */
 export function FlatList<R>({
   contentContainerStyle,
+  onContentSizeChange,
   style,
   ...rest
-}: FlatListProps<R>): React.ReactElement {
+}: Omit<FlatListProps<R>, 'onScroll'>): React.ReactElement {
   const name = useTabNameContext()
   const {
     _setRef: setRef,
@@ -42,6 +44,11 @@ export function FlatList<R>({
     setContentHeights,
   })
 
+  const scrollContentSizeChangeHandlers = useChainCallback(
+    scrollContentSizeChange,
+    onContentSizeChange
+  )
+
   return (
     <AnimatedFlatList
       {...rest}
@@ -52,7 +59,7 @@ export function FlatList<R>({
       contentContainerStyle={[_contentContainerStyle, contentContainerStyle]}
       progressViewOffset={progressViewOffset}
       onScroll={scrollHandler}
-      onContentSizeChange={scrollContentSizeChange}
+      onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
     />
   )

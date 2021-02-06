@@ -3,6 +3,7 @@ import { ScrollViewProps } from 'react-native'
 import Animated, { useAnimatedRef } from 'react-native-reanimated'
 
 import {
+  useChainCallback,
   useCollapsibleStyle,
   useScrollHandlerY,
   useTabNameContext,
@@ -13,10 +14,11 @@ import {
 /**
  * Use like a regular scrollview.
  */
-export const ScrollView: React.FC<ScrollViewProps> = ({
+export const ScrollView: React.FC<Omit<ScrollViewProps, 'onScroll'>> = ({
   contentContainerStyle,
   style,
   children,
+  onContentSizeChange,
   ...rest
 }) => {
   const name = useTabNameContext()
@@ -40,6 +42,11 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
     setContentHeights,
   })
 
+  const scrollContentSizeChangeHandlers = useChainCallback(
+    scrollContentSizeChange,
+    onContentSizeChange
+  )
+
   return (
     <Animated.ScrollView
       {...rest}
@@ -52,7 +59,7 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
         contentContainerStyle as any,
       ]}
       onScroll={scrollHandler}
-      onContentSizeChange={scrollContentSizeChange}
+      onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
     >
       {children}

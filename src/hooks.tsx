@@ -143,6 +143,26 @@ export function useUpdateScrollViewContentSize({
   return scrollContentSizeChange
 }
 
+/**
+ * Allows specifying multiple functions to be called in a sequence with the same parameters
+ * Useful because we handle some events and need to pass them forward so that the caller can handle them as well
+ * @param fns array of functions to call
+ * @returns a function that once called will call all passed functions
+ */
+export function useChainCallback(...fns: (Function | undefined)[]) {
+  const callAll = useCallback(
+    (...args: unknown[]) => {
+      fns.forEach((fn) => {
+        if (typeof fn === 'function') {
+          fn(...args)
+        }
+      })
+    },
+    [fns]
+  )
+  return callAll
+}
+
 export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
