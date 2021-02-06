@@ -1,8 +1,5 @@
 import React, { useContext } from 'react'
-import {
-  OnTabChangeCallback,
-  TabBarProps,
-} from 'react-native-collapsible-tab-view'
+import { TabBarProps } from 'react-native-collapsible-tab-view'
 
 import ExampleComponent from './Shared/ExampleComponent'
 import { Header } from './Shared/Header'
@@ -20,19 +17,14 @@ const HeaderComponent = (props: TabBarProps) => {
 const OnIndexChange: ExampleComponentType = () => {
   const [title, setTitle] = React.useState(exampleTitle)
 
-  const onIndexChange = React.useCallback<OnTabChangeCallback>(
-    ({ prevIndex, index, prevTabName, tabName }) => {
-      const title = `prev: ${prevTabName}\ncurr: ${tabName}`
-      setTitle(title)
-    },
-    []
-  )
-
   return (
     <TitleContext.Provider value={title}>
       <ExampleComponent
         HeaderComponent={HeaderComponent}
-        onIndexChange={onIndexChange}
+        onIndexChange={({ prevIndex, index, prevTabName, tabName }) => {
+          const title = `prev: ${prevTabName}\ncurr: ${tabName}`
+          setTitle(title)
+        }}
       />
     </TitleContext.Provider>
   )
