@@ -53,11 +53,10 @@ const DynamicTabs: ExampleComponentType = () => {
   }, [currentTab])
 
   const shuffleTabs = React.useCallback(() => {
-    if (!currentTab) return
     setTabs((t) => {
       return [...shuffleArray(t)]
     })
-  }, [currentTab])
+  }, [])
 
   const HeaderComponent = () => {
     return (
