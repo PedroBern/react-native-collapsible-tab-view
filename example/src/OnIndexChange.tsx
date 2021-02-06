@@ -28,17 +28,13 @@ const OnIndexChange: ExampleComponentType = () => {
     []
   )
 
-  const MemoizedTabs = React.useMemo(() => {
-    return (
+  return (
+    <TitleContext.Provider value={title}>
       <ExampleComponent
         HeaderComponent={HeaderComponent}
         onIndexChange={onIndexChange}
       />
-    )
-  }, [onIndexChange])
-
-  return (
-    <TitleContext.Provider value={title}>{MemoizedTabs}</TitleContext.Provider>
+    </TitleContext.Provider>
   )
 }
 
