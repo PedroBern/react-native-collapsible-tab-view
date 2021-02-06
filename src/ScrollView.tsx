@@ -42,6 +42,7 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
 
   return (
     <Animated.ScrollView
+      {...rest}
       ref={ref}
       bouncesZoom={false}
       style={[_style, style]}
@@ -53,7 +54,6 @@ export const ScrollView: React.FC<ScrollViewProps> = ({
       onScroll={scrollHandler}
       onContentSizeChange={scrollContentSizeChange}
       scrollEventThrottle={16}
-      {...rest}
     >
       {children}
     </Animated.ScrollView>

@@ -44,6 +44,7 @@ export function FlatList<R>({
 
   return (
     <AnimatedFlatList
+      {...rest}
       // @ts-expect-error problem with reanimated types, they're missing `ref`
       ref={ref}
       bouncesZoom={false}
@@ -53,7 +54,6 @@ export function FlatList<R>({
       onScroll={scrollHandler}
       onContentSizeChange={scrollContentSizeChange}
       scrollEventThrottle={16}
-      {...rest}
     />
   )
 }
