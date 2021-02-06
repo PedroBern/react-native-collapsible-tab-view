@@ -99,10 +99,6 @@ const ListEmptyComponent = () => {
   const translateY = useDerivedValue(() => {
     return Animated.interpolate(
       scrollYCurrent.value,
-      // Manual
-      // [0, PADDING_TOP - TABBAR_HEIGHT],
-      // [-(PADDING_TOP - TABBAR_HEIGHT) / 2, 0]
-      // Derived
       [0, headerHeight],
       [-headerHeight / 2, 0]
     )

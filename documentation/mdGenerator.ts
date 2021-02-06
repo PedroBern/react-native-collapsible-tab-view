@@ -1,4 +1,4 @@
-import { Prop, API, Props } from "./types"
+import { Prop, API, Props } from './types'
 
 const escape = (s: any) => {
   if (typeof s === 'string') {

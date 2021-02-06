@@ -537,28 +537,28 @@ const createCollapsibleTabs = <T extends TabName>() => {
             tabBarHeight: tabBarHeight || 0,
             headerHeight: headerHeight || 0,
             refMap,
-            setRef,
-            headerScrollDistance,
-            scrollYCurrent,
             tabNames,
             index,
-            scrollY,
-            accScrollY,
-            oldAccScrollY,
-            offset,
-            isScrolling,
             snapThreshold,
             diffClampEnabled,
             focusedTab,
             accDiffClamp,
-            containerHeight,
-            scrollX,
             indexDecimal,
-            isGliding,
-            isSnapping,
-            snappingTo,
-            endDrag,
-            contentHeight,
+            containerHeight,
+            scrollYCurrent,
+            scrollY,
+            _setRef: setRef,
+            _headerScrollDistance: headerScrollDistance,
+            _accScrollY: accScrollY,
+            _oldAccScrollY: oldAccScrollY,
+            _offset: offset,
+            _isScrolling: isScrolling,
+            _scrollX: scrollX,
+            _isGliding: isGliding,
+            _isSnapping: isSnapping,
+            _snappingTo: snappingTo,
+            _endDrag: endDrag,
+            _contentHeight: contentHeight,
           }}
         >
           <Animated.View
@@ -719,27 +719,27 @@ const createCollapsibleTabs = <T extends TabName>() => {
   const useScrollHandlerY = (name: T) => {
     const {
       accDiffClamp,
-      isScrolling,
       focusedTab,
       snapEnabled,
       snapThreshold,
       diffClampEnabled,
       refMap,
-      oldAccScrollY,
-      accScrollY,
-      offset,
-      scrollY,
       tabNames,
       index,
-      scrollYCurrent,
       headerHeight,
-      headerScrollDistance,
-      isGliding,
-      isSnapping,
-      snappingTo,
-      endDrag,
-      contentHeight,
       containerHeight,
+      scrollYCurrent,
+      scrollY,
+      _isScrolling: isScrolling,
+      _oldAccScrollY: oldAccScrollY,
+      _accScrollY: accScrollY,
+      _offset: offset,
+      _headerScrollDistance: headerScrollDistance,
+      _isGliding: isGliding,
+      _isSnapping: isSnapping,
+      _snappingTo: snappingTo,
+      _endDrag: endDrag,
+      _contentHeight: contentHeight,
     } = useTabsContext()
 
     const [tabIndex] = React.useState(
@@ -932,7 +932,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
     ...rest
   }: FlatListProps<R>): React.ReactElement {
     const name = useTabNameContext()
-    const { setRef, contentHeight } = useTabsContext()
+    const { _setRef: setRef, _contentHeight: contentHeight } = useTabsContext()
     const ref = useAnimatedRef<FlatList<any>>()
     const scrollHandler = useScrollHandlerY(name)
     const {
@@ -979,7 +979,7 @@ const createCollapsibleTabs = <T extends TabName>() => {
   }) => {
     const name = useTabNameContext()
     const ref = useAnimatedRef<Animated.ScrollView>()
-    const { setRef, contentHeight } = useTabsContext()
+    const { _setRef: setRef, _contentHeight: contentHeight } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
     const {
       style: _style,

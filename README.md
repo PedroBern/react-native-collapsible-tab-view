@@ -229,8 +229,8 @@ const Example = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| undefined`|`null`||
+|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`||
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
@@ -240,8 +240,8 @@ const Example = () => {
 |initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
-|onIndexChange|`OnTabChangeCallback<string> \| undefined`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Pick<FlatListProps<number>, "scrollEnabled" \| "indicatorStyle" \| "style" \| "hitSlop" \| "onLayout" \| "pointerEvents" \| "removeClippedSubviews" \| "testID" \| ... 126 more ... \| "persistentScrollbar"> \| undefined`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|onIndexChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
+|pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |snapEnabled|`boolean \| undefined`|`false`||
 |snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
@@ -304,30 +304,18 @@ const { focusedTab, ...rest } = useTabsContext()
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|accDiffClamp|`SharedValue<number>`|||
-|accScrollY|`SharedValue<number>`|||
+|accDiffClamp|`SharedValue<number>`||DiffClamp value. It's the current visible header height if `diffClampEnabled={true}`.|
 |containerHeight|`number \| undefined`|||
-|contentHeight|`SharedValue<number>`|||
 |diffClampEnabled|`boolean`|`false`||
-|endDrag|`SharedValue<number>`||Used internally.|
 |focusedTab|`SharedValue<string>`||Name of the current focused tab.|
 |headerHeight|`number`|||
-|headerScrollDistance|`SharedValue<number>`|||
-|index|`SharedValue<number>`|||
-|indexDecimal|`SharedValue<number>`|||
-|isGliding|`SharedValue<boolean>`|||
-|isScrolling|`SharedValue<number>`|||
-|isSnapping|`SharedValue<boolean>`|||
-|offset|`SharedValue<number>`|||
-|oldAccScrollY|`SharedValue<number>`|||
-|refMap|`Record<ReactText, Ref<RefComponent>>`|||
-|scrollX|`SharedValue<number>`||Scroll x position of the tabs container.|
-|scrollY|`SharedValue<number[]>`|||
+|index|`SharedValue<number>`||Current index of the pager.|
+|indexDecimal|`SharedValue<number>`||Index value, including decimal points. Use this to interpolate tab indicators.|
+|refMap|`Record<ReactText, Ref<RefComponent>>`||Object containing the ref of each scrollable component.|
+|scrollY|`SharedValue<number[]>`||Array of the scroll y position of each tab.|
 |scrollYCurrent|`SharedValue<number>`||Scroll position of current tab.|
-|setRef|`<TComponent extends RefComponent>(key: string, ref: RefObject<TComponent>) => Ref<TComponent>`|||
 |snapEnabled|`boolean`|`false`||
 |snapThreshold|`number`|`0.5`||
-|snappingTo|`SharedValue<number>`||Used internally.|
 |tabBarHeight|`number`|||
 |tabNames|`SharedValue<string[]>`||Tab names, same as the keys of `refMap`.|
 
@@ -375,7 +363,7 @@ Basic usage looks like this:
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|TabItemComponent|`((props: MaterialTabItemProps<T>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)>) \| undefined`|`null`|React component to render as tab bar item|
+|TabItemComponent|`(props: MaterialTabItemProps<N>) => React.ReactElement`|`MaterialTabItem`|React component to render as tab bar item|
 |activeColor|`string \| undefined`||Color applied to the label when active|
 |containerRef|`RefObject<ContainerRef>`|||
 |contentContainerStyle|`StyleProp<ViewStyle>`||Style to apply to the inner container for tabs|
@@ -415,7 +403,7 @@ Any additional props are passed to the pressable component.
 |pressColor|`string \| undefined`|`#DDDDDD`||
 |pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
 |scrollEnabled|`boolean \| undefined`|||
-|style|`false \| ViewStyle \| RegisteredStyle<ViewStyle> \| RecursiveArray<false \| ViewStyle \| RegisteredStyle<ViewStyle> \| null \| undefined> \| ... 15 more ... \| undefined`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+|style|`StyleProp<ViewStyle>`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
 

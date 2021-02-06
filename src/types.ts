@@ -36,7 +36,6 @@ export type TabBarProps<T extends TabName> = {
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
   tabProps: TabsWithProps<T>
-  //options: FinalTabOptions<T>
 }
 
 export type IndexChangeEventData<T extends TabName> = {
@@ -105,53 +104,61 @@ export type CollapsibleProps<T extends TabName> = {
 
 export type ContextType<T extends TabName> = {
   headerHeight: number
-  headerScrollDistance: Animated.SharedValue<number>
   tabBarHeight: number
   snapEnabled: boolean
   diffClampEnabled: boolean
   snapThreshold: number
-  refMap: Record<TabName, Ref<RefComponent>>
-  setRef: <TComponent extends RefComponent>(
-    key: T,
-    ref: React.RefObject<TComponent>
-  ) => Ref<TComponent>
+  /**
+   * Index value, including decimal points. Use this to interpolate tab indicators.
+   */
+  indexDecimal: Animated.SharedValue<number>
+  /**
+   * Tab names, same as the keys of `refMap`.
+   */
+  tabNames: Animated.SharedValue<T[]>
+  /**
+   * Current index of the pager.
+   */
+  index: Animated.SharedValue<number>
+  /**
+   * Name of the current focused tab.
+   */
+  focusedTab: Animated.SharedValue<T>
+  /**
+   * DiffClamp value. It's the current visible header height if `diffClampEnabled={true}`.
+   */
+  accDiffClamp: Animated.SharedValue<number>
   /**
    * Scroll position of current tab.
    */
   scrollYCurrent: Animated.SharedValue<number>
   /**
-   * Tab names, same as the keys of `refMap`.
+   * Array of the scroll y position of each tab.
    */
-  tabNames: Animated.SharedValue<T[]>
-  index: Animated.SharedValue<number>
   scrollY: Animated.SharedValue<number[]>
-  oldAccScrollY: Animated.SharedValue<number>
-  accScrollY: Animated.SharedValue<number>
-  offset: Animated.SharedValue<number>
-  isScrolling: Animated.SharedValue<number>
-  /**
-   * Name of the current focused tab.
-   */
-  focusedTab: Animated.SharedValue<T>
-  accDiffClamp: Animated.SharedValue<number>
   containerHeight?: number
+  /**
+   * Object containing the ref of each scrollable component.
+   */
+  refMap: Record<TabName, Ref<RefComponent>>
+  _setRef: <TComponent extends RefComponent>(
+    key: T,
+    ref: React.RefObject<TComponent>
+  ) => Ref<TComponent>
+  _headerScrollDistance: Animated.SharedValue<number>
+  _oldAccScrollY: Animated.SharedValue<number>
+  _accScrollY: Animated.SharedValue<number>
+  _offset: Animated.SharedValue<number>
+  _isScrolling: Animated.SharedValue<number>
   /**
    * Scroll x position of the tabs container.
    */
-  scrollX: Animated.SharedValue<number>
-  indexDecimal: Animated.SharedValue<number>
-  isGliding: Animated.SharedValue<boolean>
-  isSnapping: Animated.SharedValue<boolean>
-  /**
-   * Used internally.
-   */
-  snappingTo: Animated.SharedValue<number>
-  /**
-   * Used internally.
-   */
-  endDrag: Animated.SharedValue<number>
-
-  contentHeight: Animated.SharedValue<number>
+  _scrollX: Animated.SharedValue<number>
+  _isGliding: Animated.SharedValue<boolean>
+  _isSnapping: Animated.SharedValue<boolean>
+  _snappingTo: Animated.SharedValue<number>
+  _endDrag: Animated.SharedValue<number>
+  _contentHeight: Animated.SharedValue<number>
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
