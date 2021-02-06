@@ -155,7 +155,7 @@ export const useScrollHandlerY = (name: TabName) => {
     'worklet'
     if (snapEnabled) {
       if (diffClampEnabled && accDiffClamp.value > 0) {
-        if (scrollYCurrent.value > headerScrollDistance.value) {
+        if (scrollYCurrent.value > headerScrollDistance.value * snapThreshold) {
           if (
             accDiffClamp.value <=
             headerScrollDistance.value * snapThreshold
@@ -175,6 +175,10 @@ export const useScrollHandlerY = (name: TabName) => {
                 isSnapping.value = false
               }
             )
+
+            if (scrollYCurrent.value < headerScrollDistance.value) {
+              scrollToImpl(refMap[name], 0, headerScrollDistance.value, true)
+            }
           }
         } else {
           isSnapping.value = true
