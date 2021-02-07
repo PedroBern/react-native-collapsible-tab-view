@@ -5,7 +5,7 @@ import ExampleComponent from './Shared/ExampleComponent'
 import { Header } from './Shared/Header'
 import { ExampleComponentType } from './types'
 
-const exampleTitle = 'On index change example'
+const exampleTitle = 'On tab change example'
 
 const TitleContext = React.createContext<string>(exampleTitle)
 
@@ -21,7 +21,7 @@ const OnIndexChange: ExampleComponentType = () => {
     <TitleContext.Provider value={title}>
       <ExampleComponent
         HeaderComponent={HeaderComponent}
-        onIndexChange={({ prevIndex, index, prevTabName, tabName }) => {
+        onTabChange={({ prevIndex, index, prevTabName, tabName }) => {
           const title = `prev: ${prevTabName}\ncurr: ${tabName}`
           setTitle(title)
         }}

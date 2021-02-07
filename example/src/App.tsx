@@ -19,7 +19,7 @@ import DiffClampSnap from './DiffClampSnap'
 import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
 import MinHeaderHeight from './MinHeaderHeight'
-import OnIndexChange from './OnIndexChange'
+import OnTabChange from './OnTabChange'
 import QuickStartDemo from './QuickStartDemo'
 import Ref from './Ref'
 import ScrollOnHeader from './ScrollOnHeader'
@@ -42,7 +42,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   UndefinedHeaderHeight,
   StartOnSpecificTab,
   Ref,
-  OnIndexChange,
+  OnTabChange,
   DynamicTabs,
   MinHeaderHeight,
 ]

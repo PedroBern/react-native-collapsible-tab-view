@@ -100,9 +100,14 @@ export type CollapsibleProps = {
     | 'getItemLayout'
   >
   /**
-   * Callback fired when the index changes. It receives the previous and current index and tabnames.
+   * Callback fired when the index changes. It receives the current index.
    */
-  onIndexChange?: OnTabChangeCallback<TabName>
+  onIndexChange?: (index: number) => void
+
+  /**
+   * Callback fired when the tab changes. It receives the previous and current index and tabnames.
+   */
+  onTabChange?: OnTabChangeCallback<TabName>
 }
 
 export type ContextType<T extends TabName = TabName> = {

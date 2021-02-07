@@ -22,7 +22,12 @@ import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
 import { AnimatedFlatList, ONE_FRAME_MS, scrollToImpl } from './helpers'
 import { useAnimatedDynamicRefs, useContainerRef, useTabProps } from './hooks'
-import { CollapsibleProps, CollapsibleRef, TabName } from './types'
+import {
+  CollapsibleProps,
+  CollapsibleRef,
+  IndexChangeEventData,
+  TabName,
+} from './types'
 
 const init = (children: any) => {
   if (React.Children.count(children) === 0) {
@@ -82,6 +87,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       cancelLazyFadeIn,
       pagerProps,
       onIndexChange,
+      onTabChange,
     },
     ref
   ) => {
@@ -234,6 +240,14 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       []
     )
 
+    const propagateTabChange = React.useCallback(
+      (change: IndexChangeEventData<TabName>) => {
+        onTabChange?.(change)
+        onIndexChange?.(change.index)
+      },
+      [onIndexChange, onTabChange]
+    )
+
     useAnimatedReaction(
       () => {
         return calculateNextOffset.value
@@ -242,14 +256,12 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
         if (i !== index.value) {
           offset.value =
             scrollY.value[index.value] - scrollY.value[i] + offset.value
-          if (onIndexChange) {
-            runOnJS(onIndexChange)({
-              prevIndex: index.value,
-              index: i,
-              prevTabName: tabNames.value[index.value],
-              tabName: tabNames.value[i],
-            })
-          }
+          runOnJS(propagateTabChange)({
+            prevIndex: index.value,
+            index: i,
+            prevTabName: tabNames.value[index.value],
+            tabName: tabNames.value[i],
+          })
           index.value = i
         }
       },
