@@ -64,8 +64,12 @@ export function useTabProps<T extends TabName>(
         throw new Error(
           'Container children must be wrapped in a <Tabs.Tab ... /> component'
         )
+
       // make sure children is excluded otherwise our props will mutate too much
       const { name, children, ...options } = element.props
+      if (tabOptions.has(name))
+        throw new Error(`Tab names must be unique, ${name} already exists`)
+
       tabOptions.set(name, {
         index,
         name,
