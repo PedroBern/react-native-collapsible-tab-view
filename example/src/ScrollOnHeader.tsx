@@ -13,7 +13,11 @@ const HEADER_HEIGHT = 400
 const NewHeader: React.FC<TabBarProps> = (props) => {
   return (
     <View pointerEvents="none">
-      <Header height={HEADER_HEIGHT} title={title} {...props} />
+      <Header
+        height={HEADER_HEIGHT}
+        title={`${title}\n\nTry dragging up/down from within this header`}
+        {...props}
+      />
     </View>
   )
 }
