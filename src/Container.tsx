@@ -74,9 +74,8 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       headerHeight: initialHeaderHeight,
       minHeaderHeight = 0,
       tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
-      snapEnabled = false,
       headerStickyness = 'disabled',
-      snapThreshold = 0.5,
+      snapThreshold,
       children,
       HeaderComponent,
       TabBarComponent = MaterialTabBar,
@@ -459,7 +458,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     return (
       <Context.Provider
         value={{
-          snapEnabled,
           tabBarHeight: tabBarHeight || 0,
           headerHeight: headerHeight || 0,
           refMap,

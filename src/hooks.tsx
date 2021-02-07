@@ -175,7 +175,6 @@ export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
     focusedTab,
-    snapEnabled,
     snapThreshold,
     diffClampEnabled,
     refMap,
@@ -201,7 +200,7 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const onMomentumEnd = () => {
     'worklet'
-    if (snapEnabled) {
+    if (typeof snapThreshold === 'number') {
       if (diffClampEnabled && accDiffClamp.value > 0) {
         if (scrollYCurrent.value > headerScrollDistance.value * snapThreshold) {
           if (
@@ -323,9 +322,9 @@ export const useScrollHandlerY = (name: TabName) => {
       refMap,
       name,
       diffClampEnabled,
-      snapEnabled,
       containerHeight,
       contentHeights,
+      snapThreshold,
     ]
   )
 
@@ -351,7 +350,7 @@ export const useScrollHandlerY = (name: TabName) => {
             if (hasGap || currIsOnTop) {
               nextPosition = accDiffClamp.value
             }
-          } else if (snapEnabled) {
+          } else if (typeof snapThreshold === 'number') {
             if (focusedIsOnTop) {
               nextPosition = snappingTo.value
             } else if (currIsOnTop) {
@@ -368,7 +367,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       }
     },
-    [diffClampEnabled, refMap, snapEnabled]
+    [diffClampEnabled, refMap, snapThreshold]
   )
 
   return scrollHandler

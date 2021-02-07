@@ -68,13 +68,13 @@ export type CollapsibleProps = {
    * Header minimum height when collapsed
    */
   minHeaderHeight?: number
-  snapEnabled?: boolean
 
   headerStickyness?: 'disabled' | 'reveal-on-scroll'
   /**
-   * Percentage of header height to make the snap effect. A number between 0 and 1.
+   * Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.
+   * @default null
    */
-  snapThreshold?: number
+  snapThreshold?: number | null
   children: TabReactElement<TabName>[] | TabReactElement<TabName>
   HeaderComponent?: (props: TabBarProps<TabName>) => React.ReactElement | null
   TabBarComponent?: (props: TabBarProps<TabName>) => React.ReactElement | null
@@ -114,9 +114,8 @@ export type CollapsibleProps = {
 export type ContextType<T extends TabName = TabName> = {
   headerHeight: number
   tabBarHeight: number
-  snapEnabled: boolean
   diffClampEnabled: boolean
-  snapThreshold: number
+  snapThreshold: number | null | undefined
   /**
    * Index value, including decimal points. Use this to interpolate tab indicators.
    */

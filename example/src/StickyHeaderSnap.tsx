@@ -12,7 +12,7 @@ const DefaultExample: ExampleComponentType = () => {
   return (
     <ExampleComponent
       headerStickyness="reveal-on-scroll"
-      snapEnabled
+      snapThreshold={0.5}
       HeaderComponent={Header}
     />
   )
