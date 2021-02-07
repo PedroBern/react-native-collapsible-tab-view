@@ -69,7 +69,8 @@ export type CollapsibleProps = {
    */
   minHeaderHeight?: number
   snapEnabled?: boolean
-  diffClampEnabled?: boolean
+
+  headerStickyness?: 'disabled' | 'reveal-on-scroll'
   /**
    * Percentage of header height to make the snap effect. A number between 0 and 1.
    */

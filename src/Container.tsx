@@ -75,7 +75,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       minHeaderHeight = 0,
       tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
       snapEnabled = false,
-      diffClampEnabled = false,
+      headerStickyness = 'disabled',
       snapThreshold = 0.5,
       children,
       HeaderComponent,
@@ -162,6 +162,11 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
         index,
       }),
       [windowWidth]
+    )
+
+    const diffClampEnabled = React.useMemo(
+      () => headerStickyness === 'reveal-on-scroll',
+      [headerStickyness]
     )
 
     const indexDecimal = useDerivedValue(() => {

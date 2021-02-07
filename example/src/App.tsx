@@ -14,8 +14,6 @@ import {
 
 import CenteredEmptyList from './CenteredEmptyList'
 import Default from './Default'
-import DiffClamp from './DiffClamp'
-import DiffClampSnap from './DiffClampSnap'
 import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
 import MinHeaderHeight from './MinHeaderHeight'
@@ -26,14 +24,16 @@ import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
 import StartOnSpecificTab from './StartOnSpecificTab'
+import StickyHeader from './StickyHeader'
+import StickyHeaderSnap from './StickyHeaderSnap'
 import UndefinedHeaderHeight from './UndefinedHeaderHeight'
 import { ExampleComponentType } from './types'
 
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Default,
   Snap,
-  DiffClamp,
-  DiffClampSnap,
+  StickyHeader,
+  StickyHeaderSnap,
   Lazy,
   ScrollableTabs,
   CenteredEmptyList,

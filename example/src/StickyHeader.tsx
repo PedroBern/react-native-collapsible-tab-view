@@ -4,13 +4,16 @@ import ExampleComponent from './Shared/ExampleComponent'
 import { buildHeader } from './Shared/Header'
 import { ExampleComponentType } from './types'
 
-const title = 'DiffClamp + Snap Example'
+const title = 'Sticky Header Example'
 
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
   return (
-    <ExampleComponent diffClampEnabled snapEnabled HeaderComponent={Header} />
+    <ExampleComponent
+      headerStickyness="reveal-on-scroll"
+      HeaderComponent={Header}
+    />
   )
 }
 
