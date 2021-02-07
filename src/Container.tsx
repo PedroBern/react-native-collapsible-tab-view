@@ -119,7 +119,9 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     const accScrollY = useSharedValue(0)
     const oldAccScrollY = useSharedValue(0)
     const accDiffClamp = useSharedValue(0)
-    const tabNames = useSharedValue<TabName[]>(tabNamesArray)
+    const tabNames = useDerivedValue<TabName[]>(() => tabNamesArray, [
+      tabNamesArray,
+    ])
     const index = useSharedValue(
       initialTabName ? tabNames.value.findIndex((n) => n === initialTabName) : 0
     )
