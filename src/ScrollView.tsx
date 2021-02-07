@@ -1,11 +1,12 @@
 import React from 'react'
-import { ScrollViewProps } from 'react-native'
-import Animated, { useAnimatedRef } from 'react-native-reanimated'
+import { ScrollViewProps, ScrollView as RNScrollView } from 'react-native'
+import Animated from 'react-native-reanimated'
 
 import {
   useChainCallback,
   useCollapsibleStyle,
   useScrollHandlerY,
+  useSharedAnimatedRef,
   useTabNameContext,
   useTabsContext,
   useUpdateScrollViewContentSize,
@@ -14,55 +15,58 @@ import {
 /**
  * Use like a regular scrollview.
  */
-export const ScrollView: React.FC<Omit<ScrollViewProps, 'onScroll'>> = ({
-  contentContainerStyle,
-  style,
-  children,
-  onContentSizeChange,
-  ...rest
-}) => {
-  const name = useTabNameContext()
-  const ref = useAnimatedRef<Animated.ScrollView>()
-  const {
-    _setRef: setRef,
-    _setContentHeights: setContentHeights,
-  } = useTabsContext()
-  const scrollHandler = useScrollHandlerY(name)
-  const {
-    style: _style,
-    contentContainerStyle: _contentContainerStyle,
-  } = useCollapsibleStyle()
+export const ScrollView = React.forwardRef<
+  RNScrollView,
+  React.PropsWithChildren<Omit<ScrollViewProps, 'onScroll'>>
+>(
+  (
+    { contentContainerStyle, style, onContentSizeChange, children, ...rest },
+    passRef
+  ) => {
+    const name = useTabNameContext()
+    const ref = useSharedAnimatedRef<RNScrollView>(passRef)
+    const {
+      _setRef: setRef,
+      _setContentHeights: setContentHeights,
+    } = useTabsContext()
+    const scrollHandler = useScrollHandlerY(name)
+    const {
+      style: _style,
+      contentContainerStyle: _contentContainerStyle,
+    } = useCollapsibleStyle()
 
-  React.useEffect(() => {
-    setRef(name, ref)
-  }, [name, ref, setRef])
+    React.useEffect(() => {
+      setRef(name, ref)
+    }, [name, ref, setRef])
 
-  const scrollContentSizeChange = useUpdateScrollViewContentSize({
-    name,
-    setContentHeights,
-  })
+    const scrollContentSizeChange = useUpdateScrollViewContentSize({
+      name,
+      setContentHeights,
+    })
 
-  const scrollContentSizeChangeHandlers = useChainCallback(
-    scrollContentSizeChange,
-    onContentSizeChange
-  )
+    const scrollContentSizeChangeHandlers = useChainCallback(
+      scrollContentSizeChange,
+      onContentSizeChange
+    )
 
-  return (
-    <Animated.ScrollView
-      {...rest}
-      ref={ref}
-      bouncesZoom={false}
-      style={[_style, style]}
-      contentContainerStyle={[
-        _contentContainerStyle,
-        // TODO: investigate types
-        contentContainerStyle as any,
-      ]}
-      onScroll={scrollHandler}
-      onContentSizeChange={scrollContentSizeChangeHandlers}
-      scrollEventThrottle={16}
-    >
-      {children}
-    </Animated.ScrollView>
-  )
-}
+    return (
+      <Animated.ScrollView
+        {...rest}
+        // @ts-expect-error reanimated types are broken on ref
+        ref={ref}
+        bouncesZoom={false}
+        style={[_style, style]}
+        contentContainerStyle={[
+          _contentContainerStyle,
+          // TODO: investigate types
+          contentContainerStyle as any,
+        ]}
+        onScroll={scrollHandler}
+        onContentSizeChange={scrollContentSizeChangeHandlers}
+        scrollEventThrottle={16}
+      >
+        {children}
+      </Animated.ScrollView>
+    )
+  }
+)

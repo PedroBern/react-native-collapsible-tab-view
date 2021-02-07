@@ -2,7 +2,6 @@ import React, { ComponentProps } from 'react'
 import {
   FlatList,
   FlatListProps as RNFlatListProps,
-  ListRenderItem,
   ScrollView,
   StyleProp,
   ViewStyle,
@@ -169,13 +168,6 @@ export type ContextType<T extends TabName = TabName> = {
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
-
-export type FlatListProps<R extends any> = Omit<
-  ComponentProps<typeof FlatList>,
-  'renderItem'
-> & {
-  renderItem: ListRenderItem<R>
-}
 
 export type CollapsibleStyle = {
   style: { width: number }

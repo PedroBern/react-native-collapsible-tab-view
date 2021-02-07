@@ -1,4 +1,12 @@
-import { useMemo, Children, useState, useCallback, useContext } from 'react'
+import {
+  useMemo,
+  Children,
+  useState,
+  useCallback,
+  useContext,
+  MutableRefObject,
+  useEffect,
+} from 'react'
 import { Platform, useWindowDimensions } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import {
@@ -364,4 +372,35 @@ export const useScrollHandlerY = (name: TabName) => {
   )
 
   return scrollHandler
+}
+
+type ForwardRefType<T> =
+  | ((instance: T | null) => void)
+  | MutableRefObject<T | null>
+  | null
+
+/**
+ * Magic hook that creates a multicast ref. Useful so that we can both capture the ref, and forward it to callers.
+ * Accepts a parameter for an outer ref that will also be updated to the same ref
+ * @param outerRef the outer ref that needs to be updated
+ * @returns an animated ref
+ */
+export function useSharedAnimatedRef<T extends RefComponent>(
+  outerRef: ForwardRefType<T>
+) {
+  const ref = useAnimatedRef<T>()
+
+  // this executes on every render
+  useEffect(() => {
+    if (!outerRef) {
+      return
+    }
+    if (typeof outerRef === 'function') {
+      outerRef(ref.current)
+    } else {
+      outerRef.current = ref.current
+    }
+  })
+
+  return ref
 }
