@@ -25,6 +25,7 @@ import { useAnimatedDynamicRefs, useContainerRef, useTabProps } from './hooks'
 import {
   CollapsibleProps,
   CollapsibleRef,
+  ContextType,
   IndexChangeEventData,
   TabName,
 } from './types'
@@ -108,9 +109,19 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     const [headerHeight, setHeaderHeight] = React.useState<number | undefined>(
       initialHeaderHeight
     )
-    const isScrolling = useSharedValue(0)
-    const scrollYCurrent = useSharedValue(0)
-    const scrollY = useSharedValue(
+
+    const isSwiping = useSharedValue(false)
+    const isSnapping: ContextType['isSnapping'] = useSharedValue(false)
+    const snappingTo: ContextType['snappingTo'] = useSharedValue(0)
+    const isGliding: ContextType['isGliding'] = useSharedValue(false)
+    const endDrag: ContextType['endDrag'] = useSharedValue(0)
+    const offset: ContextType['offset'] = useSharedValue(0)
+    const accScrollY: ContextType['accScrollY'] = useSharedValue(0)
+    const oldAccScrollY: ContextType['oldAccScrollY'] = useSharedValue(0)
+    const accDiffClamp: ContextType['accDiffClamp'] = useSharedValue(0)
+    const isScrolling: ContextType['isScrolling'] = useSharedValue(0)
+    const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
+    const scrollY: ContextType['scrollY'] = useSharedValue(
       tabNamesArray.map(() => 0),
       false
     )
@@ -119,38 +130,31 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     // by missing updates and showing stale values inside the handler. Only normal state seems to work.
     // this may be a reanimated 2 bug
     const [contentHeights, setContentHeights] = useState({})
-
-    const offset = useSharedValue(0)
-    const accScrollY = useSharedValue(0)
-    const oldAccScrollY = useSharedValue(0)
-    const accDiffClamp = useSharedValue(0)
-    const tabNames = useDerivedValue<TabName[]>(() => tabNamesArray, [
-      tabNamesArray,
-    ])
-    const index = useSharedValue(
+    const tabNames: ContextType['tabNames'] = useDerivedValue<TabName[]>(
+      () => tabNamesArray,
+      [tabNamesArray]
+    )
+    const index: ContextType['index'] = useSharedValue(
       initialTabName ? tabNames.value.findIndex((n) => n === initialTabName) : 0
     )
-    const scrollX = useSharedValue(index.value * windowWidth)
+    const scrollX: ContextType['scrollX'] = useSharedValue(
+      index.value * windowWidth
+    )
     const pagerOpacity = useSharedValue(
       initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1,
       false
     )
-    const isSwiping = useSharedValue(false)
-    const isSnapping = useSharedValue(false)
-    const snappingTo = useSharedValue(0)
     const [data, setData] = React.useState(tabNamesArray)
 
     React.useEffect(() => {
       setData(tabNamesArray)
     }, [tabNamesArray])
 
-    const focusedTab = useDerivedValue<TabName>(() => {
+    const focusedTab: ContextType['focusedTab'] = useDerivedValue<TabName>(() => {
       return tabNames.value[index.value]
     }, [tabNames])
-    const isGliding = useSharedValue(false)
-    const endDrag = useSharedValue(0)
     const calculateNextOffset = useSharedValue(index.value)
-    const headerScrollDistance = useDerivedValue(() => {
+    const headerScrollDistance: ContextType['headerScrollDistance'] = useDerivedValue(() => {
       return headerHeight !== undefined ? headerHeight - minHeaderHeight : 0
     }, [headerHeight, minHeaderHeight])
 
@@ -168,7 +172,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       [headerStickyness]
     )
 
-    const indexDecimal = useDerivedValue(() => {
+    const indexDecimal: ContextType['indexDecimal'] = useDerivedValue(() => {
       return scrollX.value / windowWidth
     }, [windowWidth])
 
@@ -471,19 +475,19 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           containerHeight,
           scrollYCurrent,
           scrollY,
-          _setRef: setRef,
-          _headerScrollDistance: headerScrollDistance,
-          _accScrollY: accScrollY,
-          _oldAccScrollY: oldAccScrollY,
-          _offset: offset,
-          _isScrolling: isScrolling,
-          _scrollX: scrollX,
-          _isGliding: isGliding,
-          _isSnapping: isSnapping,
-          _snappingTo: snappingTo,
-          _endDrag: endDrag,
-          _contentHeights: contentHeights,
-          _setContentHeights: setContentHeights,
+          setRef,
+          headerScrollDistance,
+          accScrollY,
+          oldAccScrollY,
+          offset,
+          isScrolling,
+          scrollX,
+          isGliding,
+          isSnapping,
+          snappingTo,
+          endDrag,
+          contentHeights,
+          setContentHeights,
         }}
       >
         <Animated.View

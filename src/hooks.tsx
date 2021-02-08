@@ -37,8 +37,8 @@ export function useContainerRef() {
 }
 
 export function useAnimatedDynamicRefs(): [
-  Record<TabName, Ref<RefComponent>>,
-  <T extends RefComponent>(key: TabName, ref: React.RefObject<T>) => Ref<T>
+  ContextType['refMap'],
+  ContextType['setRef']
 ] {
   const [map, setMap] = useState<Record<TabName, Ref<RefComponent>>>({})
   const setRef = useCallback(function <T extends RefComponent>(
@@ -140,7 +140,7 @@ export function useUpdateScrollViewContentSize({
   name,
 }: {
   name: TabName
-  setContentHeights: ContextType['_setContentHeights']
+  setContentHeights: ContextType['setContentHeights']
 }) {
   const scrollContentSizeChange = useCallback(
     (_: number, h: number) => {
@@ -188,16 +188,16 @@ export const useScrollHandlerY = (name: TabName) => {
     containerHeight,
     scrollYCurrent,
     scrollY,
-    _isScrolling: isScrolling,
-    _oldAccScrollY: oldAccScrollY,
-    _accScrollY: accScrollY,
-    _offset: offset,
-    _headerScrollDistance: headerScrollDistance,
-    _isGliding: isGliding,
-    _isSnapping: isSnapping,
-    _snappingTo: snappingTo,
-    _endDrag: endDrag,
-    _contentHeights: contentHeights,
+    isScrolling,
+    oldAccScrollY,
+    accScrollY,
+    offset,
+    headerScrollDistance,
+    isGliding,
+    isSnapping,
+    snappingTo,
+    endDrag,
+    contentHeights,
   } = useTabsContext()
 
   const [tabIndex] = useState(tabNames.value.findIndex((n) => n === name))

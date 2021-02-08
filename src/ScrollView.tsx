@@ -25,10 +25,7 @@ export const ScrollView = React.forwardRef<
   ) => {
     const name = useTabNameContext()
     const ref = useSharedAnimatedRef<RNScrollView>(passRef)
-    const {
-      _setRef: setRef,
-      _setContentHeights: setContentHeights,
-    } = useTabsContext()
+    const { setRef, setContentHeights } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
     const {
       style: _style,

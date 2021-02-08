@@ -71,7 +71,8 @@ export type CollapsibleProps = {
 
   headerStickyness?: 'disabled' | 'reveal-on-scroll'
   /**
-   * Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.
+   * Percentage of header height to define as the snap point. A number between
+   * 0 and 1, or `null` to disable snapping.
    * @default null
    */
   snapThreshold?: number | null
@@ -82,12 +83,14 @@ export type CollapsibleProps = {
   containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean
   /**
-   * If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.
+   * If lazy, will mount the screens only when the tab is visited. There is a
+   * default fade in transition.
    */
   lazy?: boolean
   cancelLazyFadeIn?: boolean
   /**
-   * Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`
+   * Props passed to the horiztontal flatlist. If you want for example to
+   * disable swiping, you can pass `{ scrollEnabled: false }`
    */
   pagerProps?: Omit<
     RNFlatListProps<number>,
@@ -106,7 +109,8 @@ export type CollapsibleProps = {
   onIndexChange?: (index: number) => void
 
   /**
-   * Callback fired when the tab changes. It receives the previous and current index and tabnames.
+   * Callback fired when the tab changes. It receives the previous and current
+   *  index and tabnames.
    */
   onTabChange?: OnTabChangeCallback<TabName>
 }
@@ -117,7 +121,8 @@ export type ContextType<T extends TabName = TabName> = {
   diffClampEnabled: boolean
   snapThreshold: number | null | undefined
   /**
-   * Index value, including decimal points. Use this to interpolate tab indicators.
+   * Index value, including decimal points. Use this to interpolate tab
+   * indicators.
    */
   indexDecimal: Animated.SharedValue<number>
   /**
@@ -133,7 +138,8 @@ export type ContextType<T extends TabName = TabName> = {
    */
   focusedTab: Animated.SharedValue<T>
   /**
-   * DiffClamp value. It's the current visible header height if `diffClampEnabled={true}`.
+   * DiffClamp value. It's the current visible header height if
+   * `diffClampEnabled={true}`.
    */
   accDiffClamp: Animated.SharedValue<number>
   /**
@@ -149,25 +155,56 @@ export type ContextType<T extends TabName = TabName> = {
    * Object containing the ref of each scrollable component.
    */
   refMap: Record<TabName, Ref<RefComponent>>
-  _setRef: <TComponent extends RefComponent>(
+  /**
+   * Set the ref of the scrollable component.
+   */
+  setRef: <TComponent extends RefComponent>(
     key: T,
     ref: React.RefObject<TComponent>
   ) => Ref<TComponent>
-  _headerScrollDistance: Animated.SharedValue<number>
-  _oldAccScrollY: Animated.SharedValue<number>
-  _accScrollY: Animated.SharedValue<number>
-  _offset: Animated.SharedValue<number>
-  _isScrolling: Animated.SharedValue<number>
+  /**
+   * Max distance allowed to collapse the header.
+   */
+  headerScrollDistance: Animated.SharedValue<number>
+  /**
+   * Previous addScrollY value.
+   */
+  oldAccScrollY: Animated.SharedValue<number>
+  /**
+   * Accumulated scroll Y distance. Used to calculate the accDiffClamp value.
+   */
+  accScrollY: Animated.SharedValue<number>
+  /**
+   * Offset to take the next scrollY as if it were at the same position of the
+   * previous tab.
+   */
+  offset: Animated.SharedValue<number>
+  isScrolling: Animated.SharedValue<number>
   /**
    * Scroll x position of the tabs container.
    */
-  _scrollX: Animated.SharedValue<number>
-  _isGliding: Animated.SharedValue<boolean>
-  _isSnapping: Animated.SharedValue<boolean>
-  _snappingTo: Animated.SharedValue<number>
-  _endDrag: Animated.SharedValue<number>
-  _contentHeights: Record<string, number>
-  _setContentHeights: React.Dispatch<
+  scrollX: Animated.SharedValue<number>
+  isGliding: Animated.SharedValue<boolean>
+  isSnapping: Animated.SharedValue<boolean>
+  /**
+   * The next snapping value, used only with diffClamp.
+   */
+  snappingTo: Animated.SharedValue<number>
+  /**
+   * Helper value to track if user is dragging on iOS, because iOS calls
+   * onMomentumEnd only after a vigorous swipe. If the user has finished the
+   * drag, but the onMomentumEnd has never triggered, we to need to manually
+   * call it to sync the scenes.
+   */
+  endDrag: Animated.SharedValue<number>
+  /**
+   * Height of the scrollable content of each tab. Helps to allow iOS bouncing.
+   */
+  contentHeights: Record<string, number>
+  /**
+   * Callback to get the contentHeight of each scrollable content.
+   */
+  setContentHeights: React.Dispatch<
     React.SetStateAction<Record<string, number>>
   >
 }
