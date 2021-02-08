@@ -288,26 +288,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       []
     )
 
-    // derived from accScrollY, to calculate the accDiffClamp value
-    useAnimatedReaction(
-      () => {
-        return diffClampEnabled ? accScrollY.value - oldAccScrollY.value : 0
-      },
-      (delta) => {
-        if (delta) {
-          const nextValue = accDiffClamp.value + delta
-          if (delta > 0) {
-            // scrolling down
-            accDiffClamp.value = Math.min(headerScrollDistance.value, nextValue)
-          } else if (delta < 0) {
-            // scrolling up
-            accDiffClamp.value = Math.max(0, nextValue)
-          }
-        }
-      },
-      []
-    )
-
     const renderItem = React.useCallback(
       ({ index: i }) => {
         if (!tabNames.value[i]) return null
@@ -537,6 +517,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           <AnimatedFlatList
             // @ts-expect-error problem with reanimated types, they're missing `ref`
             ref={containerRef}
+            scrollToOverflowEnabled
             initialScrollIndex={index.value}
             data={data}
             keyExtractor={keyExtractor}

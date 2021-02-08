@@ -277,6 +277,21 @@ export const useScrollHandlerY = (name: TabName) => {
           oldAccScrollY.value = accScrollY.value
           accScrollY.value = scrollY.value[index.value] + offset.value
 
+          if (!isSnapping.value && diffClampEnabled) {
+            const delta = accScrollY.value - oldAccScrollY.value
+            const nextValue = accDiffClamp.value + delta
+            if (delta > 0) {
+              // scrolling down
+              accDiffClamp.value = Math.min(
+                headerScrollDistance.value,
+                nextValue
+              )
+            } else if (delta < 0) {
+              // scrolling up
+              accDiffClamp.value = Math.max(0, nextValue)
+            }
+          }
+
           isScrolling.value = 1
 
           // cancel the animation that is setting this back to 0 if we're still scrolling
