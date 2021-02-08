@@ -71,7 +71,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       headerHeight: initialHeaderHeight,
       minHeaderHeight = 0,
       tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
-      headerStickyness = 'disabled',
+      revealHeaderOnScroll = false,
       snapThreshold,
       children,
       HeaderComponent,
@@ -160,11 +160,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
         index,
       }),
       [windowWidth]
-    )
-
-    const diffClampEnabled = React.useMemo(
-      () => headerStickyness === 'reveal-on-scroll',
-      [headerStickyness]
     )
 
     const indexDecimal: ContextType['indexDecimal'] = useDerivedValue(() => {
@@ -313,13 +308,13 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       return {
         transform: [
           {
-            translateY: diffClampEnabled
+            translateY: revealHeaderOnScroll
               ? -accDiffClamp.value
               : -Math.min(scrollYCurrent.value, headerScrollDistance.value),
           },
         ],
       }
-    }, [diffClampEnabled])
+    }, [revealHeaderOnScroll])
 
     const getHeaderHeight = React.useCallback(
       (event: LayoutChangeEvent) => {
@@ -443,7 +438,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           tabNames,
           index,
           snapThreshold,
-          diffClampEnabled,
+          revealHeaderOnScroll,
           focusedTab,
           accDiffClamp,
           indexDecimal,

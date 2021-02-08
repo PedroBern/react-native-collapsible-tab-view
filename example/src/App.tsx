@@ -20,20 +20,20 @@ import MinHeaderHeight from './MinHeaderHeight'
 import OnTabChange from './OnTabChange'
 import QuickStartDemo from './QuickStartDemo'
 import Ref from './Ref'
+import RevealHeaderOnScroll from './RevealHeaderOnScroll'
+import RevealHeaderOnScrollSnap from './RevealHeaderOnScrollSnap'
 import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
 import StartOnSpecificTab from './StartOnSpecificTab'
-import StickyHeader from './StickyHeader'
-import StickyHeaderSnap from './StickyHeaderSnap'
 import UndefinedHeaderHeight from './UndefinedHeaderHeight'
 import { ExampleComponentType } from './types'
 
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Default,
   Snap,
-  StickyHeader,
-  StickyHeaderSnap,
+  RevealHeaderOnScroll,
+  RevealHeaderOnScrollSnap,
   Lazy,
   ScrollableTabs,
   CenteredEmptyList,
