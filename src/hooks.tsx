@@ -16,6 +16,7 @@ import {
   useAnimatedReaction,
   useAnimatedRef,
   useAnimatedScrollHandler,
+  useSharedValue,
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
@@ -195,9 +196,16 @@ export const useScrollHandlerY = (name: TabName) => {
     isGliding,
     isSnapping,
     snappingTo,
-    endDrag,
     contentHeights,
   } = useTabsContext()
+
+  /**
+   * Helper value to track if user is dragging on iOS, because iOS calls
+   * onMomentumEnd only after a vigorous swipe. If the user has finished the
+   * drag, but the onMomentumEnd has never triggered, we to need to manually
+   * call it to sync the scenes.
+   */
+  const endDrag = useSharedValue(0)
 
   const [tabIndex] = useState(tabNames.value.findIndex((n) => n === name))
 

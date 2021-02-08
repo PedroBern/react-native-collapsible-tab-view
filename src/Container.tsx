@@ -110,7 +110,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     const isSnapping: ContextType['isSnapping'] = useSharedValue(false)
     const snappingTo: ContextType['snappingTo'] = useSharedValue(0)
     const isGliding: ContextType['isGliding'] = useSharedValue(false)
-    const endDrag: ContextType['endDrag'] = useSharedValue(0)
     const offset: ContextType['offset'] = useSharedValue(0)
     const accScrollY: ContextType['accScrollY'] = useSharedValue(0)
     const oldAccScrollY: ContextType['oldAccScrollY'] = useSharedValue(0)
@@ -461,7 +460,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           isGliding,
           isSnapping,
           snappingTo,
-          endDrag,
           contentHeights,
           setContentHeights,
         }}

@@ -190,13 +190,7 @@ export type ContextType<T extends TabName = TabName> = {
    * The next snapping value, used only with diffClamp.
    */
   snappingTo: Animated.SharedValue<number>
-  /**
-   * Helper value to track if user is dragging on iOS, because iOS calls
-   * onMomentumEnd only after a vigorous swipe. If the user has finished the
-   * drag, but the onMomentumEnd has never triggered, we to need to manually
-   * call it to sync the scenes.
-   */
-  endDrag: Animated.SharedValue<number>
+
   /**
    * Height of the scrollable content of each tab. Helps to allow iOS bouncing.
    */
