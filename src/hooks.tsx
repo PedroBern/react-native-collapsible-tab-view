@@ -309,13 +309,11 @@ export const useScrollHandlerY = (name: TabName) => {
           // cancel the animation that is setting this back to 0 if we're still scrolling
           cancelAnimation(isScrolling)
 
-          if (!isDragging.value) {
-            // set it back to 0 after a few frames without active scrolling
-            isScrolling.value = withDelay(
-              ONE_FRAME_MS * 3,
-              withTiming(0, { duration: 0 })
-            )
-          }
+          // set it back to 0 after a few frames without active scrolling
+          isScrolling.value = withDelay(
+            ONE_FRAME_MS * 3,
+            withTiming(0, { duration: 0 })
+          )
         }
       },
       onBeginDrag: () => {
@@ -370,7 +368,12 @@ export const useScrollHandlerY = (name: TabName) => {
   // sync unfocused scenes
   useAnimatedReaction(
     () => {
-      return !isSnapping.value && !isScrolling.value && !isGliding.value
+      return (
+        !isSnapping.value &&
+        !isScrolling.value &&
+        !isGliding.value &&
+        !isDragging.value
+      )
     },
     (sync) => {
       if (sync && focusedTab.value !== name) {
