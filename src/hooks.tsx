@@ -266,14 +266,7 @@ export const useScrollHandlerY = (name: TabName) => {
       onScroll: (event) => {
         if (focusedTab.value === name) {
           const { y } = event.contentOffset
-          let contentHeight = contentHeights[name]
-          if (contentHeight == null) {
-            console.log(
-              `contentHeight for tab ${name} was undefined. This may be a bug with reanimated. Please open an issue if you see this error`
-            )
-            // try not to fail
-            contentHeight = Number.MAX_VALUE
-          }
+          const contentHeight = contentHeights[name]
           scrollYCurrent.value = interpolate(
             y,
             [0, contentHeight - (containerHeight || 0)],
