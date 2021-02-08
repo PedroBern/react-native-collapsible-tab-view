@@ -517,7 +517,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           <AnimatedFlatList
             // @ts-expect-error problem with reanimated types, they're missing `ref`
             ref={containerRef}
-            scrollToOverflowEnabled
             initialScrollIndex={index.value}
             data={data}
             keyExtractor={keyExtractor}
