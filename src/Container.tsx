@@ -48,7 +48,7 @@ const init = (children: any) => {
  * Basic usage looks like this:
  *
  * ```tsx
- * import * as Tabs from 'react-native-collapsible-tab-view'
+ * import { Tabs } from 'react-native-collapsible-tab-view'
  *
  * const Example = () => {
  *   return (
