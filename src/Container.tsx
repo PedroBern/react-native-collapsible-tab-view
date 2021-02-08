@@ -20,7 +20,7 @@ import { Context, TabNameContext } from './Context'
 import { Lazy } from './Lazy'
 import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
-import { AnimatedFlatList, ONE_FRAME_MS, scrollToImpl } from './helpers'
+import { AnimatedFlatList, IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
 import { useAnimatedDynamicRefs, useContainerRef, useTabProps } from './hooks'
 import {
   CollapsibleProps,
@@ -106,6 +106,11 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       initialHeaderHeight
     )
 
+    const contentInset = React.useMemo(
+      () => (IS_IOS ? (headerHeight || 0) + (tabBarHeight || 0) : 0),
+      [headerHeight, tabBarHeight]
+    )
+
     const isSwiping = useSharedValue(false)
     const isSnapping: ContextType['isSnapping'] = useSharedValue(false)
     const snappingTo: ContextType['snappingTo'] = useSharedValue(0)
@@ -186,7 +191,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     React.useEffect(() => {
       if (!firstRender.current) pagerOpacity.value = 0
       afterRender.value = withDelay(
-        ONE_FRAME_MS * 5,
+        ONE_FRAME_MS * 10,
         withTiming(1, { duration: 0 })
       )
     }, [afterRender, pagerOpacity, tabNamesArray])
@@ -214,13 +219,18 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           afterRender.value = 0
           tabNamesArray.forEach((name) => {
             'worklet'
-            scrollToImpl(refMap[name], 0, scrollY.value[index.value], false)
+            scrollToImpl(
+              refMap[name],
+              0,
+              scrollY.value[index.value] - contentInset,
+              false
+            )
           })
 
           pagerOpacity.value = withTiming(1)
         }
       },
-      [tabNamesArray, refMap, afterRender]
+      [tabNamesArray, refMap, afterRender, contentInset]
     )
 
     // derived from scrollX
@@ -437,6 +447,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     return (
       <Context.Provider
         value={{
+          contentInset,
           tabBarHeight: tabBarHeight || 0,
           headerHeight: headerHeight || 0,
           refMap,

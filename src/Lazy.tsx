@@ -10,8 +10,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { ScrollView } from './ScrollView'
-import { scrollToImpl } from './helpers'
-import { useTabNameContext, useTabsContext } from './hooks'
+import { useScroller, useTabNameContext, useTabsContext } from './hooks'
 
 /**
  * Typically used internally, but if you want to mix lazy and regular screens you can wrap the lazy ones with this component.
@@ -63,18 +62,20 @@ export const Lazy: React.FC<{
     [canMount, focusedTab]
   )
 
+  const scrollTo = useScroller()
+
   const ref = name ? refMap[name] : null
 
   useDerivedValue(() => {
     if (afterMount) {
       const tabIndex = tabNames.value.findIndex((n) => n === name)
       if (ref && tabIndex >= 0) {
-        scrollToImpl(ref, 0, scrollY.value[tabIndex], false)
+        scrollTo(ref, 0, scrollY.value[tabIndex], false, `[${name}] lazy sync`)
       }
       if (!cancelLazyFadeIn && opacity.value !== 1)
         opacity.value = withTiming(1)
     }
-  }, [ref, cancelLazyFadeIn, opacity, name, afterMount])
+  }, [ref, cancelLazyFadeIn, opacity, name, afterMount, tabNames, scrollTo])
 
   const stylez = useAnimatedStyle(() => {
     return {

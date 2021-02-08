@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollViewProps, ScrollView as RNScrollView } from 'react-native'
 import Animated from 'react-native-reanimated'
 
+import { IS_IOS } from './helpers'
 import {
   useChainCallback,
   useCollapsibleStyle,
@@ -25,7 +26,12 @@ export const ScrollView = React.forwardRef<
   ) => {
     const name = useTabNameContext()
     const ref = useSharedAnimatedRef<RNScrollView>(passRef)
-    const { setRef, setContentHeights } = useTabsContext()
+    const {
+      setRef,
+      setContentHeights,
+      contentInset,
+      scrollYCurrent,
+    } = useTabsContext()
     const scrollHandler = useScrollHandlerY(name)
     const {
       style: _style,
@@ -61,6 +67,11 @@ export const ScrollView = React.forwardRef<
         onScroll={scrollHandler}
         onContentSizeChange={scrollContentSizeChangeHandlers}
         scrollEventThrottle={16}
+        contentInset={{ top: contentInset }}
+        contentOffset={{
+          y: IS_IOS ? -contentInset + scrollYCurrent.value : 0,
+          x: 0,
+        }}
       >
         {children}
       </Animated.ScrollView>

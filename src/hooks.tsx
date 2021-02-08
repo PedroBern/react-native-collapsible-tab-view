@@ -7,12 +7,10 @@ import {
   MutableRefObject,
   useEffect,
 } from 'react'
-import { Platform, useWindowDimensions } from 'react-native'
+import { useWindowDimensions } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
-import {
+import Animated, {
   cancelAnimation,
-  Extrapolate,
-  interpolate,
   useAnimatedReaction,
   useAnimatedRef,
   useAnimatedScrollHandler,
@@ -23,13 +21,14 @@ import {
 import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { Context, TabNameContext } from './Context'
-import { ONE_FRAME_MS, scrollToImpl } from './helpers'
+import { IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
 import {
   CollapsibleStyle,
   ContextType,
   TabName,
   TabReactElement,
   TabsWithProps,
+  Ref,
 } from './types'
 
 export function useContainerRef() {
@@ -128,8 +127,10 @@ export function useCollapsibleStyle(): CollapsibleStyle {
   return {
     style: { width: windowWidth },
     contentContainerStyle: {
-      minHeight: (containerHeight || 0) + headerHeight,
-      paddingTop: headerHeight + tabBarHeight,
+      minHeight: IS_IOS
+        ? containerHeight || 0
+        : (containerHeight || 0) + headerHeight,
+      paddingTop: IS_IOS ? 0 : headerHeight + tabBarHeight,
     },
     progressViewOffset: headerHeight + tabBarHeight,
   }
@@ -175,6 +176,28 @@ export function useChainCallback(...fns: (Function | undefined)[]) {
   return callAll
 }
 
+export function useScroller<T extends RefComponent>() {
+  const { contentInset } = useTabsContext()
+
+  const scroller = useCallback(
+    (
+      ref: Ref<T> | undefined,
+      x: number,
+      y: number,
+      animated: boolean,
+      _debugKey: string
+    ) => {
+      'worklet'
+      if (!ref) return
+      console.log(`${_debugKey}, y: ${y}, y adjusted: ${y - contentInset}`)
+      scrollToImpl(ref, x, y - contentInset, animated)
+    },
+    [contentInset]
+  )
+
+  return scroller
+}
+
 export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
@@ -185,6 +208,7 @@ export const useScrollHandlerY = (name: TabName) => {
     tabNames,
     index,
     headerHeight,
+    contentInset,
     containerHeight,
     scrollYCurrent,
     scrollY,
@@ -193,7 +217,6 @@ export const useScrollHandlerY = (name: TabName) => {
     accScrollY,
     offset,
     headerScrollDistance,
-    isGliding,
     isSnapping,
     snappingTo,
     contentHeights,
@@ -209,7 +232,17 @@ export const useScrollHandlerY = (name: TabName) => {
    */
   const afterDrag = useSharedValue(0)
 
-  const [tabIndex] = useState(tabNames.value.findIndex((n) => n === name))
+  const tabIndex = useMemo(() => tabNames.value.findIndex((n) => n === name), [
+    tabNames,
+    name,
+  ])
+
+  const scrollTo = useScroller()
+
+  const clampMax = useMemo(() => {
+    const contentHeight = contentHeights[name] || Number.MAX_VALUE
+    return contentHeight - (containerHeight || 0) + contentInset
+  }, [contentHeights, name, contentInset, containerHeight])
 
   const onMomentumEnd = () => {
     'worklet'
@@ -243,7 +276,13 @@ export const useScrollHandlerY = (name: TabName) => {
               )
 
               if (scrollYCurrent.value < headerScrollDistance.value) {
-                scrollToImpl(refMap[name], 0, headerScrollDistance.value, true)
+                scrollTo(
+                  refMap[name],
+                  0,
+                  headerScrollDistance.value,
+                  true,
+                  `[${name}] sticky snap up`
+                )
               }
             }
           } else {
@@ -260,29 +299,42 @@ export const useScrollHandlerY = (name: TabName) => {
         ) {
           // snap down
           snappingTo.value = 0
-          scrollToImpl(refMap[name], 0, 0, true)
+          scrollTo(refMap[name], 0, 0, true, `[${name}] snap down`)
         } else if (scrollYCurrent.value <= headerScrollDistance.value) {
           // snap up
           snappingTo.value = headerScrollDistance.value
-          scrollToImpl(refMap[name], 0, headerScrollDistance.value, true)
+          scrollTo(
+            refMap[name],
+            0,
+            headerScrollDistance.value,
+            true,
+            `[${name}] snap up`
+          )
         }
         isSnapping.value = false
       }
     }
-    isGliding.value = false
   }
 
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
         if (focusedTab.value === name) {
-          const { y } = event.contentOffset
-          const contentHeight = contentHeights[name]
-          scrollYCurrent.value = interpolate(
+          let { y } = event.contentOffset
+
+          // normalize the value so it starts at 0
+          y = y + contentInset
+
+          // ios workaround, make sure we don't rest on 0 otherwise we can't pull to refresh
+          if (IS_IOS && y === 0) {
+            scrollTo(refMap[name], 0, 0, false, `[${name}]: ios reset`)
+          }
+
+          scrollYCurrent.value = Animated.interpolate(
             y,
-            [0, contentHeight - (containerHeight || 0)],
-            [0, contentHeight - (containerHeight || 0)],
-            Extrapolate.CLAMP
+            [0, clampMax],
+            [0, clampMax],
+            Animated.Extrapolate.CLAMP
           )
 
           scrollY.value[index.value] = scrollYCurrent.value
@@ -318,7 +370,13 @@ export const useScrollHandlerY = (name: TabName) => {
       },
       onBeginDrag: () => {
         // workaround to stop animated scrolls
-        scrollToImpl(refMap[name], 0, scrollYCurrent.value + 0.1, false)
+        scrollTo(
+          refMap[name],
+          0,
+          scrollY.value[tabIndex] + 0.1,
+          false,
+          `[${name}] stop scroll`
+        )
 
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
@@ -326,13 +384,12 @@ export const useScrollHandlerY = (name: TabName) => {
         isSnapping.value = false
         isDragging.value = true
 
-        if (Platform.OS === 'ios') cancelAnimation(afterDrag)
+        if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
-        isGliding.value = true
         isDragging.value = false
 
-        if (Platform.OS === 'ios') {
+        if (IS_IOS) {
           // we delay this by one frame so that onMomentumBegin may fire on iOS
           afterDrag.value = withDelay(
             ONE_FRAME_MS,
@@ -341,7 +398,6 @@ export const useScrollHandlerY = (name: TabName) => {
               // never started, so we need to manually trigger the onMomentumEnd
               // to make sure we snap
               if (isFinished) {
-                isGliding.value = false
                 onMomentumEnd()
               }
             })
@@ -349,7 +405,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onMomentumBegin: () => {
-        if (Platform.OS === 'ios') {
+        if (IS_IOS) {
           cancelAnimation(afterDrag)
         }
       },
@@ -362,18 +418,14 @@ export const useScrollHandlerY = (name: TabName) => {
       containerHeight,
       contentHeights,
       snapThreshold,
+      clampMax,
     ]
   )
 
   // sync unfocused scenes
   useAnimatedReaction(
     () => {
-      return (
-        !isSnapping.value &&
-        !isScrolling.value &&
-        !isGliding.value &&
-        !isDragging.value
-      )
+      return !isSnapping.value && !isScrolling.value && !isDragging.value
     },
     (sync) => {
       if (sync && focusedTab.value !== name) {
@@ -405,11 +457,11 @@ export const useScrollHandlerY = (name: TabName) => {
 
         if (nextPosition !== null) {
           scrollY.value[tabIndex] = nextPosition
-          scrollToImpl(refMap[name], 0, nextPosition, false)
+          scrollTo(refMap[name], 0, nextPosition, false, `[${name}] sync pane`)
         }
       }
     },
-    [diffClampEnabled, refMap, snapThreshold]
+    [diffClampEnabled, refMap, snapThreshold, tabIndex]
   )
 
   return scrollHandler

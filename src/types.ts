@@ -201,6 +201,8 @@ export type ContextType<T extends TabName = TabName> = {
   setContentHeights: React.Dispatch<
     React.SetStateAction<Record<string, number>>
   >
+
+  contentInset: number
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
