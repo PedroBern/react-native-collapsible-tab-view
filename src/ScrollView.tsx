@@ -13,7 +13,7 @@ import {
 } from './hooks'
 
 /**
- * Use like a regular scrollview.
+ * Use like a regular ScrollView.
  */
 export const ScrollView = React.forwardRef<
   RNScrollView,

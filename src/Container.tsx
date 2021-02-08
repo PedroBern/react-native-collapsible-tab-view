@@ -48,11 +48,7 @@ const init = (children: any) => {
  * Basic usage looks like this:
  *
  * ```tsx
- * import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
- *
- * type TabNames = 'A' | 'B'
- *
- * const Tabs = createCollapsibleTabs<TabNames>()
+ * import * as Tabs from 'react-native-collapsible-tab-view'
  *
  * const Example = () => {
  *   return (

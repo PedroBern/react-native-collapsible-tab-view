@@ -41,7 +41,7 @@ export const TABBAR_HEIGHT = 48
  * </Tabs.Container>
  * ```
  */
-const TabBar = <T extends TabName = any>({
+export const MaterialTabBar = <T extends TabName = any>({
   tabNames,
   indexDecimal,
   scrollEnabled = false,
@@ -240,5 +240,3 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
   },
 })
-
-export { TabBar as MaterialTabBar }

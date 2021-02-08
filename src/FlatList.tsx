@@ -12,9 +12,6 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
-/**
- * Use like a regular flatlist.
- */
 function FlatListImpl<R>(
   {
     contentContainerStyle,
@@ -64,6 +61,9 @@ function FlatListImpl<R>(
   )
 }
 
+/**
+ * Use like a regular FlatList.
+ */
 export const FlatList = React.forwardRef(FlatListImpl) as <T>(
   p: FlatListProps<T> & { ref?: React.Ref<RNFlatList<T>> }
 ) => React.ReactElement

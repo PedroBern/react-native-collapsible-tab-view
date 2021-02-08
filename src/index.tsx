@@ -1,8 +1,4 @@
-import {
-  MaterialTabBarProps,
-  MaterialTabItemProps,
-  MaterialTabItem,
-} from './MaterialTabBar'
+import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
 import {
   TabBarProps,
   CollapsibleProps,
@@ -19,7 +15,6 @@ export type {
   ContainerRef,
   MaterialTabBarProps,
   MaterialTabItemProps,
-  MaterialTabItem,
   CollapsibleRef,
   OnTabChangeCallback,
 }
@@ -29,6 +24,6 @@ export { FlatList } from './FlatList'
 export { ScrollView } from './ScrollView'
 export { Lazy } from './Lazy'
 export { Tab } from './Tab'
-export { useTabsContext, useTabNameContext } from './hooks'
-
-export { MaterialTabBar } from './MaterialTabBar'
+export { useTabsContext, useTabNameContext, useCollapsibleStyle } from './hooks'
+export { MaterialTabBar } from './MaterialTabBar/TabBar'
+export { MaterialTabItem } from './MaterialTabBar/TabItem'

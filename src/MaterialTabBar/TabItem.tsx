@@ -14,7 +14,7 @@ const DEFAULT_COLOR = 'rgba(0, 0, 0, 1)'
 /**
  * Any additional props are passed to the pressable component.
  */
-const TabItem = <T extends TabName = any>({
+export const MaterialTabItem = <T extends TabName = any>({
   name,
   index,
   onPress,
@@ -83,5 +83,3 @@ const styles = StyleSheet.create({
     margin: 4,
   },
 })
-
-export { TabItem as MaterialTabItem }

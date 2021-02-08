@@ -103,7 +103,7 @@ export function useTabsContext(): ContextType<TabName> {
 }
 
 /**
- * Access the parent tab screen fron any deep component.
+ * Access the parent tab screen from any deep component.
  *
  * ```tsx
  * const tabName = useTabNameContext()
