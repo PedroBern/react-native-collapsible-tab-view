@@ -525,6 +525,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
             showsHorizontalScrollIndicator={false}
             getItemLayout={getItemLayout}
             scrollEventThrottle={16}
+            bounces={false}
             {...pagerProps}
             style={[pagerStylez, pagerProps?.style]}
           />
