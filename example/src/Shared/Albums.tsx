@@ -1,6 +1,14 @@
 import * as React from 'react'
-import { Image, Dimensions, StyleSheet, View } from 'react-native'
-import * as Tabs from 'react-native-collapsible-tab-view'
+import {
+  Image,
+  Dimensions,
+  StyleSheet,
+  View,
+  RefreshControl,
+} from 'react-native'
+import { Tabs, useCollapsibleStyle } from 'react-native-collapsible-tab-view'
+
+import { useRefresh } from './useRefresh'
 
 const COVERS = [
   require('../../assets/album-art-1.jpg'),
@@ -23,18 +31,28 @@ export const AlbumsContent = () => {
   return <View style={styles.content}>{albumsContent()}</View>
 }
 
-export default class Albums extends React.Component {
-  render() {
-    return (
-      <Tabs.ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
-      >
-        <AlbumsContent />
-      </Tabs.ScrollView>
-    )
-  }
+export const Albums: React.FC = () => {
+  const [isRefreshing, startRefreshing] = useRefresh()
+  const { progressViewOffset } = useCollapsibleStyle()
+
+  return (
+    <Tabs.ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={startRefreshing}
+          progressViewOffset={progressViewOffset}
+        />
+      }
+    >
+      <AlbumsContent />
+    </Tabs.ScrollView>
+  )
 }
+
+export default Albums
 
 const styles = StyleSheet.create({
   container: {

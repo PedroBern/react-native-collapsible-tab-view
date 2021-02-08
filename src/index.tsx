@@ -1,4 +1,9 @@
+import { Container } from './Container'
+import { FlatList } from './FlatList'
+import { Lazy } from './Lazy'
 import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
+import { ScrollView } from './ScrollView'
+import { Tab } from './Tab'
 import {
   TabBarProps,
   CollapsibleProps,
@@ -19,11 +24,15 @@ export type {
   OnTabChangeCallback,
 }
 
-export { Container } from './Container'
-export { FlatList } from './FlatList'
-export { ScrollView } from './ScrollView'
-export { Lazy } from './Lazy'
-export { Tab } from './Tab'
+export const Tabs = {
+  Container,
+  Tab,
+  Lazy,
+  FlatList,
+  ScrollView,
+}
+
+export { Container, Tab, Lazy, FlatList, ScrollView }
 export { useTabsContext, useTabNameContext, useCollapsibleStyle } from './hooks'
 export { MaterialTabBar } from './MaterialTabBar/TabBar'
 export { MaterialTabItem } from './MaterialTabBar/TabItem'

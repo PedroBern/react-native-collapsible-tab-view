@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated'
+import { useRefresh } from './useRefresh'
 
 // import { HEADER_HEIGHT } from './Header'
 
@@ -122,6 +123,8 @@ const ListEmptyComponent = () => {
 }
 
 const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
+  const [isRefreshing, startRefreshing] = useRefresh()
+
   return (
     <Tabs.FlatList
       data={emptyContacts ? [] : CONTACTS}
@@ -129,6 +132,8 @@ const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
       ListEmptyComponent={ListEmptyComponent}
+      onRefresh={startRefreshing}
+      refreshing={isRefreshing}
     />
   )
 }
