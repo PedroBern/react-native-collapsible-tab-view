@@ -20,7 +20,9 @@ function generateProp(
     description = description.replace(/\s+/gm, ' ')
   }
 
-  let md = `|${propName}|\`${escape(prop.type.name)}\`|`
+  let md = ''
+  md = `|${propName}|\``
+  md += `${escape(prop.type.name)}\`|`
   md += skipDefaults
     ? ''
     : `${prop.defaultValue ? '`' + escape(prop.defaultValue.value) + '`' : ''}|`

@@ -15,14 +15,12 @@
 - [Guides](#guides)
   - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
-  - [createCollapsibleTabs](#createcollapsibletabs)
+  - [Core](#core)
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
-    - [useTabsContext](#usetabscontext)
-    - [useCollapsibleStyle](#usecollapsiblestyle)
-    - [useTabNameContext](#usetabnamecontext)
+  - [Hooks](#hooks)
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
@@ -80,57 +78,41 @@ Then, add Reanimated v2, [follow the official installation guide](https://docs.s
 ```tsx
 import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
-import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
-
-type TabNames = 'A' | 'B'
-
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
+import * as Tabs from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
 
+const Header = () => {
+  return <View style={styles.header} />
+}
+
 const Example: React.FC = () => {
+  const renderItem: ListRenderItem<number> = React.useCallback(({ index }) => {
+    return (
+      <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
+    )
+  }, [])
+
   return (
     <Tabs.Container
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT} // optional
     >
       <Tabs.Tab name="A">
-        <ScreenA />
+        <Tabs.FlatList
+          data={[0, 1, 2, 3, 4]}
+          renderItem={renderItem}
+          keyExtractor={(v) => v + ''}
+        />
       </Tabs.Tab>
       <Tabs.Tab name="B">
-        <ScreenB />
+        <Tabs.ScrollView>
+          <View style={[styles.box, styles.boxA]} />
+          <View style={[styles.box, styles.boxB]} />
+        </Tabs.ScrollView>
       </Tabs.Tab>
     </Tabs.Container>
   )
-}
-
-const ScreenB = () => {
-  return (
-    <Tabs.ScrollView>
-      <View style={[styles.box, styles.boxA]} />
-      <View style={[styles.box, styles.boxB]} />
-    </Tabs.ScrollView>
-  )
-}
-
-const renderItem: ListRenderItem<number> = ({ index }) => {
-  return (
-    <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
-  )
-}
-
-const ScreenA = () => {
-  return (
-    <Tabs.FlatList
-      data={[0, 1, 2, 3, 4]}
-      renderItem={renderItem}
-      keyExtractor={(v) => v + ''}
-    />
-  )
-}
-
-const Header = () => {
-  return <View style={styles.header} />
 }
 
 const styles = StyleSheet.create({
@@ -168,48 +150,14 @@ If you want to allow scrolling from the header:
 
 # API reference
 
-## createCollapsibleTabs
-
-Basic usage looks like this:
-
-```tsx
-import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
-
-type MyTabs = 'tab0' | 'tab1'
-
-const {
- Container,
- FlatList,
- ScrollView,
- useTabsContext
- useTabNameContext,
- useCollapsibleStyle,
-} = createCollapsibleTabs<MyTabs>()
-```
-
-or
-```tsx
-const { useTabsContext, , ...Tabs } = createCollapsibleTabs<MyTabs>()
-```
-
-use like this:
-```tsx
-<Tabs.Container {...props} />
-<Tabs.FlatList {...props} />
-<Tabs.ScrollView {...props} />
-```
-
+## Core
 
 ### Tabs.Container
 
 Basic usage looks like this:
 
 ```tsx
-import { createCollapsibleTabs } from 'react-native-collapsible-tab-view'
-
-type TabNames = 'A' | 'B'
-
-const Tabs = createCollapsibleTabs<TabNames>()
+import * as Tabs from 'react-native-collapsible-tab-view'
 
 const Example = () => {
    return (
@@ -234,18 +182,17 @@ const Example = () => {
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
-|diffClampEnabled|`boolean \| undefined`|`false`||
 |headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
 |headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-|initialTabName|`string \| undefined`|||
+|headerStickyness|`"disabled" \| "reveal-on-scroll" \| undefined`|`disabled`||
+|initialTabName|`string \| number \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
-|onIndexChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the index changes. It receives the previous and current index and tabnames.|
+|onIndexChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the index changes. It receives the current index.|
+|onTabChange|`OnTabChangeCallback<TabName> \| undefined`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
 |pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
-|snapEnabled|`boolean \| undefined`|`false`||
-|snapThreshold|`number \| undefined`|`0.5`|Percentage of header height to make the snap effect. A number between 0 and 1.|
+|snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-
 
 ### Tabs.Tab
 
@@ -267,8 +214,7 @@ Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
 |name|type|
 |:----:|:----:|
 |label|`string \| undefined`|
-|name|`string`|
-
+|name|`T`|
 
 ### Tabs.Lazy
 
@@ -281,60 +227,19 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 |cancelLazyFadeIn|`boolean \| undefined`|
 |startMounted|`boolean \| undefined`|
 
-
 ### Tabs.FlatList
 
-Use like a regular flatlist.
-
+Use like a regular FlatList.
 
 ### Tabs.ScrollView
 
-Use like a regular scrollview.
+Use like a regular ScrollView.
 
 
-### useTabsContext
 
-Hook exposing some useful variables.
+## Hooks
 
-```tsx
-const { focusedTab, ...rest } = useTabsContext()
-```
-
-#### Values
-
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|accDiffClamp|`SharedValue<number>`||DiffClamp value. It's the current visible header height if `diffClampEnabled={true}`.|
-|containerHeight|`number \| undefined`|||
-|diffClampEnabled|`boolean`|`false`||
-|focusedTab|`SharedValue<string>`||Name of the current focused tab.|
-|headerHeight|`number`|||
-|index|`SharedValue<number>`||Current index of the pager.|
-|indexDecimal|`SharedValue<number>`||Index value, including decimal points. Use this to interpolate tab indicators.|
-|refMap|`Record<ReactText, Ref<RefComponent>>`||Object containing the ref of each scrollable component.|
-|scrollY|`SharedValue<number[]>`||Array of the scroll y position of each tab.|
-|scrollYCurrent|`SharedValue<number>`||Scroll position of current tab.|
-|snapEnabled|`boolean`|`false`||
-|snapThreshold|`number`|`0.5`||
-|tabBarHeight|`number`|||
-|tabNames|`SharedValue<string[]>`||Tab names, same as the keys of `refMap`.|
-
-
-### useCollapsibleStyle
-
-Hook to access some key styles that make the whole think work.
-
-You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
-
-#### Values
-
-|name|type|
-|:----:|:----:|
-|contentContainerStyle|`{ minHeight: number; paddingTop: number; }`|
-|progressViewOffset|`number`|
-|style|`{ width: number; }`|
-
-
+TODO
 
 ## Default Tab Bar
 
@@ -381,7 +286,6 @@ Basic usage looks like this:
 |tabProps|`TabsWithProps<T>`|||
 |tabStyle|`StyleProp<ViewStyle>`||Style to apply to the individual tab items in the tab bar.|
 
-
 ### MaterialTabItem
 
 Any additional props are passed to the pressable component.
@@ -404,7 +308,6 @@ Any additional props are passed to the pressable component.
 |pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
 |scrollEnabled|`boolean \| undefined`|||
 |style|`StyleProp<ViewStyle>`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
-
 
 
 

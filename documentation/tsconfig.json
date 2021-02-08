@@ -1,8 +1,0 @@
-{
-  "ts-node": {
-    "files": true
-  },
-  "files": [
-    "global.d.ts"
-  ],
-}

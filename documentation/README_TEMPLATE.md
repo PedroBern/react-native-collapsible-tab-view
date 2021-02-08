@@ -15,14 +15,12 @@
 - [Guides](#guides)
   - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
-  - [createCollapsibleTabs](#createcollapsibletabs)
+  - [Core](#core)
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
-    - [useTabsContext](#usetabscontext)
-    - [useCollapsibleStyle](#usecollapsiblestyle)
-    - [useTabNameContext](#usetabnamecontext)
+  - [Hooks](#hooks)
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
@@ -94,9 +92,13 @@ If you want to allow scrolling from the header:
 
 # API reference
 
+## Core
+
 $CORE_API
 
-$CORE_COMPONENTS_API
+## Hooks
+
+TODO
 
 ## Default Tab Bar
 
