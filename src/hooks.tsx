@@ -205,37 +205,42 @@ export const useScrollHandlerY = (name: TabName) => {
   const onMomentumEnd = () => {
     'worklet'
     if (typeof snapThreshold === 'number') {
-      if (diffClampEnabled && accDiffClamp.value > 0) {
-        if (scrollYCurrent.value > headerScrollDistance.value * snapThreshold) {
+      if (diffClampEnabled) {
+        if (accDiffClamp.value > 0) {
           if (
-            accDiffClamp.value <=
+            scrollYCurrent.value >
             headerScrollDistance.value * snapThreshold
           ) {
-            // snap down
+            if (
+              accDiffClamp.value <=
+              headerScrollDistance.value * snapThreshold
+            ) {
+              // snap down
+              isSnapping.value = true
+              accDiffClamp.value = withTiming(0, undefined, () => {
+                isSnapping.value = false
+              })
+            } else if (accDiffClamp.value < headerScrollDistance.value) {
+              // snap up
+              isSnapping.value = true
+              accDiffClamp.value = withTiming(
+                headerScrollDistance.value,
+                undefined,
+                () => {
+                  isSnapping.value = false
+                }
+              )
+
+              if (scrollYCurrent.value < headerScrollDistance.value) {
+                scrollToImpl(refMap[name], 0, headerScrollDistance.value, true)
+              }
+            }
+          } else {
             isSnapping.value = true
             accDiffClamp.value = withTiming(0, undefined, () => {
               isSnapping.value = false
             })
-          } else if (accDiffClamp.value < headerScrollDistance.value) {
-            // snap up
-            isSnapping.value = true
-            accDiffClamp.value = withTiming(
-              headerScrollDistance.value,
-              undefined,
-              () => {
-                isSnapping.value = false
-              }
-            )
-
-            if (scrollYCurrent.value < headerScrollDistance.value) {
-              scrollToImpl(refMap[name], 0, headerScrollDistance.value, true)
-            }
           }
-        } else {
-          isSnapping.value = true
-          accDiffClamp.value = withTiming(0, undefined, () => {
-            isSnapping.value = false
-          })
         }
       } else {
         if (
