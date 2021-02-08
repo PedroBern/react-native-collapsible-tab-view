@@ -203,7 +203,7 @@ export const useScrollHandlerY = (name: TabName) => {
     accDiffClamp,
     focusedTab,
     snapThreshold,
-    diffClampEnabled,
+    revealHeaderOnScroll,
     refMap,
     tabNames,
     index,
@@ -249,7 +249,7 @@ export const useScrollHandlerY = (name: TabName) => {
     if (isDragging.value) return
 
     if (typeof snapThreshold === 'number') {
-      if (diffClampEnabled) {
+      if (revealHeaderOnScroll) {
         if (accDiffClamp.value > 0) {
           if (
             scrollYCurrent.value >
@@ -341,7 +341,7 @@ export const useScrollHandlerY = (name: TabName) => {
           oldAccScrollY.value = accScrollY.value
           accScrollY.value = scrollY.value[index.value] + offset.value
 
-          if (!isSnapping.value && diffClampEnabled) {
+          if (!isSnapping.value && revealHeaderOnScroll) {
             const delta = accScrollY.value - oldAccScrollY.value
             const nextValue = accDiffClamp.value + delta
             if (delta > 0) {
@@ -414,7 +414,7 @@ export const useScrollHandlerY = (name: TabName) => {
     [
       refMap,
       name,
-      diffClampEnabled,
+      revealHeaderOnScroll,
       containerHeight,
       contentHeights,
       snapThreshold,
@@ -439,7 +439,7 @@ export const useScrollHandlerY = (name: TabName) => {
           const focusedIsOnTop =
             focusedScrollY <= headerScrollDistance.value + 1
 
-          if (diffClampEnabled) {
+          if (revealHeaderOnScroll) {
             const hasGap = accDiffClamp.value > tabScrollY
             if (hasGap || currIsOnTop) {
               nextPosition = accDiffClamp.value
@@ -461,7 +461,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       }
     },
-    [diffClampEnabled, refMap, snapThreshold, tabIndex]
+    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex]
   )
 
   return scrollHandler

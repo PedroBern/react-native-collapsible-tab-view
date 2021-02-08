@@ -30,25 +30,11 @@ import {
   TabName,
 } from './types'
 
-const init = (children: any) => {
-  if (React.Children.count(children) === 0) {
-    throw new Error('CollapsibleTabs must have at least one child.')
-  }
-  React.Children.forEach(children, (child) => {
-    if (!React.isValidElement(child)) {
-      throw new Error(
-        'CollapsibleTabs children must be array of React Elements.'
-      )
-    }
-  })
-  return true
-}
-
 /**
  * Basic usage looks like this:
  *
  * ```tsx
- * import * as Tabs from 'react-native-collapsible-tab-view'
+ * import { Tabs } from 'react-native-collapsible-tab-view'
  *
  * const Example = () => {
  *   return (
@@ -71,7 +57,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       headerHeight: initialHeaderHeight,
       minHeaderHeight = 0,
       tabBarHeight: initialTabBarHeight = TABBAR_HEIGHT,
-      headerStickyness = 'disabled',
+      revealHeaderOnScroll = false,
       snapThreshold,
       children,
       HeaderComponent,
@@ -94,7 +80,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     const [refMap, setRef] = useAnimatedDynamicRefs()
 
     const windowWidth = useWindowDimensions().width
-    const firstRender = React.useRef(init(children))
+    const firstRender = React.useRef(true)
 
     const [containerHeight, setContainerHeight] = React.useState<
       number | undefined
@@ -165,11 +151,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
         index,
       }),
       [windowWidth]
-    )
-
-    const diffClampEnabled = React.useMemo(
-      () => headerStickyness === 'reveal-on-scroll',
-      [headerStickyness]
     )
 
     const indexDecimal: ContextType['indexDecimal'] = useDerivedValue(() => {
@@ -323,13 +304,13 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       return {
         transform: [
           {
-            translateY: diffClampEnabled
+            translateY: revealHeaderOnScroll
               ? -accDiffClamp.value
               : -Math.min(scrollYCurrent.value, headerScrollDistance.value),
           },
         ],
       }
-    }, [diffClampEnabled])
+    }, [revealHeaderOnScroll])
 
     const getHeaderHeight = React.useCallback(
       (event: LayoutChangeEvent) => {
@@ -454,7 +435,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           tabNames,
           index,
           snapThreshold,
-          diffClampEnabled,
+          revealHeaderOnScroll,
           focusedTab,
           accDiffClamp,
           indexDecimal,

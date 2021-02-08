@@ -4,14 +4,14 @@ import ExampleComponent from './Shared/ExampleComponent'
 import { buildHeader } from './Shared/Header'
 import { ExampleComponentType } from './types'
 
-const title = 'Sticky Header + Snap Example'
+const title = 'Reveal Header On Scroll + Snap'
 
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
   return (
     <ExampleComponent
-      headerStickyness="reveal-on-scroll"
+      revealHeaderOnScroll
       snapThreshold={0.5}
       HeaderComponent={Header}
     />

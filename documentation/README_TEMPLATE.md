@@ -21,6 +21,8 @@
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
   - [Hooks](#hooks)
+    - [useCollapsibleStyle](#usecollapsiblestyle)
+    - [useTabNameContext](#usetabnamecontext)
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
@@ -44,7 +46,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 
 # Demo
 
-|                                                     Default                                                      |                                                     Snap                                                      |                                                     DiffClamp                                                      |                                                    DiffClamp + Snap                                                     |
+|                                                     Default                                                      |                                                     Snap                                                      |                                                revealHeaderOnScroll                                                |                                               revealHeaderOnScroll + Snap                                               |
 | :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/default.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/snap.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp_snap.gif" width="360"> |
 
@@ -98,7 +100,33 @@ $CORE_API
 
 ## Hooks
 
-TODO
+### useCollapsibleStyle
+
+Hook to access some key styles that make the whole think work. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+
+```tsx
+const {
+  contentContainerStyle,
+  progressViewOffset,
+  style,
+} = useCollapsibleStyle()
+```
+
+#### Values
+
+|         name          |                     type                     |
+| :-------------------: | :------------------------------------------: |
+| contentContainerStyle | `{ minHeight: number; paddingTop: number; }` |
+|  progressViewOffset   |                   `number`                   |
+|         style         |             `{ width: number; }`             |
+
+### useTabNameContext
+
+Access the parent tab name from any deep component.
+
+```tsx
+const tabName = useTabNameContext()
+```
 
 ## Default Tab Bar
 

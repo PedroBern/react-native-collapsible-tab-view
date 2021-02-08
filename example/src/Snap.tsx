@@ -4,7 +4,7 @@ import ExampleComponent from './Shared/ExampleComponent'
 import { buildHeader } from './Shared/Header'
 import { ExampleComponentType } from './types'
 
-const title = 'Snap Example'
+const title = 'Snap'
 
 const Header = buildHeader(title)
 

@@ -68,8 +68,10 @@ export type CollapsibleProps = {
    * Header minimum height when collapsed
    */
   minHeaderHeight?: number
-
-  headerStickyness?: 'disabled' | 'reveal-on-scroll'
+  /**
+   * Reveal header when scrolling down. Implements diffClamp.
+   */
+  revealHeaderOnScroll?: boolean
   /**
    * Percentage of header height to define as the snap point. A number between
    * 0 and 1, or `null` to disable snapping.
@@ -118,7 +120,7 @@ export type CollapsibleProps = {
 export type ContextType<T extends TabName = TabName> = {
   headerHeight: number
   tabBarHeight: number
-  diffClampEnabled: boolean
+  revealHeaderOnScroll: boolean
   snapThreshold: number | null | undefined
   /**
    * Index value, including decimal points. Use this to interpolate tab

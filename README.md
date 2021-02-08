@@ -21,6 +21,8 @@
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
   - [Hooks](#hooks)
+    - [useCollapsibleStyle](#usecollapsiblestyle)
+    - [useTabNameContext](#usetabnamecontext)
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
@@ -44,7 +46,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 
 # Demo
 
-|                                                     Default                                                      |                                                     Snap                                                      |                                                     DiffClamp                                                      |                                                    DiffClamp + Snap                                                     |
+|                                                     Default                                                      |                                                     Snap                                                      |                                                revealHeaderOnScroll                                                |                                               revealHeaderOnScroll + Snap                                               |
 | :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/default.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/snap.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp_snap.gif" width="360"> |
 
@@ -78,7 +80,7 @@ Then, add Reanimated v2, [follow the official installation guide](https://docs.s
 ```tsx
 import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
-import * as Tabs from 'react-native-collapsible-tab-view'
+import { Tabs } from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
 
@@ -157,7 +159,7 @@ If you want to allow scrolling from the header:
 Basic usage looks like this:
 
 ```tsx
-import * as Tabs from 'react-native-collapsible-tab-view'
+import { Tabs } from 'react-native-collapsible-tab-view'
 
 const Example = () => {
    return (
@@ -184,13 +186,13 @@ const Example = () => {
 |containerStyle|`StyleProp<ViewStyle>`|||
 |headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
 |headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-|headerStickyness|`"disabled" \| "reveal-on-scroll" \| undefined`|`disabled`||
 |initialTabName|`string \| number \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
 |onIndexChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the index changes. It receives the current index.|
 |onTabChange|`OnTabChangeCallback<TabName> \| undefined`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
 |pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|revealHeaderOnScroll|`boolean \| undefined`|`false`|Reveal header when scrolling down. Implements diffClamp.|
 |snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
 
@@ -239,7 +241,33 @@ Use like a regular ScrollView.
 
 ## Hooks
 
-TODO
+### useCollapsibleStyle
+
+Hook to access some key styles that make the whole think work. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+
+```tsx
+const {
+  contentContainerStyle,
+  progressViewOffset,
+  style,
+} = useCollapsibleStyle()
+```
+
+#### Values
+
+|         name          |                     type                     |
+| :-------------------: | :------------------------------------------: |
+| contentContainerStyle | `{ minHeight: number; paddingTop: number; }` |
+|  progressViewOffset   |                   `number`                   |
+|         style         |             `{ width: number; }`             |
+
+### useTabNameContext
+
+Access the parent tab name from any deep component.
+
+```tsx
+const tabName = useTabNameContext()
+```
 
 ## Default Tab Bar
 
