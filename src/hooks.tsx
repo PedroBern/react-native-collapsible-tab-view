@@ -199,18 +199,22 @@ export const useScrollHandlerY = (name: TabName) => {
     contentHeights,
   } = useTabsContext()
 
+  const isDragging = useSharedValue(false)
+
   /**
    * Helper value to track if user is dragging on iOS, because iOS calls
    * onMomentumEnd only after a vigorous swipe. If the user has finished the
    * drag, but the onMomentumEnd has never triggered, we to need to manually
    * call it to sync the scenes.
    */
-  const endDrag = useSharedValue(0)
+  const afterDrag = useSharedValue(0)
 
   const [tabIndex] = useState(tabNames.value.findIndex((n) => n === name))
 
   const onMomentumEnd = () => {
     'worklet'
+    if (isDragging.value) return
+
     if (typeof snapThreshold === 'number') {
       if (diffClampEnabled) {
         if (accDiffClamp.value > 0) {
@@ -305,23 +309,34 @@ export const useScrollHandlerY = (name: TabName) => {
           // cancel the animation that is setting this back to 0 if we're still scrolling
           cancelAnimation(isScrolling)
 
-          // set it back to 0 after a few frames without active scrolling
-          isScrolling.value = withDelay(
-            ONE_FRAME_MS * 3,
-            withTiming(0, { duration: 0 })
-          )
+          if (!isDragging.value) {
+            // set it back to 0 after a few frames without active scrolling
+            isScrolling.value = withDelay(
+              ONE_FRAME_MS * 3,
+              withTiming(0, { duration: 0 })
+            )
+          }
         }
       },
       onBeginDrag: () => {
+        // workaround to stop animated scrolls
+        scrollToImpl(refMap[name], 0, scrollYCurrent.value + 0.1, false)
+
+        // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
+
         isSnapping.value = false
-        endDrag.value = 0
+        isDragging.value = true
+
+        if (Platform.OS === 'ios') cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
         isGliding.value = true
+        isDragging.value = false
+
         if (Platform.OS === 'ios') {
-          endDrag.value = 1
-          endDrag.value = withDelay(
+          // we delay this by one frame so that onMomentumBegin may fire on iOS
+          afterDrag.value = withDelay(
             ONE_FRAME_MS,
             withTiming(0, { duration: 0 }, (isFinished) => {
               // if the animation is finished, the onMomentumBegin has
@@ -337,7 +352,7 @@ export const useScrollHandlerY = (name: TabName) => {
       },
       onMomentumBegin: () => {
         if (Platform.OS === 'ios') {
-          cancelAnimation(endDrag)
+          cancelAnimation(afterDrag)
         }
       },
       onMomentumEnd,
