@@ -30,20 +30,6 @@ import {
   TabName,
 } from './types'
 
-const init = (children: any) => {
-  if (React.Children.count(children) === 0) {
-    throw new Error('CollapsibleTabs must have at least one child.')
-  }
-  React.Children.forEach(children, (child) => {
-    if (!React.isValidElement(child)) {
-      throw new Error(
-        'CollapsibleTabs children must be array of React Elements.'
-      )
-    }
-  })
-  return true
-}
-
 /**
  * Basic usage looks like this:
  *
@@ -94,7 +80,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     const [refMap, setRef] = useAnimatedDynamicRefs()
 
     const windowWidth = useWindowDimensions().width
-    const firstRender = React.useRef(init(children))
+    const firstRender = React.useRef(true)
 
     const [containerHeight, setContainerHeight] = React.useState<
       number | undefined
