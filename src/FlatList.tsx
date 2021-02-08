@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList as RNFlatList, FlatListProps } from 'react-native'
 
-import { AnimatedFlatList } from './helpers'
+import { AnimatedFlatList, IS_IOS } from './helpers'
 import {
   useChainCallback,
   useCollapsibleStyle,
@@ -22,7 +22,12 @@ function FlatListImpl<R>(
   passRef: React.Ref<RNFlatList>
 ): React.ReactElement {
   const name = useTabNameContext()
-  const { setRef, setContentHeights, contentInset } = useTabsContext()
+  const {
+    setRef,
+    setContentHeights,
+    contentInset,
+    scrollYCurrent,
+  } = useTabsContext()
   const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
   const scrollHandler = useScrollHandlerY(name)
   const {
@@ -58,6 +63,10 @@ function FlatListImpl<R>(
       onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
       contentInset={{ top: contentInset }}
+      contentOffset={{
+        y: IS_IOS ? -contentInset + scrollYCurrent.value : 0,
+        x: 0,
+      }}
     />
   )
 }
