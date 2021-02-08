@@ -26,7 +26,6 @@ import { ONE_FRAME_MS, scrollToImpl } from './helpers'
 import {
   CollapsibleStyle,
   ContextType,
-  Ref,
   TabName,
   TabReactElement,
   TabsWithProps,
@@ -40,7 +39,7 @@ export function useAnimatedDynamicRefs(): [
   ContextType['refMap'],
   ContextType['setRef']
 ] {
-  const [map, setMap] = useState<Record<TabName, Ref<RefComponent>>>({})
+  const [map, setMap] = useState<ContextType['refMap']>({})
   const setRef = useCallback(function <T extends RefComponent>(
     key: TabName,
     ref: React.RefObject<T>
