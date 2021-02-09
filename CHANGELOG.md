@@ -1,3 +1,11 @@
+# [3.8.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.7.1...v3.8.0) (2021-02-09)
+
+
+### Features
+
+* add minHeaderHeight prop ([0036da3](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0036da3fe95fe1476a250a0e69b508460e4f58ec)), closes [#95](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/95) [#5](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/5)
+* add tab item customization props in tab bar ([fe4ac3c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fe4ac3c53f4bc2cefd0580a3e82903bd1b9bd7a4)), closes [#82](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/82)
+
 ## [3.7.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.7.0...v3.7.1) (2021-02-01)
 
 ### Bug Fixes
