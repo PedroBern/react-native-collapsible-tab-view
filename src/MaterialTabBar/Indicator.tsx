@@ -38,7 +38,7 @@ const Indicator: React.FC<IndicatorProps> = ({
             itemsLayout.map((_, i) => i),
             itemsLayout.map((v) => v.width)
           )
-        : itemsLayout[0].width
+        : itemsLayout[0]?.width
 
     return {
       transform,
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Indicator
+export { Indicator }

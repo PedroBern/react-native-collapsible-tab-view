@@ -11,9 +11,10 @@ module.exports = {
     // 'react-native/no-color-literals': 'warn',
     // 'react-native/no-raw-text': 'warn',
     // 'react-native/no-single-element-style-arrays': 'warn',
+    'import/no-default-export': 'error',
   },
   plugins: ['react-native-globals', 'react-native'],
-  extends: 'universe/native',
+  extends: ['universe/native'],
   env: {
     'react-native-globals/all': true,
   },

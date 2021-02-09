@@ -1,68 +1,40 @@
 import React from 'react'
 import { View, StyleSheet, ListRenderItem } from 'react-native'
-import {
-  RefComponent,
-  ContainerRef,
-  createCollapsibleTabs,
-} from 'react-native-collapsible-tab-view'
-import { useAnimatedRef } from 'react-native-reanimated'
-
-type TabNames = 'A' | 'B'
-
-const { useTabsContext, ...Tabs } = createCollapsibleTabs<TabNames>()
+import { Tabs } from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
 
-const Example: React.FC = () => {
-  const containerRef = useAnimatedRef<ContainerRef>()
-  const tabARef = useAnimatedRef<RefComponent>()
-  const tabBRef = useAnimatedRef<RefComponent>()
+const Header = () => {
+  return <View style={styles.header} />
+}
 
-  const [refMap] = React.useState({
-    A: tabARef,
-    B: tabBRef,
-  })
+const Example: React.FC = () => {
+  const renderItem: ListRenderItem<number> = React.useCallback(({ index }) => {
+    return (
+      <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
+    )
+  }, [])
 
   return (
     <Tabs.Container
-      containerRef={containerRef}
       HeaderComponent={Header}
       headerHeight={HEADER_HEIGHT} // optional
-      refMap={refMap}
     >
-      <ScreenA />
-      <ScreenB />
+      <Tabs.Tab name="A">
+        <Tabs.FlatList
+          data={[0, 1, 2, 3, 4]}
+          renderItem={renderItem}
+          keyExtractor={(v) => v + ''}
+        />
+      </Tabs.Tab>
+      <Tabs.Tab name="B">
+        <Tabs.ScrollView>
+          <View style={[styles.box, styles.boxA]} />
+          <View style={[styles.box, styles.boxB]} />
+        </Tabs.ScrollView>
+      </Tabs.Tab>
     </Tabs.Container>
   )
-}
-
-const ScreenB = () => {
-  return (
-    <Tabs.ScrollView>
-      <View style={[styles.box, styles.boxA]} />
-      <View style={[styles.box, styles.boxB]} />
-    </Tabs.ScrollView>
-  )
-}
-
-const renderItem: ListRenderItem<number> = ({ index }) => {
-  return (
-    <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
-  )
-}
-
-const ScreenA = () => {
-  return (
-    <Tabs.FlatList
-      data={[0, 1, 2, 3, 4]}
-      renderItem={renderItem}
-      keyExtractor={(v) => v + ''}
-    />
-  )
-}
-
-const Header = () => {
-  return <View style={styles.header} />
 }
 
 const styles = StyleSheet.create({

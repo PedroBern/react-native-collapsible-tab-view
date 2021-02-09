@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, Text, Image, StyleSheet, RefreshControl } from 'react-native'
+import { useCollapsibleStyle, Tabs } from 'react-native-collapsible-tab-view'
 
-import Tabs from './Tabs'
+import { useRefresh } from './useRefresh'
 
 export const ArticleContent = () => {
   return (
@@ -42,10 +43,20 @@ export const ArticleContent = () => {
 }
 
 const Article: React.FC<object> = () => {
+  const [isRefreshing, startRefreshing] = useRefresh()
+  const { progressViewOffset } = useCollapsibleStyle()
+
   return (
     <Tabs.ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={startRefreshing}
+          progressViewOffset={progressViewOffset}
+        />
+      }
     >
       <ArticleContent />
     </Tabs.ScrollView>

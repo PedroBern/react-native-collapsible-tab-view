@@ -12,15 +12,16 @@ import {
   View,
 } from 'react-native'
 
-import CenteredEmptyList from './CenteredEmptyList'
+// import CenteredEmptyList from './CenteredEmptyList'
 import Default from './Default'
-import DiffClamp from './DiffClamp'
-import DiffClampSnap from './DiffClampSnap'
+import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
 import MinHeaderHeight from './MinHeaderHeight'
-import OnIndexChange from './OnIndexChange'
+import OnTabChange from './OnTabChange'
 import QuickStartDemo from './QuickStartDemo'
 import Ref from './Ref'
+import RevealHeaderOnScroll from './RevealHeaderOnScroll'
+import RevealHeaderOnScrollSnap from './RevealHeaderOnScrollSnap'
 import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
 import Snap from './Snap'
@@ -31,17 +32,18 @@ import { ExampleComponentType } from './types'
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Default,
   Snap,
-  DiffClamp,
-  DiffClampSnap,
+  RevealHeaderOnScroll,
+  RevealHeaderOnScrollSnap,
   Lazy,
   ScrollableTabs,
-  CenteredEmptyList,
+  // CenteredEmptyList,
   ScrollOnHeader,
   QuickStartDemo,
   UndefinedHeaderHeight,
   StartOnSpecificTab,
   Ref,
-  OnIndexChange,
+  OnTabChange,
+  DynamicTabs,
   MinHeaderHeight,
 ]
 
@@ -155,6 +157,7 @@ const styles = StyleSheet.create({
   },
   appbar: {
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    zIndex: 1,
   },
   content: {
     flexDirection: 'row',
@@ -186,4 +189,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ExampleList
+export { ExampleList as App }

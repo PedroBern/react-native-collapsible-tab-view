@@ -1,16 +1,14 @@
 import * as React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Platform } from 'react-native'
+import * as Tabs from 'react-native-collapsible-tab-view'
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated'
 
-// import { HEADER_HEIGHT } from './Header'
-import Tabs, { useTabsContext } from './Tabs'
+import { useRefresh } from './useRefresh'
 
 type Item = { name: string; number: number }
-
-// const TABBAR_HEIGHT = 48
 
 const CONTACTS: Item[] = [
   { name: 'Marissa Castillo', number: 7766398169 },
@@ -94,15 +92,11 @@ const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 // const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
 
 const ListEmptyComponent = () => {
-  const { headerHeight, scrollY, scrollYCurrent } = useTabsContext()
+  const { headerHeight, scrollY, scrollYCurrent } = Tabs.useTabsContext()
 
   const translateY = useDerivedValue(() => {
     return Animated.interpolate(
       scrollYCurrent.value,
-      // Manual
-      // [0, PADDING_TOP - TABBAR_HEIGHT],
-      // [-(PADDING_TOP - TABBAR_HEIGHT) / 2, 0]
-      // Derived
       [0, headerHeight],
       [-headerHeight / 2, 0]
     )
@@ -126,6 +120,8 @@ const ListEmptyComponent = () => {
 }
 
 const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
+  const [isRefreshing, startRefreshing] = useRefresh()
+
   return (
     <Tabs.FlatList
       data={emptyContacts ? [] : CONTACTS}
@@ -133,6 +129,9 @@ const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
       ListEmptyComponent={ListEmptyComponent}
+      // see https://github.com/software-mansion/react-native-reanimated/issues/1703
+      onRefresh={Platform.OS === 'ios' ? startRefreshing : undefined}
+      refreshing={Platform.OS === 'ios' ? isRefreshing : undefined}
     />
   )
 }

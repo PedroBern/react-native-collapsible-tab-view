@@ -1,18 +1,4 @@
-type Prop = {
-  defaultValue: null | { value: string }
-  description: string
-  name: string
-  required: boolean
-  type: { name: string }
-}
-
-type Props = Record<string, Prop>
-
-type API = {
-  description?: string
-  displayName: string
-  props: Props
-}
+import { Prop, API, Props } from './types'
 
 const escape = (s: any) => {
   if (typeof s === 'string') {
@@ -34,7 +20,9 @@ function generateProp(
     description = description.replace(/\s+/gm, ' ')
   }
 
-  let md = `|${propName}|\`${escape(prop.type.name)}\`|`
+  let md = ''
+  md = `|${propName}|\``
+  md += `${escape(prop.type.name)}\`|`
   md += skipDefaults
     ? ''
     : `${prop.defaultValue ? '`' + escape(prop.defaultValue.value) + '`' : ''}|`

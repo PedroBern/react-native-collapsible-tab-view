@@ -14,81 +14,65 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
-import Indicator from './Indicator'
-import TabItem from './TabItem'
+import { TabName } from '../types'
+import { Indicator } from './Indicator'
+import { MaterialTabItem } from './TabItem'
 import { MaterialTabBarProps, ItemLayout } from './types'
 
 export const TABBAR_HEIGHT = 48
 
 /**
  * Basic usage looks like this:
+ *
  * ```tsx
- * import {
- *  RefComponent,
- *  ContainerRef,
- *  TabBarProps,
- * } from 'react-native-collapsible-tab-view'
- * import { useAnimatedRef } from 'react-native-reanimated'
- * type MyTabs = 'article' | 'contacts' | 'albums'
- * const MyHeader: React.FC<TabBarProps<MyTabs>> = (props) => {...}
- * const Example: React.FC<Props> = () => {
- *  const containerRef = useAnimatedRef<ContainerRef>();
- *  const tab0Ref = useAnimatedRef<RefComponent>();
- *  const tab1Ref = useAnimatedRef<RefComponent>();
- *  const [refMap] = React.useState({
- *    tab0: tab0Ref,
- *    tab1: tab1Ref,
- *  });
- *  return (
- *    <Tabs.Container
- *      containerRef={containerRef}
- *      HeaderComponent={MyHeader}
- *      headerHeight={HEADER_HEIGHT} // optional
- *      refMap={refMap}
- *      TabBarComponent={(props) => (
- *        <MaterialTabBar
- *          {...props}
- *          activeColor="red"
- *          inactiveColor="yellow"
- *          labelStyle={{ fontSize: 14 }}
- *        />
- *      )}
- *    >
- *      {components returning Tabs.ScrollView || Tabs.FlatList}
- *    </Tabs.Container>
- *  );
- * };
+ * <Tabs.Container
+ *   ...
+ *   TabBarComponent={(props) => (
+ *     <MaterialTabBar
+ *       {...props}
+ *       activeColor="red"
+ *       inactiveColor="yellow"
+ *       inactiveOpacity={1}
+ *       labelStyle={{ fontSize: 14 }}
+ *     />
+ *   )}
+ * >
+ *   {...}
+ * </Tabs.Container>
  * ```
  */
-
-const TabBar: React.FC<MaterialTabBarProps<any>> = ({
-  refMap,
+export const MaterialTabBar = <T extends TabName = any>({
+  tabNames,
   indexDecimal,
   scrollEnabled = false,
   indicatorStyle,
   index,
-  TabItemComponent = TabItem,
-  getLabelText = (name) => name.toUpperCase(),
+  TabItemComponent = MaterialTabItem,
+  getLabelText = (name) => String(name).toUpperCase(),
   onTabPress,
   style,
+  tabProps,
   contentContainerStyle,
   labelStyle,
   inactiveColor,
   activeColor,
   tabStyle,
-}) => {
+}: MaterialTabBarProps<T>): React.ReactElement => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
   const isFirstRender = React.useRef(true)
-  const [nTabs] = React.useState(Object.keys(refMap).length)
-  const itemsLayoutGathering = React.useRef<ItemLayout[]>([])
+  const [itemsLayoutGathering, setItemsLayoutGathering] = React.useState(
+    new Map<T, ItemLayout>()
+  )
   const tabsOffset = useSharedValue(0)
   const isScrolling = useSharedValue(false)
+
+  const nTabs = tabNames.length
 
   const [itemsLayout, setItemsLayout] = React.useState<ItemLayout[]>(
     scrollEnabled
       ? []
-      : Object.keys(refMap).map((_, i) => {
+      : tabNames.map((_, i) => {
           const tabWidth = windowWidth / nTabs
           return { width: tabWidth, x: i * tabWidth }
         })
@@ -101,43 +85,59 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       // update items width on window resizing
       const tabWidth = windowWidth / nTabs
       setItemsLayout(
-        Object.keys(refMap).map((_, i) => {
+        tabNames.map((_, i) => {
           return { width: tabWidth, x: i * tabWidth }
         })
       )
     }
-  }, [scrollEnabled, nTabs, refMap, windowWidth])
+  }, [scrollEnabled, nTabs, tabNames, windowWidth])
 
   const onTabItemLayout = React.useCallback(
-    (event: LayoutChangeEvent) => {
-      if (scrollEnabled && itemsLayout.length < nTabs) {
+    (event: LayoutChangeEvent, name: T) => {
+      if (scrollEnabled) {
+        if (!event.nativeEvent?.layout) return
         const { width, x } = event.nativeEvent.layout
-        itemsLayoutGathering.current.push({
-          width,
-          x,
+        setItemsLayoutGathering((itemsLayoutGathering) => {
+          const update = new Map(itemsLayoutGathering)
+          return update.set(name, {
+            width,
+            x,
+          })
         })
-        if (itemsLayoutGathering.current.length === nTabs) {
-          setItemsLayout(itemsLayoutGathering.current.sort((a, b) => a.x - b.x))
-        }
       }
     },
-    [scrollEnabled, itemsLayout.length, nTabs]
+    [scrollEnabled]
   )
+
+  React.useEffect(() => {
+    // pick out the layouts for the tabs we know about (in case they changed dynamically)
+    const layout = [...itemsLayoutGathering.entries()]
+      .filter(([tabName]) => tabNames.includes(tabName))
+      .map(([, layout]) => layout)
+      .sort((a, b) => a.x - b.x)
+
+    if (layout.length === tabNames.length) {
+      setItemsLayout(layout)
+    }
+  }, [itemsLayoutGathering, tabNames])
 
   const cancelNextScrollSync = useSharedValue(index.value)
 
-  const onScroll = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      tabsOffset.value = event.contentOffset.x
+  const onScroll = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        tabsOffset.value = event.contentOffset.x
+      },
+      onBeginDrag: () => {
+        isScrolling.value = true
+        cancelNextScrollSync.value = index.value
+      },
+      onMomentumEnd: () => {
+        isScrolling.value = false
+      },
     },
-    onBeginDrag: () => {
-      isScrolling.value = true
-      cancelNextScrollSync.value = index.value
-    },
-    onMomentumEnd: () => {
-      isScrolling.value = false
-    },
-  })
+    []
+  )
 
   const currentIndexToSync = useSharedValue(index.value)
   const targetIndexToSync = useSharedValue(index.value)
@@ -152,7 +152,8 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
         targetIndexToSync.value = nextIndex
         currentIndexToSync.value = withTiming(nextIndex)
       }
-    }
+    },
+    [scrollEnabled]
   )
 
   useAnimatedReaction(
@@ -160,7 +161,12 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       return currentIndexToSync.value === targetIndexToSync.value
     },
     (canSync) => {
-      if (canSync && scrollEnabled && itemsLayout.length === nTabs) {
+      if (
+        canSync &&
+        scrollEnabled &&
+        itemsLayout.length === nTabs &&
+        itemsLayout[index.value]
+      ) {
         const halfTab = itemsLayout[index.value].width / 2
         const offset = itemsLayout[index.value].x
         if (
@@ -173,7 +179,6 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
     },
     [scrollEnabled, itemsLayout, nTabs]
   )
-
   return (
     <Animated.ScrollView
       ref={tabBarRef}
@@ -193,16 +198,21 @@ const TabBar: React.FC<MaterialTabBarProps<any>> = ({
       overScrollMode="never"
       scrollEnabled={scrollEnabled}
       onScroll={scrollEnabled ? onScroll : undefined}
+      scrollEventThrottle={16}
     >
-      {Object.keys(refMap).map((name, i) => {
+      {tabNames.map((name, i) => {
         return (
           <TabItemComponent
             key={name}
             index={i}
             name={name}
-            label={getLabelText(name)}
+            label={tabProps.get(name)?.label || getLabelText(name)}
             onPress={onTabPress}
-            onLayout={scrollEnabled ? onTabItemLayout : undefined}
+            onLayout={
+              scrollEnabled
+                ? (event) => onTabItemLayout(event, name)
+                : undefined
+            }
             scrollEnabled={scrollEnabled}
             indexDecimal={indexDecimal}
             labelStyle={labelStyle}
@@ -230,7 +240,3 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
   },
 })
-
-export { TabBar as MaterialTabBar }
-
-export default TabBar

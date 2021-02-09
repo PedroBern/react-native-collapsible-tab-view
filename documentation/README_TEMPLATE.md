@@ -5,7 +5,7 @@
 [![MIT License][license-badge]][license]
 [![runs with expo][expo-badge]][expo]
 
-> Due to time constraints we weren't able to finish the documentation yet. You can navigate through the code and examples.
+> This is the `@next` documentation. [See the v3 for latest stable version](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v3).
 
 - [Expo app](#expo-app)
 - [Demo](#demo)
@@ -15,12 +15,12 @@
 - [Guides](#guides)
   - [Scroll on header](#scroll-on-header)
 - [API reference](#api-reference)
-  - [createCollapsibleTabs](#createcollapsibletabs)
+  - [Core](#core)
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
-    - [useTabsContext](#usetabscontext)
+  - [Hooks](#hooks)
     - [useCollapsibleStyle](#usecollapsiblestyle)
     - [useTabNameContext](#usetabnamecontext)
   - [Default Tab Bar](#default-tab-bar)
@@ -46,7 +46,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 
 # Demo
 
-|                                                     Default                                                      |                                                     Snap                                                      |                                                     DiffClamp                                                      |                                                    DiffClamp + Snap                                                     |
+|                                                     Default                                                      |                                                     Snap                                                      |                                                revealHeaderOnScroll                                                |                                               revealHeaderOnScroll + Snap                                               |
 | :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/default.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/snap.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp.gif" width="360"> | <img src="https://github.com/PedroBern/react-native-collapsible-tab-view/raw/main/demo/diffClamp_snap.gif" width="360"> |
 
@@ -70,7 +70,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 Open a Terminal in the project root and run:
 
 ```sh
-yarn add react-native-collapsible-tab-view
+yarn add react-native-collapsible-tab-view@next
 ```
 
 Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
@@ -94,9 +94,39 @@ If you want to allow scrolling from the header:
 
 # API reference
 
+## Core
+
 $CORE_API
 
-$CORE_COMPONENTS_API
+## Hooks
+
+### useCollapsibleStyle
+
+Hook to access some key styles that make the whole think work. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+
+```tsx
+const {
+  contentContainerStyle,
+  progressViewOffset,
+  style,
+} = useCollapsibleStyle()
+```
+
+#### Values
+
+|         name          |                     type                     |
+| :-------------------: | :------------------------------------------: |
+| contentContainerStyle | `{ minHeight: number; paddingTop: number; }` |
+|  progressViewOffset   |                   `number`                   |
+|         style         |             `{ width: number; }`             |
+
+### useTabNameContext
+
+Access the parent tab name from any deep component.
+
+```tsx
+const tabName = useTabNameContext()
+```
 
 ## Default Tab Bar
 

@@ -7,12 +7,12 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { TabBarProps, ParamList } from '../types'
+import { TabBarProps, TabName } from '../types'
 
 type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
 type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>
 
-export type MaterialTabItemProps<T extends ParamList> = {
+export type MaterialTabItemProps<T extends TabName> = {
   name: T
   index: number
   indexDecimal: Animated.SharedValue<number>
@@ -38,7 +38,7 @@ export type MaterialTabItemProps<T extends ParamList> = {
   inactiveColor?: string
 } & Omit<PressableProps, 'onPress' | 'children'>
 
-export type MaterialTabBarProps<N extends ParamList> = TabBarProps<N> & {
+export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
   /**
    * Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic
    */
