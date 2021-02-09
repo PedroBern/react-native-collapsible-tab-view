@@ -1,4 +1,4 @@
-# [4.0.0-next.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.8.0...v4.0.0-next.0) (2021-02-09)
+# [4.0.0-rc.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-next.0...v4.0.0-rc.0) (2021-02-09)
 
 ### Bug Fixes
 
