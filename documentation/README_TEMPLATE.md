@@ -5,7 +5,7 @@
 [![MIT License][license-badge]][license]
 [![runs with expo][expo-badge]][expo]
 
-> Due to time constraints we weren't able to finish the documentation yet. You can navigate through the code and examples.
+> This is the `@next` documentation. [See the v3 for latest stable version](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v3).
 
 - [Expo app](#expo-app)
 - [Demo](#demo)
@@ -70,7 +70,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 Open a Terminal in the project root and run:
 
 ```sh
-yarn add react-native-collapsible-tab-view
+yarn add react-native-collapsible-tab-view@next
 ```
 
 Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
