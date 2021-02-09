@@ -97,7 +97,7 @@ const overrideProps: OverrideProps = {
       },
       defaultValue: null,
     },
-    onIndexChange: {
+    onTabChange: {
       type: {
         name:
           '(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void',

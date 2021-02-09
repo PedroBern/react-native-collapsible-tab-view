@@ -189,8 +189,8 @@ const Example = () => {
 |initialTabName|`string \| number \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
-|onIndexChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the index changes. It receives the current index.|
-|onTabChange|`OnTabChangeCallback<TabName> \| undefined`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
+|onIndexChange|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
+|onTabChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
 |pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |revealHeaderOnScroll|`boolean \| undefined`|`false`|Reveal header when scrolling down. Implements diffClamp.|
 |snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
