@@ -1,10 +1,58 @@
-# [3.8.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.7.1...v3.8.0) (2021-02-09)
+# [4.0.0-next.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.8.0...v4.0.0-next.0) (2021-02-09)
 
+### Bug Fixes
+
+- add isGliding back + interpolate scrollYCurrent only in iOS ([80a5690](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/80a5690cd57e65c1c5d3969c1cf591aa8bea89bb))
+- add null check ([fb3b1b2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fb3b1b29ba956073f1cccae258162fe61c0a3a64))
+- attempt at fixing lazy sometimes opening with 0 opacity ([264cf00](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/264cf008137f0f52cf030a791be12b975b061c61))
+- bug when removing dynamic tab ([d9c27a5](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/d9c27a5ed59e8ac878990664733736b8329722d5))
+- cancel snapping animations on drag ([63fa2dc](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/63fa2dc6ba13a932a41e17b92c077aaf5d373a2f))
+- contentHeight should've been a map ([321fa34](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/321fa340ac5ddc4a35a271e8ebb122ddaea8d374))
+- diffclamp snap threshold ([356cdbf](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/356cdbf96ddd0044c308ac51f0683addacebb8ce))
+- don't bounce pager on ios ([fb49a97](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fb49a973c630abdb7ac6f50f2f15a6e6d95371ea))
+- ensure callers can't override onScroll ([8421c65](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/8421c6538dbe74cd28143b8b7d63c2869c521aa5))
+- handle ios overscroll ([72b4e54](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/72b4e54fd46ddc928321035f9fc1a014b9c28ca5))
+- infinite loop ([f6a2f69](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/f6a2f69e4eaa4259b3920597f2f0fd0460dae63f))
+- initial lazy position on ios ([56789c1](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/56789c121b6bcb2a5f2d7193bf926ca6da995979))
+- ios refresh control ([c09a3e8](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/c09a3e860f82bf6ab877fa80fbde4187851418b0))
+- lazy ([b383af9](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/b383af90c00aba552c566597f0e02f1d5a9a742f))
+- memoize tabbar in example so it doesn't flicker ([eeb94cc](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/eeb94cc4c6b211c0664ddfdeb317ac2dc676437f))
+- minor tabbar tweaks ([b0cdcff](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/b0cdcff21a17dd719749b1256d534e912c1d5112))
+- navigation bar zindex on ios ([9fa6958](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9fa69587970911490ca9d3713e738d83535fa633))
+- opacity stuck as 0 on lazy tab (sometimes) ([8cfc596](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/8cfc596cde99df9d1d59fcf7b4706176b38f02b1))
+- prevent scrolling to top ([1db8e4e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1db8e4e7bcd110d8d02580984bd08c896929e054))
+- rework refs to fix scroll sync ([ec513cd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/ec513cd7d66ec0ccc77cb303b234e49e2bd22685))
+- sticky header edge case on android ([7569a52](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/7569a52059269b594f6742f91aa276af47858d56))
+- stop animated scroll on snap ([72e87ac](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/72e87aca21d4f8558e4840c3072c1b2180ee0089))
+- sync scroll position on dynamic tabs ([4c9cfce](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/4c9cfce49df666f6da558eb05bb49f5da1a085c5))
+- usederivedvalue for tabnames value ([92f22de](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/92f22de90fc2f43d39a9258d36cac8cd85a5fbea))
 
 ### Features
 
-* add minHeaderHeight prop ([0036da3](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0036da3fe95fe1476a250a0e69b508460e4f58ec)), closes [#95](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/95) [#5](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/5)
-* add tab item customization props in tab bar ([fe4ac3c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fe4ac3c53f4bc2cefd0580a3e82903bd1b9bd7a4)), closes [#82](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/82)
+- add sanity check (duplicate tabs not allowed) ([5e18678](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5e186785424e84c3521eaaab0ef4e04e6db31051))
+- allow callers to still hook into certain events we're also handling ([6f32f1c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6f32f1c15b87c000be7a747443f8fc38fd3b2d86))
+- dynamic tabbar ([f4ebdfe](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/f4ebdfec3c9e90bccdbcec4c9de0f7c15f9e139f))
+- dynamic tabs ([2884bba](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2884bba5de3a124c6a2349905c1d4c18d36fc6bf))
+- forward flatlist and scrollview refs ([749cfbe](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/749cfbe8a60e24de43a119d0e5e1e1d8dafbc4a4))
+- rename onIndexChange to onTabChange and add onIndexChange(number) ([c02c88a](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/c02c88a6bd1dd9f983ebded416afa960b780ec96))
+
+### BREAKING CHANGES
+
+- createCollapsibleTabs() no longer exists. Instead the library exports different components (Container, Tab, ScrollView, ListView) which can be nested like normal react components.
+- refMap no longer exists, and creating refs is no longer necessary (it's all handled internally)
+- ScrollView/FlatList now forward their refs, so the caller can just tap into their ref prop
+- the existing onIndexChange was renamed to onTabChange, and a separate onIndexChange was implemented that just returns the new index (as a number)
+- diffClampEnabled was changed to revealHeaderOnScroll
+- redundant prop snapEnabled was removed, instead snapThreshold is number | null | undefined. If not a number, then snap is not enabled. Setting it to 0.5 will result in snapping in the middle, like in the previous version.
+
+Fixes: [#88](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/88), [#94](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/94), [#98](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/98), [#100](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/100)
+
+# [3.8.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.7.1...v3.8.0) (2021-02-09)
+
+### Features
+
+- add minHeaderHeight prop ([0036da3](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0036da3fe95fe1476a250a0e69b508460e4f58ec)), closes [#95](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/95) [#5](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/5)
+- add tab item customization props in tab bar ([fe4ac3c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fe4ac3c53f4bc2cefd0580a3e82903bd1b9bd7a4)), closes [#82](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/82)
 
 ## [3.7.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v3.7.0...v3.7.1) (2021-02-01)
 
