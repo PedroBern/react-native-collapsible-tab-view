@@ -172,7 +172,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
     React.useEffect(() => {
       if (!firstRender.current) pagerOpacity.value = 0
       afterRender.value = withDelay(
-        ONE_FRAME_MS * 10,
+        ONE_FRAME_MS * 5,
         withTiming(1, { duration: 0 })
       )
     }, [afterRender, pagerOpacity, tabNamesArray])
