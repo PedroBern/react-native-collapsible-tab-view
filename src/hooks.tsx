@@ -88,15 +88,10 @@ export function useTabProps<T extends TabName>(
     }
     return tabOptions
   }, [children, tabType])
-  const optionEntries = [...options.entries()]
-  const optionKeys = [...options.keys()]
-
+  const optionEntries = Array.from(options.entries())
+  const optionKeys = Array.from(options.keys())
   const memoizedOptions = useDeepCompareMemo(() => options, [optionEntries])
-
-  const memoizedTabNames = useDeepCompareMemo(() => [...options.keys()], [
-    optionKeys,
-  ])
-
+  const memoizedTabNames = useDeepCompareMemo(() => optionKeys, [optionKeys])
   return [memoizedOptions, memoizedTabNames]
 }
 
