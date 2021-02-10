@@ -339,7 +339,7 @@ export const useScrollHandlerY = (name: TabName) => {
             y = y + contentInset
             // ios workaround, make sure we don't rest on 0 otherwise we can't pull to refresh
             if (y === 0) {
-              scrollTo(refMap[name], 0, 0, false, `[${name}]: ios reset`)
+              scrollTo(refMap[name], 0, 0, true, `[${name}]: ios reset`)
             }
             // handle iOS bouncing
             scrollYCurrent.value = interpolate(
