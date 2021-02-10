@@ -1,3 +1,10 @@
+# [4.0.0-rc.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* tab sync on ios when scrolling to the top ([15ff5fc](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/15ff5fcf8bd2e85e35225604715bceba8c5cdbc5)), closes [#104](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/104)
+
 # [4.0.0-rc.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.0...v4.0.0-rc.1) (2021-02-10)
 
 
