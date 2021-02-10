@@ -135,8 +135,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     style: { width: windowWidth },
     contentContainerStyle: {
       minHeight: IS_IOS
-        ? // on IOS we use contentInset so the padding calculation differs
-          (containerHeight || 0) - headerHeight - tabBarHeight
+        ? (containerHeight || 0) - tabBarHeight
         : (containerHeight || 0) + headerHeight,
       paddingTop: IS_IOS ? PADDING_WORKAROUND_IOS : headerHeight + tabBarHeight,
     },
