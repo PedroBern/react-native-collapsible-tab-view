@@ -15,16 +15,14 @@ type Props = Partial<CollapsibleProps>
 
 const Example = React.forwardRef<CollapsibleRef, Props>((props, ref) => {
   const windowHeight = useWindowDimensions().height
-  const windowWidth = useWindowDimensions().width
   const [isRefreshing, startRefreshing] = useRefresh()
 
   return (
     <ScrollView
+      nestedScrollEnabled
       contentContainerStyle={{
         height: windowHeight - 56 - Constants.statusBarHeight, // 56 is the naviagtion header height
-        width: windowWidth,
       }}
-      nestedScrollEnabled
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={startRefreshing} />
       }

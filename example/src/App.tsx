@@ -62,21 +62,20 @@ const ExampleList: React.FC<object> = () => {
   }, [handleNavigate])
 
   const renderItem = React.useCallback(
-    (component: ExampleComponentType, i: number) => (
-      <TouchableOpacity
-        key={i}
-        style={styles.touchable}
-        onPress={
-          !component.platform || component.platform === Platform.OS
-            ? () => handleNavigate(i)
-            : undefined
-        }
-      >
-        <Text style={styles.item}>
-          {i + 1}. {component.title}
-        </Text>
-      </TouchableOpacity>
-    ),
+    (component: ExampleComponentType, i: number) => {
+      const enabled = !component.platform || component.platform === Platform.OS
+      return (
+        <TouchableOpacity
+          key={i}
+          style={styles.touchable}
+          onPress={enabled ? () => handleNavigate(i) : undefined}
+        >
+          <Text style={[styles.item, !enabled && styles.disabled]}>
+            {i + 1}. {component.title}
+          </Text>
+        </TouchableOpacity>
+      )
+    },
     [handleNavigate]
   )
 
@@ -192,6 +191,9 @@ const styles = StyleSheet.create({
   item: {
     fontSize: 16,
     color: '#333',
+  },
+  disabled: {
+    color: '#dddddd',
   },
 })
 
