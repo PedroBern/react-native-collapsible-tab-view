@@ -23,7 +23,12 @@ import {
 import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { Context, TabNameContext } from './Context'
-import { IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
+import {
+  IS_IOS,
+  ONE_FRAME_MS,
+  PADDING_WORKAROUND_IOS,
+  scrollToImpl,
+} from './helpers'
 import {
   CollapsibleStyle,
   ContextType,
@@ -134,9 +139,9 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     style: { width: windowWidth },
     contentContainerStyle: {
       minHeight: IS_IOS
-        ? containerHeight || 0
+        ? (containerHeight || 0) - tabBarHeight
         : (containerHeight || 0) + headerHeight,
-      paddingTop: IS_IOS ? 0 : headerHeight + tabBarHeight,
+      paddingTop: IS_IOS ? PADDING_WORKAROUND_IOS : headerHeight + tabBarHeight,
     },
     progressViewOffset: headerHeight + tabBarHeight,
   }
