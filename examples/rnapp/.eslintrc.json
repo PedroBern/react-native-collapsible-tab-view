@@ -1,0 +1,11 @@
+{
+  "extends": "../../.eslintrc.js",
+  "rules": {
+    "import/no-default-export": "off"
+  },
+  "settings": {
+    "import/core-modules": [
+      "react-native-collapsible-tab-view"
+    ]
+  }
+}

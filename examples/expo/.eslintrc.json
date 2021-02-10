@@ -1,5 +1,5 @@
 {
-  "extends": "../.eslintrc.js",
+  "extends": "../../.eslintrc.js",
   "rules": {
     "import/no-default-export": "off"
   },

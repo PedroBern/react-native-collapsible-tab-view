@@ -20,8 +20,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: ./example
+        working-directory: ./examples/expo
 
       - name: Publish Expo app
         run: expo publish
-        working-directory: ./example
+        working-directory: ./examples/expo

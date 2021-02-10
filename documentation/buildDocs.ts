@@ -10,7 +10,7 @@ const TEMPLATE = path.join(__dirname, 'README_TEMPLATE.md')
 const README = path.join(__dirname, '..', 'README.md')
 const QUICK_START = path.join(
   __dirname,
-  '../example/src/Shared/QuickStartDemo.tsx'
+  '../examples/expo/src/Shared/QuickStartDemo.tsx'
 )
 const tsconfig = path.join(__dirname, '../tsconfig.json')
 

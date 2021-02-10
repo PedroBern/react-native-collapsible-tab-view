@@ -36,7 +36,7 @@
 Collapsible Tab View for React Native, with [Reanimated](https://github.com/software-mansion/react-native-reanimated).
 
 - [View it with Expo](https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos).
-- Checkout the [examples](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/example) for the source code of the Expo app.
+- Checkout the [examples](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/examples/expo) for the source code of the Expo app.
 
 <a href="https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=exp://exp.host/@pedrobern/react-native-collapsible-tab-view-demos" height="200px" width="200px"></a>
 

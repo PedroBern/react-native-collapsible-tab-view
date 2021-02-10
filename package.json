@@ -15,8 +15,10 @@
     "typescript": "tsc --noEmit",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "release": "release-it",
-    "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn",
+    "examples:expo": "yarn --cwd examples/expo",
+    "examples:rnapp": "yarn --cwd examples/rnapp",
+    "bootstrap:expo": "yarn examples/expo && yarn",
+    "bootstrap": "yarn examples/rnapp && yarn",
     "prepack": "bob build",
     "docs": "ts-node ./documentation/buildDocs.ts"
   },
@@ -85,7 +87,8 @@
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
+      "<rootDir>/examples/expo/node_modules",
+      "<rootDir>/examples/rnapp/node_modules",
       "<rootDir>/lib/"
     ]
   },
@@ -99,6 +102,8 @@
     ]
   },
   "dependencies": {
+    "react-native-status-bar-height": "^2.6.0",
+    "react-native-vector-icons": "^8.0.0",
     "use-deep-compare": "^1.1.0"
   }
 }

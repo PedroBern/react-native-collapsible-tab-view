@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "react-native-collapsible-tab-view": ["../src/index"]
+      "react-native-collapsible-tab-view": ["../../src/index"]
     },
     "jsx": "react-native",
     "lib": ["dom", "esnext"],
