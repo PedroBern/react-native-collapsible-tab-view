@@ -26,6 +26,8 @@
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
+- [Known issues](#known-issues)
+  - [Android FlatList pull to refresh](android-flatlist-pull-to-refresh)
 - [Contributing](#contributing)
   - [Documentation changes](#documentation-changes)
 
@@ -131,6 +133,14 @@ const tabName = useTabNameContext()
 ## Default Tab Bar
 
 $TAB_BAR_API
+
+# Known issues
+
+## Android FlatList pull to refresh
+
+See [this open issue](https://github.com/software-mansion/react-native-reanimated/issues/1703). We use [scrollTo](https://docs.swmansion.com/react-native-reanimated/docs/next/api/nativeMethods/scrollTo) to synchronize the unfocused tabs, it's supposed to work only with `ScrollView`, but works great with `FlatList`, until the `RefreshControl` is added. Note that this happens only to android.
+
+**Workaround**: see the `Android Shared Pull To Refresh` example in the expo app. You can have a single pull to refresh for the `Tabs.Container`.
 
 # Contributing
 
