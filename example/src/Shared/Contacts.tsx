@@ -119,7 +119,10 @@ const ListEmptyComponent = () => {
   )
 }
 
-const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
+const Contacts: React.FC<{
+  emptyContacts?: boolean
+  nestedScrollEnabled?: boolean
+}> = ({ emptyContacts, nestedScrollEnabled }) => {
   const [isRefreshing, startRefreshing] = useRefresh()
 
   return (
@@ -132,6 +135,7 @@ const Contacts: React.FC<{ emptyContacts?: boolean }> = ({ emptyContacts }) => {
       // see https://github.com/software-mansion/react-native-reanimated/issues/1703
       onRefresh={Platform.OS === 'ios' ? startRefreshing : undefined}
       refreshing={Platform.OS === 'ios' ? isRefreshing : undefined}
+      nestedScrollEnabled={nestedScrollEnabled}
     />
   )
 }

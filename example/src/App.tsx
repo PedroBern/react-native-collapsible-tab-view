@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 
 // import CenteredEmptyList from './CenteredEmptyList'
+import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import Default from './Default'
 import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
@@ -45,6 +46,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   OnTabChange,
   DynamicTabs,
   MinHeaderHeight,
+  AndroidSharedPullToRefresh,
 ]
 
 const ExampleList: React.FC<object> = () => {
@@ -64,7 +66,11 @@ const ExampleList: React.FC<object> = () => {
       <TouchableOpacity
         key={i}
         style={styles.touchable}
-        onPress={() => handleNavigate(i)}
+        onPress={
+          !component.platform || component.platform === Platform.OS
+            ? () => handleNavigate(i)
+            : undefined
+        }
       >
         <Text style={styles.item}>
           {i + 1}. {component.title}
