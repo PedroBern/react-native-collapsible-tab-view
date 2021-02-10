@@ -67,6 +67,7 @@ function FlatListImpl<R>(
         y: IS_IOS ? -contentInset + scrollYCurrent.value : 0,
         x: 0,
       }}
+      automaticallyAdjustContentInsets={false}
     />
   )
 }
