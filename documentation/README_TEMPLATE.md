@@ -27,7 +27,7 @@
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
 - [Known issues](#known-issues)
-  - [Android FlatList pull to refresh](android-flatlist-pull-to-refresh)
+  - [Android FlatList pull to refresh](#android-flatlist-pull-to-refresh)
 - [Contributing](#contributing)
   - [Documentation changes](#documentation-changes)
 
