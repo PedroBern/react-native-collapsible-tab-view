@@ -88,7 +88,7 @@ const DynamicTabs: ExampleComponentType = () => {
       headerHeight={HEADER_HEIGHT}
       HeaderComponent={HeaderComponent}
       lazy
-      onIndexChange={setCurrentTab}
+      onTabChange={setCurrentTab}
       TabBarComponent={TabBarComponent}
     >
       {tabs.map((tab) => {

@@ -60,23 +60,27 @@ export function useTabProps<T extends TabName>(
 ): [TabsWithProps<T>, T[]] {
   const options = useMemo(() => {
     const tabOptions: TabsWithProps<T> = new Map()
-    Children.forEach(children, (element, index) => {
-      if (element.type !== tabType)
-        throw new Error(
-          'Container children must be wrapped in a <Tabs.Tab ... /> component'
-        )
+    if (children) {
+      Children.forEach(children, (element, index) => {
+        if (!element) return
 
-      // make sure children is excluded otherwise our props will mutate too much
-      const { name, children, ...options } = element.props
-      if (tabOptions.has(name))
-        throw new Error(`Tab names must be unique, ${name} already exists`)
+        if (element.type !== tabType)
+          throw new Error(
+            'Container children must be wrapped in a <Tabs.Tab ... /> component'
+          )
 
-      tabOptions.set(name, {
-        index,
-        name,
-        ...options,
+        // make sure children is excluded otherwise our props will mutate too much
+        const { name, children, ...options } = element.props
+        if (tabOptions.has(name))
+          throw new Error(`Tab names must be unique, ${name} already exists`)
+
+        tabOptions.set(name, {
+          index,
+          name,
+          ...options,
+        })
       })
-    })
+    }
     return tabOptions
   }, [children, tabType])
   const optionEntries = [...options.entries()]
