@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
-import {
+import Animated, {
   cancelAnimation,
   useAnimatedReaction,
   useAnimatedRef,
@@ -19,6 +19,7 @@ import {
   withTiming,
   interpolate,
   Extrapolate,
+  runOnJS,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -122,7 +123,7 @@ export function useTabNameContext(): TabName {
 }
 
 /**
- * Hook to access some key styles that make the whole think work.
+ * Hook to access some key styles that make the whole thing work.
  *
  * You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
  */
@@ -545,4 +546,60 @@ export function useAfterMountEffect(effect: React.EffectCallback) {
     }
   }, [didExecute, effect])
   return result
+}
+
+export function useConvertAnimatedToValue<T>(
+  animatedValue: Animated.SharedValue<T>
+) {
+  const [value, setValue] = useState(animatedValue.value)
+
+  useAnimatedReaction(
+    () => {
+      return animatedValue.value
+    },
+    (animValue) => {
+      if (animValue !== value) {
+        runOnJS(setValue)(animValue)
+      }
+    },
+    [value]
+  )
+
+  return value
+}
+
+interface HeaderMeasurements {
+  /**
+   * Animated value that represents the current Y translation of the header
+   */
+  top: Animated.SharedValue<number>
+  /**
+   * The height of the header
+   */
+  height: number
+}
+
+export function useHeaderMeasurements(): HeaderMeasurements {
+  const { headerTranslateY, headerHeight } = useTabsContext()
+  return {
+    top: headerTranslateY,
+    height: headerHeight,
+  }
+}
+
+/**
+ * Returns the currently focused tab name
+ */
+export function useFocusedTab() {
+  const { focusedTab } = useTabsContext()
+  const focusedTabValue = useConvertAnimatedToValue(focusedTab)
+  return focusedTabValue
+}
+
+/**
+ * Returns an animated value representing the current tab index, as a floating point number
+ */
+export function useAnimatedTabIndex() {
+  const { indexDecimal } = useTabsContext()
+  return indexDecimal
 }

@@ -300,13 +300,17 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       [children, lazy, tabNames.value, cancelLazyFadeIn]
     )
 
+    const headerTranslateY = useDerivedValue(() => {
+      return revealHeaderOnScroll
+        ? -accDiffClamp.value
+        : -Math.min(scrollYCurrent.value, headerScrollDistance.value)
+    }, [revealHeaderOnScroll])
+
     const stylez = useAnimatedStyle(() => {
       return {
         transform: [
           {
-            translateY: revealHeaderOnScroll
-              ? -accDiffClamp.value
-              : -Math.min(scrollYCurrent.value, headerScrollDistance.value),
+            translateY: headerTranslateY.value,
           },
         ],
       }
@@ -454,6 +458,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           snappingTo,
           contentHeights,
           setContentHeights,
+          headerTranslateY,
         }}
       >
         <Animated.View

@@ -33,6 +33,11 @@ export const Tabs = {
 }
 
 export { Container, Tab, Lazy, FlatList, ScrollView }
-export { useTabsContext, useTabNameContext, useCollapsibleStyle } from './hooks'
+export {
+  useHeaderMeasurements,
+  useFocusedTab,
+  useAnimatedTabIndex,
+  useCollapsibleStyle,
+} from './hooks'
 export { MaterialTabBar } from './MaterialTabBar/TabBar'
 export { MaterialTabItem } from './MaterialTabBar/TabItem'
