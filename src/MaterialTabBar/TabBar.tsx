@@ -111,7 +111,7 @@ export const MaterialTabBar = <T extends TabName = any>({
 
   React.useEffect(() => {
     // pick out the layouts for the tabs we know about (in case they changed dynamically)
-    const layout = [...itemsLayoutGathering.entries()]
+    const layout = Array.from(itemsLayoutGathering.entries())
       .filter(([tabName]) => tabNames.includes(tabName))
       .map(([, layout]) => layout)
       .sort((a, b) => a.x - b.x)
