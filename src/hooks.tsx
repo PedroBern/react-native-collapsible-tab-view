@@ -204,7 +204,10 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (name: TabName) => {
+export const useScrollHandlerY = (
+  name: TabName,
+  { enabled }: { enabled: boolean }
+) => {
   const {
     accDiffClamp,
     focusedTab,
@@ -253,6 +256,8 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const onMomentumEnd = () => {
     'worklet'
+    if (!enabled) return
+
     if (isDragging.value) return
 
     if (typeof snapThreshold === 'number') {
@@ -327,6 +332,8 @@ export const useScrollHandlerY = (name: TabName) => {
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
+        if (!enabled) return
+
         if (focusedTab.value === name) {
           if (IS_IOS) {
             let { y } = event.contentOffset
@@ -380,6 +387,8 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onBeginDrag: () => {
+        if (!enabled) return
+
         // workaround to stop animated scrolls
         scrollTo(
           refMap[name],
@@ -398,6 +407,8 @@ export const useScrollHandlerY = (name: TabName) => {
         if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
+        if (!enabled) return
+
         isGliding.value = true
         isDragging.value = false
 
@@ -418,6 +429,8 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onMomentumBegin: () => {
+        if (!enabled) return
+
         if (IS_IOS) {
           cancelAnimation(afterDrag)
         }
@@ -432,6 +445,7 @@ export const useScrollHandlerY = (name: TabName) => {
       contentHeights,
       snapThreshold,
       clampMax,
+      enabled,
     ]
   )
 
@@ -442,7 +456,8 @@ export const useScrollHandlerY = (name: TabName) => {
         !isSnapping.value &&
         !isScrolling.value &&
         !isDragging.value &&
-        !isGliding.value
+        !isGliding.value &&
+        enabled
       )
     },
     (sync) => {
@@ -479,7 +494,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       }
     },
-    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex]
+    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex, enabled]
   )
 
   return scrollHandler
@@ -514,4 +529,20 @@ export function useSharedAnimatedRef<T extends RefComponent>(
   })
 
   return ref
+}
+
+export function useAfterMountEffect(effect: React.EffectCallback) {
+  const [didExecute, setDidExecute] = useState(false)
+  const result = useEffect(() => {
+    if (didExecute) return
+
+    const timeout = setTimeout(() => {
+      effect()
+      setDidExecute(true)
+    }, 0)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [didExecute, effect])
+  return result
 }
