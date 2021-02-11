@@ -4,6 +4,7 @@ import Animated from 'react-native-reanimated'
 
 import { IS_IOS } from './helpers'
 import {
+  useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
   useScrollHandlerY,
@@ -32,11 +33,21 @@ export const ScrollView = React.forwardRef<
       contentInset,
       scrollYCurrent,
     } = useTabsContext()
-    const scrollHandler = useScrollHandlerY(name)
     const {
       style: _style,
       contentContainerStyle: _contentContainerStyle,
     } = useCollapsibleStyle()
+    const [canBindScrollEvent, setCanBindScrollEvent] = React.useState(false)
+
+    useAfterMountEffect(() => {
+      // we enable the scroll event after mounting
+      // otherwise we get an `onScroll` call with the initial scroll position which can break things
+      setCanBindScrollEvent(true)
+    })
+
+    const scrollHandler = useScrollHandlerY(name, {
+      enabled: canBindScrollEvent,
+    })
 
     React.useEffect(() => {
       setRef(name, ref)
