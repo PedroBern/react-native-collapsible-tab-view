@@ -1,3 +1,10 @@
+# [4.0.0-rc.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-02-11)
+
+
+### Bug Fixes
+
+* switching lazy tabs sometimes jumps scroll position on ios ([#120](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/120)) ([6c3e9fd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6c3e9fda32c104522fad97ce4c2bc76ae0b8ed4c))
+
 # [4.0.0-rc.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-02-10)
 
 
