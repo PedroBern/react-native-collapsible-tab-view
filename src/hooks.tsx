@@ -232,8 +232,6 @@ export const useScrollHandlerY = (
     contentHeights,
   } = useTabsContext()
 
-  const isDragging = useSharedValue(false)
-
   /**
    * Helper value to track if user is dragging on iOS, because iOS calls
    * onMomentumEnd only after a vigorous swipe. If the user has finished the
@@ -257,8 +255,6 @@ export const useScrollHandlerY = (
   const onMomentumEnd = () => {
     'worklet'
     if (!enabled) return
-
-    if (isDragging.value) return
 
     if (typeof snapThreshold === 'number') {
       if (revealHeaderOnScroll) {
@@ -402,7 +398,8 @@ export const useScrollHandlerY = (
         cancelAnimation(accDiffClamp)
 
         isSnapping.value = false
-        isDragging.value = true
+        isScrolling.value = 0
+        isGliding.value = false
 
         if (IS_IOS) cancelAnimation(afterDrag)
       },
@@ -410,7 +407,6 @@ export const useScrollHandlerY = (
         if (!enabled) return
 
         isGliding.value = true
-        isDragging.value = false
 
         if (IS_IOS) {
           // we delay this by one frame so that onMomentumBegin may fire on iOS
@@ -454,11 +450,7 @@ export const useScrollHandlerY = (
   useAnimatedReaction(
     () => {
       return (
-        !isSnapping.value &&
-        !isScrolling.value &&
-        !isDragging.value &&
-        !isGliding.value &&
-        enabled
+        !isSnapping.value && !isScrolling.value && !isGliding.value && enabled
       )
     },
     (sync) => {
