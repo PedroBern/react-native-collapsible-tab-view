@@ -1,3 +1,10 @@
+# [4.0.0-rc.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-02-13)
+
+
+### Bug Fixes
+
+* add missing hook dependency ([#125](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/125)) ([d741e74](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/d741e74188b8815f45fd08ae342a931146d5b656))
+
 # [4.0.0-rc.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-02-11)
 
 
