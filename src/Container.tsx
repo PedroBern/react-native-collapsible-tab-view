@@ -504,23 +504,25 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
               )}
             </View>
           </Animated.View>
-          <AnimatedFlatList
-            // @ts-expect-error problem with reanimated types, they're missing `ref`
-            ref={containerRef}
-            initialScrollIndex={index.value}
-            data={data}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            horizontal
-            pagingEnabled
-            onScroll={scrollHandlerX}
-            showsHorizontalScrollIndicator={false}
-            getItemLayout={getItemLayout}
-            scrollEventThrottle={16}
-            bounces={false}
-            {...pagerProps}
-            style={[pagerStylez, pagerProps?.style]}
-          />
+          {headerHeight !== undefined && (
+            <AnimatedFlatList
+              // @ts-expect-error problem with reanimated types, they're missing `ref`
+              ref={containerRef}
+              initialScrollIndex={index.value}
+              data={data}
+              keyExtractor={keyExtractor}
+              renderItem={renderItem}
+              horizontal
+              pagingEnabled
+              onScroll={scrollHandlerX}
+              showsHorizontalScrollIndicator={false}
+              getItemLayout={getItemLayout}
+              scrollEventThrottle={16}
+              bounces={false}
+              {...pagerProps}
+              style={[pagerStylez, pagerProps?.style]}
+            />
+          )}
         </Animated.View>
       </Context.Provider>
     )
