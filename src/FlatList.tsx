@@ -3,6 +3,7 @@ import { FlatList as RNFlatList, FlatListProps } from 'react-native'
 
 import { AnimatedFlatList, IS_IOS } from './helpers'
 import {
+  useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
   useScrollHandlerY,
@@ -29,7 +30,15 @@ function FlatListImpl<R>(
     scrollYCurrent,
   } = useTabsContext()
   const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
-  const scrollHandler = useScrollHandlerY(name)
+  const [canBindScrollEvent, setCanBindScrollEvent] = React.useState(false)
+
+  useAfterMountEffect(() => {
+    // we enable the scroll event after mounting
+    // otherwise we get an `onScroll` call with the initial scroll position which can break things
+    setCanBindScrollEvent(true)
+  })
+
+  const scrollHandler = useScrollHandlerY(name, { enabled: canBindScrollEvent })
   const {
     style: _style,
     contentContainerStyle: _contentContainerStyle,
@@ -67,6 +76,7 @@ function FlatListImpl<R>(
         y: IS_IOS ? -contentInset + scrollYCurrent.value : 0,
         x: 0,
       }}
+      automaticallyAdjustContentInsets={false}
     />
   )
 }

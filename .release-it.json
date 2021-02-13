@@ -1,7 +1,8 @@
 {
   "git": {
     "commitMessage": "chore: release ${version}",
-    "tagName": "v${version}"
+    "tagName": "v${version}",
+    "pushRepo": "git@github.com:PedroBern/react-native-collapsible-tab-view.git"
   },
   "npm": {
     "publish": true

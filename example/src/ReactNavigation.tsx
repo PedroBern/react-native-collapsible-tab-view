@@ -87,7 +87,7 @@ const ListEmptyComponent = () => {
   )
 }
 
-export const Photos: React.FC<{ data?: Photos }> = ({ data }) => {
+export const PhotosList: React.FC<{ data?: Photos }> = ({ data }) => {
   const [delayedData, setDelayedData] = React.useState([])
 
   // Testing empty state update to trigger a re-render on this page?
@@ -105,7 +105,7 @@ export const Photos: React.FC<{ data?: Photos }> = ({ data }) => {
     return () => {
       clearTimeout(timer)
     }
-  }, [])
+  }, [data])
 
   return (
     <Tabs.FlatList
@@ -148,10 +148,10 @@ const TabScreen = () => {
         // snapThreshold={0.5}
       >
         <Tabs.Tab name="A">
-          <Photos data={PHOTOS} />
+          <PhotosList data={PHOTOS} />
         </Tabs.Tab>
         <Tabs.Tab name="B">
-          <Photos data={PHOTOS2} />
+          <PhotosList data={PHOTOS2} />
         </Tabs.Tab>
       </Tabs.Container>
     </SafeAreaView>

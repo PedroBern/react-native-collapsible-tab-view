@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 
 // import CenteredEmptyList from './CenteredEmptyList'
+import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import Default from './Default'
 import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
@@ -47,6 +48,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   DynamicTabs,
   MinHeaderHeight,
   ReactNavigation,
+  AndroidSharedPullToRefresh,
 ]
 
 const ExampleList: React.FC<object> = () => {
@@ -62,17 +64,20 @@ const ExampleList: React.FC<object> = () => {
   }, [handleNavigate])
 
   const renderItem = React.useCallback(
-    (component: ExampleComponentType, i: number) => (
-      <TouchableOpacity
-        key={i}
-        style={styles.touchable}
-        onPress={() => handleNavigate(i)}
-      >
-        <Text style={styles.item}>
-          {i + 1}. {component.title}
-        </Text>
-      </TouchableOpacity>
-    ),
+    (component: ExampleComponentType, i: number) => {
+      const enabled = !component.platform || component.platform === Platform.OS
+      return (
+        <TouchableOpacity
+          key={i}
+          style={styles.touchable}
+          onPress={enabled ? () => handleNavigate(i) : undefined}
+        >
+          <Text style={[styles.item, !enabled && styles.disabled]}>
+            {i + 1}. {component.title}
+          </Text>
+        </TouchableOpacity>
+      )
+    },
     [handleNavigate]
   )
 
@@ -188,6 +193,9 @@ const styles = StyleSheet.create({
   item: {
     fontSize: 16,
     color: '#333',
+  },
+  disabled: {
+    color: '#dddddd',
   },
 })
 

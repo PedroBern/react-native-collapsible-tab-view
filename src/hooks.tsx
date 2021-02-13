@@ -23,7 +23,12 @@ import {
 import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { Context, TabNameContext } from './Context'
-import { IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
+import {
+  IS_IOS,
+  ONE_FRAME_MS,
+  PADDING_WORKAROUND_IOS,
+  scrollToImpl,
+} from './helpers'
 import {
   CollapsibleStyle,
   ContextType,
@@ -60,34 +65,33 @@ export function useTabProps<T extends TabName>(
 ): [TabsWithProps<T>, T[]] {
   const options = useMemo(() => {
     const tabOptions: TabsWithProps<T> = new Map()
-    Children.forEach(children, (element, index) => {
-      if (element.type !== tabType)
-        throw new Error(
-          'Container children must be wrapped in a <Tabs.Tab ... /> component'
-        )
+    if (children) {
+      Children.forEach(children, (element, index) => {
+        if (!element) return
 
-      // make sure children is excluded otherwise our props will mutate too much
-      const { name, children, ...options } = element.props
-      if (tabOptions.has(name))
-        throw new Error(`Tab names must be unique, ${name} already exists`)
+        if (element.type !== tabType)
+          throw new Error(
+            'Container children must be wrapped in a <Tabs.Tab ... /> component'
+          )
 
-      tabOptions.set(name, {
-        index,
-        name,
-        ...options,
+        // make sure children is excluded otherwise our props will mutate too much
+        const { name, children, ...options } = element.props
+        if (tabOptions.has(name))
+          throw new Error(`Tab names must be unique, ${name} already exists`)
+
+        tabOptions.set(name, {
+          index,
+          name,
+          ...options,
+        })
       })
-    })
+    }
     return tabOptions
   }, [children, tabType])
-  const optionEntries = [...options.entries()]
-  const optionKeys = [...options.keys()]
-
+  const optionEntries = Array.from(options.entries())
+  const optionKeys = Array.from(options.keys())
   const memoizedOptions = useDeepCompareMemo(() => options, [optionEntries])
-
-  const memoizedTabNames = useDeepCompareMemo(() => [...options.keys()], [
-    optionKeys,
-  ])
-
+  const memoizedTabNames = useDeepCompareMemo(() => optionKeys, [optionKeys])
   return [memoizedOptions, memoizedTabNames]
 }
 
@@ -130,9 +134,9 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     style: { width: windowWidth },
     contentContainerStyle: {
       minHeight: IS_IOS
-        ? containerHeight || 0
+        ? (containerHeight || 0) - tabBarHeight
         : (containerHeight || 0) + headerHeight,
-      paddingTop: IS_IOS ? 0 : headerHeight + tabBarHeight,
+      paddingTop: IS_IOS ? PADDING_WORKAROUND_IOS : headerHeight + tabBarHeight,
     },
     progressViewOffset: headerHeight + tabBarHeight,
   }
@@ -200,7 +204,10 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (name: TabName) => {
+export const useScrollHandlerY = (
+  name: TabName,
+  { enabled }: { enabled: boolean }
+) => {
   const {
     accDiffClamp,
     focusedTab,
@@ -249,6 +256,8 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const onMomentumEnd = () => {
     'worklet'
+    if (!enabled) return
+
     if (isDragging.value) return
 
     if (typeof snapThreshold === 'number') {
@@ -323,6 +332,8 @@ export const useScrollHandlerY = (name: TabName) => {
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
+        if (!enabled) return
+
         if (focusedTab.value === name) {
           if (IS_IOS) {
             let { y } = event.contentOffset
@@ -330,7 +341,7 @@ export const useScrollHandlerY = (name: TabName) => {
             y = y + contentInset
             // ios workaround, make sure we don't rest on 0 otherwise we can't pull to refresh
             if (y === 0) {
-              scrollTo(refMap[name], 0, 0, false, `[${name}]: ios reset`)
+              scrollTo(refMap[name], 0, 0, true, `[${name}]: ios reset`)
             }
             // handle iOS bouncing
             scrollYCurrent.value = interpolate(
@@ -376,6 +387,8 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onBeginDrag: () => {
+        if (!enabled) return
+
         // workaround to stop animated scrolls
         scrollTo(
           refMap[name],
@@ -394,6 +407,8 @@ export const useScrollHandlerY = (name: TabName) => {
         if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
+        if (!enabled) return
+
         isGliding.value = true
         isDragging.value = false
 
@@ -414,6 +429,8 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onMomentumBegin: () => {
+        if (!enabled) return
+
         if (IS_IOS) {
           cancelAnimation(afterDrag)
         }
@@ -428,6 +445,7 @@ export const useScrollHandlerY = (name: TabName) => {
       contentHeights,
       snapThreshold,
       clampMax,
+      enabled,
     ]
   )
 
@@ -438,7 +456,8 @@ export const useScrollHandlerY = (name: TabName) => {
         !isSnapping.value &&
         !isScrolling.value &&
         !isDragging.value &&
-        !isGliding.value
+        !isGliding.value &&
+        enabled
       )
     },
     (sync) => {
@@ -475,7 +494,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       }
     },
-    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex]
+    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex, enabled]
   )
 
   return scrollHandler
@@ -510,4 +529,20 @@ export function useSharedAnimatedRef<T extends RefComponent>(
   })
 
   return ref
+}
+
+export function useAfterMountEffect(effect: React.EffectCallback) {
+  const [didExecute, setDidExecute] = useState(false)
+  const result = useEffect(() => {
+    if (didExecute) return
+
+    const timeout = setTimeout(() => {
+      effect()
+      setDidExecute(true)
+    }, 0)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [didExecute, effect])
+  return result
 }

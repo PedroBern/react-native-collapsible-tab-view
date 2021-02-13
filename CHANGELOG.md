@@ -1,3 +1,27 @@
+# [4.0.0-rc.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-02-11)
+
+
+### Bug Fixes
+
+* switching lazy tabs sometimes jumps scroll position on ios ([#120](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/120)) ([6c3e9fd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6c3e9fda32c104522fad97ce4c2bc76ae0b8ed4c))
+
+# [4.0.0-rc.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* tab sync on ios when scrolling to the top ([15ff5fc](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/15ff5fcf8bd2e85e35225604715bceba8c5cdbc5)), closes [#104](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/104)
+
+# [4.0.0-rc.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.0...v4.0.0-rc.1) (2021-02-10)
+
+
+### Bug Fixes
+
+* conditional dynamic tabs ([51bf7cf](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/51bf7cf29e569edf6452eda4e6b2125d6c3ba84d)), closes [#102](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/102)
+* content inset broken on react native ([040e5c8](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/040e5c8b6a997dfc460ebb7ffd2a5c0b72f5d78c)), closes [#113](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/113)
+* ensure top line (1px) is visible on iOS ([#112](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/112)) ([d832baf](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/d832bafc4302b97325d5c106bfef87fceb8655ab))
+* exclude documentation from library build ([6826aa0](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6826aa00b54e15dd911eda68bf2c932f0dc19c95)), closes [#105](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/105)
+
 # [4.0.0-rc.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-next.0...v4.0.0-rc.0) (2021-02-09)
 
 ### Bug Fixes
