@@ -1,3 +1,10 @@
+# [4.0.0-rc.5](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.4...v4.0.0-rc.5) (2021-02-13)
+
+
+### Bug Fixes
+
+* iOS issues when header height is undefined ([#126](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/126)) ([5b2711b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5b2711b809f8bbc2934f01bc57c2fd48d5411182))
+
 # [4.0.0-rc.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-02-13)
 
 
