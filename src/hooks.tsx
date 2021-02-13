@@ -446,6 +446,7 @@ export const useScrollHandlerY = (
       snapThreshold,
       clampMax,
       enabled,
+      scrollTo,
     ]
   )
 
@@ -494,7 +495,7 @@ export const useScrollHandlerY = (
         }
       }
     },
-    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex, enabled]
+    [revealHeaderOnScroll, refMap, snapThreshold, tabIndex, enabled, scrollTo]
   )
 
   return scrollHandler
