@@ -1,3 +1,10 @@
+# [4.0.0-rc.6](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.5...v4.0.0-rc.6) (2021-02-14)
+
+
+### Bug Fixes
+
+* remove ios scroll reset workaround ([#127](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/127)) ([9e9d130](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9e9d1300a71561b53f82e33e75c581cc1c2abfc7))
+
 # [4.0.0-rc.5](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.4...v4.0.0-rc.5) (2021-02-13)
 
 
