@@ -319,7 +319,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           setHeaderHeight(height)
         }
       },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       [headerHeight]
     )
 

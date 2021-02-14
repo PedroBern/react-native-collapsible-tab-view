@@ -23,12 +23,7 @@ import {
 import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { Context, TabNameContext } from './Context'
-import {
-  IS_IOS,
-  ONE_FRAME_MS,
-  PADDING_WORKAROUND_IOS,
-  scrollToImpl,
-} from './helpers'
+import { IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
 import {
   CollapsibleStyle,
   ContextType,
@@ -136,7 +131,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
       minHeight: IS_IOS
         ? (containerHeight || 0) - tabBarHeight
         : (containerHeight || 0) + headerHeight,
-      paddingTop: IS_IOS ? PADDING_WORKAROUND_IOS : headerHeight + tabBarHeight,
+      paddingTop: IS_IOS ? 0 : headerHeight + tabBarHeight,
     },
     progressViewOffset: headerHeight + tabBarHeight,
   }
@@ -335,11 +330,8 @@ export const useScrollHandlerY = (
             let { y } = event.contentOffset
             // normalize the value so it starts at 0
             y = y + contentInset
-            // ios workaround, make sure we don't rest on 0 otherwise we can't pull to refresh
-            if (y === 0) {
-              scrollTo(refMap[name], 0, 0, true, `[${name}]: ios reset`)
-            }
-            // handle iOS bouncing
+
+            // make sure the y value is clamped to the scrollable size (clamps overscrolling)
             scrollYCurrent.value = interpolate(
               y,
               [0, clampMax],
