@@ -89,7 +89,7 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       initialTabBarHeight
     )
     const [headerHeight, setHeaderHeight] = React.useState<number | undefined>(
-      initialHeaderHeight
+      !HeaderComponent ? 0 : initialHeaderHeight
     )
 
     const contentInset = React.useMemo(
