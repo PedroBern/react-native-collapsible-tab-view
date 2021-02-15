@@ -1,3 +1,10 @@
+# [4.0.0-rc.8](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.7...v4.0.0-rc.8) (2021-02-15)
+
+
+### Bug Fixes
+
+* assume headerHeight is 0 if HeaderComponent isn't provided ([#132](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/132)) ([418c917](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/418c91702163e16be7e5c5a36c7791136a8d56f4))
+
 # [4.0.0-rc.7](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.6...v4.0.0-rc.7) (2021-02-15)
 
 
