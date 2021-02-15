@@ -124,7 +124,8 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
       initialTabName ? tabNames.value.findIndex((n) => n === initialTabName) : 0
     )
     const scrollX: ContextType['scrollX'] = useSharedValue(
-      index.value * windowWidth
+      index.value * windowWidth,
+      false
     )
     const pagerOpacity = useSharedValue(
       initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1,
