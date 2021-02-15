@@ -1,3 +1,10 @@
+# [4.0.0-rc.7](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.6...v4.0.0-rc.7) (2021-02-15)
+
+
+### Bug Fixes
+
+* indicator glitch because scrollX was being reset ([#131](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/131)) ([49a1348](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/49a13484295deddcebb93312829edd212ec36d94))
+
 # [4.0.0-rc.6](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.5...v4.0.0-rc.6) (2021-02-14)
 
 
