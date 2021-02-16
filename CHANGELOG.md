@@ -1,3 +1,10 @@
+# [4.0.0-rc.9](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.8...v4.0.0-rc.9) (2021-02-16)
+
+
+### Performance Improvements
+
+* memoize ([#134](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/134)) ([14bfaa0](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/14bfaa03bb5b57b168570b804defa2f7a4331de4)), closes [#130](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/130)
+
 # [4.0.0-rc.8](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.7...v4.0.0-rc.8) (2021-02-15)
 
 
