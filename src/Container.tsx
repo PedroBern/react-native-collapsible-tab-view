@@ -555,4 +555,6 @@ const styles = StyleSheet.create({
   },
 })
 
-export { Container }
+const MemoizedContainer = React.memo(Container)
+
+export { MemoizedContainer as Container }

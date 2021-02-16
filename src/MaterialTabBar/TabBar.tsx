@@ -41,7 +41,7 @@ export const TABBAR_HEIGHT = 48
  * </Tabs.Container>
  * ```
  */
-export const MaterialTabBar = <T extends TabName = any>({
+const MaterialTabBar = <T extends TabName = any>({
   tabNames,
   indexDecimal,
   scrollEnabled = false,
@@ -233,6 +233,10 @@ export const MaterialTabBar = <T extends TabName = any>({
     </Animated.ScrollView>
   )
 }
+
+const MemoizedTabBar = React.memo(MaterialTabBar)
+
+export { MemoizedTabBar as MaterialTabBar }
 
 const styles = StyleSheet.create({
   contentContainer: {
