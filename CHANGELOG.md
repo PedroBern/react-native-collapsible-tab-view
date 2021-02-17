@@ -1,3 +1,10 @@
+# [4.0.0-rc.10](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.9...v4.0.0-rc.10) (2021-02-17)
+
+
+### Bug Fixes
+
+* scroll to top on header ([fed60c4](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/fed60c4327f1ba0e879b9cd85650f2910f5a9440)), closes [#137](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/137)
+
 # [4.0.0-rc.9](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.8...v4.0.0-rc.9) (2021-02-16)
 
 
