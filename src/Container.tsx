@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import Animated, {
   runOnJS,
+  runOnUI,
   useAnimatedReaction,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -371,25 +372,19 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
           calculateNextOffset.value = i
           if (name === focusedTab.value) {
             const ref = refMap[name]
-            if (ref?.current && 'scrollTo' in ref.current) {
-              ref.current?.scrollTo({
-                x: 0,
-                y: 0,
-                animated: true,
-              })
-            } else if (ref?.current && 'scrollToOffset' in ref.current) {
-              ref.current.scrollToOffset({
-                offset: 0,
-                animated: true,
-              })
-            }
+            runOnUI(scrollToImpl)(
+              ref,
+              0,
+              headerScrollDistance.value - contentInset,
+              true
+            )
           } else {
             containerRef.current?.scrollToIndex({ animated: true, index: i })
           }
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [containerRef, refMap]
+      [containerRef, refMap, contentInset]
     )
 
     React.useEffect(() => {
