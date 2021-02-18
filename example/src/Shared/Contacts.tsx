@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+} from 'react-native'
 import * as Tabs from 'react-native-collapsible-tab-view'
 import Animated, {
   useAnimatedStyle,
@@ -70,17 +76,19 @@ class ContactItem extends React.PureComponent<{
     const { item } = this.props
 
     return (
-      <View style={styles.item}>
-        <View style={styles.avatar}>
-          <Text style={styles.letter}>
-            {item.name.slice(0, 1).toUpperCase()}
-          </Text>
+      <TouchableOpacity>
+        <View style={styles.item}>
+          <View style={styles.avatar}>
+            <Text style={styles.letter}>
+              {item.name.slice(0, 1).toUpperCase()}
+            </Text>
+          </View>
+          <View style={styles.details}>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.number}>{item.number}</Text>
+          </View>
         </View>
-        <View style={styles.details}>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.number}>{item.number}</Text>
-        </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }

@@ -377,15 +377,6 @@ export const useScrollHandlerY = (
       onBeginDrag: () => {
         if (!enabled) return
 
-        // workaround to stop animated scrolls
-        scrollTo(
-          refMap[name],
-          0,
-          scrollY.value[tabIndex] + 0.1,
-          false,
-          `[${name}] stop scroll`
-        )
-
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
 
