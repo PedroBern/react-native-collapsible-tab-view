@@ -20,14 +20,19 @@
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
+    - [Ref](#ref)
   - [Hooks](#hooks)
     - [useCollapsibleStyle](#usecollapsiblestyle)
-    - [useTabNameContext](#usetabnamecontext)
+    - [useAnimatedTabIndex](#useanimatedtabindex)
+    - [useFocusedTab](#usefocusedtab)
+    - [useHeaderMeasurements](#useheadermeasurements)
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
 - [Known issues](#known-issues)
   - [Android FlatList pull to refresh](#android-flatlist-pull-to-refresh)
+  - [iOS FlatList stickyHeaderIndices](#ios-flatlist-stickyheaderindices)
+  - [ref.setIndex](#refsetIndex)
 - [Contributing](#contributing)
   - [Documentation changes](#documentation-changes)
 
@@ -138,6 +143,7 @@ const styles = StyleSheet.create({
 })
 
 export default Example
+
 ```
 
 # Guides
@@ -163,39 +169,39 @@ Basic usage looks like this:
 import { Tabs } from 'react-native-collapsible-tab-view'
 
 const Example = () => {
-  return (
-    <Tabs.Container HeaderComponent={MyHeader}>
-      <Tabs.Tab name="A">
-        <ScreenA />
-      </Tabs.Tab>
-      <Tabs.Tab name="B">
-        <ScreenB />
-      </Tabs.Tab>
-    </Tabs.Container>
-  )
+   return (
+     <Tabs.Container HeaderComponent={MyHeader}>
+       <Tabs.Tab name="A">
+         <ScreenA />
+       </Tabs.Tab>
+       <Tabs.Tab name="B">
+         <ScreenB />
+       </Tabs.Tab>
+     </Tabs.Container>
+   )
 }
 ```
 
 #### Props
 
-|         name         |                                                                                      type                                                                                       |     default      |                                                          description                                                          |
-| :------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------: | :---------------------------------------------------------------------------------------------------------------------------: |
-|   HeaderComponent    |                                                     `((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`                                                      |                  |                                                                                                                               |
-|   TabBarComponent    |                                                     `((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`                                                      | `MaterialTabBar` |                                                                                                                               |
-|   cancelLazyFadeIn   |                                                                             `boolean \| undefined`                                                                              |                  |                                                                                                                               |
-|  cancelTranslation   |                                                                             `boolean \| undefined`                                                                              |                  |                                                                                                                               |
-|    containerStyle    |                                                                             `StyleProp<ViewStyle>`                                                                              |                  |                                                                                                                               |
-| headerContainerStyle |                                                                      `StyleProp<AnimateStyle<ViewStyle>>`                                                                       |                  |                                                                                                                               |
-|     headerHeight     |                                                                              `number \| undefined`                                                                              |                  |                                       Is optional, but will optimize the first render.                                        |
-|    initialTabName    |                                                                         `string \| number \| undefined`                                                                         |                  |                                                                                                                               |
-|         lazy         |                                                                             `boolean \| undefined`                                                                              |                  |             If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.              |
-|   minHeaderHeight    |                                                                              `number \| undefined`                                                                              |       `0`        |                                             Header minimum height when collapsed                                              |
-|    onIndexChange     |                                                                    `((index: number) => void) \| undefined`                                                                     |                  |                             Callback fired when the index changes. It receives the current index.                             |
-|     onTabChange      |                                                 `(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`                                                 |                  |                 Callback fired when the tab changes. It receives the previous and current index and tabnames.                 |
-|      pagerProps      | `Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>` |                  | Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }` |
-| revealHeaderOnScroll |                                                                             `boolean \| undefined`                                                                              |     `false`      |                                   Reveal header when scrolling down. Implements diffClamp.                                    |
-|    snapThreshold     |                                                                          `number \| null \| undefined`                                                                          |      `null`      |       Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.       |
-|     tabBarHeight     |                                                                              `number \| undefined`                                                                              |                  |                                       Is optional, but will optimize the first render.                                        |
+|name|type|default|description|
+|:----:|:----:|:----:|:----:|
+|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`||
+|cancelLazyFadeIn|`boolean \| undefined`|||
+|cancelTranslation|`boolean \| undefined`|||
+|containerStyle|`StyleProp<ViewStyle>`|||
+|headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
+|headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
+|initialTabName|`string \| number \| undefined`|||
+|lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
+|minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
+|onIndexChange|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
+|onTabChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
+|pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|revealHeaderOnScroll|`boolean \| undefined`|`false`|Reveal header when scrolling down. Implements diffClamp.|
+|snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
+|tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
 
 ### Tabs.Tab
 
@@ -214,10 +220,10 @@ Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
 
 #### Props
 
-| name  |         type          |
-| :---: | :-------------------: |
-| label | `string \| undefined` |
-| name  |          `T`          |
+|name|type|
+|:----:|:----:|
+|label|`string \| undefined`|
+|name|`T`|
 
 ### Tabs.Lazy
 
@@ -225,10 +231,10 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 
 #### Props
 
-|       name       |          type          |
-| :--------------: | :--------------------: |
-| cancelLazyFadeIn | `boolean \| undefined` |
-|   startMounted   | `boolean \| undefined` |
+|name|type|
+|:----:|:----:|
+|cancelLazyFadeIn|`boolean \| undefined`|
+|startMounted|`boolean \| undefined`|
 
 ### Tabs.FlatList
 
@@ -237,6 +243,24 @@ Use like a regular FlatList.
 ### Tabs.ScrollView
 
 Use like a regular ScrollView.
+
+
+
+### Ref
+
+You can pass a ref to `Tabs.Container`.
+
+```tsx
+const ref = React.useRef()
+<Tabs.Container ref={ref}>
+```
+
+|     method      |             type             |
+| :-------------: | :--------------------------: |
+|    jumpToTab    |    `(name: T) => boolean`    |
+|    setIndex     | `(index: number) => boolean` |
+|  getFocusedTab  |          `() => T`           |
+| getCurrentIndex |        `() => number`        |
 
 ## Hooks
 
@@ -260,12 +284,28 @@ const {
 |  progressViewOffset   |                   `number`                   |
 |         style         |             `{ width: number; }`             |
 
-### useTabNameContext
+### useAnimatedTabIndex
 
-Access the parent tab name from any deep component.
+Returns an animated value representing the current tab index, as a floating point number.
 
 ```tsx
-const tabName = useTabNameContext()
+const tabIndex = useAnimatedTabIndex()
+```
+
+### useFocusedTab
+
+Returns the currently focused tab name.
+
+```tsx
+const focusedTab = useAnimatedTabIndex()
+```
+
+### useHeaderMeasurements
+
+Returns the top distance and the header height. See the animated header example in the example folder.
+
+```tsx
+const { top, height } = useHeaderMeasurements()
 ```
 
 ## Default Tab Bar
@@ -293,25 +333,25 @@ Basic usage looks like this:
 
 #### Props
 
-|         name          |                           type                           |                default                 |                                              description                                              |
-| :-------------------: | :------------------------------------------------------: | :------------------------------------: | :---------------------------------------------------------------------------------------------------: |
-|   TabItemComponent    | `(props: MaterialTabItemProps<N>) => React.ReactElement` |           `MaterialTabItem`            |                               React component to render as tab bar item                               |
-|      activeColor      |                  `string \| undefined`                   |                                        |                                Color applied to the label when active                                 |
-|     containerRef      |                `RefObject<ContainerRef>`                 |                                        |                                                                                                       |
-| contentContainerStyle |                  `StyleProp<ViewStyle>`                  |                                        |                            Style to apply to the inner container for tabs                             |
-|      focusedTab       |                     `SharedValue<T>`                     |                                        |                                                                                                       |
-|     getLabelText      |           `((name: T) => string) \| undefined`           | `(name) => String(name).toUpperCase()` |                              Function to compute the tab item label text                              |
-|     inactiveColor     |                  `string \| undefined`                   |                                        |                               Color applied to the label when inactive                                |
-|         index         |                  `SharedValue<number>`                   |                                        |                                                                                                       |
-|     indexDecimal      |                  `SharedValue<number>`                   |                                        |                                                                                                       |
-|    indicatorStyle     |           `StyleProp<AnimateStyle<ViewStyle>>`           |                                        |                                Style to apply to the active indicator.                                |
-|      labelStyle       |           `StyleProp<AnimateStyle<TextStyle>>`           |                                        |                                 Style to apply to the tab item label                                  |
-|      onTabPress       |                   `(name: T) => void`                    |                                        |                                                                                                       |
-|     scrollEnabled     |                  `boolean \| undefined`                  |                `false`                 | Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic |
-|         style         |                  `StyleProp<ViewStyle>`                  |                                        |                               Style to apply to the tab bar container.                                |
-|       tabNames        |                          `T[]`                           |                                        |                                                                                                       |
-|       tabProps        |                    `TabsWithProps<T>`                    |                                        |                                                                                                       |
-|       tabStyle        |                  `StyleProp<ViewStyle>`                  |                                        |                      Style to apply to the individual tab items in the tab bar.                       |
+|name|type|default|description|
+|:----:|:----:|:----:|:----:|
+|TabItemComponent|`(props: MaterialTabItemProps<N>) => React.ReactElement`|`MaterialTabItem`|React component to render as tab bar item|
+|activeColor|`string \| undefined`||Color applied to the label when active|
+|containerRef|`RefObject<ContainerRef>`|||
+|contentContainerStyle|`StyleProp<ViewStyle>`||Style to apply to the inner container for tabs|
+|focusedTab|`SharedValue<T>`|||
+|getLabelText|`((name: T) => string) \| undefined`|`(name) => String(name).toUpperCase()`|Function to compute the tab item label text|
+|inactiveColor|`string \| undefined`||Color applied to the label when inactive|
+|index|`SharedValue<number>`|||
+|indexDecimal|`SharedValue<number>`|||
+|indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||Style to apply to the active indicator.|
+|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
+|onTabPress|`(name: T) => void`|||
+|scrollEnabled|`boolean \| undefined`|`false`|Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic|
+|style|`StyleProp<ViewStyle>`||Style to apply to the tab bar container.|
+|tabNames|`T[]`|||
+|tabProps|`TabsWithProps<T>`|||
+|tabStyle|`StyleProp<ViewStyle>`||Style to apply to the individual tab items in the tab bar.|
 
 ### MaterialTabItem
 
@@ -319,22 +359,24 @@ Any additional props are passed to the pressable component.
 
 #### Props
 
-|      name       |                                             type                                             |              default              |                                                               description                                                               |
-| :-------------: | :------------------------------------------------------------------------------------------: | :-------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------: |
-|   activeColor   |                                    `string \| undefined`                                     |              `null`               |                                                 Color applied to the label when active                                                  |
-|  inactiveColor  |                                    `string \| undefined`                                     |              `null`               |                                                Color applied to the label when inactive                                                 |
-| inactiveOpacity |                                    `number \| undefined`                                     |               `0.7`               |                                                                                                                                         |
-|      index      |                                           `number`                                           |                                   |                                                                                                                                         |
-|  indexDecimal   |                                    `SharedValue<number>`                                     |                                   |                                                                                                                                         |
-|      label      |                                           `string`                                           |                                   |                                                                                                                                         |
-|   labelStyle    |                             `StyleProp<AnimateStyle<TextStyle>>`                             |                                   |                                                  Style to apply to the tab item label                                                   |
-|      name       |                                             `T`                                              |                                   |                                                                                                                                         |
-|    onLayout     | `(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined` |                                   |                        Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.                        |
-|     onPress     |                                     `(name: T) => void`                                      |                                   |                                                                                                                                         |
-|   pressColor    |                                    `string \| undefined`                                     |             `#DDDDDD`             |                                                                                                                                         |
-|  pressOpacity   |                                    `number \| undefined`                                     | `Platform.OS === 'ios' ? 0.2 : 1` |                                                                                                                                         |
-|  scrollEnabled  |                                    `boolean \| undefined`                                    |                                   |                                                                                                                                         |
-|      style      |                                    `StyleProp<ViewStyle>`                                    |                                   | Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles. |
+|name|type|default|description|
+|:----:|:----:|:----:|:----:|
+|activeColor|`string \| undefined`|`null`|Color applied to the label when active|
+|inactiveColor|`string \| undefined`|`null`|Color applied to the label when inactive|
+|inactiveOpacity|`number \| undefined`|`0.7`||
+|index|`number`|||
+|indexDecimal|`SharedValue<number>`|||
+|label|`string`|||
+|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
+|name|`T`|||
+|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
+|onPress|`(name: T) => void`|||
+|pressColor|`string \| undefined`|`#DDDDDD`||
+|pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
+|scrollEnabled|`boolean \| undefined`|||
+|style|`StyleProp<ViewStyle>`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+
+
 
 # Known issues
 
@@ -343,6 +385,23 @@ Any additional props are passed to the pressable component.
 See [this open issue](https://github.com/software-mansion/react-native-reanimated/issues/1703). We use [scrollTo](https://docs.swmansion.com/react-native-reanimated/docs/next/api/nativeMethods/scrollTo) to synchronize the unfocused tabs, it's supposed to work only with `ScrollView`, but works great with `FlatList`, until the `RefreshControl` is added. Note that this happens only to android.
 
 **Workaround**: see the `Android Shared Pull To Refresh` example in the expo app. You can have a single pull to refresh for the `Tabs.Container`.
+
+## iOS FlatList stickyHeaderIndices
+
+When you use the stickyHeaderIndices prop on a FlatList, the sticky elements don't scroll up when the header collapses. This happens only on iOS.
+
+See [#136](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/136).
+
+## ref.setIndex
+
+This isn't an issue, but you need to know. When using `containerRef.current.setIndex(i)`, if setting to the current index, the screen will scroll to the top. You can prevent this behavior like this:
+
+```ts
+const index = pageRef.current?.getCurrentIndex()
+if (index !== nextIndex) {
+  pageRef.current?.setIndex(nextIndex)
+}
+```
 
 # Contributing
 

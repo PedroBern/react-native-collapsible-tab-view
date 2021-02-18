@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 
 // import CenteredEmptyList from './CenteredEmptyList'
+import AnimatedHeader from "./AnimatedHeader"
 import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import Default from './Default'
 import DynamicTabs from './DynamicTabs'
@@ -46,6 +47,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   OnTabChange,
   DynamicTabs,
   MinHeaderHeight,
+  AnimatedHeader,
   AndroidSharedPullToRefresh,
 ]
 

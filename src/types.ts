@@ -205,6 +205,8 @@ export type ContextType<T extends TabName = TabName> = {
   >
 
   contentInset: number
+
+  headerTranslateY: Animated.SharedValue<number>
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>

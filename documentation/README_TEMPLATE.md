@@ -20,14 +20,19 @@
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.ScrollView](#tabsscrollview)
+    - [Ref](#ref)
   - [Hooks](#hooks)
     - [useCollapsibleStyle](#usecollapsiblestyle)
-    - [useTabNameContext](#usetabnamecontext)
+    - [useAnimatedTabIndex](#useanimatedtabindex)
+    - [useFocusedTab](#usefocusedtab)
+    - [useHeaderMeasurements](#useheadermeasurements)
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
 - [Known issues](#known-issues)
   - [Android FlatList pull to refresh](#android-flatlist-pull-to-refresh)
+  - [iOS FlatList stickyHeaderIndices](#ios-flatlist-stickyheaderindices)
+  - [ref.setIndex](#refsetIndex)
 - [Contributing](#contributing)
   - [Documentation changes](#documentation-changes)
 
@@ -100,6 +105,22 @@ If you want to allow scrolling from the header:
 
 $CORE_API
 
+### Ref
+
+You can pass a ref to `Tabs.Container`.
+
+```tsx
+const ref = React.useRef()
+<Tabs.Container ref={ref}>
+```
+
+|     method      |             type             |
+| :-------------: | :--------------------------: |
+|    jumpToTab    |    `(name: T) => boolean`    |
+|    setIndex     | `(index: number) => boolean` |
+|  getFocusedTab  |          `() => T`           |
+| getCurrentIndex |        `() => number`        |
+
 ## Hooks
 
 ### useCollapsibleStyle
@@ -122,12 +143,28 @@ const {
 |  progressViewOffset   |                   `number`                   |
 |         style         |             `{ width: number; }`             |
 
-### useTabNameContext
+### useAnimatedTabIndex
 
-Access the parent tab name from any deep component.
+Returns an animated value representing the current tab index, as a floating point number.
 
 ```tsx
-const tabName = useTabNameContext()
+const tabIndex = useAnimatedTabIndex()
+```
+
+### useFocusedTab
+
+Returns the currently focused tab name.
+
+```tsx
+const focusedTab = useAnimatedTabIndex()
+```
+
+### useHeaderMeasurements
+
+Returns the top distance and the header height. See the animated header example in the example folder.
+
+```tsx
+const { top, height } = useHeaderMeasurements()
 ```
 
 ## Default Tab Bar
@@ -141,6 +178,23 @@ $TAB_BAR_API
 See [this open issue](https://github.com/software-mansion/react-native-reanimated/issues/1703). We use [scrollTo](https://docs.swmansion.com/react-native-reanimated/docs/next/api/nativeMethods/scrollTo) to synchronize the unfocused tabs, it's supposed to work only with `ScrollView`, but works great with `FlatList`, until the `RefreshControl` is added. Note that this happens only to android.
 
 **Workaround**: see the `Android Shared Pull To Refresh` example in the expo app. You can have a single pull to refresh for the `Tabs.Container`.
+
+## iOS FlatList stickyHeaderIndices
+
+When you use the stickyHeaderIndices prop on a FlatList, the sticky elements don't scroll up when the header collapses. This happens only on iOS.
+
+See [#136](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/136).
+
+## ref.setIndex
+
+This isn't an issue, but you need to know. When using `containerRef.current.setIndex(i)`, if setting to the current index, the screen will scroll to the top. You can prevent this behavior like this:
+
+```ts
+const index = pageRef.current?.getCurrentIndex()
+if (index !== nextIndex) {
+  pageRef.current?.setIndex(nextIndex)
+}
+```
 
 # Contributing
 
