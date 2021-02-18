@@ -1,3 +1,10 @@
+# [4.0.0-rc.11](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.10...v4.0.0-rc.11) (2021-02-18)
+
+
+### Bug Fixes
+
+* touchables not registering touches after scrolling ([5598b11](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5598b11be2c0a5fb881c630084c9c55f1eb6afa3)), closes [#123](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/123)
+
 # [4.0.0-rc.10](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.9...v4.0.0-rc.10) (2021-02-17)
 
 
