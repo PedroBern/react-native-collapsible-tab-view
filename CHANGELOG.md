@@ -1,3 +1,10 @@
+# [4.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.11...v4.0.0) (2021-02-18)
+
+
+### Features
+
+* expose hooks ([06e693c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/06e693c521b777546fea75e8e82ddb67acb240a1))
+
 # [4.0.0-rc.11](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.10...v4.0.0-rc.11) (2021-02-18)
 
 
