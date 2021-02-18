@@ -5,8 +5,6 @@
 [![MIT License][license-badge]][license]
 [![runs with expo][expo-badge]][expo]
 
-> This is the `@next` documentation. [See the v3 for latest stable version](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v3).
-
 - [Expo app](#expo-app)
 - [Demo](#demo)
 - [Features](#features)
@@ -161,48 +159,6 @@ If you want to allow scrolling from the header:
 
 ## Core
 
-### Tabs.Container
-
-Basic usage looks like this:
-
-```tsx
-import { Tabs } from 'react-native-collapsible-tab-view'
-
-const Example = () => {
-   return (
-     <Tabs.Container HeaderComponent={MyHeader}>
-       <Tabs.Tab name="A">
-         <ScreenA />
-       </Tabs.Tab>
-       <Tabs.Tab name="B">
-         <ScreenB />
-       </Tabs.Tab>
-     </Tabs.Container>
-   )
-}
-```
-
-#### Props
-
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`||
-|cancelLazyFadeIn|`boolean \| undefined`|||
-|cancelTranslation|`boolean \| undefined`|||
-|containerStyle|`StyleProp<ViewStyle>`|||
-|headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
-|headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-|initialTabName|`string \| number \| undefined`|||
-|lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
-|minHeaderHeight|`number \| undefined`|`0`|Header minimum height when collapsed|
-|onIndexChange|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
-|onTabChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
-|revealHeaderOnScroll|`boolean \| undefined`|`false`|Reveal header when scrolling down. Implements diffClamp.|
-|snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
-|tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-
 ### Tabs.Tab
 
 Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
@@ -309,49 +265,6 @@ const { top, height } = useHeaderMeasurements()
 ```
 
 ## Default Tab Bar
-
-### MaterialTabBar
-
-Basic usage looks like this:
-
-```tsx
-<Tabs.Container
-   ...
-   TabBarComponent={(props) => (
-     <MaterialTabBar
-       {...props}
-       activeColor="red"
-       inactiveColor="yellow"
-       inactiveOpacity={1}
-       labelStyle={{ fontSize: 14 }}
-     />
-   )}
->
-   {...}
-</Tabs.Container>
-```
-
-#### Props
-
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|TabItemComponent|`(props: MaterialTabItemProps<N>) => React.ReactElement`|`MaterialTabItem`|React component to render as tab bar item|
-|activeColor|`string \| undefined`||Color applied to the label when active|
-|containerRef|`RefObject<ContainerRef>`|||
-|contentContainerStyle|`StyleProp<ViewStyle>`||Style to apply to the inner container for tabs|
-|focusedTab|`SharedValue<T>`|||
-|getLabelText|`((name: T) => string) \| undefined`|`(name) => String(name).toUpperCase()`|Function to compute the tab item label text|
-|inactiveColor|`string \| undefined`||Color applied to the label when inactive|
-|index|`SharedValue<number>`|||
-|indexDecimal|`SharedValue<number>`|||
-|indicatorStyle|`StyleProp<AnimateStyle<ViewStyle>>`||Style to apply to the active indicator.|
-|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
-|onTabPress|`(name: T) => void`|||
-|scrollEnabled|`boolean \| undefined`|`false`|Indicates whether the tab bar should contain horizontal scroll, when enabled the tab width is dynamic|
-|style|`StyleProp<ViewStyle>`||Style to apply to the tab bar container.|
-|tabNames|`T[]`|||
-|tabProps|`TabsWithProps<T>`|||
-|tabStyle|`StyleProp<ViewStyle>`||Style to apply to the individual tab items in the tab bar.|
 
 ### MaterialTabItem
 

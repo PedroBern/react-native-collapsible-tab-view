@@ -5,8 +5,6 @@
 [![MIT License][license-badge]][license]
 [![runs with expo][expo-badge]][expo]
 
-> This is the `@next` documentation. [See the v3 for latest stable version](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v3).
-
 - [Expo app](#expo-app)
 - [Demo](#demo)
 - [Features](#features)
