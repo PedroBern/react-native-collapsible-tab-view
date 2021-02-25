@@ -31,6 +31,7 @@
   - [Android FlatList pull to refresh](#android-flatlist-pull-to-refresh)
   - [iOS FlatList stickyHeaderIndices](#ios-flatlist-stickyheaderindices)
   - [ref.setIndex](#refsetIndex)
+- [Alternative libraries](#alternative-libraries)
 - [Contributing](#contributing)
   - [Documentation changes](#documentation-changes)
 
@@ -315,6 +316,12 @@ if (index !== nextIndex) {
   pageRef.current?.setIndex(nextIndex)
 }
 ```
+
+# Alternative libraries
+
+If you don't need a full-featured tab view, check out the other option, a simple segmented control / material tab bar without swiping or snapping, using just the react native Animated API.
+
+- [react-native-collapsible-segmented-view](https://github.com/PedroBern/react-native-collapsible-segmented-view)
 
 # Contributing
 
