@@ -23,12 +23,7 @@ function FlatListImpl<R>(
   passRef: React.Ref<RNFlatList>
 ): React.ReactElement {
   const name = useTabNameContext()
-  const {
-    setRef,
-    setContentHeights,
-    contentInset,
-    scrollYCurrent,
-  } = useTabsContext()
+  const { setRef, contentInset, scrollYCurrent } = useTabsContext()
   const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
   const [canBindScrollEvent, setCanBindScrollEvent] = React.useState(false)
 
@@ -51,7 +46,6 @@ function FlatListImpl<R>(
 
   const scrollContentSizeChange = useUpdateScrollViewContentSize({
     name,
-    setContentHeights,
   })
 
   const scrollContentSizeChangeHandlers = useChainCallback(

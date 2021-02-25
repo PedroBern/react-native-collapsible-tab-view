@@ -196,13 +196,7 @@ export type ContextType<T extends TabName = TabName> = {
   /**
    * Height of the scrollable content of each tab. Helps to allow iOS bouncing.
    */
-  contentHeights: Record<string, number>
-  /**
-   * Callback to get the contentHeight of each scrollable content.
-   */
-  setContentHeights: React.Dispatch<
-    React.SetStateAction<Record<string, number>>
-  >
+  contentHeights: Animated.SharedValue<number[]>
 
   contentInset: number
 

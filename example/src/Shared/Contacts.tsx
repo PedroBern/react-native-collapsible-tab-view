@@ -97,18 +97,11 @@ const ItemSeparator = () => <View style={styles.separator} />
 
 const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 
-// const PADDING_TOP = HEADER_HEIGHT + TABBAR_HEIGHT
-
 const ListEmptyComponent = () => {
-  const { headerHeight, scrollY, scrollYCurrent } = Tabs.useTabsContext()
-
+  const { top, height } = Tabs.useHeaderMeasurements()
   const translateY = useDerivedValue(() => {
-    return Animated.interpolate(
-      scrollYCurrent.value,
-      [0, headerHeight],
-      [-headerHeight / 2, 0]
-    )
-  }, [scrollY])
+    return Animated.interpolate(-top.value, [0, height], [-height / 2, 0])
+  }, [height])
 
   const stylez = useAnimatedStyle(() => {
     return {
