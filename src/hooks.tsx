@@ -20,6 +20,8 @@ import Animated, {
   interpolate,
   Extrapolate,
   runOnJS,
+  runOnUI,
+  useDerivedValue,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -138,21 +140,23 @@ export function useCollapsibleStyle(): CollapsibleStyle {
   }
 }
 
-export function useUpdateScrollViewContentSize({
-  setContentHeights,
-  name,
-}: {
-  name: TabName
-  setContentHeights: ContextType['setContentHeights']
-}) {
+export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
+  const { tabNames, contentHeights } = useTabsContext()
+
+  const setContentHeights = useCallback(
+    (name: TabName, height: number) => {
+      const tabIndex = tabNames.value.indexOf(name)
+      contentHeights.value[tabIndex] = height
+      contentHeights.value = [...contentHeights.value]
+    },
+    [contentHeights, tabNames.value]
+  )
+
   const scrollContentSizeChange = useCallback(
     (_: number, h: number) => {
-      setContentHeights((contentHeights) => ({
-        ...contentHeights,
-        [name]: h,
-      }))
+      runOnUI(setContentHeights)(name, h)
     },
-    [name, setContentHeights]
+    [setContentHeights, name]
   )
 
   return scrollContentSizeChange
@@ -243,11 +247,6 @@ export const useScrollHandlerY = (
 
   const scrollTo = useScroller()
 
-  const clampMax = useMemo(() => {
-    const contentHeight = contentHeights[name] || Number.MAX_VALUE
-    return contentHeight - (containerHeight || 0) + contentInset
-  }, [contentHeights, name, contentInset, containerHeight])
-
   const onMomentumEnd = () => {
     'worklet'
     if (!enabled) return
@@ -321,6 +320,11 @@ export const useScrollHandlerY = (
     isGliding.value = false
   }
 
+  const contentHeight = useDerivedValue(() => {
+    const tabIndex = tabNames.value.indexOf(name)
+    return contentHeights.value[tabIndex] || Number.MAX_VALUE
+  }, [])
+
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
@@ -331,7 +335,8 @@ export const useScrollHandlerY = (
             let { y } = event.contentOffset
             // normalize the value so it starts at 0
             y = y + contentInset
-
+            const clampMax =
+              contentHeight.value - (containerHeight || 0) + contentInset
             // make sure the y value is clamped to the scrollable size (clamps overscrolling)
             scrollYCurrent.value = interpolate(
               y,
@@ -422,9 +427,8 @@ export const useScrollHandlerY = (
       name,
       revealHeaderOnScroll,
       containerHeight,
-      contentHeights,
+      contentInset,
       snapThreshold,
-      clampMax,
       enabled,
       scrollTo,
     ]

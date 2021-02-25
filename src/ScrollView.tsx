@@ -27,12 +27,7 @@ export const ScrollView = React.forwardRef<
   ) => {
     const name = useTabNameContext()
     const ref = useSharedAnimatedRef<RNScrollView>(passRef)
-    const {
-      setRef,
-      setContentHeights,
-      contentInset,
-      scrollYCurrent,
-    } = useTabsContext()
+    const { setRef, contentInset, scrollYCurrent } = useTabsContext()
     const {
       style: _style,
       contentContainerStyle: _contentContainerStyle,
@@ -55,7 +50,6 @@ export const ScrollView = React.forwardRef<
 
     const scrollContentSizeChange = useUpdateScrollViewContentSize({
       name,
-      setContentHeights,
     })
 
     const scrollContentSizeChangeHandlers = useChainCallback(
