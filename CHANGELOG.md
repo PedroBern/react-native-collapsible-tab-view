@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/list...v4.0.1) (2021-02-25)
+
+
+### Bug Fixes
+
+* rework contentHeights to use a shared value ([#146](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/146)) ([0cecd27](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0cecd27155976a52e3ddf788507348bd8fcc5955))
+
 # [4.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.0-rc.11...v4.0.0) (2021-02-18)
 
 
