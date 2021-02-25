@@ -12,9 +12,9 @@ import {
   View,
 } from 'react-native'
 
-// import CenteredEmptyList from './CenteredEmptyList'
-import AnimatedHeader from "./AnimatedHeader"
 import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
+import AnimatedHeader from './AnimatedHeader'
+import CenteredEmptyList from './CenteredEmptyList'
 import Default from './Default'
 import DynamicTabs from './DynamicTabs'
 import Lazy from './Lazy'
@@ -38,7 +38,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   RevealHeaderOnScrollSnap,
   Lazy,
   ScrollableTabs,
-  // CenteredEmptyList,
+  CenteredEmptyList,
   ScrollOnHeader,
   QuickStartDemo,
   UndefinedHeaderHeight,
