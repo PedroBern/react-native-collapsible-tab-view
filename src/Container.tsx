@@ -210,8 +210,6 @@ const Container = React.forwardRef<CollapsibleRef, CollapsibleProps>(
               false
             )
           })
-
-          pagerOpacity.value = withTiming(1)
         }
       },
       [tabNamesArray, refMap, afterRender, contentInset]
