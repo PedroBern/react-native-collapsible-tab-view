@@ -321,7 +321,7 @@ Any additional props are passed to the pressable component.
 |inactiveColor|`string \| undefined`|`null`|Color applied to the label when inactive|
 |inactiveOpacity|`number \| undefined`|`0.7`||
 |index|`number`|||
-|indexDecimal|`any`|||
+|indexDecimal|`SharedValue<number>`|||
 |label|`string`|||
 |labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
 |name|`T`|||
