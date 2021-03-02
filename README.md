@@ -160,6 +160,48 @@ If you want to allow scrolling from the header:
 
 ## Core
 
+### Tabs.Container
+
+Basic usage looks like this:
+
+```tsx
+import { Tabs } from 'react-native-collapsible-tab-view'
+
+const Example = () => {
+   return (
+     <Tabs.Container HeaderComponent={MyHeader}>
+       <Tabs.Tab name="A">
+         <ScreenA />
+       </Tabs.Tab>
+       <Tabs.Tab name="B">
+         <ScreenB />
+       </Tabs.Tab>
+     </Tabs.Container>
+   )
+}
+```
+
+#### Props
+
+|name|type|default|description|
+|:----:|:----:|:----:|:----:|
+|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|||
+|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`||
+|cancelLazyFadeIn|`boolean \| undefined`|||
+|cancelTranslation|`boolean \| undefined`|||
+|containerStyle|`StyleProp<ViewStyle>`|||
+|headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
+|headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
+|initialTabName|`string \| number \| undefined`|||
+|lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
+|minHeaderHeight|`number \| undefined`||Header minimum height when collapsed|
+|onIndexChange|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
+|onTabChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
+|pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|revealHeaderOnScroll|`boolean \| undefined`||Reveal header when scrolling down. Implements diffClamp.|
+|snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
+|tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
+
 ### Tabs.Tab
 
 Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
@@ -279,7 +321,7 @@ Any additional props are passed to the pressable component.
 |inactiveColor|`string \| undefined`|`null`|Color applied to the label when inactive|
 |inactiveOpacity|`number \| undefined`|`0.7`||
 |index|`number`|||
-|indexDecimal|`SharedValue<number>`|||
+|indexDecimal|`any`|||
 |label|`string`|||
 |labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
 |name|`T`|||
