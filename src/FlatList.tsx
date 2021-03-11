@@ -18,6 +18,7 @@ function FlatListImpl<R>(
     contentContainerStyle,
     style,
     onContentSizeChange,
+    refreshControl,
     ...rest
   }: Omit<FlatListProps<R>, 'onScroll'>,
   passRef: React.Ref<RNFlatList>
@@ -71,6 +72,13 @@ function FlatListImpl<R>(
         x: 0,
       }}
       automaticallyAdjustContentInsets={false}
+      refreshControl={
+        refreshControl &&
+        React.cloneElement(refreshControl, {
+          progressViewOffset,
+          ...refreshControl.props,
+        })
+      }
     />
   )
 }
