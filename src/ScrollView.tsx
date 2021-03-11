@@ -22,7 +22,14 @@ export const ScrollView = React.forwardRef<
   React.PropsWithChildren<Omit<ScrollViewProps, 'onScroll'>>
 >(
   (
-    { contentContainerStyle, style, onContentSizeChange, children, ...rest },
+    {
+      contentContainerStyle,
+      style,
+      onContentSizeChange,
+      children,
+      refreshControl,
+      ...rest
+    },
     passRef
   ) => {
     const name = useTabNameContext()
@@ -31,6 +38,7 @@ export const ScrollView = React.forwardRef<
     const {
       style: _style,
       contentContainerStyle: _contentContainerStyle,
+      progressViewOffset,
     } = useCollapsibleStyle()
     const [canBindScrollEvent, setCanBindScrollEvent] = React.useState(false)
 
@@ -78,6 +86,13 @@ export const ScrollView = React.forwardRef<
           x: 0,
         }}
         automaticallyAdjustContentInsets={false}
+        refreshControl={
+          refreshControl &&
+          React.cloneElement(refreshControl, {
+            progressViewOffset,
+            ...refreshControl.props,
+          })
+        }
       >
         {children}
       </Animated.ScrollView>
