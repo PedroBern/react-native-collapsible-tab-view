@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.1...v4.1.0) (2021-03-11)
+
+
+### Features
+
+* support custom refresh control component ([273e0e7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/273e0e7ff11d0b566e65bb2f0bf81e676bd99814))
+
 ## [4.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/list...v4.0.1) (2021-02-25)
 
 
