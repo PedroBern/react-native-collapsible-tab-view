@@ -103,7 +103,7 @@ const Example: React.FC = () => {
 
   return (
     <Tabs.Container
-      HeaderComponent={Header}
+      renderHeaderComponent={Header}
       headerHeight={HEADER_HEIGHT} // optional
     >
       <Tabs.Tab name="A">
@@ -169,7 +169,7 @@ import { Tabs } from 'react-native-collapsible-tab-view'
 
 const Example = () => {
    return (
-     <Tabs.Container HeaderComponent={MyHeader}>
+     <Tabs.Container renderHeaderComponent={MyHeader}>
        <Tabs.Tab name="A">
          <ScreenA />
        </Tabs.Tab>
@@ -185,8 +185,8 @@ const Example = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|||
-|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`||
+|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`||@obsolete use `renderHeaderComponent` instead. This property will be removed in 5.0.0|
+|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`|@obsolete use `renderTabBarComponent` instead. This property will be removed in 5.0.0|
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
@@ -198,6 +198,8 @@ const Example = () => {
 |onIndexChange|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
 |onTabChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
 |pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|renderHeaderComponent|`((props: TabBarProps<TabName>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| undefined`|||
+|renderTabBarComponent|`((props: TabBarProps<TabName>) => ReactElement<any, string \| ((props: any) => ReactElement<any, string \| ... \| (new (props: any) => Component<any, any, any>)> \| null) \| (new (props: any) => Component<...>)> \| null) \| undefined`|||
 |revealHeaderOnScroll|`boolean \| undefined`||Reveal header when scrolling down. Implements diffClamp.|
 |snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
