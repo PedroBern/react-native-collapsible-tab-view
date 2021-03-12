@@ -13,7 +13,7 @@ const DefaultExample: ExampleComponentType = () => {
     <ExampleComponent
       revealHeaderOnScroll
       snapThreshold={0.5}
-      HeaderComponent={Header}
+      renderHeaderComponent={Header}
     />
   )
 }

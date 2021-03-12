@@ -79,8 +79,33 @@ export type CollapsibleProps = {
    */
   snapThreshold?: number | null
   children: TabReactElement<TabName>[] | TabReactElement<TabName>
-  HeaderComponent?: (props: TabBarProps<TabName>) => React.ReactElement | null
-  TabBarComponent?: (props: TabBarProps<TabName>) => React.ReactElement | null
+  /**
+   * @obsolete use `renderHeaderComponent` instead. This property will be removed in 5.0.0
+   */
+  HeaderComponent?:
+    | ((props: TabBarProps<TabName>) => React.ReactElement)
+    | React.MemoExoticComponent<
+        (props: TabBarProps<TabName>) => React.ReactElement
+      >
+    | null
+  /**
+   * @obsolete use `renderTabBarComponent` instead. This property will be removed in 5.0.0
+   */
+  TabBarComponent?:
+    | ((props: TabBarProps<TabName>) => React.ReactElement)
+    | React.MemoExoticComponent<
+        (props: TabBarProps<TabName>) => React.ReactElement
+      >
+    | null
+
+  renderHeaderComponent?: (
+    props: TabBarProps<TabName>
+  ) => React.ReactElement | null
+
+  renderTabBarComponent?: (
+    props: TabBarProps<TabName>
+  ) => React.ReactElement | null
+
   headerContainerStyle?: StyleProp<Animated.AnimateStyle<ViewStyle>>
   containerStyle?: StyleProp<ViewStyle>
   cancelTranslation?: boolean

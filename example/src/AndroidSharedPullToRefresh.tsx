@@ -9,7 +9,7 @@ const title = 'Android Shared Pull To Refresh'
 const Header = buildHeader(title)
 
 const Example: ExampleComponentType = () => {
-  return <ExampleComponent HeaderComponent={Header} />
+  return <ExampleComponent renderHeaderComponent={Header} />
 }
 
 Example.title = title

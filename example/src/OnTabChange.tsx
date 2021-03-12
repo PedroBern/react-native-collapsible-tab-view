@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { TabBarProps } from 'react-native-collapsible-tab-view'
+import React from 'react'
 
 import ExampleComponent from './Shared/ExampleComponent'
 import { Header } from './Shared/Header'
@@ -9,18 +8,13 @@ const exampleTitle = 'On tab change example'
 
 const TitleContext = React.createContext<string>(exampleTitle)
 
-const HeaderComponent = (props: TabBarProps) => {
-  const title = useContext(TitleContext)
-  return <Header title={title} {...props} />
-}
-
 const OnIndexChange: ExampleComponentType = () => {
   const [title, setTitle] = React.useState(exampleTitle)
 
   return (
     <TitleContext.Provider value={title}>
       <ExampleComponent
-        HeaderComponent={HeaderComponent}
+        renderHeaderComponent={(props) => <Header title={title} {...props} />}
         onTabChange={({ prevIndex, index, prevTabName, tabName }) => {
           const title = `prev: ${prevTabName}\ncurr: ${tabName}`
           setTitle(title)

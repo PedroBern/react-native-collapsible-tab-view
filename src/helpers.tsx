@@ -1,3 +1,4 @@
+import React from 'react'
 import { FlatList, Platform } from 'react-native'
 import Animated, { scrollTo } from 'react-native-reanimated'
 
@@ -23,4 +24,18 @@ export function scrollToImpl<T extends RefComponent>(
 
   //@ts-expect-error: reanimated typescript types do not accept FlatList for `scrollTo`, but it does work
   scrollTo(ref, x, y, animated)
+}
+
+export function makeRenderFunction<T>(
+  ComponentOrMemo:
+    | ((props: T) => React.ReactElement)
+    | React.MemoExoticComponent<(props: T) => React.ReactElement>
+    | undefined
+    | null
+) {
+  return typeof ComponentOrMemo === 'function'
+    ? ComponentOrMemo
+    : ComponentOrMemo && typeof ComponentOrMemo === 'object'
+    ? (props: any) => <ComponentOrMemo {...props} />
+    : undefined
 }
