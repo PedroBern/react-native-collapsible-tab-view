@@ -1,5 +1,6 @@
 # react-native-collapsible-tab-view
 
+[![Downloads][downloads-badge]][downloads]
 [![Build Status][build-badge]][build]
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
@@ -396,6 +397,8 @@ yarn docs
 
 <!-- badges -->
 
+[downloads-badge]: https://img.shields.io/npm/dm/react-native-collapsible-tab-view?style=flat-square
+[downloads]: https://www.npmjs.com/package/react-native-collapsible-tab-view
 [build-badge]: https://img.shields.io/circleci/build/github/PedroBern/react-native-collapsible-tab-view/main.svg?style=flat-square
 [build]: https://app.circleci.com/pipelines/github/PedroBern/react-native-collapsible-tab-view
 [version-badge]: https://img.shields.io/npm/v/react-native-collapsible-tab-view.svg?style=flat-square
