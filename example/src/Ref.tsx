@@ -25,7 +25,7 @@ const RefExample: ExampleComponentType = () => {
     }
   }, [])
 
-  return <ExampleComponent ref={ref} renderHeaderComponent={Header} />
+  return <ExampleComponent ref={ref} renderHeader={Header} />
 }
 
 RefExample.title = title

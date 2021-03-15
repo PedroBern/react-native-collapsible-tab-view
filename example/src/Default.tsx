@@ -9,7 +9,7 @@ const title = 'Default'
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
-  return <ExampleComponent renderHeaderComponent={Header} />
+  return <ExampleComponent renderHeader={Header} />
 }
 
 DefaultExample.title = title

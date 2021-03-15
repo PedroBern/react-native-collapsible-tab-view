@@ -14,7 +14,7 @@ const OnIndexChange: ExampleComponentType = () => {
   return (
     <TitleContext.Provider value={title}>
       <ExampleComponent
-        renderHeaderComponent={(props) => <Header title={title} {...props} />}
+        renderHeader={(props) => <Header title={title} {...props} />}
         onTabChange={({ prevIndex, index, prevTabName, tabName }) => {
           const title = `prev: ${prevTabName}\ncurr: ${tabName}`
           setTitle(title)

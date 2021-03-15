@@ -45,7 +45,7 @@ import {
  *
  * const Example = () => {
  *   return (
- *     <Tabs.Container renderHeaderComponent={MyHeader}>
+ *     <Tabs.Container renderHeader={MyHeader}>
  *       <Tabs.Tab name="A">
  *         <ScreenA />
  *       </Tabs.Tab>
@@ -71,8 +71,8 @@ export const Container = React.memo(
         // TODO: these two are obsolete, remove them in v5.0
         HeaderComponent,
         TabBarComponent = MaterialTabBar,
-        renderHeaderComponent = makeRenderFunction(HeaderComponent),
-        renderTabBarComponent = makeRenderFunction(TabBarComponent),
+        renderHeader = makeRenderFunction(HeaderComponent),
+        renderTabBar = makeRenderFunction(TabBarComponent),
         headerContainerStyle,
         cancelTranslation,
         containerStyle,
@@ -101,7 +101,7 @@ export const Container = React.memo(
       >(initialTabBarHeight)
       const [headerHeight, setHeaderHeight] = React.useState<
         number | undefined
-      >(!renderHeaderComponent ? 0 : initialHeaderHeight)
+      >(!renderHeader ? 0 : initialHeaderHeight)
 
       const contentInset = React.useMemo(
         () => (IS_IOS ? (headerHeight || 0) + (tabBarHeight || 0) : 0),
@@ -487,8 +487,8 @@ export const Container = React.memo(
                 onLayout={getHeaderHeight}
                 pointerEvents="box-none"
               >
-                {renderHeaderComponent &&
-                  renderHeaderComponent({
+                {renderHeader &&
+                  renderHeader({
                     containerRef,
                     index,
                     tabNames: tabNamesArray,
@@ -503,8 +503,8 @@ export const Container = React.memo(
                 onLayout={getTabBarHeight}
                 pointerEvents="box-none"
               >
-                {renderTabBarComponent &&
-                  renderTabBarComponent({
+                {renderTabBar &&
+                  renderTabBar({
                     containerRef,
                     index,
                     tabNames: tabNamesArray,
