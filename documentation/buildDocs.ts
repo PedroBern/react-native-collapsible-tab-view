@@ -90,6 +90,20 @@ const overrideProps: OverrideProps = {
       },
       defaultValue: { value: 'MaterialTabBar' },
     },
+    renderHeaderComponent: {
+      type: {
+        name: '(props: TabBarProps<TabName>) => React.ReactElement | null',
+      },
+      defaultValue: null,
+    },
+    renderTabBarComponent: {
+      type: {
+        name: '(props: TabBarProps<TabName>) => React.ReactElement | null',
+      },
+      defaultValue: {
+        value: '(props: TabBarProps<TabName>) => MaterialTabBar',
+      },
+    },
     pagerProps: {
       type: {
         name:
