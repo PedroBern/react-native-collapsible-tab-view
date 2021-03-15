@@ -9,7 +9,7 @@ const title = 'Scrollable Tabs'
 const Header = buildHeader(title)
 
 const ScrollableTabs: ExampleComponentType = () => {
-  return <ExampleComponent renderHeaderComponent={Header} />
+  return <ExampleComponent renderHeader={Header} />
 }
 
 ScrollableTabs.title = title

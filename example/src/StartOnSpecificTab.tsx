@@ -9,12 +9,7 @@ const title = 'Start On Specific Tab'
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
-  return (
-    <ExampleComponent
-      initialTabName="contacts"
-      renderHeaderComponent={Header}
-    />
-  )
+  return <ExampleComponent initialTabName="contacts" renderHeader={Header} />
 }
 
 DefaultExample.title = title

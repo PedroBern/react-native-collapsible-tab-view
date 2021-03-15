@@ -9,7 +9,7 @@ const title = 'Centered Empty List'
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
-  return <ExampleComponent renderHeaderComponent={Header} emptyContacts />
+  return <ExampleComponent renderHeader={Header} emptyContacts />
 }
 
 DefaultExample.title = title

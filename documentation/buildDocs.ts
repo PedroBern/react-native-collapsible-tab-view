@@ -90,13 +90,13 @@ const overrideProps: OverrideProps = {
       },
       defaultValue: { value: 'MaterialTabBar' },
     },
-    renderHeaderComponent: {
+    renderHeader: {
       type: {
         name: '(props: TabBarProps<TabName>) => React.ReactElement | null',
       },
       defaultValue: null,
     },
-    renderTabBarComponent: {
+    renderTabBar: {
       type: {
         name: '(props: TabBarProps<TabName>) => React.ReactElement | null',
       },

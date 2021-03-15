@@ -10,7 +10,7 @@ const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
   return (
-    <ExampleComponent revealHeaderOnScroll renderHeaderComponent={Header} />
+    <ExampleComponent revealHeaderOnScroll renderHeader={Header} />
   )
 }
 
