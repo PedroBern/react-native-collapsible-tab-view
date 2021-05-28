@@ -86,7 +86,7 @@ const DynamicTabs: ExampleComponentType = () => {
   return (
     <Tabs.Container
       headerHeight={HEADER_HEIGHT}
-      HeaderComponent={HeaderComponent}
+      renderHeader={HeaderComponent}
       lazy
       onTabChange={setCurrentTab}
       TabBarComponent={TabBarComponent}

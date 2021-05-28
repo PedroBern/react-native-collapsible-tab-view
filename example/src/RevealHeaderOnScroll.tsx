@@ -9,7 +9,9 @@ const title = 'Reveal Header On Scroll'
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
-  return <ExampleComponent revealHeaderOnScroll HeaderComponent={Header} />
+  return (
+    <ExampleComponent revealHeaderOnScroll renderHeader={Header} />
+  )
 }
 
 DefaultExample.title = title

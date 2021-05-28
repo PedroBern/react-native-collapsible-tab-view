@@ -9,7 +9,7 @@ const title = 'Snap'
 const Header = buildHeader(title)
 
 const DefaultExample: ExampleComponentType = () => {
-  return <ExampleComponent snapThreshold={0.5} HeaderComponent={Header} />
+  return <ExampleComponent snapThreshold={0.5} renderHeader={Header} />
 }
 
 DefaultExample.title = title

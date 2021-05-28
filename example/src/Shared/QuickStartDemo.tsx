@@ -17,7 +17,7 @@ const Example: React.FC = () => {
 
   return (
     <Tabs.Container
-      HeaderComponent={Header}
+      renderHeader={Header}
       headerHeight={HEADER_HEIGHT} // optional
     >
       <Tabs.Tab name="A">

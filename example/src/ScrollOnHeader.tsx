@@ -25,7 +25,7 @@ const NewHeader: React.FC<TabBarProps> = (props) => {
 const DefaultExample: ExampleComponentType = () => {
   return (
     <ExampleComponent
-      HeaderComponent={NewHeader}
+      renderHeader={NewHeader}
       headerHeight={HEADER_HEIGHT}
     />
   )

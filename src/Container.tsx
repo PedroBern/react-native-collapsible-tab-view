@@ -21,7 +21,13 @@ import { Context, TabNameContext } from './Context'
 import { Lazy } from './Lazy'
 import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
-import { AnimatedFlatList, IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
+import {
+  AnimatedFlatList,
+  IS_IOS,
+  makeRenderFunction,
+  ONE_FRAME_MS,
+  scrollToImpl,
+} from './helpers'
 import { useAnimatedDynamicRefs, useContainerRef, useTabProps } from './hooks'
 import {
   CollapsibleProps,
@@ -39,7 +45,7 @@ import {
  *
  * const Example = () => {
  *   return (
- *     <Tabs.Container HeaderComponent={MyHeader}>
+ *     <Tabs.Container renderHeader={MyHeader}>
  *       <Tabs.Tab name="A">
  *         <ScreenA />
  *       </Tabs.Tab>
@@ -62,8 +68,11 @@ export const Container = React.memo(
         revealHeaderOnScroll = false,
         snapThreshold,
         children,
+        // TODO: these two are obsolete, remove them in v5.0
         HeaderComponent,
         TabBarComponent = MaterialTabBar,
+        renderHeader = makeRenderFunction(HeaderComponent),
+        renderTabBar = makeRenderFunction(TabBarComponent),
         headerContainerStyle,
         cancelTranslation,
         containerStyle,
@@ -92,7 +101,7 @@ export const Container = React.memo(
       >(initialTabBarHeight)
       const [headerHeight, setHeaderHeight] = React.useState<
         number | undefined
-      >(!HeaderComponent ? 0 : initialHeaderHeight)
+      >(!renderHeader ? 0 : initialHeaderHeight)
 
       const contentInset = React.useMemo(
         () => (IS_IOS ? (headerHeight || 0) + (tabBarHeight || 0) : 0),
@@ -478,34 +487,32 @@ export const Container = React.memo(
                 onLayout={getHeaderHeight}
                 pointerEvents="box-none"
               >
-                {HeaderComponent && (
-                  <HeaderComponent
-                    containerRef={containerRef}
-                    index={index}
-                    tabNames={tabNamesArray}
-                    focusedTab={focusedTab}
-                    indexDecimal={indexDecimal}
-                    onTabPress={onTabPress}
-                    tabProps={tabProps}
-                  />
-                )}
+                {renderHeader &&
+                  renderHeader({
+                    containerRef,
+                    index,
+                    tabNames: tabNamesArray,
+                    focusedTab,
+                    indexDecimal,
+                    onTabPress,
+                    tabProps,
+                  })}
               </View>
               <View
                 style={[styles.container, styles.tabBarContainer]}
                 onLayout={getTabBarHeight}
                 pointerEvents="box-none"
               >
-                {TabBarComponent && (
-                  <TabBarComponent
-                    containerRef={containerRef}
-                    index={index}
-                    tabNames={tabNamesArray}
-                    focusedTab={focusedTab}
-                    indexDecimal={indexDecimal}
-                    onTabPress={onTabPress}
-                    tabProps={tabProps}
-                  />
-                )}
+                {renderTabBar &&
+                  renderTabBar({
+                    containerRef,
+                    index,
+                    tabNames: tabNamesArray,
+                    focusedTab,
+                    indexDecimal,
+                    onTabPress,
+                    tabProps,
+                  })}
               </View>
             </Animated.View>
             {headerHeight !== undefined && (
