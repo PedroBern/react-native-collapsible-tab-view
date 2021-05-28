@@ -1,11 +1,9 @@
-# [4.2.0-pre.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.1.0...v4.2.0-pre.0) (2021-03-15)
+# [4.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.1.0...v4.2.0) (2021-05-28)
 
 
 ### Features
 
-* add renderHeader and renderTabBar ([9d0194e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9d0194e7100166c9e07be886a3351ed74c0febcd))
-
-# [4.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.0.1...v4.1.0) (2021-03-11)
+* add renderHeader and renderTabBar ([#154](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/154)) ([73af169](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/73af1692f88de0c525ebc6440ed592a5ff7e4fcf))
 
 
 ### Features
