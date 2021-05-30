@@ -42,7 +42,7 @@ export const Header = () => {
 const Example: ExampleComponentType = () => {
   return (
     <ExampleComponent
-      renderHeader={Header}
+      renderHeader={() => <Header />}
       minHeaderHeight={MIN_HEADER_HEIGHT}
     />
   )
