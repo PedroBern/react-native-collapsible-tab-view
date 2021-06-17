@@ -204,10 +204,7 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (
-  name: TabName,
-  { enabled }: { enabled: boolean }
-) => {
+export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
     focusedTab,
@@ -231,6 +228,15 @@ export const useScrollHandlerY = (
     snappingTo,
     contentHeights,
   } = useTabsContext()
+
+  const enabled = useSharedValue(false)
+
+  const enable = useCallback(
+    (toggle: boolean) => {
+      enabled.value = toggle
+    },
+    [enabled]
+  )
 
   /**
    * Helper value to track if user is dragging on iOS, because iOS calls
@@ -478,7 +484,7 @@ export const useScrollHandlerY = (
     [revealHeaderOnScroll, refMap, snapThreshold, tabIndex, enabled, scrollTo]
   )
 
-  return scrollHandler
+  return { scrollHandler, enable }
 }
 
 type ForwardRefType<T> =
@@ -514,7 +520,7 @@ export function useSharedAnimatedRef<T extends RefComponent>(
 
 export function useAfterMountEffect(effect: React.EffectCallback) {
   const [didExecute, setDidExecute] = useState(false)
-  const result = useEffect(() => {
+  useEffect(() => {
     if (didExecute) return
 
     const timeout = setTimeout(() => {
@@ -525,7 +531,6 @@ export function useAfterMountEffect(effect: React.EffectCallback) {
       clearTimeout(timeout)
     }
   }, [didExecute, effect])
-  return result
 }
 
 export function useConvertAnimatedToValue<T>(

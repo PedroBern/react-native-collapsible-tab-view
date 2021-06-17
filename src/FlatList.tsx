@@ -26,15 +26,14 @@ function FlatListImpl<R>(
   const name = useTabNameContext()
   const { setRef, contentInset, scrollYCurrent } = useTabsContext()
   const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
-  const [canBindScrollEvent, setCanBindScrollEvent] = React.useState(false)
 
+  const { scrollHandler, enable } = useScrollHandlerY(name)
   useAfterMountEffect(() => {
     // we enable the scroll event after mounting
     // otherwise we get an `onScroll` call with the initial scroll position which can break things
-    setCanBindScrollEvent(true)
+    enable(true)
   })
 
-  const scrollHandler = useScrollHandlerY(name, { enabled: canBindScrollEvent })
   const {
     style: _style,
     contentContainerStyle: _contentContainerStyle,
