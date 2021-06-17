@@ -76,9 +76,9 @@ export const ScrollView = React.forwardRef<
         onScroll={scrollHandler}
         onContentSizeChange={scrollContentSizeChangeHandlers}
         scrollEventThrottle={16}
-        contentInset={{ top: contentInset }}
+        contentInset={{ top: contentInset.value }}
         contentOffset={{
-          y: IS_IOS ? -contentInset + scrollYCurrent.value : 0,
+          y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
           x: 0,
         }}
         automaticallyAdjustContentInsets={false}

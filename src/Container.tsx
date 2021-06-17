@@ -93,20 +93,21 @@ export const Container = React.memo(
       const windowWidth = useWindowDimensions().width
       const firstRender = React.useRef(true)
 
-      const [containerHeight, setContainerHeight] = React.useState<
-        number | undefined
-      >(undefined)
-      const [tabBarHeight, setTabBarHeight] = React.useState<
-        number | undefined
-      >(initialTabBarHeight)
-      const [headerHeight, setHeaderHeight] = React.useState<
-        number | undefined
-      >(!renderHeader ? 0 : initialHeaderHeight)
+      const containerHeight = useSharedValue<number | undefined>(undefined)
 
-      const contentInset = React.useMemo(
-        () => (IS_IOS ? (headerHeight || 0) + (tabBarHeight || 0) : 0),
-        [headerHeight, tabBarHeight]
+      const tabBarHeight = useSharedValue<number | undefined>(
+        initialTabBarHeight
       )
+
+      const headerHeight = useSharedValue<number | undefined>(
+        !renderHeader ? 0 : initialHeaderHeight
+      )
+
+      const contentInset = useDerivedValue(() => {
+        return IS_IOS
+          ? (headerHeight.value || 0) + (tabBarHeight.value || 0)
+          : 0
+      })
 
       const isSwiping = useSharedValue(false)
       const isSnapping: ContextType['isSnapping'] = useSharedValue(false)
@@ -156,7 +157,9 @@ export const Container = React.memo(
       }, [tabNames])
       const calculateNextOffset = useSharedValue(index.value)
       const headerScrollDistance: ContextType['headerScrollDistance'] = useDerivedValue(() => {
-        return headerHeight !== undefined ? headerHeight - minHeaderHeight : 0
+        return headerHeight.value !== undefined
+          ? headerHeight.value - minHeaderHeight
+          : 0
       }, [headerHeight, minHeaderHeight])
 
       const getItemLayout = React.useCallback(
@@ -218,7 +221,7 @@ export const Container = React.memo(
               scrollToImpl(
                 refMap[name],
                 0,
-                scrollY.value[index.value] - contentInset,
+                scrollY.value[index.value] - contentInset.value,
                 false
               )
             })
@@ -334,8 +337,8 @@ export const Container = React.memo(
       const getHeaderHeight = React.useCallback(
         (event: LayoutChangeEvent) => {
           const height = event.nativeEvent.layout.height
-          if (headerHeight !== height) {
-            setHeaderHeight(height)
+          if (headerHeight.value !== height) {
+            headerHeight.value = height
           }
         },
         [headerHeight]
@@ -344,7 +347,7 @@ export const Container = React.memo(
       const getTabBarHeight = React.useCallback(
         (event: LayoutChangeEvent) => {
           const height = event.nativeEvent.layout.height
-          if (tabBarHeight !== height) setTabBarHeight(height)
+          if (tabBarHeight.value !== height) tabBarHeight.value = height
         },
         [tabBarHeight]
       )
@@ -352,7 +355,7 @@ export const Container = React.memo(
       const onLayout = React.useCallback(
         (event: LayoutChangeEvent) => {
           const height = event.nativeEvent.layout.height
-          if (containerHeight !== height) setContainerHeight(height)
+          if (containerHeight.value !== height) containerHeight.value = height
         },
         [containerHeight]
       )
@@ -393,7 +396,7 @@ export const Container = React.memo(
               runOnUI(scrollToImpl)(
                 ref,
                 0,
-                headerScrollDistance.value - contentInset,
+                headerScrollDistance.value - contentInset.value,
                 true
               )
             } else {
@@ -442,8 +445,8 @@ export const Container = React.memo(
         <Context.Provider
           value={{
             contentInset,
-            tabBarHeight: tabBarHeight || 0,
-            headerHeight: headerHeight || 0,
+            tabBarHeight,
+            headerHeight,
             refMap,
             tabNames,
             index,
