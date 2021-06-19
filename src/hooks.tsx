@@ -151,14 +151,13 @@ export function useCollapsibleStyle(): CollapsibleStyle {
 
 export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
   const { tabNames, contentHeights } = useTabsContext()
-
   const setContentHeights = useCallback(
     (name: TabName, height: number) => {
       const tabIndex = tabNames.value.indexOf(name)
       contentHeights.value[tabIndex] = height
       contentHeights.value = [...contentHeights.value]
     },
-    [contentHeights, tabNames.value]
+    [contentHeights, tabNames]
   )
 
   const scrollContentSizeChange = useCallback(
@@ -177,7 +176,7 @@ export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
  * @param fns array of functions to call
  * @returns a function that once called will call all passed functions
  */
-export function useChainCallback(...fns: (Function | undefined)[]) {
+export function useChainCallback(fns: (Function | undefined)[]) {
   const callAll = useCallback(
     (...args: unknown[]) => {
       fns.forEach((fn) => {

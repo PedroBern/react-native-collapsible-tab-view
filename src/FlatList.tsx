@@ -13,6 +13,24 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+/**
+ * Used as a memo to prevent rerendering too often when the context changes.
+ * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
+ */
+const FlatListMemo = React.memo(
+  React.forwardRef<RNFlatList, React.PropsWithChildren<FlatListProps<unknown>>>(
+    (props, passRef) => {
+      return (
+        <AnimatedFlatList
+          // @ts-expect-error reanimated types are broken on ref
+          ref={passRef}
+          {...props}
+        />
+      )
+    }
+  )
+)
+
 function FlatListImpl<R>(
   {
     contentContainerStyle,
@@ -49,35 +67,57 @@ function FlatListImpl<R>(
   })
 
   const scrollContentSizeChangeHandlers = useChainCallback(
-    scrollContentSizeChange,
-    onContentSizeChange
+    React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
+      onContentSizeChange,
+      scrollContentSizeChange,
+    ])
   )
 
+  const memoRefreshControl = React.useMemo(
+    () =>
+      refreshControl &&
+      React.cloneElement(refreshControl, {
+        progressViewOffset,
+        ...refreshControl.props,
+      }),
+    [progressViewOffset, refreshControl]
+  )
+  const memoContentOffset = React.useMemo(
+    () => ({
+      y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
+      x: 0,
+    }),
+    [contentInset.value, scrollYCurrent.value]
+  )
+  const memoContentInset = React.useMemo(() => ({ top: contentInset.value }), [
+    contentInset.value,
+  ])
+  const memoContentContainerStyle = React.useMemo(
+    () => [
+      _contentContainerStyle,
+      // TODO: investigate types
+      contentContainerStyle as any,
+    ],
+    [_contentContainerStyle, contentContainerStyle]
+  )
+  const memoStyle = React.useMemo(() => [_style, style], [_style, style])
+
   return (
-    <AnimatedFlatList
+    // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
+    <FlatListMemo
       {...rest}
-      // @ts-expect-error problem with reanimated types, they're missing `ref`
       ref={ref}
       bouncesZoom={false}
-      style={[_style, style]}
-      contentContainerStyle={[_contentContainerStyle, contentContainerStyle]}
+      style={memoStyle}
+      contentContainerStyle={memoContentContainerStyle}
       progressViewOffset={progressViewOffset}
       onScroll={scrollHandler}
       onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
-      contentInset={{ top: contentInset.value }}
-      contentOffset={{
-        y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
-        x: 0,
-      }}
+      contentInset={memoContentInset}
+      contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
-      refreshControl={
-        refreshControl &&
-        React.cloneElement(refreshControl, {
-          progressViewOffset,
-          ...refreshControl.props,
-        })
-      }
+      refreshControl={memoRefreshControl}
     />
   )
 }
