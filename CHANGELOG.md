@@ -1,3 +1,18 @@
+## [4.2.1-rc.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.2.0...v4.2.1-rc.0) (2021-06-19)
+
+
+### Bug Fixes
+
+* animated header example ([#177](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/177)) ([ebfecd7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/ebfecd77ebd50cae30f8b911202a068e41b5efd4))
+
+
+### Performance Improvements
+
+* memoize scrollables ([44c8ac2](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/44c8ac276f742cfad166c81b9ccf10f066e6f0ff))
+* reduce tabbar rerenders with scrollEnabled ([8415908](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/8415908ab7541b75b0b46d7d06d906f0057f9c5d))
+* remove 1 scrollable rerender ([48a2739](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/48a2739a6ff27807e37d68ec3ec568783ada3a48))
+* use more animated values ([f0e53f5](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/f0e53f581b26628d817c44ccebac1ac3d7c67271))
+
 # [4.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.1.0...v4.2.0) (2021-05-28)
 
 
