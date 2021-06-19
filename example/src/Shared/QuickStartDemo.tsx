@@ -4,6 +4,9 @@ import { Tabs } from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
 
+const DATA = [0, 1, 2, 3, 4]
+const identity = (v: unknown): string => v + ''
+
 const Header = () => {
   return <View style={styles.header} />
 }
@@ -22,9 +25,9 @@ const Example: React.FC = () => {
     >
       <Tabs.Tab name="A">
         <Tabs.FlatList
-          data={[0, 1, 2, 3, 4]}
+          data={DATA}
           renderItem={renderItem}
-          keyExtractor={(v) => v + ''}
+          keyExtractor={identity}
         />
       </Tabs.Tab>
       <Tabs.Tab name="B">

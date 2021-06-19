@@ -61,9 +61,8 @@ const MaterialTabBar = <T extends TabName = any>({
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
   const isFirstRender = React.useRef(true)
-  const [itemsLayoutGathering, setItemsLayoutGathering] = React.useState(
-    new Map<T, ItemLayout>()
-  )
+  const itemLayoutGathering = React.useRef(new Map<T, ItemLayout>())
+
   const tabsOffset = useSharedValue(0)
   const isScrolling = useSharedValue(false)
 
@@ -97,29 +96,25 @@ const MaterialTabBar = <T extends TabName = any>({
       if (scrollEnabled) {
         if (!event.nativeEvent?.layout) return
         const { width, x } = event.nativeEvent.layout
-        setItemsLayoutGathering((itemsLayoutGathering) => {
-          const update = new Map(itemsLayoutGathering)
-          return update.set(name, {
-            width,
-            x,
-          })
+
+        itemLayoutGathering.current.set(name, {
+          width,
+          x,
         })
+
+        // pick out the layouts for the tabs we know about (in case they changed dynamically)
+        const layout = Array.from(itemLayoutGathering.current.entries())
+          .filter(([tabName]) => tabNames.includes(tabName))
+          .map(([, layout]) => layout)
+          .sort((a, b) => a.x - b.x)
+
+        if (layout.length === tabNames.length) {
+          setItemsLayout(layout)
+        }
       }
     },
-    [scrollEnabled]
+    [scrollEnabled, tabNames]
   )
-
-  React.useEffect(() => {
-    // pick out the layouts for the tabs we know about (in case they changed dynamically)
-    const layout = Array.from(itemsLayoutGathering.entries())
-      .filter(([tabName]) => tabNames.includes(tabName))
-      .map(([, layout]) => layout)
-      .sort((a, b) => a.x - b.x)
-
-    if (layout.length === tabNames.length) {
-      setItemsLayout(layout)
-    }
-  }, [itemsLayoutGathering, tabNames])
 
   const cancelNextScrollSync = useSharedValue(index.value)
 

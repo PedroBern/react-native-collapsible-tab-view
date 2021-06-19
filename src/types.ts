@@ -139,8 +139,8 @@ export type CollapsibleProps = {
 }
 
 export type ContextType<T extends TabName = TabName> = {
-  headerHeight: number
-  tabBarHeight: number
+  headerHeight: Animated.SharedValue<number | undefined>
+  tabBarHeight: Animated.SharedValue<number | undefined>
   revealHeaderOnScroll: boolean
   snapThreshold: number | null | undefined
   /**
@@ -173,7 +173,7 @@ export type ContextType<T extends TabName = TabName> = {
    * Array of the scroll y position of each tab.
    */
   scrollY: Animated.SharedValue<number[]>
-  containerHeight?: number
+  containerHeight: Animated.SharedValue<number | undefined>
   /**
    * Object containing the ref of each scrollable component.
    */
@@ -219,7 +219,7 @@ export type ContextType<T extends TabName = TabName> = {
    */
   contentHeights: Animated.SharedValue<number[]>
 
-  contentInset: number
+  contentInset: Animated.SharedValue<number>
 
   headerTranslateY: Animated.SharedValue<number>
 }
