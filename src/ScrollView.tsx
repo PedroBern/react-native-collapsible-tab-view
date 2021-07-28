@@ -15,6 +15,24 @@ import {
 } from './hooks'
 
 /**
+ * Used as a memo to prevent rerendering too often when the context changes.
+ * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
+ */
+const ScrollViewMemo = React.memo(
+  React.forwardRef<RNScrollView, React.PropsWithChildren<ScrollViewProps>>(
+    (props, passRef) => {
+      return (
+        <Animated.ScrollView
+          // @ts-expect-error reanimated types are broken on ref
+          ref={passRef}
+          {...props}
+        />
+      )
+    }
+  )
+)
+
+/**
  * Use like a regular ScrollView.
  */
 export const ScrollView = React.forwardRef<
@@ -40,16 +58,11 @@ export const ScrollView = React.forwardRef<
       contentContainerStyle: _contentContainerStyle,
       progressViewOffset,
     } = useCollapsibleStyle()
-    const [canBindScrollEvent, setCanBindScrollEvent] = React.useState(false)
-
+    const { scrollHandler, enable } = useScrollHandlerY(name)
     useAfterMountEffect(() => {
       // we enable the scroll event after mounting
       // otherwise we get an `onScroll` call with the initial scroll position which can break things
-      setCanBindScrollEvent(true)
-    })
-
-    const scrollHandler = useScrollHandlerY(name, {
-      enabled: canBindScrollEvent,
+      enable(true)
     })
 
     React.useEffect(() => {
@@ -61,41 +74,59 @@ export const ScrollView = React.forwardRef<
     })
 
     const scrollContentSizeChangeHandlers = useChainCallback(
-      scrollContentSizeChange,
-      onContentSizeChange
+      React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
+        onContentSizeChange,
+        scrollContentSizeChange,
+      ])
     )
 
+    const memoRefreshControl = React.useMemo(
+      () =>
+        refreshControl &&
+        React.cloneElement(refreshControl, {
+          progressViewOffset,
+          ...refreshControl.props,
+        }),
+      [progressViewOffset, refreshControl]
+    )
+    const memoContentOffset = React.useMemo(
+      () => ({
+        y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
+        x: 0,
+      }),
+      [contentInset.value, scrollYCurrent.value]
+    )
+    const memoContentInset = React.useMemo(
+      () => ({ top: contentInset.value }),
+      [contentInset.value]
+    )
+    const memoContentContainerStyle = React.useMemo(
+      () => [
+        _contentContainerStyle,
+        // TODO: investigate types
+        contentContainerStyle as any,
+      ],
+      [_contentContainerStyle, contentContainerStyle]
+    )
+    const memoStyle = React.useMemo(() => [_style, style], [_style, style])
+
     return (
-      <Animated.ScrollView
+      <ScrollViewMemo
         {...rest}
-        // @ts-expect-error reanimated types are broken on ref
         ref={ref}
         bouncesZoom={false}
-        style={[_style, style]}
-        contentContainerStyle={[
-          _contentContainerStyle,
-          // TODO: investigate types
-          contentContainerStyle as any,
-        ]}
+        style={memoStyle}
+        contentContainerStyle={memoContentContainerStyle}
         onScroll={scrollHandler}
         onContentSizeChange={scrollContentSizeChangeHandlers}
         scrollEventThrottle={16}
-        contentInset={{ top: contentInset }}
-        contentOffset={{
-          y: IS_IOS ? -contentInset + scrollYCurrent.value : 0,
-          x: 0,
-        }}
+        contentInset={memoContentInset}
+        contentOffset={memoContentOffset}
         automaticallyAdjustContentInsets={false}
-        refreshControl={
-          refreshControl &&
-          React.cloneElement(refreshControl, {
-            progressViewOffset,
-            ...refreshControl.props,
-          })
-        }
+        refreshControl={memoRefreshControl}
       >
         {children}
-      </Animated.ScrollView>
+      </ScrollViewMemo>
     )
   }
 )

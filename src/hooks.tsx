@@ -127,29 +127,37 @@ export function useTabNameContext(): TabName {
 export function useCollapsibleStyle(): CollapsibleStyle {
   const { headerHeight, tabBarHeight, containerHeight } = useTabsContext()
   const windowWidth = useWindowDimensions().width
-
-  return {
-    style: { width: windowWidth },
-    contentContainerStyle: {
-      minHeight: IS_IOS
-        ? (containerHeight || 0) - tabBarHeight
-        : (containerHeight || 0) + headerHeight,
-      paddingTop: IS_IOS ? 0 : headerHeight + tabBarHeight,
-    },
-    progressViewOffset: headerHeight + tabBarHeight,
-  }
+  const [containerHeightVal, tabBarHeightVal, headerHeightVal] = [
+    useConvertAnimatedToValue(containerHeight),
+    useConvertAnimatedToValue(tabBarHeight),
+    useConvertAnimatedToValue(headerHeight),
+  ]
+  return useMemo(
+    () => ({
+      style: { width: windowWidth },
+      contentContainerStyle: {
+        minHeight: IS_IOS
+          ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
+          : (containerHeightVal || 0) + (headerHeightVal || 0),
+        paddingTop: IS_IOS
+          ? 0
+          : (headerHeightVal || 0) + (tabBarHeightVal || 0),
+      },
+      progressViewOffset: (headerHeightVal || 0) + (tabBarHeightVal || 0),
+    }),
+    [containerHeightVal, headerHeightVal, tabBarHeightVal, windowWidth]
+  )
 }
 
 export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
   const { tabNames, contentHeights } = useTabsContext()
-
   const setContentHeights = useCallback(
     (name: TabName, height: number) => {
       const tabIndex = tabNames.value.indexOf(name)
       contentHeights.value[tabIndex] = height
       contentHeights.value = [...contentHeights.value]
     },
-    [contentHeights, tabNames.value]
+    [contentHeights, tabNames]
   )
 
   const scrollContentSizeChange = useCallback(
@@ -168,7 +176,7 @@ export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
  * @param fns array of functions to call
  * @returns a function that once called will call all passed functions
  */
-export function useChainCallback(...fns: (Function | undefined)[]) {
+export function useChainCallback(fns: (Function | undefined)[]) {
   const callAll = useCallback(
     (...args: unknown[]) => {
       fns.forEach((fn) => {
@@ -196,7 +204,7 @@ export function useScroller<T extends RefComponent>() {
       'worklet'
       if (!ref) return
       // console.log(`${_debugKey}, y: ${y}, y adjusted: ${y - contentInset}`)
-      scrollToImpl(ref, x, y - contentInset, animated)
+      scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
   )
@@ -204,10 +212,7 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (
-  name: TabName,
-  { enabled }: { enabled: boolean }
-) => {
+export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
     focusedTab,
@@ -232,6 +237,15 @@ export const useScrollHandlerY = (
     contentHeights,
   } = useTabsContext()
 
+  const enabled = useSharedValue(false)
+
+  const enable = useCallback(
+    (toggle: boolean) => {
+      enabled.value = toggle
+    },
+    [enabled]
+  )
+
   /**
    * Helper value to track if user is dragging on iOS, because iOS calls
    * onMomentumEnd only after a vigorous swipe. If the user has finished the
@@ -249,7 +263,7 @@ export const useScrollHandlerY = (
 
   const onMomentumEnd = () => {
     'worklet'
-    if (!enabled) return
+    if (!enabled.value) return
 
     if (typeof snapThreshold === 'number') {
       if (revealHeaderOnScroll) {
@@ -328,15 +342,17 @@ export const useScrollHandlerY = (
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
-        if (!enabled) return
+        if (!enabled.value) return
 
         if (focusedTab.value === name) {
           if (IS_IOS) {
             let { y } = event.contentOffset
             // normalize the value so it starts at 0
-            y = y + contentInset
+            y = y + contentInset.value
             const clampMax =
-              contentHeight.value - (containerHeight || 0) + contentInset
+              contentHeight.value -
+              (containerHeight.value || 0) +
+              contentInset.value
             // make sure the y value is clamped to the scrollable size (clamps overscrolling)
             scrollYCurrent.value = interpolate(
               y,
@@ -381,7 +397,7 @@ export const useScrollHandlerY = (
         }
       },
       onBeginDrag: () => {
-        if (!enabled) return
+        if (!enabled.value) return
 
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
@@ -393,7 +409,7 @@ export const useScrollHandlerY = (
         if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
-        if (!enabled) return
+        if (!enabled.value) return
 
         isGliding.value = true
 
@@ -414,7 +430,7 @@ export const useScrollHandlerY = (
         }
       },
       onMomentumBegin: () => {
-        if (!enabled) return
+        if (!enabled.value) return
 
         if (IS_IOS) {
           cancelAnimation(afterDrag)
@@ -438,7 +454,10 @@ export const useScrollHandlerY = (
   useAnimatedReaction(
     () => {
       return (
-        !isSnapping.value && !isScrolling.value && !isGliding.value && enabled
+        !isSnapping.value &&
+        !isScrolling.value &&
+        !isGliding.value &&
+        enabled.value
       )
     },
     (sync) => {
@@ -462,7 +481,7 @@ export const useScrollHandlerY = (
             if (focusedIsOnTop) {
               nextPosition = snappingTo.value
             } else if (currIsOnTop) {
-              nextPosition = headerHeight
+              nextPosition = headerHeight.value || 0
             }
           } else if (currIsOnTop || focusedIsOnTop) {
             nextPosition = Math.min(focusedScrollY, headerScrollDistance.value)
@@ -478,7 +497,7 @@ export const useScrollHandlerY = (
     [revealHeaderOnScroll, refMap, snapThreshold, tabIndex, enabled, scrollTo]
   )
 
-  return scrollHandler
+  return { scrollHandler, enable }
 }
 
 type ForwardRefType<T> =
@@ -514,7 +533,7 @@ export function useSharedAnimatedRef<T extends RefComponent>(
 
 export function useAfterMountEffect(effect: React.EffectCallback) {
   const [didExecute, setDidExecute] = useState(false)
-  const result = useEffect(() => {
+  useEffect(() => {
     if (didExecute) return
 
     const timeout = setTimeout(() => {
@@ -525,7 +544,6 @@ export function useAfterMountEffect(effect: React.EffectCallback) {
       clearTimeout(timeout)
     }
   }, [didExecute, effect])
-  return result
 }
 
 export function useConvertAnimatedToValue<T>(
@@ -563,7 +581,7 @@ export function useHeaderMeasurements(): HeaderMeasurements {
   const { headerTranslateY, headerHeight } = useTabsContext()
   return {
     top: headerTranslateY,
-    height: headerHeight,
+    height: headerHeight.value || 0,
   }
 }
 
