@@ -1,3 +1,15 @@
+## [4.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.2.0...v4.2.1) (2021-07-28)
+
+
+### Bug Fixes
+
+* animated header example ([#177](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/177)) ([ebfecd7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/ebfecd77ebd50cae30f8b911202a068e41b5efd4))
+
+
+### Performance Improvements
+
+* optimize and reduce rerenders ([#186](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/186)) ([a9d2a44](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/a9d2a445fa59a46547e3be6afb1ed09f068ef2ac))
+
 # [4.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.1.0...v4.2.0) (2021-05-28)
 
 
