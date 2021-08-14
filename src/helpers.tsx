@@ -1,11 +1,14 @@
 import React from 'react'
-import { FlatList, Platform } from 'react-native'
+import { FlatList, Platform, I18nManager } from 'react-native'
 import Animated, { scrollTo } from 'react-native-reanimated'
 
 import { Ref, RefComponent } from './types'
 
 /** The time one frame takes at 60 fps (16 ms) */
 export const ONE_FRAME_MS = 16
+
+/** check if app is in RTL mode or not */
+export const { isRTL } = I18nManager
 
 export const IS_IOS = Platform.OS === 'ios'
 
