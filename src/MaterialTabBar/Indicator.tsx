@@ -32,7 +32,7 @@ const Indicator: React.FC<IndicatorProps> = ({
                   why => indicator are invisible in RTL mode
                   how => incase rtl multiply v.x with -1
                 **/
-                itemsLayout.map((v) => isRTL ? -1 & v.x : v.x) // itemsLayout.map((v) => v.x)
+                itemsLayout.map((v) => isRTL ? -1 * v.x : v.x) // itemsLayout.map((v) => v.x)
               ),
             },
           ]
