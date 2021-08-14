@@ -7,6 +7,8 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated'
 
+import { isRTL } from '../helpers'
+
 import { IndicatorProps } from './types'
 
 const Indicator: React.FC<IndicatorProps> = ({
@@ -25,7 +27,12 @@ const Indicator: React.FC<IndicatorProps> = ({
               translateX: interpolate(
                 indexDecimal.value,
                 itemsLayout.map((_, i) => i),
-                itemsLayout.map((v) => v.x)
+                /*
+                  what => fixed indicator in RTL
+                  why => indicator are invisible in RTL mode
+                  how => incase rtl multiply v.x with -1
+                **/
+                itemsLayout.map((v) => isRTL ? -1 & v.x : v.x) // itemsLayout.map((v) => v.x)
               ),
             },
           ]
