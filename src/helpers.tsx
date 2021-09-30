@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, Platform } from 'react-native'
+import { FlatList, Platform, SectionList } from 'react-native'
 import Animated, { scrollTo } from 'react-native-reanimated'
 
 import { Ref, RefComponent } from './types'
@@ -10,6 +10,8 @@ export const ONE_FRAME_MS = 16
 export const IS_IOS = Platform.OS === 'ios'
 
 export const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+export const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
 export function scrollToImpl<T extends RefComponent>(
   ref: Ref<T> | undefined,

@@ -9,6 +9,7 @@ import Albums from './Albums'
 import Article from './Article'
 import Contacts from './Contacts'
 import { HEADER_HEIGHT } from './Header'
+import SectionContacts from './SectionContacts'
 
 type Props = {
   emptyContacts?: boolean
@@ -26,6 +27,9 @@ const Example = React.forwardRef<CollapsibleRef, Props>(
         </Tabs.Tab>
         <Tabs.Tab name="contacts" label="Contacts">
           <Contacts emptyContacts={emptyContacts} />
+        </Tabs.Tab>
+        <Tabs.Tab name="ordered" label="Ordered">
+          <SectionContacts emptyContacts={emptyContacts} />
         </Tabs.Tab>
       </Tabs.Container>
     )

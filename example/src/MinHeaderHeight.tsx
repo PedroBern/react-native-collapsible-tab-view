@@ -11,10 +11,7 @@ const minHeaderHeight = Math.round(HEADER_HEIGHT / 3)
 
 const DefaultExample: ExampleComponentType = () => {
   return (
-    <ExampleComponent
-      renderHeader={Header}
-      minHeaderHeight={minHeaderHeight}
-    />
+    <ExampleComponent renderHeader={Header} minHeaderHeight={minHeaderHeight} />
   )
 }
 
