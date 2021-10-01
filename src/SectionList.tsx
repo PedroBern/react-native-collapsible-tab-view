@@ -119,7 +119,6 @@ function SectionListImpl<R>(
       contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
-      stickySectionHeadersEnabled={false}
     />
   )
 }
