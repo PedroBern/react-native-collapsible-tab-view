@@ -120,13 +120,11 @@ export const Container = React.memo(
       const isScrolling: ContextType['isScrolling'] = useSharedValue(0)
       const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
       const scrollY: ContextType['scrollY'] = useSharedValue(
-        tabNamesArray.map(() => 0),
-        false
+        tabNamesArray.map(() => 0)
       )
 
       const contentHeights: ContextType['contentHeights'] = useSharedValue(
-        tabNamesArray.map(() => 0),
-        false
+        tabNamesArray.map(() => 0)
       )
 
       const tabNames: ContextType['tabNames'] = useDerivedValue<TabName[]>(
@@ -139,12 +137,10 @@ export const Container = React.memo(
           : 0
       )
       const scrollX: ContextType['scrollX'] = useSharedValue(
-        index.value * windowWidth,
-        false
+        index.value * windowWidth
       )
       const pagerOpacity = useSharedValue(
-        initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1,
-        false
+        initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1
       )
       const [data, setData] = React.useState(tabNamesArray)
 
@@ -520,7 +516,6 @@ export const Container = React.memo(
             </Animated.View>
             {headerHeight !== undefined && (
               <AnimatedFlatList
-                // @ts-expect-error problem with reanimated types, they're missing `ref`
                 ref={containerRef}
                 initialScrollIndex={index.value}
                 data={data}
