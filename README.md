@@ -1,6 +1,5 @@
 # react-native-collapsible-tab-view
 
-[![Downloads][downloads-badge]][downloads]
 [![Build Status][build-badge]][build]
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
@@ -91,6 +90,9 @@ import { Tabs } from 'react-native-collapsible-tab-view'
 
 const HEADER_HEIGHT = 250
 
+const DATA = [0, 1, 2, 3, 4]
+const identity = (v: unknown): string => v + ''
+
 const Header = () => {
   return <View style={styles.header} />
 }
@@ -109,9 +111,9 @@ const Example: React.FC = () => {
     >
       <Tabs.Tab name="A">
         <Tabs.FlatList
-          data={[0, 1, 2, 3, 4]}
+          data={DATA}
           renderItem={renderItem}
-          keyExtractor={(v) => v + ''}
+          keyExtractor={identity}
         />
       </Tabs.Tab>
       <Tabs.Tab name="B">
@@ -399,8 +401,6 @@ yarn docs
 
 <!-- badges -->
 
-[downloads-badge]: https://img.shields.io/npm/dm/react-native-collapsible-tab-view?style=flat-square
-[downloads]: https://www.npmjs.com/package/react-native-collapsible-tab-view
 [build-badge]: https://img.shields.io/circleci/build/github/PedroBern/react-native-collapsible-tab-view/main.svg?style=flat-square
 [build]: https://app.circleci.com/pipelines/github/PedroBern/react-native-collapsible-tab-view
 [version-badge]: https://img.shields.io/npm/v/react-native-collapsible-tab-view.svg?style=flat-square
