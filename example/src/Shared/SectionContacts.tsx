@@ -157,6 +157,7 @@ const SectionContacts: React.FC<{
       onRefresh={Platform.OS === 'ios' ? startRefreshing : undefined}
       refreshing={Platform.OS === 'ios' ? isRefreshing : undefined}
       nestedScrollEnabled={nestedScrollEnabled}
+      stickySectionHeadersEnabled={false}
     />
   )
 }
