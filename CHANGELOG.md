@@ -1,3 +1,16 @@
+# [4.3.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.2.1...v4.3.0) (2021-10-03)
+
+
+### Bug Fixes
+
+* lint and typescript errors ([dc5fd39](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/dc5fd398451d1eeb795a07c239f1d1b939255709))
+* tab indicator did not work correctly in RTL mode ([#193](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/193)) ([243848d](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/243848dd1f76b5e62524bd94a8a1a7d9f9416f75))
+
+
+### Features
+
+* SectionList support (without stickyHeaders for now) ([#201](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/201)) ([1571a62](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1571a625eb3a2527acd3ba9a9267fb939b330a51))
+
 ## [4.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.2.0...v4.2.1) (2021-07-28)
 
 
