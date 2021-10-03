@@ -27,12 +27,8 @@ const Indicator: React.FC<IndicatorProps> = ({
               translateX: interpolate(
                 indexDecimal.value,
                 itemsLayout.map((_, i) => i),
-                /*
-                  what => fixed indicator in RTL
-                  why => indicator are invisible in RTL mode
-                  how => incase rtl multiply v.x with -1
-                **/
-                itemsLayout.map((v) => isRTL ? -1 * v.x : v.x) // itemsLayout.map((v) => v.x)
+                // when in RTL mode, the X value should be inverted
+                itemsLayout.map((v) => isRTL ? -1 * v.x : v.x)
               ),
             },
           ]
