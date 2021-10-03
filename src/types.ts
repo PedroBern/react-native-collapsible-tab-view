@@ -3,6 +3,7 @@ import {
   FlatList,
   FlatListProps as RNFlatListProps,
   ScrollView,
+  SectionList,
   StyleProp,
   ViewStyle,
 } from 'react-native'
@@ -12,7 +13,11 @@ import { TabProps } from './Tab'
 
 export type ContainerRef = FlatList<any>
 
-export type RefComponent = FlatList<any> | ScrollView | Animated.ScrollView
+export type RefComponent =
+  | FlatList<any>
+  | ScrollView
+  | Animated.ScrollView
+  | SectionList<any>
 
 export type Ref<T extends RefComponent> = React.RefObject<T>
 

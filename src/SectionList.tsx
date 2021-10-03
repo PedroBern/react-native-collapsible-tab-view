@@ -1,7 +1,7 @@
 import React from 'react'
-import { FlatList as RNFlatList, FlatListProps } from 'react-native'
+import { SectionList as RNSectionList, SectionListProps } from 'react-native'
 
-import { AnimatedFlatList, IS_IOS } from './helpers'
+import { AnimatedSectionList, IS_IOS } from './helpers'
 import {
   useAfterMountEffect,
   useChainCallback,
@@ -17,27 +17,28 @@ import {
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
-const FlatListMemo = React.memo(
-  React.forwardRef<RNFlatList, React.PropsWithChildren<FlatListProps<unknown>>>(
-    (props, passRef) => {
-      return <AnimatedFlatList ref={passRef} {...props} />
-    }
-  )
+const SectionListMemo = React.memo(
+  React.forwardRef<
+    RNSectionList,
+    React.PropsWithChildren<SectionListProps<unknown>>
+  >((props, passRef) => {
+    return <AnimatedSectionList ref={passRef} {...props} />
+  })
 )
 
-function FlatListImpl<R>(
+function SectionListImpl<R>(
   {
     contentContainerStyle,
     style,
     onContentSizeChange,
     refreshControl,
     ...rest
-  }: Omit<FlatListProps<R>, 'onScroll'>,
-  passRef: React.Ref<RNFlatList>
+  }: Omit<SectionListProps<R>, 'onScroll'>,
+  passRef: React.Ref<RNSectionList>
 ): React.ReactElement {
   const name = useTabNameContext()
   const { setRef, contentInset, scrollYCurrent } = useTabsContext()
-  const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
+  const ref = useSharedAnimatedRef<RNSectionList<unknown>>(passRef)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
   useAfterMountEffect(() => {
@@ -98,7 +99,7 @@ function FlatListImpl<R>(
 
   return (
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
-    <FlatListMemo
+    <SectionListMemo
       {...rest}
       ref={ref}
       bouncesZoom={false}
@@ -117,8 +118,8 @@ function FlatListImpl<R>(
 }
 
 /**
- * Use like a regular FlatList.
+ * Use like a regular SectionList.
  */
-export const FlatList = React.forwardRef(FlatListImpl) as <T>(
-  p: FlatListProps<T> & { ref?: React.Ref<RNFlatList<T>> }
+export const SectionList = React.forwardRef(SectionListImpl) as <T>(
+  p: SectionListProps<T> & { ref?: React.Ref<RNSectionList<T>> }
 ) => React.ReactElement

@@ -3,6 +3,7 @@ import { FlatList } from './FlatList'
 import { Lazy } from './Lazy'
 import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
 import { ScrollView } from './ScrollView'
+import { SectionList } from './SectionList'
 import { Tab } from './Tab'
 import {
   TabBarProps,
@@ -30,9 +31,10 @@ export const Tabs = {
   Lazy,
   FlatList,
   ScrollView,
+  SectionList,
 }
 
-export { Container, Tab, Lazy, FlatList, ScrollView }
+export { Container, Tab, Lazy, FlatList, ScrollView, SectionList }
 export {
   useHeaderMeasurements,
   useFocusedTab,

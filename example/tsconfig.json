@@ -2,15 +2,23 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "react-native-collapsible-tab-view": ["../src/index"]
+      "react-native-collapsible-tab-view": [
+        "../src/index"
+      ]
     },
     "jsx": "react-native",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true,
-    "rootDirs": ["src"],
-  }
+    "rootDirs": [
+      "src"
+    ]
+  },
+  "extends": "expo/tsconfig.base"
 }
