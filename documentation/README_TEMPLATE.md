@@ -156,7 +156,7 @@ const tabIndex = useAnimatedTabIndex()
 Returns the currently focused tab name.
 
 ```tsx
-const focusedTab = useAnimatedTabIndex()
+const focusedTab = useFocusedTab()
 ```
 
 ### useHeaderMeasurements
