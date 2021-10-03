@@ -26,10 +26,7 @@ export const Lazy: React.FC<{
   const [afterMount, setAfterMount] = React.useState(!!startMounted)
   const isSelfMounted = React.useRef(true)
 
-  const opacity = useSharedValue(
-    cancelLazyFadeIn || startMounted ? 1 : 0,
-    false
-  )
+  const opacity = useSharedValue(cancelLazyFadeIn || startMounted ? 1 : 0)
 
   React.useEffect(() => {
     return () => {

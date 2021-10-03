@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import * as Tabs from 'react-native-collapsible-tab-view'
 import Animated, {
+  interpolate,
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated'
@@ -100,7 +101,7 @@ const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 const ListEmptyComponent = () => {
   const { top, height } = Tabs.useHeaderMeasurements()
   const translateY = useDerivedValue(() => {
-    return Animated.interpolate(-top.value, [0, height], [-height / 2, 0])
+    return interpolate(-top.value, [0, height], [-height / 2, 0])
   }, [height])
 
   const stylez = useAnimatedStyle(() => {

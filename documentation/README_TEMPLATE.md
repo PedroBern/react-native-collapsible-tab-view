@@ -17,6 +17,7 @@
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
+    - [Tabs.SectionList](#tabssectionlist)
     - [Tabs.ScrollView](#tabsscrollview)
     - [Ref](#ref)
   - [Hooks](#hooks)
@@ -29,7 +30,7 @@
     - [MaterialTabItem](#materialtabitem)
 - [Known issues](#known-issues)
   - [Android FlatList pull to refresh](#android-flatlist-pull-to-refresh)
-  - [iOS FlatList stickyHeaderIndices](#ios-flatlist-stickyheaderindices)
+  - [iOS FlatList/ SectionList stickyHeaders](#ios-flatlist-stickyheaderindices)
   - [ref.setIndex](#refsetIndex)
 - [Alternative libraries](#alternative-libraries)
 - [Contributing](#contributing)
@@ -178,9 +179,9 @@ See [this open issue](https://github.com/software-mansion/react-native-reanimate
 
 **Workaround**: see the `Android Shared Pull To Refresh` example in the expo app. You can have a single pull to refresh for the `Tabs.Container`.
 
-## iOS FlatList stickyHeaderIndices
+## iOS FlatList stickyHeaderIndices and iOS SectionList stickySectionHeadersEnabled
 
-When you use the stickyHeaderIndices prop on a FlatList, the sticky elements don't scroll up when the header collapses. This happens only on iOS.
+When you use the stickyHeaderIndices prop on a FlatList or stickySectionHeadersEnabled on a SectionList, the sticky elements don't scroll up when the header collapses. This happens only on iOS.
 
 See [#136](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/136).
 

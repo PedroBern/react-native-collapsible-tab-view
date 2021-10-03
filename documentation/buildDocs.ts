@@ -20,6 +20,7 @@ const coreComponents = getComponentPaths([
   'Lazy',
   'FlatList',
   'ScrollView',
+  'SectionList',
 ])
 
 const tabBarComponents = getComponentPaths([
@@ -34,6 +35,7 @@ const docs = docgen.withCustomConfig(tsconfig, {
     if (
       prop.parent ||
       component.name === 'Tabs.FlatList' ||
+      component.name === 'Tabs.SectionList' ||
       component.name === 'Tabs.ScrollView' ||
       prop.name.startsWith('_')
     )
@@ -47,6 +49,7 @@ const docs = docgen.withCustomConfig(tsconfig, {
       case 'Tab':
       case 'Lazy':
       case 'FlatList':
+      case 'SectionList':
       case 'ScrollView':
         return 'Tabs.' + exp.escapedName
 
