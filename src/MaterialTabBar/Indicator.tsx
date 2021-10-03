@@ -8,7 +8,6 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { isRTL } from '../helpers'
-
 import { IndicatorProps } from './types'
 
 const Indicator: React.FC<IndicatorProps> = ({
@@ -28,7 +27,7 @@ const Indicator: React.FC<IndicatorProps> = ({
                 indexDecimal.value,
                 itemsLayout.map((_, i) => i),
                 // when in RTL mode, the X value should be inverted
-                itemsLayout.map((v) => isRTL ? -1 * v.x : v.x)
+                itemsLayout.map((v) => (isRTL ? -1 * v.x : v.x))
               ),
             },
           ]

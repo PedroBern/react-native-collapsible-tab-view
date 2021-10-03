@@ -516,6 +516,7 @@ export const Container = React.memo(
             </Animated.View>
             {headerHeight !== undefined && (
               <AnimatedFlatList
+                // @ts-expect-error problem with reanimated types, they're missing `ref`
                 ref={containerRef}
                 initialScrollIndex={index.value}
                 data={data}

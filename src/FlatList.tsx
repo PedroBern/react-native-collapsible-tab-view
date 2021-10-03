@@ -20,7 +20,13 @@ import {
 const FlatListMemo = React.memo(
   React.forwardRef<RNFlatList, React.PropsWithChildren<FlatListProps<unknown>>>(
     (props, passRef) => {
-      return <AnimatedFlatList ref={passRef} {...props} />
+      return (
+        <AnimatedFlatList
+          // @ts-expect-error problem with reanimated types, they're missing `ref`
+          ref={passRef}
+          {...props}
+        />
+      )
     }
   )
 )
