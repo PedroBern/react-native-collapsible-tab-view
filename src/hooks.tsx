@@ -468,11 +468,7 @@ export const useScrollHandlerY = (name: TabName) => {
       // if the index is decimal, then we're in between panes
       const isChangingPane = !Number.isInteger(indexDecimal.value)
 
-      if (isChangingPane) {
-        return true
-      }
-
-      return false
+      return isChangingPane
     },
     (result, previous) => {
       if (result && result !== previous && focusedTab.value !== name) {
