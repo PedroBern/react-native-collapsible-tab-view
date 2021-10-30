@@ -7,7 +7,6 @@ import {
   MutableRefObject,
   useEffect,
 } from 'react'
-import { useWindowDimensions } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import Animated, {
   cancelAnimation,
@@ -125,8 +124,12 @@ export function useTabNameContext(): TabName {
  * You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
  */
 export function useCollapsibleStyle(): CollapsibleStyle {
-  const { headerHeight, tabBarHeight, containerHeight } = useTabsContext()
-  const windowWidth = useWindowDimensions().width
+  const {
+    headerHeight,
+    tabBarHeight,
+    containerHeight,
+    width,
+  } = useTabsContext()
   const [containerHeightVal, tabBarHeightVal, headerHeightVal] = [
     useConvertAnimatedToValue(containerHeight),
     useConvertAnimatedToValue(tabBarHeight),
@@ -134,7 +137,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
   ]
   return useMemo(
     () => ({
-      style: { width: windowWidth },
+      style: { width },
       contentContainerStyle: {
         minHeight: IS_IOS
           ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
@@ -145,7 +148,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
       },
       progressViewOffset: (headerHeightVal || 0) + (tabBarHeightVal || 0),
     }),
-    [containerHeightVal, headerHeightVal, tabBarHeightVal, windowWidth]
+    [containerHeightVal, headerHeightVal, tabBarHeightVal, width]
   )
 }
 

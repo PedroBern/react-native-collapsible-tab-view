@@ -141,6 +141,11 @@ export type CollapsibleProps = {
    *  index and tabnames.
    */
   onTabChange?: OnTabChangeCallback<TabName>
+
+  /**
+   * Custom width of the container. Defaults to the window width.
+   */
+  width?: number
 }
 
 export type ContextType<T extends TabName = TabName> = {
@@ -227,6 +232,8 @@ export type ContextType<T extends TabName = TabName> = {
   contentInset: Animated.SharedValue<number>
 
   headerTranslateY: Animated.SharedValue<number>
+
+  width: number
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>

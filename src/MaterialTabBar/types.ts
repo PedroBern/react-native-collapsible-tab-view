@@ -79,6 +79,11 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
    * Color applied to the label when inactive
    */
   inactiveColor?: string
+
+  /**
+   * Custom width of the tabbar. Defaults to the window width.
+   */
+  width?: number
 }
 
 export type ItemLayout = {
