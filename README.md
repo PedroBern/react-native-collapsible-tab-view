@@ -343,9 +343,6 @@ Any additional props are passed to the pressable component.
 |scrollEnabled|`boolean \| undefined`|||
 |style|`StyleProp<ViewStyle>`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
-|width|`number \| undefined`||Optionally set a custom width of the tab bar. Defaults to the window width.|
-
-
 # Known issues
 
 ## Android FlatList pull to refresh
