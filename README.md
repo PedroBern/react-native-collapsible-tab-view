@@ -207,6 +207,7 @@ const Example = () => {
 |revealHeaderOnScroll|`boolean \| undefined`||Reveal header when scrolling down. Implements diffClamp.|
 |snapThreshold|`number \| null \| undefined`|`null`|Percentage of header height to define as the snap point. A number between 0 and 1, or `null` to disable snapping.|
 |tabBarHeight|`number \| undefined`||Is optional, but will optimize the first render.|
+|width|`number \| undefined`||Optionally set a custom width of the container. Defaults to the window width.|
 
 ### Tabs.Tab
 
@@ -341,8 +342,6 @@ Any additional props are passed to the pressable component.
 |pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
 |scrollEnabled|`boolean \| undefined`|||
 |style|`StyleProp<ViewStyle>`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
-
-
 
 # Known issues
 

@@ -57,9 +57,11 @@ const MaterialTabBar = <T extends TabName = any>({
   inactiveColor,
   activeColor,
   tabStyle,
+  width: customWidth,
 }: MaterialTabBarProps<T>): React.ReactElement => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
+  const width = customWidth ?? windowWidth
   const isFirstRender = React.useRef(true)
   const itemLayoutGathering = React.useRef(new Map<T, ItemLayout>())
 
@@ -72,7 +74,7 @@ const MaterialTabBar = <T extends TabName = any>({
     scrollEnabled
       ? []
       : tabNames.map((_, i) => {
-          const tabWidth = windowWidth / nTabs
+          const tabWidth = width / nTabs
           return { width: tabWidth, x: i * tabWidth }
         })
   )
@@ -82,14 +84,14 @@ const MaterialTabBar = <T extends TabName = any>({
       isFirstRender.current = false
     } else if (!scrollEnabled) {
       // update items width on window resizing
-      const tabWidth = windowWidth / nTabs
+      const tabWidth = width / nTabs
       setItemsLayout(
         tabNames.map((_, i) => {
           return { width: tabWidth, x: i * tabWidth }
         })
       )
     }
-  }, [scrollEnabled, nTabs, tabNames, windowWidth])
+  }, [scrollEnabled, nTabs, tabNames, width])
 
   const onTabItemLayout = React.useCallback(
     (event: LayoutChangeEvent, name: T) => {
@@ -166,9 +168,9 @@ const MaterialTabBar = <T extends TabName = any>({
         const offset = itemsLayout[index.value].x
         if (
           offset < tabsOffset.value ||
-          offset > tabsOffset.value + windowWidth - 2 * halfTab
+          offset > tabsOffset.value + width - 2 * halfTab
         ) {
-          scrollTo(tabBarRef, offset - windowWidth / 2 + halfTab, 0, true)
+          scrollTo(tabBarRef, offset - width / 2 + halfTab, 0, true)
         }
       }
     },
@@ -181,7 +183,7 @@ const MaterialTabBar = <T extends TabName = any>({
       style={style}
       contentContainerStyle={[
         styles.contentContainer,
-        !scrollEnabled && { width: windowWidth },
+        !scrollEnabled && { width },
         contentContainerStyle,
       ]}
       keyboardShouldPersistTaps="handled"

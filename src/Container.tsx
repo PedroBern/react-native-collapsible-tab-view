@@ -81,6 +81,7 @@ export const Container = React.memo(
         pagerProps,
         onIndexChange,
         onTabChange,
+        width: customWidth,
       },
       ref
     ) => {
@@ -91,6 +92,7 @@ export const Container = React.memo(
       const [refMap, setRef] = useAnimatedDynamicRefs()
 
       const windowWidth = useWindowDimensions().width
+      const width = customWidth ?? windowWidth
       const firstRender = React.useRef(true)
 
       const containerHeight = useSharedValue<number | undefined>(undefined)
@@ -137,7 +139,7 @@ export const Container = React.memo(
           : 0
       )
       const scrollX: ContextType['scrollX'] = useSharedValue(
-        index.value * windowWidth
+        index.value * width
       )
       const pagerOpacity = useSharedValue(
         initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1
@@ -160,16 +162,16 @@ export const Container = React.memo(
 
       const getItemLayout = React.useCallback(
         (_: unknown, index: number) => ({
-          length: windowWidth,
-          offset: windowWidth * index,
+          length: width,
+          offset: width * index,
           index,
         }),
-        [windowWidth]
+        [width]
       )
 
       const indexDecimal: ContextType['indexDecimal'] = useDerivedValue(() => {
-        return scrollX.value / windowWidth
-      }, [windowWidth])
+        return scrollX.value / width
+      }, [width])
 
       // handle window resize
       React.useEffect(() => {
@@ -180,7 +182,7 @@ export const Container = React.memo(
           })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [windowWidth])
+      }, [width])
 
       const afterRender = useSharedValue(0)
       React.useEffect(() => {
@@ -202,7 +204,7 @@ export const Container = React.memo(
           firstRender.current = false
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [containerRef, initialTabName, windowWidth])
+      }, [containerRef, initialTabName, width])
 
       // the purpose of this is to scroll to the proper position if dynamic tabs are changing
       useAnimatedReaction(
@@ -466,10 +468,11 @@ export const Container = React.memo(
             snappingTo,
             contentHeights,
             headerTranslateY,
+            width,
           }}
         >
           <Animated.View
-            style={[styles.container, containerStyle]}
+            style={[styles.container, { width }, containerStyle]}
             onLayout={onLayout}
             pointerEvents="box-none"
           >
@@ -509,6 +512,7 @@ export const Container = React.memo(
                     tabNames: tabNamesArray,
                     focusedTab,
                     indexDecimal,
+                    width,
                     onTabPress,
                     tabProps,
                   })}
