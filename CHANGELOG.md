@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.3.0...v4.4.0) (2021-11-04)
+
+
+### Features
+
+* add `width` prop to `Tabs.Container` ([#208](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/208)) ([4b9e738](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/4b9e73881347dc205e8e0c95290314b165233150))
+
 # [4.3.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.2.1...v4.3.0) (2021-10-03)
 
 
