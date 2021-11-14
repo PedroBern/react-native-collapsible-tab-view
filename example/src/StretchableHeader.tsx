@@ -7,6 +7,7 @@ import ExampleComponent from './Shared/ExampleComponent'
 import { ExampleComponentType } from './types'
 
 const title = 'Stretchable Header'
+const HEADER_HEIGHT = 250
 
 export const Header = () => {
   const { top } = useHeaderMeasurements()
@@ -18,7 +19,7 @@ export const Header = () => {
           translateY: Math.min(0, -top.value / 2),
         },
         {
-          scale: Math.max(1, (250 + top.value) / 250),
+          scale: Math.max(1, (HEADER_HEIGHT + top.value) / HEADER_HEIGHT),
         },
       ],
     }
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   root: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 250,
+    height: HEADER_HEIGHT,
   },
   background: {
     position: 'absolute',
