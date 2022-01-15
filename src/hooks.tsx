@@ -206,7 +206,9 @@ export function useScroller<T extends RefComponent>() {
     ) => {
       'worklet'
       if (!ref) return
-      // console.log(`${_debugKey}, y: ${y}, y adjusted: ${y - contentInset}`)
+      // console.log(
+      //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
+      // )
       scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
@@ -238,6 +240,7 @@ export const useScrollHandlerY = (name: TabName) => {
     isSnapping,
     snappingTo,
     contentHeights,
+    indexDecimal,
   } = useTabsContext()
 
   const enabled = useSharedValue(false)
@@ -456,17 +459,24 @@ export const useScrollHandlerY = (name: TabName) => {
   // sync unfocused scenes
   useAnimatedReaction(
     () => {
-      return (
+      if (
         !isSnapping.value &&
         !isScrolling.value &&
         !isGliding.value &&
-        enabled.value
-      )
+        !enabled.value
+      ) {
+        return false
+      }
+
+      // if the index is decimal, then we're in between panes
+      const isChangingPane = !Number.isInteger(indexDecimal.value)
+
+      return isChangingPane
     },
-    (sync) => {
-      if (sync && focusedTab.value !== name) {
+    (result, previous) => {
+      if (result && result !== previous && focusedTab.value !== name) {
         let nextPosition = null
-        const focusedScrollY = scrollY.value[index.value]
+        const focusedScrollY = scrollY.value[Math.round(indexDecimal.value)]
         const tabScrollY = scrollY.value[tabIndex]
         const areEqual = focusedScrollY === tabScrollY
 

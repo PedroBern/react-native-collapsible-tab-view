@@ -237,9 +237,7 @@ export const Container = React.memo(
       // the next index in advance
       useAnimatedReaction(
         () => {
-          const nextIndex = isSwiping.value
-            ? Math.round(indexDecimal.value)
-            : null
+          const nextIndex = Math.round(indexDecimal.value)
           return nextIndex
         },
         (nextIndex) => {
@@ -388,7 +386,7 @@ export const Container = React.memo(
           // when is scrolling or gliding.
           if (!isScrolling.value && !isGliding.value) {
             const i = tabNames.value.findIndex((n) => n === name)
-            calculateNextOffset.value = i
+
             if (name === focusedTab.value) {
               const ref = refMap[name]
               runOnUI(scrollToImpl)(
