@@ -1,3 +1,10 @@
+## [4.5.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.0...v4.5.1) (2022-01-15)
+
+
+### Bug Fixes
+
+* minimum height with allowHeaderOverscroll ([#229](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/229)) ([1e8ce9c](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1e8ce9ce5481621c242b3178f8fbb73ee60a8109))
+
 # [4.5.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.4.0...v4.5.0) (2022-01-15)
 
 
