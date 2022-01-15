@@ -1,3 +1,10 @@
+## [4.5.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.1...v4.5.2) (2022-01-15)
+
+
+### Bug Fixes
+
+* edge case with tabs still scrolling to top ([#230](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/230)) ([dd13cbc](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/dd13cbc44fbcf49ff519c6f7e9fb8d3502cfe2db))
+
 ## [4.5.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.0...v4.5.1) (2022-01-15)
 
 
