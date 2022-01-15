@@ -1,3 +1,15 @@
+# [4.5.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.4.0...v4.5.0) (2022-01-15)
+
+
+### Bug Fixes
+
+* tabs should not scroll to top ([#205](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/205)) ([dd6d2ef](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/dd6d2efd97337ce29903650de3d072a32de540db))
+
+
+### Features
+
+* allow header to move down on pull to refresh on iOS ([#228](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/228)) ([d0e063b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/d0e063b710b0d48b75443c8e97f32d45e19a171c))
+
 # [4.4.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.3.0...v4.4.0) (2021-11-04)
 
 
