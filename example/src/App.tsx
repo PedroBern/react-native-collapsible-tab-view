@@ -17,6 +17,7 @@ import AnimatedHeader from './AnimatedHeader'
 import CenteredEmptyList from './CenteredEmptyList'
 import Default from './Default'
 import DynamicTabs from './DynamicTabs'
+import HeaderOverscrollExample from './HeaderOverscroll'
 import Lazy from './Lazy'
 import MinHeaderHeight from './MinHeaderHeight'
 import OnTabChange from './OnTabChange'
@@ -49,6 +50,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   MinHeaderHeight,
   AnimatedHeader,
   AndroidSharedPullToRefresh,
+  HeaderOverscrollExample,
 ]
 
 const ExampleList: React.FC<object> = () => {
