@@ -140,9 +140,10 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     () => ({
       style: { width },
       contentContainerStyle: {
-        minHeight: IS_IOS
-          ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
-          : (containerHeightVal || 0) + (headerHeightVal || 0),
+        minHeight:
+          IS_IOS && !allowHeaderOverscroll
+            ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
+            : (containerHeightVal || 0) + (headerHeightVal || 0),
         paddingTop:
           IS_IOS && !allowHeaderOverscroll
             ? 0
