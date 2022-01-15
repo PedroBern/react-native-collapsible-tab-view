@@ -140,15 +140,21 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     () => ({
       style: { width },
       contentContainerStyle: {
-        minHeight: IS_IOS
-          ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
-          : (containerHeightVal || 0) + (headerHeightVal || 0),
+        minHeight:
+          IS_IOS && !allowHeaderOverscroll
+            ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
+            : (containerHeightVal || 0) + (headerHeightVal || 0),
         paddingTop:
           IS_IOS && !allowHeaderOverscroll
             ? 0
             : (headerHeightVal || 0) + (tabBarHeightVal || 0),
       },
-      progressViewOffset: (headerHeightVal || 0) + (tabBarHeightVal || 0),
+      progressViewOffset:
+        // on iOS we need the refresh control to be at the top if overscrolling
+        IS_IOS && allowHeaderOverscroll
+          ? 0
+          : // on android we need it below the header or it doesn't show because of z-index
+            (headerHeightVal || 0) + (tabBarHeightVal || 0),
     }),
     [
       allowHeaderOverscroll,
