@@ -82,6 +82,7 @@ export const Container = React.memo(
         onIndexChange,
         onTabChange,
         width: customWidth,
+        allowHeaderOverscroll,
       },
       ref
     ) => {
@@ -106,6 +107,10 @@ export const Container = React.memo(
       )
 
       const contentInset = useDerivedValue(() => {
+        if (allowHeaderOverscroll) return 0
+
+        // necessary for the refresh control on iOS to be positioned underneath the header
+        // this also adjusts the scroll bars to clamp underneath the header area
         return IS_IOS
           ? (headerHeight.value || 0) + (tabBarHeight.value || 0)
           : 0
@@ -467,6 +472,7 @@ export const Container = React.memo(
             contentHeights,
             headerTranslateY,
             width,
+            allowHeaderOverscroll,
           }}
         >
           <Animated.View

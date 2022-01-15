@@ -146,6 +146,13 @@ export type CollapsibleProps = {
    * Custom width of the container. Defaults to the window width.
    */
   width?: number
+
+  /**
+   * Whether the header moves down during overscrolling (for example on pull-to-refresh on iOS) or sticks to the top
+   *
+   * @default false
+   */
+  allowHeaderOverscroll?: boolean
 }
 
 export type ContextType<T extends TabName = TabName> = {
@@ -234,6 +241,13 @@ export type ContextType<T extends TabName = TabName> = {
   headerTranslateY: Animated.SharedValue<number>
 
   width: number
+
+  /**
+   * Whether the header moves down during overscrolling (for example on pull-to-refresh on iOS) or sticks to the top
+   *
+   * @default false
+   */
+  allowHeaderOverscroll?: boolean
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>

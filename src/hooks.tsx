@@ -129,6 +129,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     tabBarHeight,
     containerHeight,
     width,
+    allowHeaderOverscroll,
   } = useTabsContext()
   const [containerHeightVal, tabBarHeightVal, headerHeightVal] = [
     useConvertAnimatedToValue(containerHeight),
@@ -142,13 +143,20 @@ export function useCollapsibleStyle(): CollapsibleStyle {
         minHeight: IS_IOS
           ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
           : (containerHeightVal || 0) + (headerHeightVal || 0),
-        paddingTop: IS_IOS
-          ? 0
-          : (headerHeightVal || 0) + (tabBarHeightVal || 0),
+        paddingTop:
+          IS_IOS && !allowHeaderOverscroll
+            ? 0
+            : (headerHeightVal || 0) + (tabBarHeightVal || 0),
       },
       progressViewOffset: (headerHeightVal || 0) + (tabBarHeightVal || 0),
     }),
-    [containerHeightVal, headerHeightVal, tabBarHeightVal, width]
+    [
+      allowHeaderOverscroll,
+      containerHeightVal,
+      headerHeightVal,
+      tabBarHeightVal,
+      width,
+    ]
   )
 }
 
@@ -241,6 +249,7 @@ export const useScrollHandlerY = (name: TabName) => {
     snappingTo,
     contentHeights,
     indexDecimal,
+    allowHeaderOverscroll,
   } = useTabsContext()
 
   const enabled = useSharedValue(false)
@@ -360,12 +369,9 @@ export const useScrollHandlerY = (name: TabName) => {
               (containerHeight.value || 0) +
               contentInset.value
             // make sure the y value is clamped to the scrollable size (clamps overscrolling)
-            scrollYCurrent.value = interpolate(
-              y,
-              [0, clampMax],
-              [0, clampMax],
-              Extrapolate.CLAMP
-            )
+            scrollYCurrent.value = allowHeaderOverscroll
+              ? y
+              : interpolate(y, [0, clampMax], [0, clampMax], Extrapolate.CLAMP)
           } else {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
