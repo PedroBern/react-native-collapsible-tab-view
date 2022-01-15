@@ -7,6 +7,7 @@ import {
   MutableRefObject,
   useEffect,
 } from 'react'
+import { StyleSheet } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import Animated, {
   cancelAnimation,
@@ -220,6 +221,7 @@ export function useScroller<T extends RefComponent>() {
     ) => {
       'worklet'
       if (!ref) return
+      //! this is left here on purpose to ease troubleshooting (uncomment when necessary)
       // console.log(
       //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
       // )
@@ -485,17 +487,23 @@ export const useScrollHandlerY = (name: TabName) => {
 
       return isChangingPane
     },
-    (result, previous) => {
-      if (result && result !== previous && focusedTab.value !== name) {
+    (isSyncNeeded, wasSyncNeeded) => {
+      if (
+        isSyncNeeded &&
+        isSyncNeeded !== wasSyncNeeded &&
+        focusedTab.value !== name
+      ) {
         let nextPosition = null
         const focusedScrollY = scrollY.value[Math.round(indexDecimal.value)]
         const tabScrollY = scrollY.value[tabIndex]
         const areEqual = focusedScrollY === tabScrollY
 
         if (!areEqual) {
-          const currIsOnTop = tabScrollY <= headerScrollDistance.value + 1
+          const currIsOnTop =
+            tabScrollY + StyleSheet.hairlineWidth <= headerScrollDistance.value
           const focusedIsOnTop =
-            focusedScrollY <= headerScrollDistance.value + 1
+            focusedScrollY + StyleSheet.hairlineWidth <=
+            headerScrollDistance.value
 
           if (revealHeaderOnScroll) {
             const hasGap = accDiffClamp.value > tabScrollY
