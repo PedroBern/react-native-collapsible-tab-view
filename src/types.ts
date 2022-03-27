@@ -56,7 +56,7 @@ export type OnTabChangeCallback<T extends TabName = TabName> = (
 ) => void
 
 export type TabReactElement<T extends TabName = TabName> = React.ReactElement<
-  TabProps<T>
+  TabProps<T> | null
 >
 
 export type CollapsibleProps = {
