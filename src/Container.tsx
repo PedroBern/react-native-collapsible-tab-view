@@ -5,14 +5,22 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native'
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from 'react-native-gesture-handler'
 import Animated, {
+  Extrapolate,
+  interpolate,
   runOnJS,
   runOnUI,
+  useAnimatedGestureHandler,
   useAnimatedReaction,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withDecay,
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
@@ -319,6 +327,57 @@ export const Container = React.memo(
         [children, lazy, tabNames.value, cancelLazyFadeIn]
       )
 
+      const isSlidingHeader = useSharedValue(false)
+
+      const gestureHandler = useAnimatedGestureHandler<
+        PanGestureHandlerGestureEvent,
+        { startY: number }
+      >({
+        onActive: (event, ctx) => {
+          if (!isSlidingHeader.value) {
+            ctx.startY = scrollYCurrent.value
+            isSlidingHeader.value = true
+
+            return
+          }
+
+          scrollYCurrent.value = interpolate(
+            -event.translationY + ctx.startY,
+            [0, headerHeight.value!],
+            [0, headerHeight.value!],
+            Extrapolate.CLAMP
+          )
+        },
+        onEnd: (evt, ctx) => {
+          if (!isSlidingHeader.value) return
+
+          ctx.startY = 0
+          scrollYCurrent.value = withDecay(
+            {
+              velocity: -evt.velocityY,
+              clamp: [0, headerHeight.value!],
+            },
+            () => {
+              isSlidingHeader.value = false
+            }
+          )
+        },
+      })
+
+      useAnimatedReaction(
+        () => scrollYCurrent.value - contentInset.value,
+        (nextPosition, previousPosition) => {
+          if (nextPosition !== previousPosition && isSlidingHeader.value) {
+            scrollToImpl(
+              refMap[tabNames.value[index.value]],
+              0,
+              scrollYCurrent.value - contentInset.value,
+              false
+            )
+          }
+        }
+      )
+
       const headerTranslateY = useDerivedValue(() => {
         return revealHeaderOnScroll
           ? -accDiffClamp.value
@@ -473,6 +532,7 @@ export const Container = React.memo(
             headerTranslateY,
             width,
             allowHeaderOverscroll,
+            isSlidingHeader,
           }}
         >
           <Animated.View
@@ -480,48 +540,50 @@ export const Container = React.memo(
             onLayout={onLayout}
             pointerEvents="box-none"
           >
-            <Animated.View
-              pointerEvents="box-none"
-              style={[
-                styles.topContainer,
-                headerContainerStyle,
-                !cancelTranslation && stylez,
-              ]}
-            >
-              <View
-                style={[styles.container, styles.headerContainer]}
-                onLayout={getHeaderHeight}
+            <PanGestureHandler onGestureEvent={gestureHandler}>
+              <Animated.View
                 pointerEvents="box-none"
+                style={[
+                  styles.topContainer,
+                  headerContainerStyle,
+                  !cancelTranslation && stylez,
+                ]}
               >
-                {renderHeader &&
-                  renderHeader({
-                    containerRef,
-                    index,
-                    tabNames: tabNamesArray,
-                    focusedTab,
-                    indexDecimal,
-                    onTabPress,
-                    tabProps,
-                  })}
-              </View>
-              <View
-                style={[styles.container, styles.tabBarContainer]}
-                onLayout={getTabBarHeight}
-                pointerEvents="box-none"
-              >
-                {renderTabBar &&
-                  renderTabBar({
-                    containerRef,
-                    index,
-                    tabNames: tabNamesArray,
-                    focusedTab,
-                    indexDecimal,
-                    width,
-                    onTabPress,
-                    tabProps,
-                  })}
-              </View>
-            </Animated.View>
+                <View
+                  style={[styles.container, styles.headerContainer]}
+                  onLayout={getHeaderHeight}
+                  pointerEvents="box-none"
+                >
+                  {renderHeader &&
+                    renderHeader({
+                      containerRef,
+                      index,
+                      tabNames: tabNamesArray,
+                      focusedTab,
+                      indexDecimal,
+                      onTabPress,
+                      tabProps,
+                    })}
+                </View>
+                <View
+                  style={[styles.container, styles.tabBarContainer]}
+                  onLayout={getTabBarHeight}
+                  pointerEvents="box-none"
+                >
+                  {renderTabBar &&
+                    renderTabBar({
+                      containerRef,
+                      index,
+                      tabNames: tabNamesArray,
+                      focusedTab,
+                      indexDecimal,
+                      width,
+                      onTabPress,
+                      tabProps,
+                    })}
+                </View>
+              </Animated.View>
+            </PanGestureHandler>
             {headerHeight !== undefined && (
               <AnimatedFlatList
                 ref={containerRef}
