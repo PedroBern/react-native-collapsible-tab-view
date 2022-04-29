@@ -88,4 +88,3 @@ const DefaultExample: ExampleComponentType = () => {
 DefaultExample.title = title
 
 export default DefaultExample
-diff --git a/example/src/App.tsx b/example/src/App.tsx
