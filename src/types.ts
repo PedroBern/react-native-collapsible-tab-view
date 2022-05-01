@@ -42,6 +42,7 @@ export type TabBarProps<T extends TabName = TabName> = {
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
   tabProps: TabsWithProps<T>
+  width?: number
 }
 
 export type IndexChangeEventData<T extends TabName = TabName> = {

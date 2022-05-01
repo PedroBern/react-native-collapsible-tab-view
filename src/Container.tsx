@@ -3,32 +3,25 @@ import {
   LayoutChangeEvent,
   StyleSheet,
   useWindowDimensions,
-  View,
 } from 'react-native'
-import {
-  PanGestureHandler,
-  PanGestureHandlerGestureEvent,
-} from 'react-native-gesture-handler'
 import Animated, {
-  Extrapolate,
-  interpolate,
   runOnJS,
   runOnUI,
-  useAnimatedGestureHandler,
   useAnimatedReaction,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withDecay,
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
 
 import { Context, TabNameContext } from './Context'
+import { HeaderContainer } from './HeaderContainer'
 import { Lazy } from './Lazy'
 import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
+import { TabBarContainer } from './TabBarContainer'
 import {
   AnimatedFlatList,
   IS_IOS,
@@ -133,6 +126,7 @@ export const Container = React.memo(
       const oldAccScrollY: ContextType['oldAccScrollY'] = useSharedValue(0)
       const accDiffClamp: ContextType['accDiffClamp'] = useSharedValue(0)
       const isScrolling: ContextType['isScrolling'] = useSharedValue(0)
+      const isSlidingHeader = useSharedValue(false)
       const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
       const scrollY: ContextType['scrollY'] = useSharedValue(
         tabNamesArray.map(() => 0)
@@ -327,43 +321,6 @@ export const Container = React.memo(
         [children, lazy, tabNames.value, cancelLazyFadeIn]
       )
 
-      const isSlidingHeader = useSharedValue(false)
-
-      const gestureHandler = useAnimatedGestureHandler<
-        PanGestureHandlerGestureEvent,
-        { startY: number }
-      >({
-        onActive: (event, ctx) => {
-          if (!isSlidingHeader.value) {
-            ctx.startY = scrollYCurrent.value
-            isSlidingHeader.value = true
-
-            return
-          }
-
-          scrollYCurrent.value = interpolate(
-            -event.translationY + ctx.startY,
-            [0, headerHeight.value!],
-            [0, headerHeight.value!],
-            Extrapolate.CLAMP
-          )
-        },
-        onEnd: (evt, ctx) => {
-          if (!isSlidingHeader.value) return
-
-          ctx.startY = 0
-          scrollYCurrent.value = withDecay(
-            {
-              velocity: -evt.velocityY,
-              clamp: [0, headerHeight.value!],
-            },
-            () => {
-              isSlidingHeader.value = false
-            }
-          )
-        },
-      })
-
       useAnimatedReaction(
         () => scrollYCurrent.value - contentInset.value,
         (nextPosition, previousPosition) => {
@@ -393,24 +350,6 @@ export const Container = React.memo(
           ],
         }
       }, [revealHeaderOnScroll])
-
-      const getHeaderHeight = React.useCallback(
-        (event: LayoutChangeEvent) => {
-          const height = event.nativeEvent.layout.height
-          if (headerHeight.value !== height) {
-            headerHeight.value = height
-          }
-        },
-        [headerHeight]
-      )
-
-      const getTabBarHeight = React.useCallback(
-        (event: LayoutChangeEvent) => {
-          const height = event.nativeEvent.layout.height
-          if (tabBarHeight.value !== height) tabBarHeight.value = height
-        },
-        [tabBarHeight]
-      )
 
       const onLayout = React.useCallback(
         (event: LayoutChangeEvent) => {
@@ -540,50 +479,32 @@ export const Container = React.memo(
             onLayout={onLayout}
             pointerEvents="box-none"
           >
-            <PanGestureHandler onGestureEvent={gestureHandler}>
-              <Animated.View
-                pointerEvents="box-none"
-                style={[
-                  styles.topContainer,
-                  headerContainerStyle,
-                  !cancelTranslation && stylez,
-                ]}
-              >
-                <View
-                  style={[styles.container, styles.headerContainer]}
-                  onLayout={getHeaderHeight}
-                  pointerEvents="box-none"
-                >
-                  {renderHeader &&
-                    renderHeader({
-                      containerRef,
-                      index,
-                      tabNames: tabNamesArray,
-                      focusedTab,
-                      indexDecimal,
-                      onTabPress,
-                      tabProps,
-                    })}
-                </View>
-                <View
-                  style={[styles.container, styles.tabBarContainer]}
-                  onLayout={getTabBarHeight}
-                  pointerEvents="box-none"
-                >
-                  {renderTabBar &&
-                    renderTabBar({
-                      containerRef,
-                      index,
-                      tabNames: tabNamesArray,
-                      focusedTab,
-                      indexDecimal,
-                      width,
-                      onTabPress,
-                      tabProps,
-                    })}
-                </View>
-              </Animated.View>
-            </PanGestureHandler>
+            <Animated.View
+              pointerEvents="box-none"
+              style={[
+                styles.topContainer,
+                headerContainerStyle,
+                !cancelTranslation && stylez,
+              ]}
+            >
+              <HeaderContainer
+                containerRef={containerRef}
+                onTabPress={onTabPress}
+                tabNamesArray={tabNamesArray}
+                tabProps={tabProps}
+                renderHeader={renderHeader}
+              />
+
+              <TabBarContainer
+                containerRef={containerRef}
+                onTabPress={onTabPress}
+                tabNamesArray={tabNamesArray}
+                tabProps={tabProps}
+                width={width}
+                renderTabBar={renderTabBar}
+              />
+            </Animated.View>
+
             {headerHeight !== undefined && (
               <AnimatedFlatList
                 ref={containerRef}
@@ -626,11 +547,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
-  },
-  tabBarContainer: {
-    zIndex: 1,
-  },
-  headerContainer: {
-    zIndex: 2,
   },
 })
