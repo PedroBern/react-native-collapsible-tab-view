@@ -22,6 +22,7 @@ import { Lazy } from './Lazy'
 import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
 import { TabBarContainer } from './TabBarContainer'
+import { TopContainer } from './TopContainer'
 import {
   AnimatedFlatList,
   IS_IOS,
@@ -126,7 +127,7 @@ export const Container = React.memo(
       const oldAccScrollY: ContextType['oldAccScrollY'] = useSharedValue(0)
       const accDiffClamp: ContextType['accDiffClamp'] = useSharedValue(0)
       const isScrolling: ContextType['isScrolling'] = useSharedValue(0)
-      const isSlidingHeader = useSharedValue(false)
+      const isSlidingTopContainer = useSharedValue(false)
       const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
       const scrollY: ContextType['scrollY'] = useSharedValue(
         tabNamesArray.map(() => 0)
@@ -321,34 +322,10 @@ export const Container = React.memo(
         [children, lazy, tabNames.value, cancelLazyFadeIn]
       )
 
-      useAnimatedReaction(
-        () => scrollYCurrent.value - contentInset.value,
-        (nextPosition, previousPosition) => {
-          if (nextPosition !== previousPosition && isSlidingHeader.value) {
-            scrollToImpl(
-              refMap[tabNames.value[index.value]],
-              0,
-              scrollYCurrent.value - contentInset.value,
-              false
-            )
-          }
-        }
-      )
-
       const headerTranslateY = useDerivedValue(() => {
         return revealHeaderOnScroll
           ? -accDiffClamp.value
           : -Math.min(scrollYCurrent.value, headerScrollDistance.value)
-      }, [revealHeaderOnScroll])
-
-      const stylez = useAnimatedStyle(() => {
-        return {
-          transform: [
-            {
-              translateY: headerTranslateY.value,
-            },
-          ],
-        }
       }, [revealHeaderOnScroll])
 
       const onLayout = React.useCallback(
@@ -386,8 +363,12 @@ export const Container = React.memo(
       const onTabPress = React.useCallback(
         (name: TabName) => {
           // simplify logic by preventing index change
-          // when is scrolling or gliding.
-          if (!isScrolling.value && !isGliding.value) {
+          // when is scrolling, gliding, or scrolling the top container
+          if (
+            !isScrolling.value &&
+            !isGliding.value &&
+            !isSlidingTopContainer.value
+          ) {
             const i = tabNames.value.findIndex((n) => n === name)
 
             if (name === focusedTab.value) {
@@ -471,7 +452,7 @@ export const Container = React.memo(
             headerTranslateY,
             width,
             allowHeaderOverscroll,
-            isSlidingHeader,
+            isSlidingTopContainer,
           }}
         >
           <Animated.View
@@ -479,14 +460,7 @@ export const Container = React.memo(
             onLayout={onLayout}
             pointerEvents="box-none"
           >
-            <Animated.View
-              pointerEvents="box-none"
-              style={[
-                styles.topContainer,
-                headerContainerStyle,
-                !cancelTranslation && stylez,
-              ]}
-            >
+            <TopContainer>
               <HeaderContainer
                 containerRef={containerRef}
                 onTabPress={onTabPress}
@@ -503,7 +477,7 @@ export const Container = React.memo(
                 width={width}
                 renderTabBar={renderTabBar}
               />
-            </Animated.View>
+            </TopContainer>
 
             {headerHeight !== undefined && (
               <AnimatedFlatList
@@ -533,19 +507,5 @@ export const Container = React.memo(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  topContainer: {
-    position: 'absolute',
-    zIndex: 100,
-    width: '100%',
-    backgroundColor: 'white',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
   },
 })
