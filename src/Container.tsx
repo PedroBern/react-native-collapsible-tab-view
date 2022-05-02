@@ -460,7 +460,10 @@ export const Container = React.memo(
             onLayout={onLayout}
             pointerEvents="box-none"
           >
-            <TopContainer>
+            <TopContainer
+              cancelTranslation={cancelTranslation}
+              headerContainerStyle={headerContainerStyle}
+            >
               <HeaderContainer
                 containerRef={containerRef}
                 onTabPress={onTabPress}
