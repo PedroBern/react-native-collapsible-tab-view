@@ -225,12 +225,168 @@ export function useScroller<T extends RefComponent>() {
       // console.log(
       //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
       // )
+
       scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
   )
 
   return scroller
+}
+
+export const useSnap = () => {
+  const {
+    accDiffClamp,
+    snapThreshold,
+    revealHeaderOnScroll,
+    refMap,
+    scrollYCurrent,
+    headerScrollDistance,
+    isSnapping,
+    snappingTo,
+    focusedTab,
+  } = useTabsContext()
+
+  const scrollTo = useScroller()
+
+  const tryToSnap = useCallback(() => {
+    'worklet'
+
+    if (typeof snapThreshold === 'number') {
+      if (revealHeaderOnScroll) {
+        if (accDiffClamp.value > 0) {
+          if (
+            scrollYCurrent.value >
+            headerScrollDistance.value * snapThreshold
+          ) {
+            if (
+              accDiffClamp.value <=
+              headerScrollDistance.value * snapThreshold
+            ) {
+              // snap down
+              isSnapping.value = true
+              accDiffClamp.value = withTiming(0, undefined, () => {
+                isSnapping.value = false
+              })
+            } else if (accDiffClamp.value < headerScrollDistance.value) {
+              // snap up
+              isSnapping.value = true
+              accDiffClamp.value = withTiming(
+                headerScrollDistance.value,
+                undefined,
+                () => {
+                  isSnapping.value = false
+                }
+              )
+
+              if (scrollYCurrent.value < headerScrollDistance.value) {
+                scrollTo(
+                  refMap[focusedTab.value],
+                  0,
+                  headerScrollDistance.value,
+                  true,
+                  `[${focusedTab.value}] sticky snap up`
+                )
+              }
+            }
+          } else {
+            isSnapping.value = true
+            accDiffClamp.value = withTiming(0, undefined, () => {
+              isSnapping.value = false
+            })
+          }
+        }
+      } else {
+        if (
+          scrollYCurrent.value <=
+          headerScrollDistance.value * snapThreshold
+        ) {
+          // snap down
+          snappingTo.value = 0
+          scrollTo(
+            refMap[focusedTab.value],
+            0,
+            0,
+            true,
+            `[${focusedTab.value}] snap down`
+          )
+        } else if (scrollYCurrent.value <= headerScrollDistance.value) {
+          // snap up
+          snappingTo.value = headerScrollDistance.value
+
+          scrollTo(
+            refMap[focusedTab.value],
+            0,
+            headerScrollDistance.value,
+            true,
+            `[${focusedTab.value}] snap up`
+          )
+        }
+        isSnapping.value = false
+      }
+    }
+  }, [
+    accDiffClamp,
+    focusedTab,
+    isSnapping,
+    snappingTo,
+    headerScrollDistance,
+    scrollTo,
+    refMap,
+    revealHeaderOnScroll,
+    snapThreshold,
+    scrollYCurrent,
+  ])
+
+  return tryToSnap
+}
+
+export const useOnScroll = () => {
+  const {
+    accDiffClamp,
+    revealHeaderOnScroll,
+    index,
+    scrollYCurrent,
+    scrollY,
+    oldAccScrollY,
+    accScrollY,
+    offset,
+    headerScrollDistance,
+    isSnapping,
+  } = useTabsContext()
+
+  const onScroll = useCallback(() => {
+    'worklet'
+
+    scrollY.value[index.value] = scrollYCurrent.value
+    oldAccScrollY.value = accScrollY.value
+    accScrollY.value = scrollY.value[index.value] + offset.value
+
+    if (!isSnapping.value && revealHeaderOnScroll) {
+      const delta = accScrollY.value - oldAccScrollY.value
+      const nextValue = accDiffClamp.value + delta
+      if (delta > 0) {
+        // scrolling down
+        accDiffClamp.value = Math.min(headerScrollDistance.value, nextValue)
+      } else if (delta < 0) {
+        // scrolling up
+        accDiffClamp.value = Math.max(0, nextValue)
+      }
+    }
+  }, [
+    scrollY,
+    oldAccScrollY,
+    index,
+    accDiffClamp,
+    accScrollY,
+    headerScrollDistance,
+    revealHeaderOnScroll,
+    isSnapping,
+    offset,
+    scrollYCurrent,
+  ])
+
+  return onScroll
 }
 
 export const useScrollHandlerY = (name: TabName) => {
@@ -241,7 +397,6 @@ export const useScrollHandlerY = (name: TabName) => {
     revealHeaderOnScroll,
     refMap,
     tabNames,
-    index,
     headerHeight,
     contentInset,
     containerHeight,
@@ -249,9 +404,6 @@ export const useScrollHandlerY = (name: TabName) => {
     scrollY,
     isScrolling,
     isGliding,
-    oldAccScrollY,
-    accScrollY,
-    offset,
     headerScrollDistance,
     isSnapping,
     snappingTo,
@@ -284,77 +436,14 @@ export const useScrollHandlerY = (name: TabName) => {
   ])
 
   const scrollTo = useScroller()
+  const tryToSnap = useSnap()
+  const onScroll = useOnScroll()
 
   const onMomentumEnd = () => {
     'worklet'
     if (!enabled.value) return
 
-    if (typeof snapThreshold === 'number') {
-      if (revealHeaderOnScroll) {
-        if (accDiffClamp.value > 0) {
-          if (
-            scrollYCurrent.value >
-            headerScrollDistance.value * snapThreshold
-          ) {
-            if (
-              accDiffClamp.value <=
-              headerScrollDistance.value * snapThreshold
-            ) {
-              // snap down
-              isSnapping.value = true
-              accDiffClamp.value = withTiming(0, undefined, () => {
-                isSnapping.value = false
-              })
-            } else if (accDiffClamp.value < headerScrollDistance.value) {
-              // snap up
-              isSnapping.value = true
-              accDiffClamp.value = withTiming(
-                headerScrollDistance.value,
-                undefined,
-                () => {
-                  isSnapping.value = false
-                }
-              )
-
-              if (scrollYCurrent.value < headerScrollDistance.value) {
-                scrollTo(
-                  refMap[name],
-                  0,
-                  headerScrollDistance.value,
-                  true,
-                  `[${name}] sticky snap up`
-                )
-              }
-            }
-          } else {
-            isSnapping.value = true
-            accDiffClamp.value = withTiming(0, undefined, () => {
-              isSnapping.value = false
-            })
-          }
-        }
-      } else {
-        if (
-          scrollYCurrent.value <=
-          headerScrollDistance.value * snapThreshold
-        ) {
-          // snap down
-          snappingTo.value = 0
-          scrollTo(refMap[name], 0, 0, true, `[${name}] snap down`)
-        } else if (scrollYCurrent.value <= headerScrollDistance.value) {
-          // snap up
-          snappingTo.value = headerScrollDistance.value
-          scrollTo(
-            refMap[name],
-            0,
-            headerScrollDistance.value,
-            true,
-            `[${name}] snap up`
-          )
-        }
-        isSnapping.value = false
-      }
-    }
+    tryToSnap()
     isGliding.value = false
   }
 
@@ -386,24 +475,7 @@ export const useScrollHandlerY = (name: TabName) => {
             scrollYCurrent.value = y
           }
 
-          scrollY.value[index.value] = scrollYCurrent.value
-          oldAccScrollY.value = accScrollY.value
-          accScrollY.value = scrollY.value[index.value] + offset.value
-
-          if (!isSnapping.value && revealHeaderOnScroll) {
-            const delta = accScrollY.value - oldAccScrollY.value
-            const nextValue = accDiffClamp.value + delta
-            if (delta > 0) {
-              // scrolling down
-              accDiffClamp.value = Math.min(
-                headerScrollDistance.value,
-                nextValue
-              )
-            } else if (delta < 0) {
-              // scrolling up
-              accDiffClamp.value = Math.max(0, nextValue)
-            }
-          }
+          onScroll()
 
           isScrolling.value = 1
 
@@ -422,6 +494,8 @@ export const useScrollHandlerY = (name: TabName) => {
 
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
+        // ensure decaying header animation stops
+        cancelAnimation(scrollYCurrent)
 
         isSnapping.value = false
         isScrolling.value = 0
@@ -478,7 +552,8 @@ export const useScrollHandlerY = (name: TabName) => {
         !isSnapping.value &&
         !isScrolling.value &&
         !isGliding.value &&
-        !enabled.value
+        !enabled.value &&
+        !isSlidingTopContainer.value
       ) {
         return false
       }
