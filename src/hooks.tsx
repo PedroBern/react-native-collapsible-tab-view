@@ -225,6 +225,7 @@ export function useScroller<T extends RefComponent>() {
       // console.log(
       //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
       // )
+
       scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
@@ -233,60 +234,23 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (name: TabName) => {
+export const useSnap = () => {
   const {
     accDiffClamp,
-    focusedTab,
     snapThreshold,
     revealHeaderOnScroll,
     refMap,
-    tabNames,
-    index,
-    headerHeight,
-    contentInset,
-    containerHeight,
     scrollYCurrent,
-    scrollY,
-    isScrolling,
-    isGliding,
-    oldAccScrollY,
-    accScrollY,
-    offset,
     headerScrollDistance,
     isSnapping,
     snappingTo,
-    contentHeights,
-    indexDecimal,
-    allowHeaderOverscroll,
+    focusedTab,
   } = useTabsContext()
-
-  const enabled = useSharedValue(false)
-
-  const enable = useCallback(
-    (toggle: boolean) => {
-      enabled.value = toggle
-    },
-    [enabled]
-  )
-
-  /**
-   * Helper value to track if user is dragging on iOS, because iOS calls
-   * onMomentumEnd only after a vigorous swipe. If the user has finished the
-   * drag, but the onMomentumEnd has never triggered, we need to manually
-   * call it to sync the scenes.
-   */
-  const afterDrag = useSharedValue(0)
-
-  const tabIndex = useMemo(() => tabNames.value.findIndex((n) => n === name), [
-    tabNames,
-    name,
-  ])
 
   const scrollTo = useScroller()
 
-  const onMomentumEnd = () => {
+  const tryToSnap = useCallback(() => {
     'worklet'
-    if (!enabled.value) return
 
     if (typeof snapThreshold === 'number') {
       if (revealHeaderOnScroll) {
@@ -317,11 +281,11 @@ export const useScrollHandlerY = (name: TabName) => {
 
               if (scrollYCurrent.value < headerScrollDistance.value) {
                 scrollTo(
-                  refMap[name],
+                  refMap[focusedTab.value],
                   0,
                   headerScrollDistance.value,
                   true,
-                  `[${name}] sticky snap up`
+                  `[${focusedTab.value}] sticky snap up`
                 )
               }
             }
@@ -339,21 +303,147 @@ export const useScrollHandlerY = (name: TabName) => {
         ) {
           // snap down
           snappingTo.value = 0
-          scrollTo(refMap[name], 0, 0, true, `[${name}] snap down`)
+          scrollTo(
+            refMap[focusedTab.value],
+            0,
+            0,
+            true,
+            `[${focusedTab.value}] snap down`
+          )
         } else if (scrollYCurrent.value <= headerScrollDistance.value) {
           // snap up
           snappingTo.value = headerScrollDistance.value
+
           scrollTo(
-            refMap[name],
+            refMap[focusedTab.value],
             0,
             headerScrollDistance.value,
             true,
-            `[${name}] snap up`
+            `[${focusedTab.value}] snap up`
           )
         }
         isSnapping.value = false
       }
     }
+  }, [
+    accDiffClamp,
+    focusedTab,
+    isSnapping,
+    snappingTo,
+    headerScrollDistance,
+    scrollTo,
+    refMap,
+    revealHeaderOnScroll,
+    snapThreshold,
+    scrollYCurrent,
+  ])
+
+  return tryToSnap
+}
+
+export const useOnScroll = () => {
+  const {
+    accDiffClamp,
+    revealHeaderOnScroll,
+    index,
+    scrollYCurrent,
+    scrollY,
+    oldAccScrollY,
+    accScrollY,
+    offset,
+    headerScrollDistance,
+    isSnapping,
+  } = useTabsContext()
+
+  const onScroll = useCallback(() => {
+    'worklet'
+
+    scrollY.value[index.value] = scrollYCurrent.value
+    oldAccScrollY.value = accScrollY.value
+    accScrollY.value = scrollY.value[index.value] + offset.value
+
+    if (!isSnapping.value && revealHeaderOnScroll) {
+      const delta = accScrollY.value - oldAccScrollY.value
+      const nextValue = accDiffClamp.value + delta
+      if (delta > 0) {
+        // scrolling down
+        accDiffClamp.value = Math.min(headerScrollDistance.value, nextValue)
+      } else if (delta < 0) {
+        // scrolling up
+        accDiffClamp.value = Math.max(0, nextValue)
+      }
+    }
+  }, [
+    scrollY,
+    oldAccScrollY,
+    index,
+    accDiffClamp,
+    accScrollY,
+    headerScrollDistance,
+    revealHeaderOnScroll,
+    isSnapping,
+    offset,
+    scrollYCurrent,
+  ])
+
+  return onScroll
+}
+
+export const useScrollHandlerY = (name: TabName) => {
+  const {
+    accDiffClamp,
+    focusedTab,
+    snapThreshold,
+    revealHeaderOnScroll,
+    refMap,
+    tabNames,
+    headerHeight,
+    contentInset,
+    containerHeight,
+    scrollYCurrent,
+    scrollY,
+    isScrolling,
+    isGliding,
+    headerScrollDistance,
+    isSnapping,
+    snappingTo,
+    contentHeights,
+    indexDecimal,
+    allowHeaderOverscroll,
+    isSlidingTopContainer,
+  } = useTabsContext()
+
+  const enabled = useSharedValue(false)
+
+  const enable = useCallback(
+    (toggle: boolean) => {
+      enabled.value = toggle
+    },
+    [enabled]
+  )
+
+  /**
+   * Helper value to track if user is dragging on iOS, because iOS calls
+   * onMomentumEnd only after a vigorous swipe. If the user has finished the
+   * drag, but the onMomentumEnd has never triggered, we need to manually
+   * call it to sync the scenes.
+   */
+  const afterDrag = useSharedValue(0)
+
+  const tabIndex = useMemo(() => tabNames.value.findIndex((n) => n === name), [
+    tabNames,
+    name,
+  ])
+
+  const scrollTo = useScroller()
+  const tryToSnap = useSnap()
+  const onScroll = useOnScroll()
+
+  const onMomentumEnd = () => {
+    'worklet'
+    if (!enabled.value) return
+
+    tryToSnap()
     isGliding.value = false
   }
 
@@ -365,7 +455,7 @@ export const useScrollHandlerY = (name: TabName) => {
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
-        if (!enabled.value) return
+        if (!enabled.value || isSlidingTopContainer.value) return
 
         if (focusedTab.value === name) {
           if (IS_IOS) {
@@ -385,24 +475,7 @@ export const useScrollHandlerY = (name: TabName) => {
             scrollYCurrent.value = y
           }
 
-          scrollY.value[index.value] = scrollYCurrent.value
-          oldAccScrollY.value = accScrollY.value
-          accScrollY.value = scrollY.value[index.value] + offset.value
-
-          if (!isSnapping.value && revealHeaderOnScroll) {
-            const delta = accScrollY.value - oldAccScrollY.value
-            const nextValue = accDiffClamp.value + delta
-            if (delta > 0) {
-              // scrolling down
-              accDiffClamp.value = Math.min(
-                headerScrollDistance.value,
-                nextValue
-              )
-            } else if (delta < 0) {
-              // scrolling up
-              accDiffClamp.value = Math.max(0, nextValue)
-            }
-          }
+          onScroll()
 
           isScrolling.value = 1
 
@@ -421,6 +494,8 @@ export const useScrollHandlerY = (name: TabName) => {
 
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
+        // ensure decaying header animation stops
+        cancelAnimation(scrollYCurrent)
 
         isSnapping.value = false
         isScrolling.value = 0
@@ -477,7 +552,8 @@ export const useScrollHandlerY = (name: TabName) => {
         !isSnapping.value &&
         !isScrolling.value &&
         !isGliding.value &&
-        !enabled.value
+        !enabled.value &&
+        !isSlidingTopContainer.value
       ) {
         return false
       }
