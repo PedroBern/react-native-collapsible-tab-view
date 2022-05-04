@@ -3,7 +3,7 @@
   "version": "5.0.0-rc.0",
   "description": "Collapsible tab view component for React Native",
   "main": "lib/commonjs/index.js",
-  "react-native": "lib/module/index.js",
+  "react-native": "src/index.tsx",
   "module": "lib/module/index.js",
   "types": "lib/typescript/index.d.ts",
   "files": [
@@ -18,7 +18,8 @@
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn",
     "prepack": "bob build",
-    "docs": "ts-node ./documentation/buildDocs.ts"
+    "docs": "ts-node ./documentation/buildDocs.ts",
+    "prepare": "bob build"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -108,5 +109,18 @@
   "dependencies": {
     "use-deep-compare": "^1.1.0"
   },
-  "packageManager": "yarn@1.22.11"
+  "packageManager": "yarn@1.22.11",
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ]
 }
