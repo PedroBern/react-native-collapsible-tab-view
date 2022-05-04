@@ -84,6 +84,11 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
    * Custom width of the tabbar. Defaults to the window width.
    */
   width?: number
+
+  /**
+   * Whether to keep the currently active tab centered in a scrollable tab bar
+   */
+  keepActiveTabCentered?: boolean
 }
 
 export type ItemLayout = {
