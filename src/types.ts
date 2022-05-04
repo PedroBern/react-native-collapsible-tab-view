@@ -7,11 +7,12 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native'
+import PagerView from 'react-native-pager-view'
 import Animated from 'react-native-reanimated'
 
 import { TabProps } from './Tab'
 
-export type ContainerRef = FlatList<any>
+export type ContainerRef = PagerView
 
 export type RefComponent =
   | FlatList<any>
@@ -219,13 +220,7 @@ export type ContextType<T extends TabName = TabName> = {
    * previous tab.
    */
   offset: Animated.SharedValue<number>
-  isScrolling: Animated.SharedValue<number>
-  /**
-   * Scroll x position of the tabs container.
-   */
-  scrollX: Animated.SharedValue<number>
-  isGliding: Animated.SharedValue<boolean>
-  isSnapping: Animated.SharedValue<boolean>
+
   /**
    * The next snapping value, used only with diffClamp.
    */

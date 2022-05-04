@@ -5,11 +5,11 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native'
+import PagerView from 'react-native-pager-view'
 import Animated, {
   runOnJS,
   runOnUI,
   useAnimatedReaction,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -22,13 +22,17 @@ import { Lazy } from './Lazy'
 import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
 import {
-  AnimatedFlatList,
   IS_IOS,
   makeRenderFunction,
   ONE_FRAME_MS,
   scrollToImpl,
 } from './helpers'
-import { useAnimatedDynamicRefs, useContainerRef, useTabProps } from './hooks'
+import {
+  useAnimatedDynamicRefs,
+  useContainerRef,
+  usePageScrollHandler,
+  useTabProps,
+} from './hooks'
 import {
   CollapsibleProps,
   CollapsibleRef,
@@ -36,6 +40,8 @@ import {
   IndexChangeEventData,
   TabName,
 } from './types'
+
+const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
 
 /**
  * Basic usage looks like this:
@@ -116,15 +122,11 @@ export const Container = React.memo(
           : 0
       })
 
-      const isSwiping = useSharedValue(false)
-      const isSnapping: ContextType['isSnapping'] = useSharedValue(false)
       const snappingTo: ContextType['snappingTo'] = useSharedValue(0)
-      const isGliding: ContextType['isGliding'] = useSharedValue(false)
       const offset: ContextType['offset'] = useSharedValue(0)
       const accScrollY: ContextType['accScrollY'] = useSharedValue(0)
       const oldAccScrollY: ContextType['oldAccScrollY'] = useSharedValue(0)
       const accDiffClamp: ContextType['accDiffClamp'] = useSharedValue(0)
-      const isScrolling: ContextType['isScrolling'] = useSharedValue(0)
       const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
       const scrollY: ContextType['scrollY'] = useSharedValue(
         tabNamesArray.map(() => 0)
@@ -143,9 +145,7 @@ export const Container = React.memo(
           ? tabNames.value.findIndex((n) => n === initialTabName)
           : 0
       )
-      const scrollX: ContextType['scrollX'] = useSharedValue(
-        index.value * width
-      )
+
       const pagerOpacity = useSharedValue(
         initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1
       )
@@ -165,26 +165,14 @@ export const Container = React.memo(
           : 0
       }, [headerHeight, minHeaderHeight])
 
-      const getItemLayout = React.useCallback(
-        (_: unknown, index: number) => ({
-          length: width,
-          offset: width * index,
-          index,
-        }),
-        [width]
+      const indexDecimal: ContextType['indexDecimal'] = useSharedValue(
+        index.value
       )
-
-      const indexDecimal: ContextType['indexDecimal'] = useDerivedValue(() => {
-        return scrollX.value / width
-      }, [width])
 
       // handle window resize
       React.useEffect(() => {
         if (!firstRender.current) {
-          containerRef.current?.scrollToIndex({
-            index: index.value,
-            animated: false,
-          })
+          containerRef.current?.setPageWithoutAnimation(index.value)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [width])
@@ -201,10 +189,7 @@ export const Container = React.memo(
       React.useEffect(() => {
         if (firstRender.current) {
           if (initialTabName !== undefined && index.value !== 0) {
-            containerRef.current?.scrollToIndex({
-              index: index.value,
-              animated: false,
-            })
+            containerRef.current?.setPageWithoutAnimation(index.value)
           }
           firstRender.current = false
         }
@@ -281,44 +266,6 @@ export const Container = React.memo(
         []
       )
 
-      const scrollHandlerX = useAnimatedScrollHandler(
-        {
-          onScroll: (event) => {
-            const { x } = event.contentOffset
-            scrollX.value = x
-          },
-          onBeginDrag: () => {
-            isSwiping.value = true
-          },
-          onMomentumEnd: () => {
-            isSwiping.value = false
-          },
-        },
-        []
-      )
-
-      const renderItem = React.useCallback(
-        ({ index: i }) => {
-          if (!tabNames.value[i]) return null
-          return (
-            <TabNameContext.Provider value={tabNames.value[i]}>
-              {lazy ? (
-                <Lazy
-                  startMounted={i === index.value}
-                  cancelLazyFadeIn={cancelLazyFadeIn}
-                >
-                  {React.Children.toArray(children)[i] as React.ReactElement}
-                </Lazy>
-              ) : (
-                React.Children.toArray(children)[i]
-              )}
-            </TabNameContext.Provider>
-          )
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [children, lazy, tabNames.value, cancelLazyFadeIn]
-      )
-
       const headerTranslateY = useDerivedValue(() => {
         return revealHeaderOnScroll
           ? -accDiffClamp.value
@@ -389,20 +336,18 @@ export const Container = React.memo(
         (name: TabName) => {
           // simplify logic by preventing index change
           // when is scrolling or gliding.
-          if (!isScrolling.value && !isGliding.value) {
-            const i = tabNames.value.findIndex((n) => n === name)
+          const i = tabNames.value.findIndex((n) => n === name)
 
-            if (name === focusedTab.value) {
-              const ref = refMap[name]
-              runOnUI(scrollToImpl)(
-                ref,
-                0,
-                headerScrollDistance.value - contentInset.value,
-                true
-              )
-            } else {
-              containerRef.current?.scrollToIndex({ animated: true, index: i })
-            }
+          if (name === focusedTab.value) {
+            const ref = refMap[name]
+            runOnUI(scrollToImpl)(
+              ref,
+              0,
+              headerScrollDistance.value - contentInset.value,
+              true
+            )
+          } else {
+            containerRef.current?.setPage(i)
           }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -415,19 +360,22 @@ export const Container = React.memo(
         }
       }, [index.value, onTabPress, tabNamesArray])
 
-      const keyExtractor = React.useCallback((name) => name, [])
+      const pageScrollHandler = usePageScrollHandler({
+        onPageScroll: (e) => {
+          'worklet'
+          indexDecimal.value = e.position + e.offset
+        },
+      })
 
       React.useImperativeHandle(
         ref,
         () => ({
           setIndex: (index) => {
-            if (isScrolling.value || isGliding.value) return false
             const name = tabNames.value[index]
             onTabPress(name)
             return true
           },
           jumpToTab: (name) => {
-            if (isScrolling.value || isGliding.value) return false
             onTabPress(name)
             return true
           },
@@ -464,10 +412,6 @@ export const Container = React.memo(
             accScrollY,
             oldAccScrollY,
             offset,
-            isScrolling,
-            scrollX,
-            isGliding,
-            isSnapping,
             snappingTo,
             contentHeights,
             headerTranslateY,
@@ -523,22 +467,39 @@ export const Container = React.memo(
               </View>
             </Animated.View>
             {headerHeight !== undefined && (
-              <AnimatedFlatList
+              <AnimatedPagerView
                 ref={containerRef}
-                initialScrollIndex={index.value}
-                data={data}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                horizontal
-                pagingEnabled
-                onScroll={scrollHandlerX}
-                showsHorizontalScrollIndicator={false}
-                getItemLayout={getItemLayout}
-                scrollEventThrottle={16}
-                bounces={false}
-                {...pagerProps}
-                style={[pagerStylez, pagerProps?.style]}
-              />
+                onPageScroll={pageScrollHandler}
+                initialPage={index.value}
+                style={[
+                  pagerStylez,
+                  pagerProps?.style,
+                  StyleSheet.absoluteFill,
+                ]}
+              >
+                {data.map((tabName, i) => {
+                  return (
+                    <View key={i}>
+                      <TabNameContext.Provider value={tabName}>
+                        {lazy ? (
+                          <Lazy
+                            startMounted={i === index.value}
+                            cancelLazyFadeIn={cancelLazyFadeIn}
+                          >
+                            {
+                              React.Children.toArray(children)[
+                                i
+                              ] as React.ReactElement
+                            }
+                          </Lazy>
+                        ) : (
+                          React.Children.toArray(children)[i]
+                        )}
+                      </TabNameContext.Provider>
+                    </View>
+                  )
+                })}
+              </AnimatedPagerView>
             )}
           </Animated.View>
         </Context.Provider>

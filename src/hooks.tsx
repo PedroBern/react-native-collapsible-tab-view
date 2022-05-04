@@ -6,9 +6,11 @@ import {
   useContext,
   MutableRefObject,
   useEffect,
+  DependencyList,
 } from 'react'
 import { StyleSheet } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
+import { PagerViewOnPageScrollEvent } from 'react-native-pager-view'
 import Animated, {
   cancelAnimation,
   useAnimatedReaction,
@@ -22,6 +24,8 @@ import Animated, {
   runOnJS,
   runOnUI,
   useDerivedValue,
+  useEvent,
+  useHandler,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -247,13 +251,10 @@ export const useScrollHandlerY = (name: TabName) => {
     containerHeight,
     scrollYCurrent,
     scrollY,
-    isScrolling,
-    isGliding,
     oldAccScrollY,
     accScrollY,
     offset,
     headerScrollDistance,
-    isSnapping,
     snappingTo,
     contentHeights,
     indexDecimal,
@@ -300,19 +301,12 @@ export const useScrollHandlerY = (name: TabName) => {
               headerScrollDistance.value * snapThreshold
             ) {
               // snap down
-              isSnapping.value = true
-              accDiffClamp.value = withTiming(0, undefined, () => {
-                isSnapping.value = false
-              })
+              accDiffClamp.value = withTiming(0, undefined)
             } else if (accDiffClamp.value < headerScrollDistance.value) {
               // snap up
-              isSnapping.value = true
               accDiffClamp.value = withTiming(
                 headerScrollDistance.value,
-                undefined,
-                () => {
-                  isSnapping.value = false
-                }
+                undefined
               )
 
               if (scrollYCurrent.value < headerScrollDistance.value) {
@@ -326,10 +320,7 @@ export const useScrollHandlerY = (name: TabName) => {
               }
             }
           } else {
-            isSnapping.value = true
-            accDiffClamp.value = withTiming(0, undefined, () => {
-              isSnapping.value = false
-            })
+            accDiffClamp.value = withTiming(0, undefined)
           }
         }
       } else {
@@ -351,10 +342,8 @@ export const useScrollHandlerY = (name: TabName) => {
             `[${name}] snap up`
           )
         }
-        isSnapping.value = false
       }
     }
-    isGliding.value = false
   }
 
   const contentHeight = useDerivedValue(() => {
@@ -389,7 +378,7 @@ export const useScrollHandlerY = (name: TabName) => {
           oldAccScrollY.value = accScrollY.value
           accScrollY.value = scrollY.value[index.value] + offset.value
 
-          if (!isSnapping.value && revealHeaderOnScroll) {
+          if (revealHeaderOnScroll) {
             const delta = accScrollY.value - oldAccScrollY.value
             const nextValue = accDiffClamp.value + delta
             if (delta > 0) {
@@ -403,17 +392,6 @@ export const useScrollHandlerY = (name: TabName) => {
               accDiffClamp.value = Math.max(0, nextValue)
             }
           }
-
-          isScrolling.value = 1
-
-          // cancel the animation that is setting this back to 0 if we're still scrolling
-          cancelAnimation(isScrolling)
-
-          // set it back to 0 after a few frames without active scrolling
-          isScrolling.value = withDelay(
-            ONE_FRAME_MS * 3,
-            withTiming(0, { duration: 0 })
-          )
         }
       },
       onBeginDrag: () => {
@@ -422,16 +400,10 @@ export const useScrollHandlerY = (name: TabName) => {
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
 
-        isSnapping.value = false
-        isScrolling.value = 0
-        isGliding.value = false
-
         if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
         if (!enabled.value) return
-
-        isGliding.value = true
 
         if (IS_IOS) {
           // we delay this by one frame so that onMomentumBegin may fire on iOS
@@ -442,7 +414,6 @@ export const useScrollHandlerY = (name: TabName) => {
               // never started, so we need to manually trigger the onMomentumEnd
               // to make sure we snap
               if (isFinished) {
-                isGliding.value = false
                 onMomentumEnd()
               }
             })
@@ -473,12 +444,7 @@ export const useScrollHandlerY = (name: TabName) => {
   // sync unfocused scenes
   useAnimatedReaction(
     () => {
-      if (
-        !isSnapping.value &&
-        !isScrolling.value &&
-        !isGliding.value &&
-        !enabled.value
-      ) {
+      if (!enabled.value) {
         return false
       }
 
@@ -522,6 +488,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
 
         if (nextPosition !== null) {
+          // console.log(`sync ${name} ${nextPosition}`)
           scrollY.value[tabIndex] = nextPosition
           scrollTo(refMap[name], 0, nextPosition, false, `[${name}] sync pane`)
         }
@@ -633,4 +600,29 @@ export function useFocusedTab() {
 export function useAnimatedTabIndex() {
   const { indexDecimal } = useTabsContext()
   return indexDecimal
+}
+
+export const usePageScrollHandler = (
+  handlers: {
+    onPageScroll: (
+      event: PagerViewOnPageScrollEvent['nativeEvent'],
+      context: unknown
+    ) => unknown
+  },
+  dependencies?: DependencyList
+) => {
+  const { context, doDependenciesDiffer } = useHandler(handlers, dependencies)
+  const subscribeForEvents = ['onPageScroll']
+
+  return useEvent<any>(
+    (event) => {
+      'worklet'
+      const { onPageScroll } = handlers
+      if (onPageScroll && event.eventName.endsWith('onPageScroll')) {
+        onPageScroll(event, context)
+      }
+    },
+    subscribeForEvents,
+    doDependenciesDiffer
+  )
 }

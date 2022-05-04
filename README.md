@@ -191,7 +191,7 @@ const Example = () => {
 |:----:|:----:|:----:|:----:|
 |HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`||@obsolete use `renderHeader` instead. This property will be removed in 5.0.0|
 |TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`|@obsolete use `renderTabBar` instead. This property will be removed in 5.0.0|
-|allowHeaderOverscroll|`boolean`|`false`|Whether the header moves down during overscrolling (for example on pull-to-refresh on iOS) or sticks to the top|
+|allowHeaderOverscroll|`boolean \| undefined`|`false`|Whether the header moves down during overscrolling (for example on pull-to-refresh on iOS) or sticks to the top|
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerStyle|`StyleProp<ViewStyle>`|||

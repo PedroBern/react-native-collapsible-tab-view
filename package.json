@@ -47,7 +47,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^9.1.1",
     "@microsoft/tsdoc": "^0.13.0",
-    "@react-native-community/bob": "^0.16.2",
+    "react-native-builder-bob": "^0.18.2",
     "@release-it/conventional-changelog": "^1.1.4",
     "@types/react": "^16.9.44",
     "@types/react-native": "0.63.4",
@@ -66,7 +66,8 @@
     "react-docgen-typescript": "^1.20.5",
     "react-native": "~0.62.2",
     "react-native-gesture-handler": "~1.6.0",
-    "react-native-reanimated": "^2.2.2",
+    "react-native-pager-view": "^5",
+    "react-native-reanimated": "^2.3.0",
     "release-it": "^13.6.6",
     "ts-node": "^9.1.1",
     "typescript": "^3.9.7"
@@ -74,7 +75,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-reanimated": ">=2.1.0"
+    "react-native-pager-view": "*",
+    "react-native-reanimated": ">=2.3.0"
   },
   "husky": {
     "hooks": {
@@ -105,5 +107,6 @@
   },
   "dependencies": {
     "use-deep-compare": "^1.1.0"
-  }
+  },
+  "packageManager": "yarn@1.22.11"
 }

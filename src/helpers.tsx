@@ -27,7 +27,6 @@ export function scrollToImpl<T extends RefComponent>(
   // ensure we don't scroll on NaN
   if (!Number.isFinite(x) || !Number.isFinite(y)) return
 
-  //@ts-expect-error: reanimated typescript types do not accept FlatList for `scrollTo`, but it does work
   scrollTo(ref, x, y, animated)
 }
 
