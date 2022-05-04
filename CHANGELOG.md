@@ -1,3 +1,10 @@
+# [5.0.0-rc.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.2...v5.0.0-rc.1) (2022-05-04)
+
+
+### Features
+
+* property on scrollable MaterialTabBar to keep tab in the center ([6d35e31](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d35e3151355d35830a8387af642c5af5a13c54d))
+
 ## [4.5.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.1...v4.5.2) (2022-01-15)
 
 
