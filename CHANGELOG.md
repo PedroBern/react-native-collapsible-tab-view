@@ -1,3 +1,16 @@
+# [5.0.0-rc.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.2...v5.0.0-rc.0) (2022-05-04)
+
+
+### Features
+
+* perf: use react-native-pager-view for the horizontal pager
+
+* property on scrollable MaterialTabBar to keep tab in the center ([6d35e31](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d35e3151355d35830a8387af642c5af5a13c54d))
+
+### BREAKING CHANGES
+
+- v5 adds a peer dependency to `react-native-pager-view@5`. It will need to be installed into your project.
+
 ## [4.5.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.1...v4.5.2) (2022-01-15)
 
 
