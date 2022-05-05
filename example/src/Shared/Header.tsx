@@ -19,7 +19,8 @@ export const Header = ({
     <View style={[styles.root, { height }]}>
       <Text style={styles.title}>
         {title}
-        {'\n'}<Text style={styles.description}>{description}</Text>
+        {'\n'}
+        <Text style={styles.description}>{description}</Text>
       </Text>
     </View>
   )

@@ -21,12 +21,7 @@ import { Context, TabNameContext } from './Context'
 import { Lazy } from './Lazy'
 import { MaterialTabBar, TABBAR_HEIGHT } from './MaterialTabBar'
 import { Tab } from './Tab'
-import {
-  IS_IOS,
-  makeRenderFunction,
-  ONE_FRAME_MS,
-  scrollToImpl,
-} from './helpers'
+import { IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
 import {
   useAnimatedDynamicRefs,
   useContainerRef,
@@ -74,11 +69,8 @@ export const Container = React.memo(
         revealHeaderOnScroll = false,
         snapThreshold,
         children,
-        // TODO: these two are obsolete, remove them in v5.0
-        HeaderComponent,
-        TabBarComponent = MaterialTabBar,
-        renderHeader = makeRenderFunction(HeaderComponent),
-        renderTabBar = makeRenderFunction(TabBarComponent),
+        renderHeader,
+        renderTabBar = (props) => <MaterialTabBar {...props} />,
         headerContainerStyle,
         cancelTranslation,
         containerStyle,

@@ -43,6 +43,11 @@ export type TabBarProps<T extends TabName = TabName> = {
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
   tabProps: TabsWithProps<T>
+
+  /**
+   * Custom width of the tabbar. Defaults to the window width.
+   */
+  width?: number
 }
 
 export type IndexChangeEventData<T extends TabName = TabName> = {
@@ -85,24 +90,6 @@ export type CollapsibleProps = {
    */
   snapThreshold?: number | null
   children: TabReactElement<TabName>[] | TabReactElement<TabName>
-  /**
-   * @obsolete use `renderHeader` instead. This property will be removed in 5.0.0
-   */
-  HeaderComponent?:
-    | ((props: TabBarProps<TabName>) => React.ReactElement)
-    | React.MemoExoticComponent<
-        (props: TabBarProps<TabName>) => React.ReactElement
-      >
-    | null
-  /**
-   * @obsolete use `renderTabBar` instead. This property will be removed in 5.0.0
-   */
-  TabBarComponent?:
-    | ((props: TabBarProps<TabName>) => React.ReactElement)
-    | React.MemoExoticComponent<
-        (props: TabBarProps<TabName>) => React.ReactElement
-      >
-    | null
 
   renderHeader?: (props: TabBarProps<TabName>) => React.ReactElement | null
 
