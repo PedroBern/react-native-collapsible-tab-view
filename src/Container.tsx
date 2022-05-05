@@ -277,8 +277,6 @@ export const Container = React.memo(
 
       const onTabPress = React.useCallback(
         (name: TabName) => {
-          // simplify logic by preventing index change
-          // when is scrolling or gliding.
           const i = tabNames.value.findIndex((n) => n === name)
 
           if (name === focusedTab.value) {

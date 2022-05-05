@@ -301,13 +301,10 @@ export const useScrollHandlerY = (name: TabName) => {
               headerScrollDistance.value * snapThreshold
             ) {
               // snap down
-              accDiffClamp.value = withTiming(0, undefined)
+              accDiffClamp.value = withTiming(0)
             } else if (accDiffClamp.value < headerScrollDistance.value) {
               // snap up
-              accDiffClamp.value = withTiming(
-                headerScrollDistance.value,
-                undefined
-              )
+              accDiffClamp.value = withTiming(headerScrollDistance.value)
 
               if (scrollYCurrent.value < headerScrollDistance.value) {
                 scrollTo(
@@ -320,7 +317,7 @@ export const useScrollHandlerY = (name: TabName) => {
               }
             }
           } else {
-            accDiffClamp.value = withTiming(0, undefined)
+            accDiffClamp.value = withTiming(0)
           }
         }
       } else {
