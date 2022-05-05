@@ -92,7 +92,6 @@ export const Container = React.memo(
 
       const windowWidth = useWindowDimensions().width
       const width = customWidth ?? windowWidth
-      const firstRender = React.useRef(true)
 
       const containerHeight = useSharedValue<number | undefined>(undefined)
 
@@ -158,14 +157,6 @@ export const Container = React.memo(
         index.value
       )
 
-      // handle window resize
-      React.useEffect(() => {
-        if (!firstRender.current) {
-          containerRef.current?.setPageWithoutAnimation(index.value)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [width])
-
       const afterRender = useSharedValue(0)
       React.useEffect(() => {
         afterRender.value = withDelay(
@@ -173,16 +164,6 @@ export const Container = React.memo(
           withTiming(1, { duration: 0 })
         )
       }, [afterRender, tabNamesArray])
-
-      React.useEffect(() => {
-        if (firstRender.current) {
-          if (initialTabName !== undefined && index.value !== 0) {
-            containerRef.current?.setPageWithoutAnimation(index.value)
-          }
-          firstRender.current = false
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [containerRef, initialTabName, width])
 
       // the purpose of this is to scroll to the proper position if dynamic tabs are changing
       useAnimatedReaction(
@@ -428,37 +409,36 @@ export const Container = React.memo(
                   })}
               </View>
             </Animated.View>
-            {headerHeight !== undefined && (
-              <AnimatedPagerView
-                ref={containerRef}
-                onPageScroll={pageScrollHandler}
-                initialPage={index.value}
-                style={[pagerProps?.style, StyleSheet.absoluteFill]}
-              >
-                {data.map((tabName, i) => {
-                  return (
-                    <View key={i}>
-                      <TabNameContext.Provider value={tabName}>
-                        {lazy ? (
-                          <Lazy
-                            startMounted={i === index.value}
-                            cancelLazyFadeIn={cancelLazyFadeIn}
-                          >
-                            {
-                              React.Children.toArray(children)[
-                                i
-                              ] as React.ReactElement
-                            }
-                          </Lazy>
-                        ) : (
-                          React.Children.toArray(children)[i]
-                        )}
-                      </TabNameContext.Provider>
-                    </View>
-                  )
-                })}
-              </AnimatedPagerView>
-            )}
+
+            <AnimatedPagerView
+              ref={containerRef}
+              onPageScroll={pageScrollHandler}
+              initialPage={index.value}
+              style={[pagerProps?.style, StyleSheet.absoluteFill]}
+            >
+              {data.map((tabName, i) => {
+                return (
+                  <View key={i}>
+                    <TabNameContext.Provider value={tabName}>
+                      {lazy ? (
+                        <Lazy
+                          startMounted={i === index.value}
+                          cancelLazyFadeIn={cancelLazyFadeIn}
+                        >
+                          {
+                            React.Children.toArray(children)[
+                              i
+                            ] as React.ReactElement
+                          }
+                        </Lazy>
+                      ) : (
+                        React.Children.toArray(children)[i]
+                      )}
+                    </TabNameContext.Provider>
+                  </View>
+                )
+              })}
+            </AnimatedPagerView>
           </Animated.View>
         </Context.Provider>
       )
