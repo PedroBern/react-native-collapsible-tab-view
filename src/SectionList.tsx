@@ -1,7 +1,7 @@
 import React from 'react'
 import { SectionList as RNSectionList, SectionListProps } from 'react-native'
 
-import { AnimatedSectionList, IS_IOS } from './helpers'
+import { AnimatedSectionList } from './helpers'
 import {
   useAfterMountEffect,
   useChainCallback,
@@ -37,7 +37,7 @@ function SectionListImpl<R>(
   passRef: React.Ref<RNSectionList>
 ): React.ReactElement {
   const name = useTabNameContext()
-  const { setRef, contentInset, scrollYCurrent } = useTabsContext()
+  const { setRef, contentInset } = useTabsContext()
   const ref = useSharedAnimatedRef<RNSectionList<unknown>>(passRef)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
@@ -77,13 +77,7 @@ function SectionListImpl<R>(
       }),
     [progressViewOffset, refreshControl]
   )
-  const memoContentOffset = React.useMemo(
-    () => ({
-      y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
-      x: 0,
-    }),
-    [contentInset.value, scrollYCurrent.value]
-  )
+
   const memoContentInset = React.useMemo(() => ({ top: contentInset.value }), [
     contentInset.value,
   ])
@@ -110,7 +104,6 @@ function SectionListImpl<R>(
       onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
       contentInset={memoContentInset}
-      contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
       // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735

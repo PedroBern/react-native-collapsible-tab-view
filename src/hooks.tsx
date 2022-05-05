@@ -226,9 +226,9 @@ export function useScroller<T extends RefComponent>() {
       'worklet'
       if (!ref) return
       //! this is left here on purpose to ease troubleshooting (uncomment when necessary)
-      // console.log(
-      //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
-      // )
+      console.log(
+        `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
+      )
       scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
