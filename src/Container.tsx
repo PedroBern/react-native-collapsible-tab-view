@@ -146,9 +146,6 @@ export const Container = React.memo(
           : 0
       )
 
-      const pagerOpacity = useSharedValue(
-        initialHeaderHeight === undefined || index.value !== 0 ? 0 : 1
-      )
       const [data, setData] = React.useState(tabNamesArray)
 
       React.useEffect(() => {
@@ -179,12 +176,11 @@ export const Container = React.memo(
 
       const afterRender = useSharedValue(0)
       React.useEffect(() => {
-        if (!firstRender.current) pagerOpacity.value = 0
         afterRender.value = withDelay(
           ONE_FRAME_MS * 5,
           withTiming(1, { duration: 0 })
         )
-      }, [afterRender, pagerOpacity, tabNamesArray])
+      }, [afterRender, tabNamesArray])
 
       React.useEffect(() => {
         if (firstRender.current) {
@@ -213,8 +209,6 @@ export const Container = React.memo(
                 false
               )
             })
-
-            pagerOpacity.value = withTiming(1)
           }
         },
         [tabNamesArray, refMap, afterRender, contentInset]
@@ -307,30 +301,6 @@ export const Container = React.memo(
         },
         [containerHeight]
       )
-
-      // fade in the pager if the headerHeight is not defined
-      useAnimatedReaction(
-        () => {
-          return (
-            (initialHeaderHeight === undefined ||
-              initialTabName !== undefined) &&
-            headerHeight !== undefined &&
-            pagerOpacity.value === 0
-          )
-        },
-        (update) => {
-          if (update) {
-            pagerOpacity.value = withTiming(1)
-          }
-        },
-        [headerHeight]
-      )
-
-      const pagerStylez = useAnimatedStyle(() => {
-        return {
-          opacity: pagerOpacity.value,
-        }
-      }, [])
 
       const onTabPress = React.useCallback(
         (name: TabName) => {
@@ -471,11 +441,7 @@ export const Container = React.memo(
                 ref={containerRef}
                 onPageScroll={pageScrollHandler}
                 initialPage={index.value}
-                style={[
-                  pagerStylez,
-                  pagerProps?.style,
-                  StyleSheet.absoluteFill,
-                ]}
+                style={[pagerProps?.style, StyleSheet.absoluteFill]}
               >
                 {data.map((tabName, i) => {
                   return (
