@@ -27,7 +27,7 @@ export const Header = ({
 
 function buildHeader<T extends TabBarProps<any>>(
   title: string,
-  description: string
+  description?: string
 ) {
   const NewHeader = (props: T) => {
     return <Header title={title} description={description} {...props} />
