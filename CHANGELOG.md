@@ -1,3 +1,15 @@
+# [5.0.0-rc.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.2) (2022-05-05)
+
+
+### Code Refactoring
+
+* remove obsolete HeaderComponent and FooterComponent ([cb2cb04](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/cb2cb04bbcf1dd86484c2a77f273e10ee6ceabbe))
+
+
+### BREAKING CHANGES
+
+* use `renderHeader` and `renderTabBar` instead
+
 # [5.0.0-rc.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.2...v5.0.0-rc.1) (2022-05-04)
 
 
