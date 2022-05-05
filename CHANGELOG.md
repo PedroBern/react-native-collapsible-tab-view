@@ -1,3 +1,10 @@
+# [5.0.0-rc.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.2...v5.0.0-rc.3) (2022-05-05)
+
+
+### Bug Fixes
+
+* **ios:** scroll sync issues between tabs ([14dfc79](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/14dfc7995c6d56763d694eec3f373e0c2dc00ab5))
+
 # [5.0.0-rc.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.2) (2022-05-05)
 
 
