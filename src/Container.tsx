@@ -412,6 +412,7 @@ export const Container = React.memo(
               ref={containerRef}
               onPageScroll={pageScrollHandler}
               initialPage={index.value}
+              {...pagerProps}
               style={[pagerProps?.style, StyleSheet.absoluteFill]}
             >
               {data.map((tabName, i) => {

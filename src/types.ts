@@ -1,13 +1,12 @@
 import React, { ComponentProps } from 'react'
 import {
   FlatList,
-  FlatListProps as RNFlatListProps,
   ScrollView,
   SectionList,
   StyleProp,
   ViewStyle,
 } from 'react-native'
-import PagerView from 'react-native-pager-view'
+import PagerView, { PagerViewProps } from 'react-native-pager-view'
 import Animated from 'react-native-reanimated'
 
 import { TabProps } from './Tab'
@@ -105,20 +104,10 @@ export type CollapsibleProps = {
   lazy?: boolean
   cancelLazyFadeIn?: boolean
   /**
-   * Props passed to the horiztontal flatlist. If you want for example to
+   * Props passed to the pager. If you want for example to
    * disable swiping, you can pass `{ scrollEnabled: false }`
    */
-  pagerProps?: Omit<
-    RNFlatListProps<number>,
-    | 'data'
-    | 'keyExtractor'
-    | 'renderItem'
-    | 'horizontal'
-    | 'pagingEnabled'
-    | 'onScroll'
-    | 'showsHorizontalScrollIndicator'
-    | 'getItemLayout'
-  >
+  pagerProps?: Omit<PagerViewProps, 'onPageScroll' | 'initialPage'>
   /**
    * Callback fired when the index changes. It receives the current index.
    */
