@@ -1,3 +1,10 @@
+# [5.0.0-rc.5](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.4...v5.0.0-rc.5) (2022-05-06)
+
+
+### Bug Fixes
+
+* bring back pagerProps ([2137bbd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2137bbd5562becc3136c79c966a107c4239a120c))
+
 # [5.0.0-rc.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.3...v5.0.0-rc.4) (2022-05-05)
 
 # [5.0.0-rc.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.2...v5.0.0-rc.3) (2022-05-05)
