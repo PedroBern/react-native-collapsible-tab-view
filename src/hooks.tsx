@@ -285,6 +285,17 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const scrollTo = useScroller()
 
+  const scrollAnimation = useSharedValue<number | undefined>(undefined)
+
+  useAnimatedReaction(
+    () => scrollAnimation.value,
+    (val) => {
+      if (val !== undefined) {
+        scrollTo(refMap[name], 0, val, false, '[useAnimatedReaction scroll]')
+      }
+    }
+  )
+
   const onMomentumEnd = () => {
     'worklet'
     if (!enabled.value) return
@@ -307,13 +318,9 @@ export const useScrollHandlerY = (name: TabName) => {
               accDiffClamp.value = withTiming(headerScrollDistance.value)
 
               if (scrollYCurrent.value < headerScrollDistance.value) {
-                scrollTo(
-                  refMap[name],
-                  0,
-                  headerScrollDistance.value,
-                  true,
-                  `[${name}] sticky snap up`
-                )
+                scrollAnimation.value = scrollYCurrent.value
+                scrollAnimation.value = withTiming(headerScrollDistance.value)
+                //console.log('[${name}] sticky snap up')
               }
             }
           } else {
@@ -327,17 +334,15 @@ export const useScrollHandlerY = (name: TabName) => {
         ) {
           // snap down
           snappingTo.value = 0
-          scrollTo(refMap[name], 0, 0, true, `[${name}] snap down`)
+          scrollAnimation.value = scrollYCurrent.value
+          scrollAnimation.value = withTiming(0)
+          //console.log('[${name}] snap down')
         } else if (scrollYCurrent.value <= headerScrollDistance.value) {
           // snap up
           snappingTo.value = headerScrollDistance.value
-          scrollTo(
-            refMap[name],
-            0,
-            headerScrollDistance.value,
-            true,
-            `[${name}] snap up`
-          )
+          scrollAnimation.value = scrollYCurrent.value
+          scrollAnimation.value = withTiming(headerScrollDistance.value)
+          //console.log('[${name}] snap up')
         }
       }
     }

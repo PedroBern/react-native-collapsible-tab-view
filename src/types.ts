@@ -198,7 +198,7 @@ export type ContextType<T extends TabName = TabName> = {
   offset: Animated.SharedValue<number>
 
   /**
-   * The next snapping value, used only with diffClamp.
+   * The next snapping value.
    */
   snappingTo: Animated.SharedValue<number>
 
