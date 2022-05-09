@@ -1,3 +1,15 @@
+# [5.0.0-rc.6](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.5...v5.0.0-rc.6) (2022-05-09)
+
+
+### Bug Fixes
+
+* initial scroll position if starting with undefined header height ([9378af6](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9378af6a0f95ce59a3eab9ca786baa05bb8039ba))
+
+
+### Performance Improvements
+
+* snap using animated reaction scroll ([5f11c61](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5f11c610a3a8fbaea95edacb3e4c522cd5db8187))
+
 # [5.0.0-rc.5](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.4...v5.0.0-rc.5) (2022-05-06)
 
 
