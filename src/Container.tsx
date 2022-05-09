@@ -165,6 +165,18 @@ export const Container = React.memo(
         )
       }, [afterRender, tabNamesArray])
 
+      const resyncTabScroll = () => {
+        'worklet'
+        for (const name of tabNamesArray) {
+          scrollToImpl(
+            refMap[name],
+            0,
+            scrollYCurrent.value - contentInset.value,
+            false
+          )
+        }
+      }
+
       // the purpose of this is to scroll to the proper position if dynamic tabs are changing
       useAnimatedReaction(
         () => {
@@ -173,15 +185,7 @@ export const Container = React.memo(
         (trigger) => {
           if (trigger) {
             afterRender.value = 0
-            tabNamesArray.forEach((name) => {
-              'worklet'
-              scrollToImpl(
-                refMap[name],
-                0,
-                scrollY.value[index.value] - contentInset.value,
-                false
-              )
-            })
+            resyncTabScroll()
           }
         },
         [tabNamesArray, refMap, afterRender, contentInset]
@@ -231,6 +235,16 @@ export const Container = React.memo(
           }
         },
         []
+      )
+
+      useAnimatedReaction(
+        () => headerHeight.value,
+        (_current, prev) => {
+          if (prev === undefined) {
+            // sync scroll if we started with undefined header height
+            resyncTabScroll()
+          }
+        }
       )
 
       const headerTranslateY = useDerivedValue(() => {
