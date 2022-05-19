@@ -1,3 +1,10 @@
+# [5.0.0-rc.7](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.6...v5.0.0-rc.7) (2022-05-19)
+
+
+### Bug Fixes
+
+* initial scroll position sometimes wrong on iOS ([e349941](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/e3499412ea660fd7c5445414adbd14cc840b44a0))
+
 # [5.0.0-rc.6](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.5...v5.0.0-rc.6) (2022-05-09)
 
 
