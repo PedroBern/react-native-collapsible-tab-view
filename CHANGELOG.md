@@ -1,3 +1,10 @@
+# [5.0.0-rc.8](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.7...v5.0.0-rc.8) (2022-05-19)
+
+
+### Features
+
+* custom label component ([51a7234](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/51a7234fec8f19f384ed771789d883aee247260f))
+
 # [5.0.0-rc.7](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.6...v5.0.0-rc.7) (2022-05-19)
 
 
