@@ -21,7 +21,7 @@ export type RefComponent =
 
 export type Ref<T extends RefComponent> = React.RefObject<T>
 
-export type TabName = string | number
+export type TabName = string
 
 export type RefHandler<T extends TabName = TabName> = {
   jumpToTab: (name: T) => boolean

@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   LayoutChangeEvent,
   PressableProps,
@@ -7,19 +8,17 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
+import { TabItemProps } from '../Tab'
 import { TabBarProps, TabName } from '../types'
 
 type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
 type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>
 
-export type MaterialTabItemProps<T extends TabName> = {
-  name: T
-  index: number
-  indexDecimal: Animated.SharedValue<number>
+export type MaterialTabItemProps<T extends TabName> = TabItemProps<T> & {
   onPress: (name: T) => void
   onLayout?: (event: LayoutChangeEvent) => void
   scrollEnabled?: boolean
-  label: string
+
   style?: StyleProp<ViewStyle>
   /**
    * Style to apply to the tab item label

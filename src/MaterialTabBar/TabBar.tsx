@@ -41,7 +41,7 @@ export const TABBAR_HEIGHT = 48
  * </Tabs.Container>
  * ```
  */
-const MaterialTabBar = <T extends TabName = any>({
+const MaterialTabBar = <T extends TabName = TabName>({
   tabNames,
   indexDecimal,
   scrollEnabled = false,
