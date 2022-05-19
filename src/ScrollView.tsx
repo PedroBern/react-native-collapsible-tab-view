@@ -6,6 +6,7 @@ import {
   useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
+  useConvertAnimatedToValue,
   useScrollHandlerY,
   useSharedAnimatedRef,
   useTabNameContext,
@@ -89,10 +90,17 @@ export const ScrollView = React.forwardRef<
       [progressViewOffset, refreshControl]
     )
 
-    const memoContentInset = React.useMemo(
-      () => ({ top: contentInset.value }),
-      [contentInset.value]
+    const contentInsetValue = useConvertAnimatedToValue(contentInset)
+
+    const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
+      contentInsetValue,
+    ])
+
+    const memoContentOffset = React.useMemo(
+      () => ({ x: 0, y: -contentInsetValue }),
+      [contentInsetValue]
     )
+
     const memoContentContainerStyle = React.useMemo(
       () => [
         _contentContainerStyle,
@@ -114,6 +122,7 @@ export const ScrollView = React.forwardRef<
         onContentSizeChange={scrollContentSizeChangeHandlers}
         scrollEventThrottle={16}
         contentInset={memoContentInset}
+        contentOffset={memoContentOffset}
         automaticallyAdjustContentInsets={false}
         refreshControl={memoRefreshControl}
         // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
