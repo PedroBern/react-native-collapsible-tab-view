@@ -8,8 +8,7 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { TabItemProps } from '../Tab'
-import { TabBarProps, TabName } from '../types'
+import { TabBarProps, TabName, TabItemProps } from '../types'
 
 type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
 type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>

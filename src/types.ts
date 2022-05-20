@@ -9,8 +9,6 @@ import {
 import PagerView, { PagerViewProps } from 'react-native-pager-view'
 import Animated from 'react-native-reanimated'
 
-import { TabProps } from './Tab'
-
 export type ContainerRef = PagerView
 
 export type RefComponent =
@@ -60,9 +58,9 @@ export type OnTabChangeCallback<T extends TabName = TabName> = (
   data: IndexChangeEventData<T>
 ) => void
 
-export type TabReactElement<T extends TabName = TabName> = React.ReactElement<
-  TabProps<T>
->
+export type TabReactElement<
+  T extends TabName = TabName
+> = React.ReactElement<TabProps<T> | null>
 
 export type CollapsibleProps = {
   initialTabName?: TabName
@@ -236,3 +234,17 @@ export type TabsWithProps<T extends TabName = TabName> = Map<
   T,
   Omit<TabProps<T>, 'children'> & { index: number }
 >
+
+export type TabItemProps<T extends TabName> = {
+  name: T
+  index: number
+  indexDecimal: Animated.SharedValue<number>
+
+  label: string | ((props: TabItemProps<T>) => React.ReactNode)
+}
+
+export type TabProps<T extends TabName> = {
+  readonly name: T
+  label?: TabItemProps<T>['label']
+  children: React.ReactNode
+}

@@ -1,21 +1,6 @@
 import React from 'react'
-import Animated from 'react-native-reanimated'
 
-import { TabName } from './types'
-
-export type TabItemProps<T extends TabName> = {
-  name: T
-  index: number
-  indexDecimal: Animated.SharedValue<number>
-
-  label: string | ((props: TabItemProps<T>) => React.ReactNode)
-}
-
-export type TabProps<T extends TabName> = {
-  readonly name: T
-  label?: TabItemProps<T>['label']
-  children: React.ReactNode
-}
+import { TabName, TabProps } from './types'
 
 /**
  * Wrap your screens with `Tabs.Tab`. Basic usage looks like this:

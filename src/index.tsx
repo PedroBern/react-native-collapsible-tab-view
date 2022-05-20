@@ -4,7 +4,7 @@ import { Lazy } from './Lazy'
 import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
 import { ScrollView } from './ScrollView'
 import { SectionList } from './SectionList'
-import { Tab, TabItemProps, TabProps } from './Tab'
+import { Tab } from './Tab'
 import {
   TabBarProps,
   CollapsibleProps,
@@ -12,6 +12,8 @@ import {
   ContainerRef,
   CollapsibleRef,
   OnTabChangeCallback,
+  TabItemProps,
+  TabProps,
 } from './types'
 
 export type {
@@ -24,7 +26,7 @@ export type {
   CollapsibleRef,
   OnTabChangeCallback,
   TabItemProps,
-  TabProps
+  TabProps,
 }
 
 export const Tabs = {
