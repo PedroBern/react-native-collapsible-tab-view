@@ -1,62 +1,21 @@
-# [5.0.0-rc.10](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.9...v5.0.0-rc.10) (2022-05-25)
-
-
-### Bug Fixes
-
-* prevent typescript error for conditional tabs ([749c27b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/749c27b05ce6a158d320929e13dbbfa9d8c82b79))
-
-# [5.0.0-rc.9](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.8...v5.0.0-rc.9) (2022-05-20)
-
-
-### Bug Fixes
-
-* prevent types issues w/ conditional tabs ([a05783e](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/a05783ed602d2e55f0469e73d04c6833dae0e8fc))
-
-# [5.0.0-rc.8](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.7...v5.0.0-rc.8) (2022-05-19)
-
-
-### Features
-
-* custom label component ([51a7234](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/51a7234fec8f19f384ed771789d883aee247260f))
-
-# [5.0.0-rc.7](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.6...v5.0.0-rc.7) (2022-05-19)
-
-
-### Bug Fixes
-
-* initial scroll position sometimes wrong on iOS ([e349941](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/e3499412ea660fd7c5445414adbd14cc840b44a0))
-
-# [5.0.0-rc.6](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.5...v5.0.0-rc.6) (2022-05-09)
-
-
-### Bug Fixes
-
-* initial scroll position if starting with undefined header height ([9378af6](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9378af6a0f95ce59a3eab9ca786baa05bb8039ba))
-
+# [5.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.10) (2022-05-25)
 
 ### Performance Improvements
 
 * snap using animated reaction scroll ([5f11c61](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5f11c610a3a8fbaea95edacb3e4c522cd5db8187))
 
-# [5.0.0-rc.5](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.4...v5.0.0-rc.5) (2022-05-06)
-
-
 ### Bug Fixes
 
+* prevent typescript error for conditional tabs ([749c27b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/749c27b05ce6a158d320929e13dbbfa9d8c82b79))
+* initial scroll position sometimes wrong on iOS ([e349941](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/e3499412ea660fd7c5445414adbd14cc840b44a0))
+* initial scroll position if starting with undefined header height ([9378af6](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9378af6a0f95ce59a3eab9ca786baa05bb8039ba))
 * bring back pagerProps ([2137bbd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2137bbd5562becc3136c79c966a107c4239a120c))
-
-# [5.0.0-rc.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.3...v5.0.0-rc.4) (2022-05-05)
-
-# [5.0.0-rc.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.2...v5.0.0-rc.3) (2022-05-05)
-
-
-### Bug Fixes
-
 * **ios:** scroll sync issues between tabs ([14dfc79](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/14dfc7995c6d56763d694eec3f373e0c2dc00ab5))
 
-# [5.0.0-rc.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.2) (2022-05-05)
+### Features
 
-
+* custom label component ([51a7234](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/51a7234fec8f19f384ed771789d883aee247260f))
+* `keepActiveTabCentered` property on scrollable MaterialTabBar to keep tab in the center ([6d35e31](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d35e3151355d35830a8387af642c5af5a13c54d))
 ### Code Refactoring
 
 * remove obsolete HeaderComponent and FooterComponent ([cb2cb04](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/cb2cb04bbcf1dd86484c2a77f273e10ee6ceabbe))
@@ -64,14 +23,8 @@
 
 ### BREAKING CHANGES
 
-* use `renderHeader` and `renderTabBar` instead
-
-# [5.0.0-rc.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.2...v5.0.0-rc.1) (2022-05-04)
-
-
-### Features
-
-* property on scrollable MaterialTabBar to keep tab in the center ([6d35e31](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d35e3151355d35830a8387af642c5af5a13c54d))
+* use `renderHeader` and `renderTabBar` instead of HeaderComponent and FooterComponent
+* a peer dependency on `react-native-pager-view@5` is now required
 
 ## [4.5.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.1...v4.5.2) (2022-01-15)
 
