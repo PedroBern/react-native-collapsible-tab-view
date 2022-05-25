@@ -1,3 +1,10 @@
+# [5.0.0-rc.10](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.9...v5.0.0-rc.10) (2022-05-25)
+
+
+### Bug Fixes
+
+* prevent typescript error for conditional tabs ([749c27b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/749c27b05ce6a158d320929e13dbbfa9d8c82b79))
+
 # [5.0.0-rc.9](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.8...v5.0.0-rc.9) (2022-05-20)
 
 
