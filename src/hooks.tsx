@@ -69,7 +69,7 @@ export function useTabProps<T extends TabName>(
     const tabOptions: TabsWithProps<T> = new Map()
     if (children) {
       Children.forEach(children, (element, index) => {
-        if (!element || !element.props) return
+        if (!element) return
 
         if (element.type !== tabType)
           throw new Error(

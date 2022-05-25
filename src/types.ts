@@ -58,9 +58,9 @@ export type OnTabChangeCallback<T extends TabName = TabName> = (
   data: IndexChangeEventData<T>
 ) => void
 
-export type TabReactElement<
-  T extends TabName = TabName
-> = React.ReactElement<TabProps<T> | null>
+export type TabReactElement<T extends TabName = TabName> = React.ReactElement<
+  TabProps<T>
+> | null
 
 export type CollapsibleProps = {
   initialTabName?: TabName

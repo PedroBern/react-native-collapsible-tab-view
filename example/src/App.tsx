@@ -15,6 +15,7 @@ import {
 import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import AnimatedHeader from './AnimatedHeader'
 import CenteredEmptyList from './CenteredEmptyList'
+import ConditionalTabs from './ConditionalTabs'
 import Default from './Default'
 import DefaultCustomLabels from './DefaultCustomLabels'
 import DynamicTabs from './DynamicTabs'
@@ -49,6 +50,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Ref,
   OnTabChange,
   DynamicTabs,
+  ConditionalTabs,
   MinHeaderHeight,
   AnimatedHeader,
   AndroidSharedPullToRefresh,
