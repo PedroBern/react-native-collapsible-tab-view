@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { StyleSheet, Pressable, Platform } from 'react-native'
 import Animated, {
   interpolate,
@@ -14,23 +14,27 @@ const DEFAULT_COLOR = 'rgba(0, 0, 0, 1)'
 /**
  * Any additional props are passed to the pressable component.
  */
-export const MaterialTabItem = <T extends TabName = any>({
-  name,
-  index,
-  onPress,
-  onLayout,
-  scrollEnabled,
-  indexDecimal,
-  label,
-  style,
-  labelStyle,
-  activeColor = DEFAULT_COLOR,
-  inactiveColor = DEFAULT_COLOR,
-  inactiveOpacity = 0.7,
-  pressColor = '#DDDDDD',
-  pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
-  ...rest
-}: MaterialTabItemProps<T>): React.ReactElement => {
+export const MaterialTabItem = <T extends TabName = string>(
+  props: MaterialTabItemProps<T>
+): React.ReactElement => {
+  const {
+    name,
+    index,
+    onPress,
+    onLayout,
+    scrollEnabled,
+    indexDecimal,
+    label,
+    style,
+    labelStyle,
+    activeColor = DEFAULT_COLOR,
+    inactiveColor = DEFAULT_COLOR,
+    inactiveOpacity = 0.7,
+    pressColor = '#DDDDDD',
+    pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
+    ...rest
+  } = props
+
   const stylez = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
@@ -45,6 +49,18 @@ export const MaterialTabItem = <T extends TabName = any>({
           : inactiveColor,
     }
   })
+
+  const renderedLabel = useMemo(() => {
+    if (typeof label === 'string') {
+      return (
+        <Animated.Text style={[styles.label, stylez, labelStyle]}>
+          {label}
+        </Animated.Text>
+      )
+    }
+
+    return label(props)
+  }, [label, labelStyle, props, stylez])
 
   return (
     <Pressable
@@ -62,9 +78,7 @@ export const MaterialTabItem = <T extends TabName = any>({
       }}
       {...rest}
     >
-      <Animated.Text style={[styles.label, stylez, labelStyle]}>
-        {label}
-      </Animated.Text>
+      {renderedLabel}
     </Pressable>
   )
 }

@@ -1,3 +1,31 @@
+# [5.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.10) (2022-05-25)
+
+### Performance Improvements
+
+* snap using animated reaction scroll ([5f11c61](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/5f11c610a3a8fbaea95edacb3e4c522cd5db8187))
+
+### Bug Fixes
+
+* prevent typescript error for conditional tabs ([749c27b](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/749c27b05ce6a158d320929e13dbbfa9d8c82b79))
+* initial scroll position sometimes wrong on iOS ([e349941](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/e3499412ea660fd7c5445414adbd14cc840b44a0))
+* initial scroll position if starting with undefined header height ([9378af6](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/9378af6a0f95ce59a3eab9ca786baa05bb8039ba))
+* bring back pagerProps ([2137bbd](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2137bbd5562becc3136c79c966a107c4239a120c))
+* **ios:** scroll sync issues between tabs ([14dfc79](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/14dfc7995c6d56763d694eec3f373e0c2dc00ab5))
+
+### Features
+
+* custom label component ([51a7234](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/51a7234fec8f19f384ed771789d883aee247260f))
+* `keepActiveTabCentered` property on scrollable MaterialTabBar to keep tab in the center ([6d35e31](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d35e3151355d35830a8387af642c5af5a13c54d))
+### Code Refactoring
+
+* remove obsolete HeaderComponent and FooterComponent ([cb2cb04](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/cb2cb04bbcf1dd86484c2a77f273e10ee6ceabbe))
+
+
+### BREAKING CHANGES
+
+* use `renderHeader` and `renderTabBar` instead of HeaderComponent and FooterComponent
+* a peer dependency on `react-native-pager-view@5` is now required
+
 ## [4.5.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.1...v4.5.2) (2022-01-15)
 
 

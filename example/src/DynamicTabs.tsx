@@ -3,7 +3,6 @@ import { Text, View, StyleSheet } from 'react-native'
 import * as Tabs from 'react-native-collapsible-tab-view'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import { IndexChangeEventData, TabName } from '../../src/types'
 import { AlbumsContent } from './Shared/Albums'
 import { ArticleContent } from './Shared/Article'
 import { ExampleComponentType } from './types'
@@ -28,9 +27,7 @@ const DynamicTabs: ExampleComponentType = () => {
     { name: 'Default Tab', component: ComponentTypes[0] },
   ])
 
-  const [currentTab, setCurrentTab] = React.useState<
-    IndexChangeEventData<TabName>
-  >()
+  const [currentTabIndex, setCurrentTabIndex] = React.useState(0)
 
   const addTab = React.useCallback(() => {
     const newIndex = lastTabIndex + 1
@@ -45,12 +42,11 @@ const DynamicTabs: ExampleComponentType = () => {
   }, [lastTabIndex])
 
   const removeTab = React.useCallback(() => {
-    if (!currentTab) return
     setTabs((t) => {
-      t.splice(currentTab?.index, 1)
+      t.splice(currentTabIndex, 1)
       return [...t]
     })
-  }, [currentTab])
+  }, [currentTabIndex])
 
   const shuffleTabs = React.useCallback(() => {
     setTabs((t) => {
@@ -88,8 +84,8 @@ const DynamicTabs: ExampleComponentType = () => {
       headerHeight={HEADER_HEIGHT}
       renderHeader={HeaderComponent}
       lazy
-      onTabChange={setCurrentTab}
-      TabBarComponent={TabBarComponent}
+      onTabChange={(e) => setCurrentTabIndex(e.index)}
+      renderTabBar={TabBarComponent}
     >
       {tabs.map((tab) => {
         return (

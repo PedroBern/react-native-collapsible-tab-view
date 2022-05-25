@@ -2,11 +2,11 @@ import React from 'react'
 import { ScrollViewProps, ScrollView as RNScrollView } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { IS_IOS } from './helpers'
 import {
   useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
+  useConvertAnimatedToValue,
   useScrollHandlerY,
   useSharedAnimatedRef,
   useTabNameContext,
@@ -52,7 +52,7 @@ export const ScrollView = React.forwardRef<
   ) => {
     const name = useTabNameContext()
     const ref = useSharedAnimatedRef<RNScrollView>(passRef)
-    const { setRef, contentInset, scrollYCurrent } = useTabsContext()
+    const { setRef, contentInset } = useTabsContext()
     const {
       style: _style,
       contentContainerStyle: _contentContainerStyle,
@@ -89,17 +89,18 @@ export const ScrollView = React.forwardRef<
         }),
       [progressViewOffset, refreshControl]
     )
+
+    const contentInsetValue = useConvertAnimatedToValue(contentInset)
+
+    const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
+      contentInsetValue,
+    ])
+
     const memoContentOffset = React.useMemo(
-      () => ({
-        y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
-        x: 0,
-      }),
-      [contentInset.value, scrollYCurrent.value]
+      () => ({ x: 0, y: -contentInsetValue }),
+      [contentInsetValue]
     )
-    const memoContentInset = React.useMemo(
-      () => ({ top: contentInset.value }),
-      [contentInset.value]
-    )
+
     const memoContentContainerStyle = React.useMemo(
       () => [
         _contentContainerStyle,
@@ -124,6 +125,8 @@ export const ScrollView = React.forwardRef<
         contentOffset={memoContentOffset}
         automaticallyAdjustContentInsets={false}
         refreshControl={memoRefreshControl}
+        // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
+        onMomentumScrollEnd={() => {}}
       >
         {children}
       </ScrollViewMemo>

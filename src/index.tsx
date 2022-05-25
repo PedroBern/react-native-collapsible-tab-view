@@ -12,6 +12,8 @@ import {
   ContainerRef,
   CollapsibleRef,
   OnTabChangeCallback,
+  TabItemProps,
+  TabProps,
 } from './types'
 
 export type {
@@ -23,6 +25,8 @@ export type {
   MaterialTabItemProps,
   CollapsibleRef,
   OnTabChangeCallback,
+  TabItemProps,
+  TabProps,
 }
 
 export const Tabs = {

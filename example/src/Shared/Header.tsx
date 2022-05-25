@@ -19,7 +19,8 @@ export const Header = ({
     <View style={[styles.root, { height }]}>
       <Text style={styles.title}>
         {title}
-        {'\n'}<Text style={styles.description}>{description}</Text>
+        {'\n'}
+        <Text style={styles.description}>{description}</Text>
       </Text>
     </View>
   )
@@ -27,7 +28,7 @@ export const Header = ({
 
 function buildHeader<T extends TabBarProps<any>>(
   title: string,
-  description: string
+  description?: string
 ) {
   const NewHeader = (props: T) => {
     return <Header title={title} description={description} {...props} />

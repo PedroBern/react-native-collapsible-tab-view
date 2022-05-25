@@ -1,12 +1,6 @@
 import React from 'react'
 
-import { TabName } from './types'
-
-export type TabProps<T extends TabName> = {
-  readonly name: T
-  label?: string
-  children: React.ReactNode
-}
+import { TabName, TabProps } from './types'
 
 /**
  * Wrap your screens with `Tabs.Tab`. Basic usage looks like this:

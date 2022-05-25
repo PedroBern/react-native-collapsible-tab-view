@@ -1,17 +1,15 @@
 import React, { ComponentProps } from 'react'
 import {
   FlatList,
-  FlatListProps as RNFlatListProps,
   ScrollView,
   SectionList,
   StyleProp,
   ViewStyle,
 } from 'react-native'
+import PagerView, { PagerViewProps } from 'react-native-pager-view'
 import Animated from 'react-native-reanimated'
 
-import { TabProps } from './Tab'
-
-export type ContainerRef = FlatList<any>
+export type ContainerRef = PagerView
 
 export type RefComponent =
   | FlatList<any>
@@ -21,7 +19,7 @@ export type RefComponent =
 
 export type Ref<T extends RefComponent> = React.RefObject<T>
 
-export type TabName = string | number
+export type TabName = string
 
 export type RefHandler<T extends TabName = TabName> = {
   jumpToTab: (name: T) => boolean
@@ -42,6 +40,11 @@ export type TabBarProps<T extends TabName = TabName> = {
   containerRef: React.RefObject<ContainerRef>
   onTabPress: (name: T) => void
   tabProps: TabsWithProps<T>
+
+  /**
+   * Custom width of the tabbar. Defaults to the window width.
+   */
+  width?: number
 }
 
 export type IndexChangeEventData<T extends TabName = TabName> = {
@@ -57,7 +60,7 @@ export type OnTabChangeCallback<T extends TabName = TabName> = (
 
 export type TabReactElement<T extends TabName = TabName> = React.ReactElement<
   TabProps<T>
->
+> | null
 
 export type CollapsibleProps = {
   initialTabName?: TabName
@@ -84,24 +87,6 @@ export type CollapsibleProps = {
    */
   snapThreshold?: number | null
   children: TabReactElement<TabName>[] | TabReactElement<TabName>
-  /**
-   * @obsolete use `renderHeader` instead. This property will be removed in 5.0.0
-   */
-  HeaderComponent?:
-    | ((props: TabBarProps<TabName>) => React.ReactElement)
-    | React.MemoExoticComponent<
-        (props: TabBarProps<TabName>) => React.ReactElement
-      >
-    | null
-  /**
-   * @obsolete use `renderTabBar` instead. This property will be removed in 5.0.0
-   */
-  TabBarComponent?:
-    | ((props: TabBarProps<TabName>) => React.ReactElement)
-    | React.MemoExoticComponent<
-        (props: TabBarProps<TabName>) => React.ReactElement
-      >
-    | null
 
   renderHeader?: (props: TabBarProps<TabName>) => React.ReactElement | null
 
@@ -117,20 +102,10 @@ export type CollapsibleProps = {
   lazy?: boolean
   cancelLazyFadeIn?: boolean
   /**
-   * Props passed to the horiztontal flatlist. If you want for example to
+   * Props passed to the pager. If you want for example to
    * disable swiping, you can pass `{ scrollEnabled: false }`
    */
-  pagerProps?: Omit<
-    RNFlatListProps<number>,
-    | 'data'
-    | 'keyExtractor'
-    | 'renderItem'
-    | 'horizontal'
-    | 'pagingEnabled'
-    | 'onScroll'
-    | 'showsHorizontalScrollIndicator'
-    | 'getItemLayout'
-  >
+  pagerProps?: Omit<PagerViewProps, 'onPageScroll' | 'initialPage'>
   /**
    * Callback fired when the index changes. It receives the current index.
    */
@@ -219,15 +194,9 @@ export type ContextType<T extends TabName = TabName> = {
    * previous tab.
    */
   offset: Animated.SharedValue<number>
-  isScrolling: Animated.SharedValue<number>
+
   /**
-   * Scroll x position of the tabs container.
-   */
-  scrollX: Animated.SharedValue<number>
-  isGliding: Animated.SharedValue<boolean>
-  isSnapping: Animated.SharedValue<boolean>
-  /**
-   * The next snapping value, used only with diffClamp.
+   * The next snapping value.
    */
   snappingTo: Animated.SharedValue<number>
 
@@ -265,3 +234,17 @@ export type TabsWithProps<T extends TabName = TabName> = Map<
   T,
   Omit<TabProps<T>, 'children'> & { index: number }
 >
+
+export type TabItemProps<T extends TabName> = {
+  name: T
+  index: number
+  indexDecimal: Animated.SharedValue<number>
+
+  label: string | ((props: TabItemProps<T>) => React.ReactNode)
+}
+
+export type TabProps<T extends TabName> = {
+  readonly name: T
+  label?: TabItemProps<T>['label']
+  children: React.ReactNode
+}

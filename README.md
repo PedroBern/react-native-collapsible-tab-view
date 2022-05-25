@@ -77,7 +77,7 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 Open a Terminal in the project root and run:
 
 ```sh
-yarn add react-native-collapsible-tab-view@next
+yarn add react-native-collapsible-tab-view@rc react-native-pager-view@5
 ```
 
 Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
@@ -189,20 +189,18 @@ const Example = () => {
 
 |name|type|default|description|
 |:----:|:----:|:----:|:----:|
-|HeaderComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`||@obsolete use `renderHeader` instead. This property will be removed in 5.0.0|
-|TabBarComponent|`((props: TabBarProps<T>) => React.ReactElement) \| null \| undefined`|`MaterialTabBar`|@obsolete use `renderTabBar` instead. This property will be removed in 5.0.0|
-|allowHeaderOverscroll|`boolean`|`false`|Whether the header moves down during overscrolling (for example on pull-to-refresh on iOS) or sticks to the top|
+|allowHeaderOverscroll|`boolean \| undefined`|`false`|Whether the header moves down during overscrolling (for example on pull-to-refresh on iOS) or sticks to the top|
 |cancelLazyFadeIn|`boolean \| undefined`|||
 |cancelTranslation|`boolean \| undefined`|||
 |containerStyle|`StyleProp<ViewStyle>`|||
 |headerContainerStyle|`StyleProp<AnimateStyle<ViewStyle>>`|||
 |headerHeight|`number \| undefined`||Is optional, but will optimize the first render.|
-|initialTabName|`string \| number \| undefined`|||
+|initialTabName|`string \| undefined`|||
 |lazy|`boolean \| undefined`||If lazy, will mount the screens only when the tab is visited. There is a default fade in transition.|
 |minHeaderHeight|`number \| undefined`||Header minimum height when collapsed|
 |onIndexChange|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
 |onTabChange|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
-|pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the horiztontal flatlist. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|pagerProps|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the pager. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
 |renderHeader|`(props: TabBarProps<TabName>) => React.ReactElement \| null`|||
 |renderTabBar|`(props: TabBarProps<TabName>) => React.ReactElement \| null`|`(props: TabBarProps<TabName>) => MaterialTabBar`||
 |revealHeaderOnScroll|`boolean \| undefined`||Reveal header when scrolling down. Implements diffClamp.|
@@ -229,7 +227,7 @@ Wrap your screens with `Tabs.Tab`. Basic usage looks like this:
 
 |name|type|
 |:----:|:----:|
-|label|`string \| undefined`|
+|label|`string \| ((props: TabItemProps<T>) => ReactNode) \| undefined`|
 |name|`T`|
 
 ### Tabs.Lazy
@@ -327,22 +325,22 @@ Any additional props are passed to the pressable component.
 
 #### Props
 
-|name|type|default|description|
-|:----:|:----:|:----:|:----:|
-|activeColor|`string \| undefined`|`null`|Color applied to the label when active|
-|inactiveColor|`string \| undefined`|`null`|Color applied to the label when inactive|
-|inactiveOpacity|`number \| undefined`|`0.7`||
-|index|`number`|||
-|indexDecimal|`SharedValue<number>`|||
-|label|`string`|||
-|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`||Style to apply to the tab item label|
-|name|`T`|||
-|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`||Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
-|onPress|`(name: T) => void`|||
-|pressColor|`string \| undefined`|`#DDDDDD`||
-|pressOpacity|`number \| undefined`|`Platform.OS === 'ios' ? 0.2 : 1`||
-|scrollEnabled|`boolean \| undefined`|||
-|style|`StyleProp<ViewStyle>`||Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+|name|type|description|
+|:----:|:----:|:----:|
+|activeColor|`string \| undefined`|Color applied to the label when active|
+|inactiveColor|`string \| undefined`|Color applied to the label when inactive|
+|inactiveOpacity|`number \| undefined`||
+|index|`number`||
+|indexDecimal|`SharedValue<number>`||
+|label|`string \| ((props: TabItemProps<T>) => ReactNode)`||
+|labelStyle|`StyleProp<AnimateStyle<TextStyle>>`|Style to apply to the tab item label|
+|name|`T`||
+|onLayout|`(((event: LayoutChangeEvent) => void) & ((event: LayoutChangeEvent) => void)) \| undefined`|Invoked on mount and layout changes with {nativeEvent: { layout: {x, y, width, height}}}.|
+|onPress|`(name: T) => void`||
+|pressColor|`string \| undefined`||
+|pressOpacity|`number \| undefined`||
+|scrollEnabled|`boolean \| undefined`||
+|style|`StyleProp<ViewStyle>`|Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
 

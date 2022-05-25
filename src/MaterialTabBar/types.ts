@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   LayoutChangeEvent,
   PressableProps,
@@ -7,19 +8,16 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { TabBarProps, TabName } from '../types'
+import { TabBarProps, TabName, TabItemProps } from '../types'
 
 type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
 type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>
 
-export type MaterialTabItemProps<T extends TabName> = {
-  name: T
-  index: number
-  indexDecimal: Animated.SharedValue<number>
+export type MaterialTabItemProps<T extends TabName> = TabItemProps<T> & {
   onPress: (name: T) => void
   onLayout?: (event: LayoutChangeEvent) => void
   scrollEnabled?: boolean
-  label: string
+
   style?: StyleProp<ViewStyle>
   /**
    * Style to apply to the tab item label
@@ -81,9 +79,9 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
   inactiveColor?: string
 
   /**
-   * Custom width of the tabbar. Defaults to the window width.
+   * Whether to keep the currently active tab centered in a scrollable tab bar
    */
-  width?: number
+  keepActiveTabCentered?: boolean
 }
 
 export type ItemLayout = {

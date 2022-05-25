@@ -41,7 +41,7 @@ export const TABBAR_HEIGHT = 48
  * </Tabs.Container>
  * ```
  */
-const MaterialTabBar = <T extends TabName = any>({
+const MaterialTabBar = <T extends TabName = TabName>({
   tabNames,
   indexDecimal,
   scrollEnabled = false,
@@ -58,6 +58,7 @@ const MaterialTabBar = <T extends TabName = any>({
   activeColor,
   tabStyle,
   width: customWidth,
+  keepActiveTabCentered,
 }: MaterialTabBarProps<T>): React.ReactElement => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -167,6 +168,7 @@ const MaterialTabBar = <T extends TabName = any>({
         const halfTab = itemsLayout[index.value].width / 2
         const offset = itemsLayout[index.value].x
         if (
+          keepActiveTabCentered ||
           offset < tabsOffset.value ||
           offset > tabsOffset.value + width - 2 * halfTab
         ) {

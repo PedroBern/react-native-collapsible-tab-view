@@ -1,11 +1,12 @@
 import React from 'react'
 import { FlatList as RNFlatList, FlatListProps } from 'react-native'
 
-import { AnimatedFlatList, IS_IOS } from './helpers'
+import { AnimatedFlatList } from './helpers'
 import {
   useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
+  useConvertAnimatedToValue,
   useScrollHandlerY,
   useSharedAnimatedRef,
   useTabNameContext,
@@ -36,7 +37,7 @@ function FlatListImpl<R>(
   passRef: React.Ref<RNFlatList>
 ): React.ReactElement {
   const name = useTabNameContext()
-  const { setRef, contentInset, scrollYCurrent } = useTabsContext()
+  const { setRef, contentInset } = useTabsContext()
   const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
@@ -76,16 +77,18 @@ function FlatListImpl<R>(
       }),
     [progressViewOffset, refreshControl]
   )
-  const memoContentOffset = React.useMemo(
-    () => ({
-      y: IS_IOS ? -contentInset.value + scrollYCurrent.value : 0,
-      x: 0,
-    }),
-    [contentInset.value, scrollYCurrent.value]
-  )
-  const memoContentInset = React.useMemo(() => ({ top: contentInset.value }), [
-    contentInset.value,
+
+  const contentInsetValue = useConvertAnimatedToValue(contentInset)
+
+  const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
+    contentInsetValue,
   ])
+
+  const memoContentOffset = React.useMemo(
+    () => ({ x: 0, y: -contentInsetValue }),
+    [contentInsetValue]
+  )
+
   const memoContentContainerStyle = React.useMemo(
     () => [
       _contentContainerStyle,
@@ -112,6 +115,8 @@ function FlatListImpl<R>(
       contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
+      // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
+      onMomentumScrollEnd={() => {}}
     />
   )
 }

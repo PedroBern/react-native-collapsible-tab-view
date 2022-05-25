@@ -15,7 +15,9 @@ import {
 import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import AnimatedHeader from './AnimatedHeader'
 import CenteredEmptyList from './CenteredEmptyList'
+import ConditionalTabs from './ConditionalTabs'
 import Default from './Default'
+import DefaultCustomLabels from './DefaultCustomLabels'
 import DynamicTabs from './DynamicTabs'
 import HeaderOverscrollExample from './HeaderOverscroll'
 import Lazy from './Lazy'
@@ -34,6 +36,7 @@ import { ExampleComponentType } from './types'
 
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Default,
+  DefaultCustomLabels,
   Snap,
   RevealHeaderOnScroll,
   RevealHeaderOnScrollSnap,
@@ -47,6 +50,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Ref,
   OnTabChange,
   DynamicTabs,
+  ConditionalTabs,
   MinHeaderHeight,
   AnimatedHeader,
   AndroidSharedPullToRefresh,
