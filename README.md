@@ -317,6 +317,17 @@ Returns the top distance and the header height. See the animated header example 
 const { top, height } = useHeaderMeasurements()
 ```
 
+### useCurrentTabScrollY
+
+Returns the vertical scroll position of the current tab as an Animated SharedValue.
+
+Because this library requires handling `onScroll` for its functionality, this is the only way to react to changes to the scroll position of the underlying scrollable component.
+
+```tsx
+const scrollY = useCurrentTabScrollY()
+```
+
+
 ## Default Tab Bar
 
 ### MaterialTabItem
