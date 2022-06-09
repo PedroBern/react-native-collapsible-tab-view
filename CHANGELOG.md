@@ -1,4 +1,4 @@
-# [5.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.10) (2022-05-25)
+# [5.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.1...v5.0.0-rc.10) (2022-06-29)
 
 ### Performance Improvements
 
@@ -16,6 +16,8 @@
 
 * custom label component ([51a7234](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/51a7234fec8f19f384ed771789d883aee247260f))
 * `keepActiveTabCentered` property on scrollable MaterialTabBar to keep tab in the center ([6d35e31](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d35e3151355d35830a8387af642c5af5a13c54d))
+* `useCurrentTabScrollY` ([73ee5d7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/73ee5d7c5e2b470551a5ad1dedae68413d3d5da0))
+
 ### Code Refactoring
 
 * remove obsolete HeaderComponent and FooterComponent ([cb2cb04](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/cb2cb04bbcf1dd86484c2a77f273e10ee6ceabbe))
@@ -25,6 +27,7 @@
 
 * use `renderHeader` and `renderTabBar` instead of HeaderComponent and FooterComponent
 * a peer dependency on `react-native-pager-view@5` is now required
+* `useHeaderMeasurements` now returns the `height` as an `Animated.SharedValue`
 
 ## [4.5.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v4.5.1...v4.5.2) (2022-01-15)
 
