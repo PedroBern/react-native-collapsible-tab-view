@@ -40,6 +40,7 @@ export const Tabs = {
 
 export { Container, Tab, Lazy, FlatList, ScrollView, SectionList }
 export {
+  useCurrentTabScrollY,
   useHeaderMeasurements,
   useFocusedTab,
   useAnimatedTabIndex,
