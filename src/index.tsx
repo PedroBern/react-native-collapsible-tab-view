@@ -46,5 +46,7 @@ export {
   useAnimatedTabIndex,
   useCollapsibleStyle,
 } from './hooks'
+export type { HeaderMeasurements } from './hooks'
+
 export { MaterialTabBar } from './MaterialTabBar/TabBar'
 export { MaterialTabItem } from './MaterialTabBar/TabItem'

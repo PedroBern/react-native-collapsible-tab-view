@@ -568,7 +568,7 @@ export function useConvertAnimatedToValue<T>(
   return value
 }
 
-interface HeaderMeasurements {
+export interface HeaderMeasurements {
   /**
    * Animated value that represents the current Y translation of the header
    */
