@@ -232,6 +232,7 @@ export const Container = React.memo(
               tabName: tabNames.value[i],
             })
             index.value = i
+            scrollYCurrent.value = scrollY.value[index.value] || 0
           }
         },
         []

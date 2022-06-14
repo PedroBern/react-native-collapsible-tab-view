@@ -568,23 +568,31 @@ export function useConvertAnimatedToValue<T>(
   return value
 }
 
-interface HeaderMeasurements {
+export interface HeaderMeasurements {
   /**
    * Animated value that represents the current Y translation of the header
    */
   top: Animated.SharedValue<number>
   /**
-   * The height of the header
+   * Animated value that represents the height of the header
    */
-  height: number
+  height: Animated.SharedValue<number | undefined>
 }
 
 export function useHeaderMeasurements(): HeaderMeasurements {
   const { headerTranslateY, headerHeight } = useTabsContext()
   return {
     top: headerTranslateY,
-    height: headerHeight.value || 0,
+    height: headerHeight,
   }
+}
+
+/**
+ * Returns the vertical scroll position of the current tab as an Animated SharedValue
+ */
+export function useCurrentTabScrollY(): Animated.SharedValue<number> {
+  const { scrollYCurrent } = useTabsContext()
+  return scrollYCurrent
 }
 
 /**

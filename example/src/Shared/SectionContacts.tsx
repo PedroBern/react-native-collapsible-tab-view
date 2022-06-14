@@ -117,7 +117,11 @@ const renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 const ListEmptyComponent = () => {
   const { top, height } = Tabs.useHeaderMeasurements()
   const translateY = useDerivedValue(() => {
-    return interpolate(-top.value, [0, height], [-height / 2, 0])
+    return interpolate(
+      -top.value,
+      [0, height.value || 0],
+      [-(height.value || 0) / 2, 0]
+    )
   }, [height])
 
   const stylez = useAnimatedStyle(() => {
