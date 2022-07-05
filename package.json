@@ -74,6 +74,7 @@
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
+    "@shopify/flash-list": "^1.0.3",
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",
@@ -107,6 +108,7 @@
     ]
   },
   "dependencies": {
+    "@shopify/flash-list": "^1.0.3",
     "use-deep-compare": "^1.1.0"
   },
   "packageManager": "yarn@1.22.11",

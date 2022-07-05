@@ -1,3 +1,4 @@
+import { FlashList } from '@shopify/flash-list'
 import { FlatList, Platform, SectionList, I18nManager } from 'react-native'
 import Animated, { scrollTo } from 'react-native-reanimated'
 
@@ -12,6 +13,8 @@ export const { isRTL } = I18nManager
 export const IS_IOS = Platform.OS === 'ios'
 
 export const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+export const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 export const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 

@@ -1,3 +1,4 @@
+import { FlashList } from '@shopify/flash-list'
 import React, { ComponentProps } from 'react'
 import {
   FlatList,
@@ -16,6 +17,7 @@ export type RefComponent =
   | ScrollView
   | Animated.ScrollView
   | SectionList<any>
+  | FlashList<any>
 
 export type Ref<T extends RefComponent> = React.RefObject<T>
 

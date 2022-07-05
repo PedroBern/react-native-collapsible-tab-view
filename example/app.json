@@ -11,6 +11,9 @@
       "android",
       "ios",
       "web"
-    ]
+    ],
+    "ios": {
+      "bundleIdentifier": "example-collapsible-tab-view"
+    }
   }
 }

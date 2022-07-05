@@ -132,7 +132,7 @@ const Contacts: React.FC<{
   const [isRefreshing, startRefreshing] = useRefresh()
 
   return (
-    <Tabs.FlatList
+    <Tabs.FlashList
       data={emptyContacts ? [] : CONTACTS}
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
@@ -142,6 +142,7 @@ const Contacts: React.FC<{
       onRefresh={Platform.OS === 'ios' ? startRefreshing : undefined}
       refreshing={Platform.OS === 'ios' ? isRefreshing : undefined}
       nestedScrollEnabled={nestedScrollEnabled}
+      estimatedItemSize={63.7}
     />
   )
 }
