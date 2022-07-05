@@ -62,6 +62,10 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
    */
   contentContainerStyle?: StyleProp<ViewStyle>
   /**
+   * React custom component to render as tab bar indictator
+   */
+  IndicatorComponent?: JSX.Element
+  /**
    * Style to apply to the individual tab items in the tab bar.
    */
   tabStyle?: StyleProp<ViewStyle>

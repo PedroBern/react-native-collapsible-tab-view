@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -10,11 +10,14 @@ import Animated, {
 import { isRTL } from '../helpers'
 import { IndicatorProps } from './types'
 
+const IndicatorComponent = <View />
+
 const Indicator: React.FC<IndicatorProps> = ({
   indexDecimal,
   itemsLayout,
   style,
   fadeIn = false,
+  ...rest
 }) => {
   const opacity = useSharedValue(fadeIn ? 0 : 1)
 
@@ -56,7 +59,7 @@ const Indicator: React.FC<IndicatorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fadeIn])
 
-  return <Animated.View style={[stylez, styles.indicator, style]} />
+  return <Animated.View style={[stylez, styles.indicator, style]} {...rest} />
 }
 
 const styles = StyleSheet.create({
@@ -68,4 +71,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export { Indicator }
+export { Indicator, IndicatorComponent }

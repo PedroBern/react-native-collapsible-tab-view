@@ -15,7 +15,10 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { TabName } from '../types'
-import { Indicator } from './Indicator'
+import {
+  Indicator,
+  IndicatorComponent as _IndicatorComponent,
+} from './Indicator'
 import { MaterialTabItem } from './TabItem'
 import { MaterialTabBarProps, ItemLayout } from './types'
 
@@ -48,6 +51,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
   indicatorStyle,
   index,
   TabItemComponent = MaterialTabItem,
+  IndicatorComponent = _IndicatorComponent,
   getLabelText = (name) => String(name).toUpperCase(),
   onTabPress,
   style,
@@ -223,6 +227,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
       })}
       {itemsLayout.length === nTabs && (
         <Indicator
+          children={IndicatorComponent}
           indexDecimal={indexDecimal}
           itemsLayout={itemsLayout}
           fadeIn={scrollEnabled}
