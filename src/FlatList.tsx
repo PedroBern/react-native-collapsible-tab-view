@@ -115,6 +115,7 @@ function FlatListImpl<R>(
       contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
+      keyboardShouldPersistTaps="handled"
       // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
       onMomentumScrollEnd={() => {}}
     />
