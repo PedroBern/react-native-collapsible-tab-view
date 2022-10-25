@@ -135,20 +135,29 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     containerHeight,
     width,
     allowHeaderOverscroll,
+    minHeaderHeight,
   } = useTabsContext()
   const [containerHeightVal, tabBarHeightVal, headerHeightVal] = [
     useConvertAnimatedToValue(containerHeight),
     useConvertAnimatedToValue(tabBarHeight),
     useConvertAnimatedToValue(headerHeight),
   ]
+
+  const containerHeightWithMinHeader = Math.max(
+    0,
+    (containerHeightVal ?? 0) - minHeaderHeight
+  )
+
+  console.log('containerHeightWithMinHeader', containerHeightWithMinHeader)
+
   return useMemo(
     () => ({
       style: { width },
       contentContainerStyle: {
         minHeight:
           IS_IOS && !allowHeaderOverscroll
-            ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
-            : (containerHeightVal || 0) + (headerHeightVal || 0),
+            ? containerHeightWithMinHeader - (tabBarHeightVal || 0)
+            : containerHeightWithMinHeader + (headerHeightVal || 0),
         paddingTop:
           IS_IOS && !allowHeaderOverscroll
             ? 0
@@ -163,10 +172,10 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     }),
     [
       allowHeaderOverscroll,
-      containerHeightVal,
       headerHeightVal,
       tabBarHeightVal,
       width,
+      containerHeightWithMinHeader,
     ]
   )
 }
