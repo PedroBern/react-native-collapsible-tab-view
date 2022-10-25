@@ -27,11 +27,17 @@ const albumsContent = (n = 8) =>
     <Image key={i} source={source} style={styles.cover} />
   ))
 
-export const AlbumsContent = () => {
-  return <View style={styles.content}>{albumsContent()}</View>
+interface AlbumsProps {
+  numberOfAlbums?: number
 }
 
-export const Albums: React.FC = () => {
+export const AlbumsContent: React.FC<AlbumsProps> = ({
+  numberOfAlbums = 8,
+}) => {
+  return <View style={styles.content}>{albumsContent(numberOfAlbums)}</View>
+}
+
+export const Albums: React.FC<AlbumsProps> = ({ numberOfAlbums }) => {
   const [isRefreshing, startRefreshing] = useRefresh()
 
   return (
@@ -42,7 +48,7 @@ export const Albums: React.FC = () => {
         <RefreshControl refreshing={isRefreshing} onRefresh={startRefreshing} />
       }
     >
-      <AlbumsContent />
+      <AlbumsContent numberOfAlbums={numberOfAlbums} />
     </Tabs.ScrollView>
   )
 }

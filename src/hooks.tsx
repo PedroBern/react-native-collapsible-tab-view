@@ -148,8 +148,6 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     (containerHeightVal ?? 0) - minHeaderHeight
   )
 
-  console.log('containerHeightWithMinHeader', containerHeightWithMinHeader)
-
   return useMemo(
     () => ({
       style: { width },
