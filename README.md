@@ -275,7 +275,7 @@ const ref = React.useRef()
 
 ### useCollapsibleStyle
 
-Hook to access some key styles that make the whole think work. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+Hook to access some key styles that make the whole thing work. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
 
 ```tsx
 const {
