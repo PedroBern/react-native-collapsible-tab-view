@@ -4,7 +4,6 @@ import Animated, {
   useSharedValue,
   useAnimatedReaction,
   runOnJS,
-  useDerivedValue,
   withTiming,
   useAnimatedStyle,
 } from 'react-native-reanimated'
@@ -63,16 +62,28 @@ export const Lazy: React.FC<{
 
   const ref = name ? refMap[name] : null
 
-  useDerivedValue(() => {
-    if (afterMount) {
-      const tabIndex = tabNames.value.findIndex((n) => n === name)
-      if (ref && tabIndex >= 0) {
-        scrollTo(ref, 0, scrollY.value[tabIndex], false, `[${name}] lazy sync`)
+  useAnimatedReaction(
+    () => {
+      return afterMount
+    },
+    (trigger) => {
+      if (trigger) {
+        const tabIndex = tabNames.value.findIndex((n) => n === name)
+        if (ref && tabIndex >= 0) {
+          scrollTo(
+            ref,
+            0,
+            scrollY.value[tabIndex],
+            false,
+            `[${name}] lazy sync`
+          )
+        }
+        if (!cancelLazyFadeIn && opacity.value !== 1)
+          opacity.value = withTiming(1)
       }
-      if (!cancelLazyFadeIn && opacity.value !== 1)
-        opacity.value = withTiming(1)
-    }
-  }, [ref, cancelLazyFadeIn, opacity, name, afterMount, tabNames, scrollTo])
+    },
+    [ref, cancelLazyFadeIn, name, afterMount, scrollTo]
+  )
 
   const stylez = useAnimatedStyle(() => {
     return {
