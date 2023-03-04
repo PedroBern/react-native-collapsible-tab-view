@@ -36,16 +36,13 @@
 - [Contributing](#contributing)
   - [Documentation changes](#documentation-changes)
 
-# Expo app
+## 🚀 Version 6 released with Reanimated v3 support.
 
-> If you are looking for the integration with [react-native-tab-view](https://github.com/satya164/react-native-tab-view) and/or [react-navigation](https://github.com/react-navigation/react-navigation), you need to use the [v2](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/v2).
 
 Collapsible Tab View for React Native, with [Reanimated](https://github.com/software-mansion/react-native-reanimated).
 
-- [View it with Expo](https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos).
 - Checkout the [examples](https://github.com/PedroBern/react-native-collapsible-tab-view/tree/main/example) for the source code of the Expo app.
 
-<a href="https://expo.io/@pedrobern/react-native-collapsible-tab-view-demos"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=exp://exp.host/@pedrobern/react-native-collapsible-tab-view-demos" height="200px" width="200px"></a>
 
 **Credits**
 
@@ -70,17 +67,16 @@ The [react-native-tab-view](https://github.com/satya164/react-native-tab-view) e
 - Scroll snap (with interpolated header)
 - Animated snap (with diffClamp header)
 - Scrollable tabs, inspired by the [react-native-tab-view](https://github.com/satya164/react-native-tab-view) tab bar
-- Support horizontal and vertical window
 
 # Installation
 
 Open a Terminal in the project root and run:
 
 ```sh
-yarn add react-native-collapsible-tab-view@rc react-native-pager-view@5
+yarn add react-native-collapsible-tab-view react-native-pager-view
 ```
 
-Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
+Then, add Reanimated v3, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
 
 # Quick Start
 
@@ -90,16 +86,16 @@ $QUICK_START_CODE
 
 # Guides
 
-## Scroll on header
+## Scrolling on the Header
 
-If you want to allow scrolling from the header:
+If you want to enable scrolling from the header, follow these steps:
 
-- If the `HeaderComponent` **doesn't** contain touchables set `pointerEvents='none'`
-- If `HeaderComponent` **does** contain touchables set `pointerEvents='box-none'` for them to work.
+- If the `HeaderComponent` **does not** contain touchable components, set the `pointerEvents` prop to `'none'`.
+- If the `HeaderComponent` **does** contain touchable components, set the `pointerEvents` prop to `'box-none'` to ensure they function properly.
 
-  _Note: With this setting any child component that should **not** respond to touches (e.g. `<Image />`) needs to have `pointerEvents` set to `'none'`. Otherwise it can become the target of a touch gesture on iOS devices and thereby preventing scrolling._
+Note: If any child component within the `HeaderComponent` should **not** respond to touches, such as an `<Image />` element, set its `pointerEvents` prop to `'none'`. Otherwise, it may unintentionally become the target of a touch gesture on iOS devices and prevent scrolling.
 
-# API reference
+# API Reference
 
 ## Core
 
@@ -125,7 +121,7 @@ const ref = React.useRef()
 
 ### useCollapsibleStyle
 
-Hook to access some key styles that make the whole think work. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
+Hook to access some key styles. You can use this to get the progessViewOffset and pass to the refresh control of scroll view.
 
 ```tsx
 const {
@@ -145,7 +141,7 @@ const {
 
 ### useAnimatedTabIndex
 
-Returns an animated value representing the current tab index, as a floating point number.
+The `useAnimatedTabIndex` hook returns an animated value representing the current tab index. This value is a floating-point number because the tab view can be in between panes while swiping.
 
 ```tsx
 const tabIndex = useAnimatedTabIndex()
