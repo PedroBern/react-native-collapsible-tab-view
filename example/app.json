@@ -11,6 +11,12 @@
       "android",
       "ios",
       "web"
-    ]
+    ],
+    "android": {
+      "package": "com.rnctvexample"
+    },
+    "ios": {
+      "bundleIdentifier": "com.rnctvexample"
+    }
   }
 }

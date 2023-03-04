@@ -7,6 +7,7 @@ import {
   TabItemProps,
 } from 'react-native-collapsible-tab-view'
 import Animated, {
+  Extrapolation,
   interpolate,
   interpolateColor,
   useAnimatedStyle,
@@ -36,7 +37,7 @@ function TabItem<T extends TabName>({
             indexDecimal.value,
             [index - 1, index, index + 1],
             [0, -8, 0],
-            Animated.Extrapolate.CLAMP
+            Extrapolation.CLAMP
           ),
         },
       ],
@@ -44,7 +45,7 @@ function TabItem<T extends TabName>({
         indexDecimal.value,
         [index - 1, index, index + 1],
         [0, 1, 0],
-        Animated.Extrapolate.CLAMP
+        Extrapolation.CLAMP
       ),
     }
   })
@@ -59,7 +60,7 @@ function TabItem<T extends TabName>({
             indexDecimal.value,
             [index - 1, index, index + 1],
             [0, 8, 0],
-            Animated.Extrapolate.CLAMP
+            Extrapolation.CLAMP
           ),
         },
       ],

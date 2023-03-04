@@ -175,6 +175,7 @@ export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
   const { tabNames, contentHeights } = useTabsContext()
   const setContentHeights = useCallback(
     (name: TabName, height: number) => {
+      'worklet'
       const tabIndex = tabNames.value.indexOf(name)
       contentHeights.value[tabIndex] = height
       contentHeights.value = [...contentHeights.value]

@@ -80,7 +80,7 @@ Open a Terminal in the project root and run:
 yarn add react-native-collapsible-tab-view@rc react-native-pager-view@5
 ```
 
-Then, add Reanimated v2, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
+Then, add Reanimated v3, [follow the official installation guide](https://docs.swmansion.com/react-native-reanimated/docs/next/installation).
 
 # Quick Start
 
