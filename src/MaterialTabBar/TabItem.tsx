@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { StyleSheet, Pressable, Platform } from 'react-native'
 import Animated, {
+  Extrapolation,
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated'
@@ -41,7 +42,7 @@ export const MaterialTabItem = <T extends TabName = string>(
         indexDecimal.value,
         [index - 1, index, index + 1],
         [inactiveOpacity, 1, inactiveOpacity],
-        Animated.Extrapolate.CLAMP
+        Extrapolation.CLAMP
       ),
       color:
         Math.abs(index - indexDecimal.value) < 0.5
