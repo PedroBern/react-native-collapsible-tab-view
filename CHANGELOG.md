@@ -1,3 +1,20 @@
+# [6.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.13...v6.0.0) (2023-03-04)
+
+
+### Bug Fixes
+
+* lazy loading glitch with reanimated 3 ([de032e9](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/de032e9d3770565fdb7a3ec93c818a3d8a226497))
+
+
+### Features
+
+* reanimated v3 compatibility ([f2e0f21](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/f2e0f2137b166c4c8f4ec3fa20cb08c8473b8c10))
+
+
+### BREAKING CHANGES
+
+* This version is only compatible with reanimated >= 3.0.1
+
 # [6.0.0-rc.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.13...v6.0.0-rc.0) (2023-03-04)
 
 
