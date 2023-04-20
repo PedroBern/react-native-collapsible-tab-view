@@ -28,10 +28,6 @@ const FlashListMemo = React.memo(
   })
 )
 
-const EMPTY_HANDLER = () => {
-  //
-}
-
 function FlashListImpl<R>(
   {
     style,
@@ -95,18 +91,24 @@ function FlashListImpl<R>(
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <FlashListMemo
       {...rest}
-      ref={ref}
+      ref={(value) => {
+        // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
+        // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
+        // this ref the access to it
+        // eslint-ignore
+        ;(ref as any)(value?.recyclerlistview_unsafe)
+      }}
       bouncesZoom={false}
-      progressViewOffset={progressViewOffset}
       onScroll={scrollHandler}
-      onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
       contentInset={memoContentInset}
       contentOffset={memoContentOffset}
-      automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
       // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
-      onMomentumScrollEnd={EMPTY_HANDLER}
+      onMomentumScrollEnd={() => {}}
+      progressViewOffset={progressViewOffset}
+      automaticallyAdjustContentInsets={false}
+      onContentSizeChange={scrollContentSizeChangeHandlers}
     />
   )
 }
