@@ -40,7 +40,7 @@ export const Tabs = {
   FlashList,
 }
 
-export { Container, Tab, Lazy, FlatList, ScrollView, SectionList }
+export { Container, Tab, Lazy, FlatList, ScrollView, SectionList, FlashList }
 export {
   useCurrentTabScrollY,
   useHeaderMeasurements,
