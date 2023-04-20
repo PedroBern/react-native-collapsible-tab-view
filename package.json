@@ -79,7 +79,8 @@
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",
-    "react-native-reanimated": ">=2.15.0"
+    "react-native-reanimated": ">=2.15.0",
+    "@shopify/flash-list": ">=1.0.0"
   },
   "peerDependenciesMeta": {
     "@shopify/flash-list": {
