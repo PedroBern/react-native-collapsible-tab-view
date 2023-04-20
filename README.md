@@ -17,6 +17,7 @@
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
+    - [Tabs.FlashList](#tabsflatlist)
     - [Tabs.SectionList](#tabssectionlist)
     - [Tabs.ScrollView](#tabsscrollview)
     - [Ref](#ref)
@@ -236,6 +237,10 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 ### Tabs.FlatList
 
 Use like a regular FlatList.
+
+### Tabs.FlashList
+
+Use like a regular FlashList.
 
 ### Tabs.ScrollView
 

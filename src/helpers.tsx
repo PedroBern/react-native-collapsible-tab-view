@@ -1,3 +1,4 @@
+import { FlashList } from '@shopify/flash-list'
 import { FlatList, Platform, SectionList, I18nManager } from 'react-native'
 import Animated, { scrollTo } from 'react-native-reanimated'
 
@@ -28,3 +29,5 @@ export function scrollToImpl<T extends RefComponent>(
 
   scrollTo(ref, x, y, animated)
 }
+
+export const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
