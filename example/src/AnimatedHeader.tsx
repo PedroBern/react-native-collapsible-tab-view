@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { useCurrentTabScrollY } from '../../src/hooks'
-import ExampleComponent from './Shared/ExampleComponentFlashList'
+import ExampleComponent from './Shared/ExampleComponent'
 import ReText from './Shared/ReText'
 import { ExampleComponentType } from './types'
 
