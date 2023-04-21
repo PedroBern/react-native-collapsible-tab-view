@@ -17,19 +17,6 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
-// Load FlashList dynamically or print a friendly error message
-let AnimatedFlashList: React.ComponentClass<FlashListProps<any>>
-try {
-  const flashListModule = require('@shopify/flash-list')
-  AnimatedFlashList = (Animated.createAnimatedComponent(
-    flashListModule.FlashList
-  ) as unknown) as React.ComponentClass<FlashListProps<any>>
-} catch (error) {
-  console.error(
-    'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
-  )
-}
-
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
@@ -40,7 +27,19 @@ type FlashListMemoRef = SPFlashList<any>
 
 const FlashListMemo = React.memo(
   React.forwardRef<FlashListMemoRef, FlashListMemoProps>((props, passRef) => {
-    return <AnimatedFlashList ref={passRef} {...props} />
+    // Load FlashList dynamically or print a friendly error message
+    try {
+      const flashListModule = require('@shopify/flash-list')
+      const AnimatedFlashList = (Animated.createAnimatedComponent(
+        flashListModule.FlashList
+      ) as unknown) as React.ComponentClass<FlashListProps<any>>
+      return <AnimatedFlashList ref={passRef} {...props} />
+    } catch (error) {
+      console.error(
+        'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
+      )
+      return <></>
+    }
   })
 )
 
