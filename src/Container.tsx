@@ -361,6 +361,7 @@ export const Container = React.memo(
             accDiffClamp,
             indexDecimal,
             containerHeight,
+            minHeaderHeight,
             scrollYCurrent,
             scrollY,
             setRef,
