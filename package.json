@@ -81,11 +81,9 @@
     "react-native-reanimated": ">=2.15.0",
     "@shopify/flash-list": ">=1.0.0"
   },
-  {
-    "peerDependenciesMeta": {
-      "@shopify/flash-list": {
-        "optional": true
-      }
+  "peerDependenciesMeta": {
+    "@shopify/flash-list": {
+      "optional": true
     }
   },
   "husky": {
