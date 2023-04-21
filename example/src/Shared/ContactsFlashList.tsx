@@ -130,11 +130,17 @@ const Contacts: React.FC<{
   nestedScrollEnabled?: boolean
 }> = ({ emptyContacts, nestedScrollEnabled }) => {
   const [isRefreshing, startRefreshing] = useRefresh()
+  const [data, setData] = React.useState(CONTACTS)
+
+  React.useEffect(() => {
+    setInterval(() => {
+      setData([...CONTACTS])
+    }, 10 * 1000)
+  }, [])
 
   return (
     <Tabs.FlashList
-      data={emptyContacts ? [] : CONTACTS}
-      keyExtractor={(_, i) => String(i)}
+      data={data}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
       ListEmptyComponent={ListEmptyComponent}

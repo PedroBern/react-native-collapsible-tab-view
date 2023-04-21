@@ -2,7 +2,7 @@ import type {
   FlashListProps,
   FlashList as SPFlashList,
 } from '@shopify/flash-list'
-import React from 'react'
+import React, { useMemo } from 'react'
 import Animated from 'react-native-reanimated'
 
 import {
@@ -28,18 +28,20 @@ type FlashListMemoRef = SPFlashList<any>
 const FlashListMemo = React.memo(
   React.forwardRef<FlashListMemoRef, FlashListMemoProps>((props, passRef) => {
     // Load FlashList dynamically or print a friendly error message
-    try {
-      const flashListModule = require('@shopify/flash-list')
-      const AnimatedFlashList = (Animated.createAnimatedComponent(
-        flashListModule.FlashList
-      ) as unknown) as React.ComponentClass<FlashListProps<any>>
-      return <AnimatedFlashList ref={passRef} {...props} />
-    } catch (error) {
-      console.error(
-        'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
-      )
-      return <></>
-    }
+    const AnimatedFlashList = useMemo(() => {
+      try {
+        const flashListModule = require('@shopify/flash-list')
+        return Animated.createAnimatedComponent(
+          flashListModule.FlashList
+        ) as unknown
+      } catch (error) {
+        console.error(
+          'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
+        )
+      }
+    }, []) as React.ComponentClass<FlashListProps<any>>
+
+    return <AnimatedFlashList ref={passRef} {...props} />
   })
 )
 
