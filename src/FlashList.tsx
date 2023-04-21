@@ -1,7 +1,10 @@
-import { FlashList as SPFlashList, FlashListProps } from '@shopify/flash-list'
+import type {
+  FlashListProps,
+  FlashList as SPFlashList,
+} from '@shopify/flash-list'
 import React from 'react'
+import Animated from 'react-native-reanimated'
 
-import { AnimatedFlashList } from './helpers'
 import {
   useAfterMountEffect,
   useChainCallback,
@@ -13,6 +16,19 @@ import {
   useTabsContext,
   useUpdateScrollViewContentSize,
 } from './hooks'
+
+// Load FlashList dynamically or print a friendly error message
+let AnimatedFlashList: React.ComponentClass<FlashListProps<any>>
+try {
+  const flashListModule = require('@shopify/flash-list')
+  AnimatedFlashList = (Animated.createAnimatedComponent(
+    flashListModule.FlashList
+  ) as unknown) as React.ComponentClass<FlashListProps<any>>
+} catch (error) {
+  console.error(
+    'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
+  )
+}
 
 /**
  * Used as a memo to prevent rerendering too often when the context changes.

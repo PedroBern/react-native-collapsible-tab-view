@@ -335,8 +335,6 @@ PODS:
     - React-jsi (= 0.71.6)
     - React-logger (= 0.71.6)
     - React-perflogger (= 0.71.6)
-  - RNFlashList (1.4.2):
-    - React-Core
   - RNGestureHandler (2.9.0):
     - React-Core
   - RNReanimated (2.14.4):
@@ -411,7 +409,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -503,8 +500,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNFlashList:
-    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -555,7 +550,6 @@ SPEC CHECKSUMS:
   React-RCTVibration: 73d201599a64ea14b4e0b8f91b64970979fd92e6
   React-runtimeexecutor: 8692ac548bec648fa121980ccb4304afd136d584
   ReactCommon: e1067159764444e5db7c14e294d5cd79fb159c59
-  RNFlashList: 7fbca4fc075484a9426f1610d648dbea2de94eb0
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
   Yoga: ba09b6b11e6139e3df8229238aa794205ca6a02a
