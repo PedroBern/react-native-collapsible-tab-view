@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -20,7 +20,13 @@ export const Lazy: React.FC<{
   children: React.ReactElement
 }> = ({ children, startMounted, cancelLazyFadeIn }) => {
   const name = useTabNameContext()
-  const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
+  const {
+    focusedTab,
+    refMap,
+    scrollY,
+    scrollYCurrent,
+    tabNames,
+  } = useTabsContext()
   const [canMount, setCanMount] = React.useState(!!startMounted)
   const [afterMount, setAfterMount] = React.useState(!!startMounted)
   const isSelfMounted = React.useRef(true)
@@ -38,10 +44,6 @@ export const Lazy: React.FC<{
     setTimeout(() => {
       if (focusedTab.value === name) {
         if (isSelfMounted.current) setCanMount(true)
-        // we need to wait for the children rendering to complete so that we can scroll properly
-        setTimeout(() => {
-          if (isSelfMounted.current) setAfterMount(true)
-        }, 10)
       }
     }, 50)
   }, [focusedTab.value, name])
@@ -66,14 +68,16 @@ export const Lazy: React.FC<{
     () => {
       return afterMount
     },
-    (trigger) => {
-      if (trigger) {
+    (isMounted, wasMounted) => {
+      if (isMounted && !wasMounted) {
         const tabIndex = tabNames.value.findIndex((n) => n === name)
         if (ref && tabIndex >= 0) {
           scrollTo(
             ref,
             0,
-            scrollY.value[tabIndex],
+            typeof scrollY.value[tabIndex] === 'number'
+              ? scrollY.value[tabIndex]
+              : scrollYCurrent.value,
             false,
             `[${name}] lazy sync`
           )
@@ -91,6 +95,12 @@ export const Lazy: React.FC<{
     }
   }, [])
 
+  const onLayout = useCallback(() => {
+    setTimeout(() => {
+      setAfterMount(true)
+    }, 100)
+  }, [])
+
   return canMount ? (
     cancelLazyFadeIn ? (
       children
@@ -98,6 +108,7 @@ export const Lazy: React.FC<{
       <Animated.View
         pointerEvents="box-none"
         style={[styles.container, !cancelLazyFadeIn && stylez]}
+        onLayout={onLayout}
       >
         {children}
       </Animated.View>
