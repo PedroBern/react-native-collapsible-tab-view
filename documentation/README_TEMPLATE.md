@@ -17,6 +17,7 @@
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
+    - [Tabs.FlashList](#tabsflatlist)
     - [Tabs.SectionList](#tabssectionlist)
     - [Tabs.ScrollView](#tabsscrollview)
     - [Ref](#ref)
