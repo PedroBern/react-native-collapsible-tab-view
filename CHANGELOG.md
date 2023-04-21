@@ -1,3 +1,16 @@
+# [6.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.0.1...v6.1.0) (2023-04-21)
+
+
+### Bug Fixes
+
+* **collapsible-style:** update min header height example ([aff6c60](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/aff6c6082150886a83b0f330bd5f3ca28b4f22cf))
+* **collapsible-style:** use minHeaderHeight when calculating the iOS min height ([bd373ac](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/bd373acdf243705fa00b0b3f533c841ccec72125))
+
+
+### Features
+
+* shopify/flash-list support ([#332](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/332)) ([2ecc175](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2ecc175694d91aee61e9beab2d0f101aee5c775b))
+
 ## [6.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.0.0...v6.0.1) (2023-03-04)
 
 * updated readme
