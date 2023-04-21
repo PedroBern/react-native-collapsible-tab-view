@@ -77,7 +77,7 @@
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",
-    "react-native-reanimated": ">=3.0.1"
+    "react-native-reanimated": ">=2.15.0"
   },
   "husky": {
     "hooks": {
