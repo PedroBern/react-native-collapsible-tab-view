@@ -2,7 +2,7 @@ import type {
   FlashListProps,
   FlashList as SPFlashList,
 } from '@shopify/flash-list'
-import React, { useMemo } from 'react'
+import React from 'react'
 import Animated from 'react-native-reanimated'
 
 import {
@@ -17,6 +17,18 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+let AnimatedFlashList: React.ComponentClass<FlashListProps<any>>
+try {
+  const flashListModule = require('@shopify/flash-list')
+  AnimatedFlashList = (Animated.createAnimatedComponent(
+    flashListModule.FlashList
+  ) as unknown) as React.ComponentClass<FlashListProps<any>>
+} catch (error) {
+  AnimatedFlashList = (Animated.View as unknown) as React.ComponentClass<
+    FlashListProps<any>
+  >
+}
+
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
@@ -27,20 +39,6 @@ type FlashListMemoRef = SPFlashList<any>
 
 const FlashListMemo = React.memo(
   React.forwardRef<FlashListMemoRef, FlashListMemoProps>((props, passRef) => {
-    // Load FlashList dynamically or print a friendly error message
-    const AnimatedFlashList = useMemo(() => {
-      try {
-        const flashListModule = require('@shopify/flash-list')
-        return Animated.createAnimatedComponent(
-          flashListModule.FlashList
-        ) as unknown
-      } catch (error) {
-        console.error(
-          'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
-        )
-      }
-    }, []) as React.ComponentClass<FlashListProps<any>>
-
     return <AnimatedFlashList ref={passRef} {...props} />
   })
 )
@@ -71,6 +69,16 @@ function FlashListImpl<R>(
   React.useEffect(() => {
     setRef(name, ref)
   }, [name, ref, setRef])
+
+  React.useEffect(() => {
+    try {
+      require('@shopify/flash-list').FlashList
+    } catch (error) {
+      console.error(
+        'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
+      )
+    }
+  }, [])
 
   const scrollContentSizeChange = useUpdateScrollViewContentSize({
     name,
