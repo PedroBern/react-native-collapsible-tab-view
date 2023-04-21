@@ -1,6 +1,6 @@
 {
   "name": "react-native-collapsible-tab-view",
-  "version": "6.0.1",
+  "version": "6.1.0",
   "description": "Collapsible tab view component for React Native",
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
@@ -75,11 +75,11 @@
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
+    "@shopify/flash-list": ">=1.0.0",
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",
-    "react-native-reanimated": ">=2.15.0",
-    "@shopify/flash-list": ">=1.0.0"
+    "react-native-reanimated": ">=2.15.0"
   },
   "peerDependenciesMeta": {
     "@shopify/flash-list": {
