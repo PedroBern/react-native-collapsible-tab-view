@@ -81,6 +81,13 @@
     "react-native-reanimated": ">=2.15.0",
     "@shopify/flash-list": ">=1.0.0"
   },
+  {
+    "peerDependenciesMeta": {
+      "@shopify/flash-list": {
+        "optional": true
+      }
+    }
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
