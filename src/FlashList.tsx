@@ -25,21 +25,33 @@ import {
 type FlashListMemoProps = React.PropsWithChildren<FlashListProps<unknown>>
 type FlashListMemoRef = SPFlashList<any>
 
+let AnimatedFlashList: React.ComponentClass<FlashListProps<any>> | null = null
+
+const ensureFlastList = () => {
+  if (AnimatedFlashList) {
+    return
+  }
+
+  try {
+    const flashListModule = require('@shopify/flash-list')
+    AnimatedFlashList = (Animated.createAnimatedComponent(
+      flashListModule.FlashList
+    ) as unknown) as React.ComponentClass<FlashListProps<any>>
+  } catch (error) {
+    console.error(
+      'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
+    )
+  }
+}
+
 const FlashListMemo = React.memo(
   React.forwardRef<FlashListMemoRef, FlashListMemoProps>((props, passRef) => {
-    // Load FlashList dynamically or print a friendly error message
-    try {
-      const flashListModule = require('@shopify/flash-list')
-      const AnimatedFlashList = (Animated.createAnimatedComponent(
-        flashListModule.FlashList
-      ) as unknown) as React.ComponentClass<FlashListProps<any>>
-      return <AnimatedFlashList ref={passRef} {...props} />
-    } catch (error) {
-      console.error(
-        'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
-      )
-      return <></>
-    }
+    ensureFlastList()
+    return AnimatedFlashList ? (
+      <AnimatedFlashList ref={passRef} {...props} />
+    ) : (
+      <></>
+    )
   })
 )
 
@@ -119,8 +131,6 @@ function FlashListImpl<R>(
       contentInset={memoContentInset}
       contentOffset={memoContentOffset}
       refreshControl={memoRefreshControl}
-      // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
-      onMomentumScrollEnd={() => {}}
       progressViewOffset={progressViewOffset}
       automaticallyAdjustContentInsets={false}
       onContentSizeChange={scrollContentSizeChangeHandlers}
