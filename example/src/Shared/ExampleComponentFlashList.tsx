@@ -7,9 +7,9 @@ import {
 
 import Albums from './Albums'
 import Article from './Article'
-import Contacts from './ContactsFlashList'
+import ContactsFlatList from './Contacts'
+import ContactsFlashList from './ContactsFlashList'
 import { HEADER_HEIGHT } from './Header'
-import SectionContacts from './SectionContacts'
 
 type Props = {
   emptyContacts?: boolean
@@ -28,11 +28,15 @@ const Example = React.forwardRef<CollapsibleRef, Props>(
         <Tabs.Tab name="albums" label="Albums">
           <Albums />
         </Tabs.Tab>
-        <Tabs.Tab name="contacts" label="Contacts">
-          <Contacts emptyContacts={emptyContacts} />
+        <Tabs.Tab name="contacts" label="FlashList">
+          {/* 
+            // see: https://github.com/PedroBern/react-native-collapsible-tab-view/issues/335
+            <ContactsFlashList emptyContacts={emptyContacts} limit={5} /> 
+          */}
+          <ContactsFlashList emptyContacts={emptyContacts} />
         </Tabs.Tab>
-        <Tabs.Tab name="ordered" label="Ordered">
-          <SectionContacts emptyContacts={emptyContacts} />
+        <Tabs.Tab name="ordered" label="FlatList">
+          <ContactsFlatList emptyContacts={emptyContacts} limit={5} />
         </Tabs.Tab>
       </Tabs.Container>
     )
