@@ -1,3 +1,11 @@
+## [6.1.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.0...v6.1.1) (2023-04-22)
+
+
+### Bug Fixes
+
+* flashlist rerender issue ([0fc3092](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0fc30921e4ca998793d56c32b4a8dbda63283833))
+* flashlist with allowHeaderOverscroll ([6d04616](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d0461688a4692372397ccfdb03fbf08c057b2ec))
+
 # [6.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.0.1...v6.1.0) (2023-04-21)
 
 
