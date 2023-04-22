@@ -128,12 +128,13 @@ const ListEmptyComponent = () => {
 const Contacts: React.FC<{
   emptyContacts?: boolean
   nestedScrollEnabled?: boolean
-}> = ({ emptyContacts, nestedScrollEnabled }) => {
+  limit?: number
+}> = ({ emptyContacts, nestedScrollEnabled, limit }) => {
   const [isRefreshing, startRefreshing] = useRefresh()
 
   return (
     <Tabs.FlatList
-      data={emptyContacts ? [] : CONTACTS}
+      data={emptyContacts ? [] : limit ? CONTACTS.slice(0, limit) : CONTACTS}
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}

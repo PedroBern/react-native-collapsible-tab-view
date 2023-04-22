@@ -50,6 +50,7 @@ export const Header = () => {
 const Example: ExampleComponentType = () => {
   return (
     <ExampleComponent
+      allowHeaderOverscroll
       renderHeader={() => <Header />}
       minHeaderHeight={MIN_HEADER_HEIGHT}
     />
