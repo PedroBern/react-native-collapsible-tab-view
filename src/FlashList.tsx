@@ -76,7 +76,7 @@ function FlashListImpl<R>(
     enable(true)
   })
 
-  const { progressViewOffset } = useCollapsibleStyle()
+  const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
   React.useEffect(() => {
     setRef(name, ref)
@@ -114,6 +114,11 @@ function FlashListImpl<R>(
     [contentInsetValue]
   )
 
+  const memoContentContainerStyle = React.useMemo(
+    () => ({ paddingTop: contentContainerStyle.paddingTop }),
+    [contentContainerStyle.paddingTop]
+  )
+
   return (
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <FlashListMemo
@@ -125,6 +130,7 @@ function FlashListImpl<R>(
         // eslint-ignore
         ;(ref as any)(value?.recyclerlistview_unsafe)
       }}
+      contentContainerStyle={memoContentContainerStyle}
       bouncesZoom={false}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
