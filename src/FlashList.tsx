@@ -2,7 +2,7 @@ import type {
   FlashListProps,
   FlashList as SPFlashList,
 } from '@shopify/flash-list'
-import React from 'react'
+import React, { useCallback } from 'react'
 import Animated from 'react-native-reanimated'
 
 import {
@@ -60,6 +60,7 @@ function FlashListImpl<R>(
     style,
     onContentSizeChange,
     refreshControl,
+    contentContainerStyle: _contentContainerStyle,
     ...rest
   }: Omit<FlashListProps<R>, 'onScroll'>,
   passRef: React.Ref<SPFlashList<any>>
@@ -115,21 +116,29 @@ function FlashListImpl<R>(
   )
 
   const memoContentContainerStyle = React.useMemo(
-    () => ({ paddingTop: contentContainerStyle.paddingTop }),
-    [contentContainerStyle.paddingTop]
+    () => ({
+      paddingTop: contentContainerStyle.paddingTop,
+      ..._contentContainerStyle,
+    }),
+    [_contentContainerStyle, contentContainerStyle.paddingTop]
+  )
+
+  const refWorkaround = useCallback(
+    (value: FlashListMemoRef | null): void => {
+      // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
+      // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
+      // this ref the access to it
+      // eslint-ignore
+      ;(ref as any)(value?.recyclerlistview_unsafe)
+    },
+    [ref]
   )
 
   return (
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <FlashListMemo
       {...rest}
-      ref={(value) => {
-        // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
-        // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
-        // this ref the access to it
-        // eslint-ignore
-        ;(ref as any)(value?.recyclerlistview_unsafe)
-      }}
+      ref={refWorkaround}
       contentContainerStyle={memoContentContainerStyle}
       bouncesZoom={false}
       onScroll={scrollHandler}

@@ -27,7 +27,7 @@ const Example: React.FC<Props> = (props) => {
     <Tabs.Container
       headerHeight={HEADER_HEIGHT}
       lazy
-      TabBarComponent={(props) => <MaterialTabBar {...props} scrollEnabled />}
+      renderTabBar={(props) => <MaterialTabBar {...props} scrollEnabled />}
       {...props}
     >
       {TabNames.map((name) => {
