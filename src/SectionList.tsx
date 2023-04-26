@@ -23,7 +23,13 @@ const SectionListMemo = React.memo(
     RNSectionList,
     React.PropsWithChildren<SectionListProps<unknown>>
   >((props, passRef) => {
-    return <AnimatedSectionList ref={passRef} {...props} />
+    return (
+      <AnimatedSectionList
+        // @ts-expect-error reanimated types are broken on ref
+        ref={passRef}
+        {...props}
+      />
+    )
   })
 )
 
