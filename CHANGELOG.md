@@ -1,3 +1,10 @@
+## [6.1.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.3...v6.1.4) (2023-04-27)
+
+
+### Bug Fixes
+
+* pass actual FlashList ref to consumer ([bb019c4](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/bb019c4d7963ea461213535dcc3faa672f9f397d))
+
 ## [6.1.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.2...v6.1.3) (2023-04-27)
 
 
