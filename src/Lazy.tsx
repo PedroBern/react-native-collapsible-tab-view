@@ -15,23 +15,52 @@ import { useScroller, useTabNameContext, useTabsContext } from './hooks'
  * Typically used internally, but if you want to mix lazy and regular screens you can wrap the lazy ones with this component.
  */
 export const Lazy: React.FC<{
-  startMounted?: boolean
+  /**
+   * Whether to cancel the lazy fade in animation. Defaults to false.
+   */
   cancelLazyFadeIn?: boolean
+  /**
+   * How long to wait before mounting the children.
+   */
+  mountDelayMs?: number
+  /**
+   * Whether to start mounted. Defaults to true if we are the focused tab.
+   */
+  startMounted?: boolean
   children: React.ReactElement
-}> = ({ children, startMounted, cancelLazyFadeIn }) => {
+}> = ({
+  children,
+  cancelLazyFadeIn,
+  startMounted: _startMounted,
+  mountDelayMs = 50,
+}) => {
   const name = useTabNameContext()
-  const {
-    focusedTab,
-    refMap,
-    scrollY,
-    scrollYCurrent,
-    tabNames,
-  } = useTabsContext()
-  const [canMount, setCanMount] = React.useState(!!startMounted)
-  const [afterMount, setAfterMount] = React.useState(!!startMounted)
+  const { focusedTab, refMap } = useTabsContext()
+
+  /**
+   * We start mounted if we are the focused tab, or if props.startMounted is true.
+   */
+  const startMounted = useSharedValue(
+    typeof _startMounted === 'boolean'
+      ? _startMounted
+      : focusedTab.value === name
+  )
+
+  /**
+   * We keep track of whether a layout has been triggered
+   */
+  const didTriggerLayout = useSharedValue(false)
+
+  /**
+   * This is used to control when children are mounted
+   */
+  const [canMount, setCanMount] = React.useState(!!startMounted.value)
+  /**
+   * Ensure we don't mount after the component has been unmounted
+   */
   const isSelfMounted = React.useRef(true)
 
-  const opacity = useSharedValue(cancelLazyFadeIn || startMounted ? 1 : 0)
+  const opacity = useSharedValue(cancelLazyFadeIn || startMounted.value ? 1 : 0)
 
   React.useEffect(() => {
     return () => {
@@ -39,22 +68,27 @@ export const Lazy: React.FC<{
     }
   }, [])
 
-  const allowToMount = React.useCallback(() => {
-    // wait the scene to be at least 50 ms focused, before mounting
+  const startMountTimer = React.useCallback(() => {
+    // wait the scene to be at least mountDelay ms focused, before mounting
     setTimeout(() => {
       if (focusedTab.value === name) {
         if (isSelfMounted.current) setCanMount(true)
       }
-    }, 50)
-  }, [focusedTab.value, name])
+    }, mountDelayMs)
+  }, [focusedTab.value, mountDelayMs, name])
 
   useAnimatedReaction(
     () => {
       return focusedTab.value === name
     },
-    (focused) => {
-      if (focused && !canMount) {
-        runOnJS(allowToMount)()
+    (focused, wasFocused) => {
+      if (focused && !wasFocused && !canMount) {
+        if (cancelLazyFadeIn) {
+          opacity.value = 1
+          runOnJS(setCanMount)(true)
+        } else {
+          runOnJS(startMountTimer)()
+        }
       }
     },
     [canMount, focusedTab]
@@ -66,27 +100,16 @@ export const Lazy: React.FC<{
 
   useAnimatedReaction(
     () => {
-      return afterMount
+      return didTriggerLayout.value
     },
     (isMounted, wasMounted) => {
       if (isMounted && !wasMounted) {
-        const tabIndex = tabNames.value.findIndex((n) => n === name)
-        if (ref && tabIndex >= 0) {
-          scrollTo(
-            ref,
-            0,
-            typeof scrollY.value[tabIndex] === 'number'
-              ? scrollY.value[tabIndex]
-              : scrollYCurrent.value,
-            false,
-            `[${name}] lazy sync`
-          )
-        }
-        if (!cancelLazyFadeIn && opacity.value !== 1)
+        if (!cancelLazyFadeIn && opacity.value !== 1) {
           opacity.value = withTiming(1)
+        }
       }
     },
-    [ref, cancelLazyFadeIn, name, afterMount, scrollTo]
+    [ref, cancelLazyFadeIn, name, didTriggerLayout, scrollTo]
   )
 
   const stylez = useAnimatedStyle(() => {
@@ -96,10 +119,8 @@ export const Lazy: React.FC<{
   }, [])
 
   const onLayout = useCallback(() => {
-    setTimeout(() => {
-      setAfterMount(true)
-    }, 100)
-  }, [])
+    didTriggerLayout.value = true
+  }, [didTriggerLayout])
 
   return canMount ? (
     cancelLazyFadeIn ? (
@@ -107,7 +128,7 @@ export const Lazy: React.FC<{
     ) : (
       <Animated.View
         pointerEvents="box-none"
-        style={[styles.container, !cancelLazyFadeIn && stylez]}
+        style={[styles.container, !cancelLazyFadeIn ? stylez : undefined]}
         onLayout={onLayout}
       >
         {children}

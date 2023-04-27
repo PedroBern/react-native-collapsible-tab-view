@@ -41,7 +41,8 @@ function FlatListImpl<R>(
   const ref = useSharedAnimatedRef<RNFlatList<unknown>>(passRef)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
-  useAfterMountEffect(() => {
+  const onLayout = useAfterMountEffect(rest.onLayout, () => {
+    'worklet'
     // we enable the scroll event after mounting
     // otherwise we get an `onScroll` call with the initial scroll position which can break things
     enable(true)
@@ -103,6 +104,7 @@ function FlatListImpl<R>(
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <FlatListMemo
       {...rest}
+      onLayout={onLayout}
       ref={ref}
       bouncesZoom={false}
       style={memoStyle}

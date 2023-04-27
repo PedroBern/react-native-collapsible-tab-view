@@ -71,7 +71,8 @@ function FlashListImpl<R>(
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
 
-  useAfterMountEffect(() => {
+  const onLayout = useAfterMountEffect(rest.onLayout, () => {
+    'worklet'
     // we enable the scroll event after mounting
     // otherwise we get an `onScroll` call with the initial scroll position which can break things
     enable(true)
@@ -138,6 +139,7 @@ function FlashListImpl<R>(
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <FlashListMemo
       {...rest}
+      onLayout={onLayout}
       ref={refWorkaround}
       contentContainerStyle={memoContentContainerStyle}
       bouncesZoom={false}

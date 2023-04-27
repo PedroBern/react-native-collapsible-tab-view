@@ -7,8 +7,9 @@ import {
   MutableRefObject,
   useEffect,
   DependencyList,
+  useRef,
 } from 'react'
-import { StyleSheet } from 'react-native'
+import { LayoutChangeEvent, StyleSheet, ViewProps } from 'react-native'
 import { ContainerRef, RefComponent } from 'react-native-collapsible-tab-view'
 import { PagerViewOnPageScrollEvent } from 'react-native-pager-view'
 import Animated, {
@@ -234,9 +235,9 @@ export function useScroller<T extends RefComponent>() {
       'worklet'
       if (!ref) return
       //! this is left here on purpose to ease troubleshooting (uncomment when necessary)
-      // console.log(
-      //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
-      // )
+      console.log(
+        `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
+      )
       scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
@@ -273,6 +274,7 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const enable = useCallback(
     (toggle: boolean) => {
+      'worklet'
       enabled.value = toggle
     },
     [enabled]
@@ -383,7 +385,7 @@ export const useScrollHandlerY = (name: TabName) => {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
           }
-
+          console.log('scrollYCurrent.value', scrollYCurrent.value, name)
           scrollY.value[index.value] = scrollYCurrent.value
           oldAccScrollY.value = accScrollY.value
           accScrollY.value = scrollY.value[index.value] + offset.value
@@ -454,9 +456,9 @@ export const useScrollHandlerY = (name: TabName) => {
   // sync unfocused scenes
   useAnimatedReaction(
     () => {
-      if (!enabled.value) {
-        return false
-      }
+      // if (!enabled.value) {
+      //   return false
+      // }
 
       // if the index is decimal, then we're in between panes
       const isChangingPane = !Number.isInteger(indexDecimal.value)
@@ -469,7 +471,7 @@ export const useScrollHandlerY = (name: TabName) => {
         isSyncNeeded !== wasSyncNeeded &&
         focusedTab.value !== name
       ) {
-        let nextPosition = null
+        let nextPosition: number | null = null
         const focusedScrollY = scrollY.value[Math.round(indexDecimal.value)]
         const tabScrollY = scrollY.value[tabIndex]
         const areEqual = focusedScrollY === tabScrollY
@@ -541,19 +543,59 @@ export function useSharedAnimatedRef<T extends RefComponent>(
   return ref
 }
 
-export function useAfterMountEffect(effect: React.EffectCallback) {
-  const [didExecute, setDidExecute] = useState(false)
-  useEffect(() => {
-    if (didExecute) return
+export function useAfterMountEffect(
+  nextOnLayout: ViewProps['onLayout'],
+  effect: React.EffectCallback
+) {
+  const name = useTabNameContext()
+  const {
+    //tabsMounted,
+    refMap,
+    scrollY,
+    //scrollYCurrent,
+    tabNames,
+  } = useTabsContext()
 
-    const timeout = setTimeout(() => {
-      effect()
-      setDidExecute(true)
-    }, 0)
-    return () => {
-      clearTimeout(timeout)
+  const didExecute = useRef(false)
+  const didMount = useSharedValue(false)
+
+  const scrollTo = useScroller()
+  const ref = name ? refMap[name] : null
+
+  useAnimatedReaction(
+    () => {
+      return didMount.value
+    },
+    (didMount, prevDidMount) => {
+      if (didMount && !prevDidMount) {
+        if (didExecute.current) return
+        if (ref) {
+          const tabIndex = tabNames.value.findIndex((n) => n === name)
+          scrollTo(
+            ref,
+            0,
+            scrollY.value[tabIndex],
+            false,
+            `[${name}] restore scroll position`
+          )
+        }
+        effect()
+        didExecute.current = true
+      }
     }
-  }, [didExecute, effect])
+  )
+
+  const onLayoutOut: NonNullable<ViewProps['onLayout']> = useCallback(
+    (event: LayoutChangeEvent) => {
+      requestAnimationFrame(() => {
+        didMount.value = true
+      })
+      return nextOnLayout?.(event)
+    },
+    [didMount, nextOnLayout]
+  )
+
+  return onLayoutOut
 }
 
 export function useConvertAnimatedToValue<T>(
