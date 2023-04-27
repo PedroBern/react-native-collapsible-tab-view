@@ -68,6 +68,7 @@ function FlashListImpl<R>(
   const name = useTabNameContext()
   const { setRef, contentInset } = useTabsContext()
   const ref = useSharedAnimatedRef<any>(passRef)
+  const recyclerRef = useSharedAnimatedRef<any>(null)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
 
@@ -81,8 +82,8 @@ function FlashListImpl<R>(
   const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
   React.useEffect(() => {
-    setRef(name, ref)
-  }, [name, ref, setRef])
+    setRef(name, recyclerRef)
+  }, [name, recyclerRef, setRef])
 
   const scrollContentSizeChange = useUpdateScrollViewContentSize({
     name,
@@ -130,9 +131,10 @@ function FlashListImpl<R>(
       // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
       // this ref the access to it
       // eslint-ignore
-      ;(ref as any)(value?.recyclerlistview_unsafe)
+      ;(recyclerRef as any)(value?.recyclerlistview_unsafe)
+      ;(ref as any)(value)
     },
-    [ref]
+    [recyclerRef, ref]
   )
 
   return (
