@@ -385,7 +385,7 @@ export const useScrollHandlerY = (name: TabName) => {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
           }
-          console.log('scrollYCurrent.value', scrollYCurrent.value, name)
+
           scrollY.value[index.value] = scrollYCurrent.value
           oldAccScrollY.value = accScrollY.value
           accScrollY.value = scrollY.value[index.value] + offset.value
