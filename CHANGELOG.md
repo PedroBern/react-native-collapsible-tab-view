@@ -1,3 +1,10 @@
+## [6.1.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.1...v6.1.2) (2023-04-27)
+
+
+### Bug Fixes
+
+* scroll restoration when using Lazy ([7c0ec48](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/7c0ec48a73aa7ce1ebf3a723244e0707ecbede29))
+
 ## [6.1.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.0...v6.1.1) (2023-04-22)
 
 
