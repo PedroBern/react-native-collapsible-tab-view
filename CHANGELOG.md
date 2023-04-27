@@ -1,3 +1,10 @@
+## [6.1.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.2...v6.1.3) (2023-04-27)
+
+
+### Bug Fixes
+
+* remove console.log ([668e1ba](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/668e1ba501d3a21d956e5af4c432821fa592ec02))
+
 ## [6.1.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.1...v6.1.2) (2023-04-27)
 
 
