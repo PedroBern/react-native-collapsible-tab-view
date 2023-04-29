@@ -217,6 +217,8 @@ export type ContextType<T extends TabName = TabName> = {
    * @default false
    */
   allowHeaderOverscroll?: boolean
+
+  minHeaderHeight: number
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>

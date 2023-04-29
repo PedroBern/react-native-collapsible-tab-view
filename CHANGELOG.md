@@ -1,3 +1,49 @@
+## [6.1.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.3...v6.1.4) (2023-04-27)
+
+
+### Bug Fixes
+
+* pass actual FlashList ref to consumer ([bb019c4](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/bb019c4d7963ea461213535dcc3faa672f9f397d))
+
+## [6.1.3](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.2...v6.1.3) (2023-04-27)
+
+
+### Bug Fixes
+
+* remove console.log ([668e1ba](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/668e1ba501d3a21d956e5af4c432821fa592ec02))
+
+## [6.1.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.1...v6.1.2) (2023-04-27)
+
+
+### Bug Fixes
+
+* scroll restoration when using Lazy ([7c0ec48](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/7c0ec48a73aa7ce1ebf3a723244e0707ecbede29))
+
+## [6.1.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.0...v6.1.1) (2023-04-22)
+
+
+### Bug Fixes
+
+* flashlist rerender issue ([0fc3092](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/0fc30921e4ca998793d56c32b4a8dbda63283833))
+* flashlist with allowHeaderOverscroll ([6d04616](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/6d0461688a4692372397ccfdb03fbf08c057b2ec))
+
+# [6.1.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.0.1...v6.1.0) (2023-04-21)
+
+
+### Bug Fixes
+
+* **collapsible-style:** update min header height example ([aff6c60](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/aff6c6082150886a83b0f330bd5f3ca28b4f22cf))
+* **collapsible-style:** use minHeaderHeight when calculating the iOS min height ([bd373ac](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/bd373acdf243705fa00b0b3f533c841ccec72125))
+
+
+### Features
+
+* shopify/flash-list support ([#332](https://github.com/PedroBern/react-native-collapsible-tab-view/issues/332)) ([2ecc175](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/2ecc175694d91aee61e9beab2d0f101aee5c775b))
+
+## [6.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.0.0...v6.0.1) (2023-03-04)
+
+* updated readme
+
 # [6.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v5.0.0-rc.13...v6.0.0) (2023-03-04)
 
 

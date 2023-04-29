@@ -21,7 +21,7 @@ function generateProp(
   }
 
   let md = ''
-  md = `|${propName}|\``
+  md = `|\`${propName}\`|\``
   md += `${escape(prop.type.name)}\`|`
   md += skipDefaults
     ? ''

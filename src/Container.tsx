@@ -361,6 +361,7 @@ export const Container = React.memo(
             accDiffClamp,
             indexDecimal,
             containerHeight,
+            minHeaderHeight,
             scrollYCurrent,
             scrollY,
             setRef,
@@ -434,20 +435,16 @@ export const Container = React.memo(
                 return (
                   <View key={i}>
                     <TabNameContext.Provider value={tabName}>
-                      {lazy ? (
-                        <Lazy
-                          startMounted={i === index.value}
-                          cancelLazyFadeIn={cancelLazyFadeIn}
-                        >
-                          {
-                            React.Children.toArray(children)[
-                              i
-                            ] as React.ReactElement
-                          }
-                        </Lazy>
-                      ) : (
-                        React.Children.toArray(children)[i]
-                      )}
+                      <Lazy
+                        startMounted={lazy ? undefined : true}
+                        cancelLazyFadeIn={!lazy ? true : !!cancelLazyFadeIn}
+                      >
+                        {
+                          React.Children.toArray(children)[
+                            i
+                          ] as React.ReactElement
+                        }
+                      </Lazy>
                     </TabNameContext.Provider>
                   </View>
                 )

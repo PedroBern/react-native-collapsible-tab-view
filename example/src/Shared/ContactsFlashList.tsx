@@ -133,8 +133,9 @@ const Contacts: React.FC<{
   const [isRefreshing, startRefreshing] = useRefresh()
 
   return (
-    <Tabs.FlatList
+    <Tabs.FlashList
       data={emptyContacts ? [] : limit ? CONTACTS.slice(0, limit) : CONTACTS}
+      estimatedItemSize={60}
       keyExtractor={(_, i) => String(i)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}

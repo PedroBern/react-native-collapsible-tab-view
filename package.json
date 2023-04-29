@@ -1,6 +1,6 @@
 {
   "name": "react-native-collapsible-tab-view",
-  "version": "6.0.0",
+  "version": "6.1.4",
   "description": "Collapsible tab view component for React Native",
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
@@ -49,8 +49,9 @@
     "@commitlint/config-conventional": "^9.1.1",
     "@microsoft/tsdoc": "^0.13.0",
     "@release-it/conventional-changelog": "^1.1.4",
-    "@types/react": "^16.9.44",
-    "@types/react-native": "0.63.4",
+    "@shopify/flash-list": "^1.4.2",
+    "@types/react": "~18.0.27",
+    "@types/react-native": "0.71.6",
     "babel-jest": "^26.2.2",
     "babel-preset-react-native": "^4.0.0",
     "commitlint": "^9.1.0",
@@ -64,20 +65,26 @@
     "prettier": "^2.2.1",
     "react": "~16.11.0",
     "react-docgen-typescript": "^1.20.5",
-    "react-native": "~0.62.2",
+    "react-native": "~0.71.6",
     "react-native-builder-bob": "^0.18.2",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-pager-view": "^5",
-    "react-native-reanimated": "^3.0.1",
+    "react-native-reanimated": "3.1.0",
     "release-it": "^13.6.6",
     "ts-node": "^9.1.1",
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
+    "@shopify/flash-list": ">=1.0.0",
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",
-    "react-native-reanimated": ">=3.0.1"
+    "react-native-reanimated": ">=2.15.0"
+  },
+  "peerDependenciesMeta": {
+    "@shopify/flash-list": {
+      "optional": true
+    }
   },
   "husky": {
     "hooks": {

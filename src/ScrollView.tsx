@@ -59,7 +59,8 @@ export const ScrollView = React.forwardRef<
       progressViewOffset,
     } = useCollapsibleStyle()
     const { scrollHandler, enable } = useScrollHandlerY(name)
-    useAfterMountEffect(() => {
+    const onLayout = useAfterMountEffect(rest.onLayout, () => {
+      'worklet'
       // we enable the scroll event after mounting
       // otherwise we get an `onScroll` call with the initial scroll position which can break things
       enable(true)
@@ -114,6 +115,7 @@ export const ScrollView = React.forwardRef<
     return (
       <ScrollViewMemo
         {...rest}
+        onLayout={onLayout}
         ref={ref}
         bouncesZoom={false}
         style={memoStyle}
