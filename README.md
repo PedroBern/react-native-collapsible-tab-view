@@ -17,7 +17,7 @@
     - [Tabs.Container](#tabscontainer)
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
-    - [Tabs.FlashList](#tabsflashlist)
+    - [Tabs.FlashList](#tabsflatlist)
     - [Tabs.SectionList](#tabssectionlist)
     - [Tabs.ScrollView](#tabsscrollview)
     - [Ref](#ref)
@@ -194,6 +194,7 @@ const Example = () => {
 |`onIndexChange`|`((index: number) => void) \| undefined`||Callback fired when the index changes. It receives the current index.|
 |`onTabChange`|`(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void`||Callback fired when the tab changes. It receives the previous and current index and tabnames.|
 |`pagerProps`|`Omit<FlatListProps<number>, 'data' \| 'keyExtractor' \| 'renderItem' \| 'horizontal' \| 'pagingEnabled' \| 'onScroll' \| 'showsHorizontalScrollIndicator' \| 'getItemLayout'>`||Props passed to the pager. If you want for example to disable swiping, you can pass `{ scrollEnabled: false }`|
+|`renderBackground`|`((props: TabBarProps<string>) => ReactElement<any, string \| ((props: any) => ReactElement<any, any> \| null) \| (new (props: any) => Component<any, any, any>)> \| null) \| undefined`|||
 |`renderHeader`|`(props: TabBarProps<TabName>) => React.ReactElement \| null`|||
 |`renderTabBar`|`(props: TabBarProps<TabName>) => React.ReactElement \| null`|`(props: TabBarProps<TabName>) => MaterialTabBar`||
 |`revealHeaderOnScroll`|`boolean \| undefined`||Reveal header when scrolling down. Implements diffClamp.|
@@ -229,18 +230,15 @@ Typically used internally, but if you want to mix lazy and regular screens you c
 
 #### Props
 
-|name|type|
-|:----:|:----:|
-|`cancelLazyFadeIn`|`boolean \| undefined`|
-|`startMounted`|`boolean \| undefined`|
+|name|type|default|description|
+|:----:|:----:|:----:|:----:|
+|`cancelLazyFadeIn`|`boolean \| undefined`||Whether to cancel the lazy fade in animation. Defaults to false.|
+|`mountDelayMs`|`number \| undefined`|`50`|How long to wait before mounting the children.|
+|`startMounted`|`boolean \| undefined`||Whether to start mounted. Defaults to true if we are the focused tab.|
 
 ### Tabs.FlatList
 
 Use like a regular FlatList.
-
-### Tabs.FlashList
-
-Use like a regular FlashList.
 
 ### Tabs.ScrollView
 
