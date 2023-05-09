@@ -81,6 +81,7 @@ export const Container = React.memo(
         onTabChange,
         width: customWidth,
         allowHeaderOverscroll,
+        renderBackground,
       },
       ref
     ) => {
@@ -381,6 +382,16 @@ export const Container = React.memo(
             onLayout={onLayout}
             pointerEvents="box-none"
           >
+            {renderBackground &&
+              renderBackground({
+                containerRef,
+                index,
+                tabNames: tabNamesArray,
+                focusedTab,
+                indexDecimal,
+                onTabPress,
+                tabProps,
+              })}
             <Animated.View
               pointerEvents="box-none"
               style={[
