@@ -48,6 +48,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
   indicatorStyle,
   index,
   TabItemComponent = MaterialTabItem,
+  IndicatorComponent = Indicator,
   getLabelText = (name) => String(name).toUpperCase(),
   onTabPress,
   style,
@@ -222,7 +223,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
         )
       })}
       {itemsLayout.length === nTabs && (
-        <Indicator
+        <IndicatorComponent
           indexDecimal={indexDecimal}
           itemsLayout={itemsLayout}
           fadeIn={scrollEnabled}

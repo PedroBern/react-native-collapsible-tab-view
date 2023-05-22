@@ -29,6 +29,7 @@
   - [Default Tab Bar](#default-tab-bar)
     - [MaterialTabBar](#materialtabbar)
     - [MaterialTabItem](#materialtabitem)
+    - [IndicatorComponent](#indicatorcomponent)
 - [Known Issues](#known-issues)
   - [Android FlatList Pull to Refresh](#android-flatlist-pull-to-refresh)
   - [iOS FlatList StickyHeaderIndices](#ios-flatlist-stickyheaderindices)
@@ -352,6 +353,38 @@ Any additional props are passed to the pressable component.
 |`style`|`StyleProp<ViewStyle>`|Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
 
 
+### IndicatorComponent
+To custom `MaterialTabBar` indicator we can use `IndicatorComponent` as a prop of `MaterialTabBar`.
+```tsx
+  const CustomTabbar = useCallback(
+    (props) => {
+      return (
+        <MaterialTabBar
+          {...props}
+          TabItemComponent={CustomTabItem}
+          IndicatorComponent={CustomTabIndicator}
+        />
+      )
+    },
+    []
+  )
+
+  return (
+    <Tabs.Container
+      renderTabBar={CustomTabbar}
+    >
+    ...
+    </Tabs.Container>
+  )
+```
+#### Props
+
+|name|type|description|
+|:----:|:----:|:----:|
+|`indexDecimal`|``SharedValue<number>``||
+|`itemsLayout`|`ItemLayout[]`|ItemLayout = { width: number, x: number }|
+|`style`|`StyleProp<ViewStyle>`||
+|`fadeIn`|`boolean \| undefined`||
 
 # Known Issues
 
