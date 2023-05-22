@@ -50,6 +50,10 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
    */
   TabItemComponent?: (props: MaterialTabItemProps<N>) => React.ReactElement
   /**
+   * React component to render as indicator
+   */
+  IndicatorComponent?: React.FC<IndicatorProps>
+  /**
    * Function to compute the tab item label text
    */
   getLabelText?: (name: N) => string

@@ -2,7 +2,11 @@ import { Container } from './Container'
 import { FlashList } from './FlashList'
 import { FlatList } from './FlatList'
 import { Lazy } from './Lazy'
-import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
+import {
+  MaterialTabBarProps,
+  MaterialTabItemProps,
+  IndicatorProps,
+} from './MaterialTabBar'
 import { ScrollView } from './ScrollView'
 import { SectionList } from './SectionList'
 import { Tab } from './Tab'
@@ -28,6 +32,7 @@ export type {
   OnTabChangeCallback,
   TabItemProps,
   TabProps,
+  IndicatorProps,
 }
 
 export const Tabs = {
