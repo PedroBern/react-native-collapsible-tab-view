@@ -5,6 +5,11 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native'
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+  PanGestureHandlerGestureEvent,
+} from 'react-native-gesture-handler'
 import PagerView from 'react-native-pager-view'
 import Animated, {
   runOnJS,
@@ -15,6 +20,8 @@ import Animated, {
   useSharedValue,
   withDelay,
   withTiming,
+  withDecay,
+  useAnimatedGestureHandler,
 } from 'react-native-reanimated'
 
 import { Context, TabNameContext } from './Context'
@@ -346,6 +353,39 @@ export const Container = React.memo(
         [onTabPress]
       )
 
+      const headerYCurrent = useSharedValue(0)
+
+      const gestureHandler = useAnimatedGestureHandler<
+        PanGestureHandlerGestureEvent,
+        { start: number }
+      >({
+        onStart: (_, ctx) => {
+          ctx.start = scrollY.value[index.value]
+        },
+        onActive: (event, ctx) => {
+          const y = ctx.start - event.translationY
+          headerYCurrent.value = y < 0 ? 0 : y
+        },
+        onEnd: (_) => {
+          headerYCurrent.value = withDecay({
+            velocity: -_.velocityY,
+            clamp: [0, headerHeight.value || 0],
+          })
+        },
+      })
+
+      useAnimatedReaction(
+        () => headerYCurrent.value,
+        (y) => {
+          scrollY.value[index.value] = y
+          scrollYCurrent.value = y
+
+          for (const name of tabNamesArray) {
+            scrollToImpl(refMap[name], 0, y - contentInset.value, false)
+          }
+        }
+      )
+
       return (
         <Context.Provider
           value={{
@@ -389,22 +429,29 @@ export const Container = React.memo(
                 !cancelTranslation && stylez,
               ]}
             >
-              <View
-                style={[styles.container, styles.headerContainer]}
-                onLayout={getHeaderHeight}
-                pointerEvents="box-none"
-              >
-                {renderHeader &&
-                  renderHeader({
-                    containerRef,
-                    index,
-                    tabNames: tabNamesArray,
-                    focusedTab,
-                    indexDecimal,
-                    onTabPress,
-                    tabProps,
-                  })}
-              </View>
+              <GestureHandlerRootView>
+                <PanGestureHandler
+                  onGestureEvent={gestureHandler}
+                  hitSlop={{ left: -20 }}
+                >
+                  <Animated.View
+                    style={[styles.container, styles.headerContainer]}
+                    onLayout={getHeaderHeight}
+                    pointerEvents="box-none"
+                  >
+                    {renderHeader &&
+                      renderHeader({
+                        containerRef,
+                        index,
+                        tabNames: tabNamesArray,
+                        focusedTab,
+                        indexDecimal,
+                        onTabPress,
+                        tabProps,
+                      })}
+                  </Animated.View>
+                </PanGestureHandler>
+              </GestureHandlerRootView>
               <View
                 style={[styles.container, styles.tabBarContainer]}
                 onLayout={getTabBarHeight}
