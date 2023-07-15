@@ -363,6 +363,7 @@ export const useScrollHandlerY = (name: TabName) => {
     return contentHeights.value[tabIndex] || Number.MAX_VALUE
   }, [])
 
+  const scrollYCurrentInstant = useSharedValue(0)
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
@@ -378,9 +379,19 @@ export const useScrollHandlerY = (name: TabName) => {
               (containerHeight.value || 0) +
               contentInset.value
             // make sure the y value is clamped to the scrollable size (clamps overscrolling)
-            scrollYCurrent.value = allowHeaderOverscroll
+            let offset = allowHeaderOverscroll
               ? y
               : interpolate(y, [0, clampMax], [0, clampMax], Extrapolate.CLAMP)
+
+              if (scrollYCurrentInstant.value !== offset) {
+                // Check if the delta is very small
+                let delta = Math.abs(offset - scrollYCurrent.value);
+
+                scrollYCurrentInstant.value = offset;
+                scrollYCurrent.value = delta <= 3 ? withTiming(offset, {
+                  duration: 8
+                }) : offset;
+              }
           } else {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
