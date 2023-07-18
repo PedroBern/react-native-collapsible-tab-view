@@ -112,7 +112,7 @@ function FlatListImpl<R>(
       progressViewOffset={progressViewOffset}
       onScroll={scrollHandler}
       onContentSizeChange={scrollContentSizeChangeHandlers}
-      scrollEventThrottle={16}
+      scrollEventThrottle={8}
       contentInset={memoContentInset}
       contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
