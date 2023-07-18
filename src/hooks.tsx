@@ -363,6 +363,7 @@ export const useScrollHandlerY = (name: TabName) => {
     return contentHeights.value[tabIndex] || Number.MAX_VALUE
   }, [])
 
+  const scrollYSmoothing = useSharedValue(false)
   const scrollYCurrentInstant = useSharedValue(0)
   const scrollHandler = useAnimatedScrollHandler(
     {
@@ -385,12 +386,16 @@ export const useScrollHandlerY = (name: TabName) => {
 
               if (scrollYCurrentInstant.value !== offset) {
                 // Check if the delta is very small
-                let delta = Math.abs(offset - scrollYCurrent.value);
+                let delta = offset - scrollYCurrent.value;
 
                 scrollYCurrentInstant.value = offset;
-                scrollYCurrent.value = delta <= 3 ? withTiming(offset, {
-                  duration: 8
-                }) : offset;
+                if (delta >= 0 && delta <= 3 && scrollYSmoothing.value) {
+                  scrollYCurrent.value = withTiming(offset, {
+                    duration: 8
+                  })
+                } else {
+                  scrollYCurrent.value = offset;
+                }
               }
           } else {
             const { y } = event.contentOffset
@@ -418,6 +423,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onBeginDrag: () => {
+        scrollYSmoothing.value = false
         if (!enabled.value) return
 
         // ensure the header stops snapping
@@ -426,6 +432,7 @@ export const useScrollHandlerY = (name: TabName) => {
         if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
+        scrollYSmoothing.value = true
         if (!enabled.value) return
 
         if (IS_IOS) {
