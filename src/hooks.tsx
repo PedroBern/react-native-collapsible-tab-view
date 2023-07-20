@@ -27,6 +27,7 @@ import Animated, {
   useDerivedValue,
   useEvent,
   useHandler,
+  Easing,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -363,8 +364,6 @@ export const useScrollHandlerY = (name: TabName) => {
     return contentHeights.value[tabIndex] || Number.MAX_VALUE
   }, [])
 
-  const scrollYSmoothing = useSharedValue(false)
-  const scrollYCurrentInstant = useSharedValue(0)
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
@@ -384,19 +383,8 @@ export const useScrollHandlerY = (name: TabName) => {
               ? y
               : interpolate(y, [0, clampMax], [0, clampMax], Extrapolate.CLAMP)
 
-              if (scrollYCurrentInstant.value !== offset) {
-                // Check if the delta is very small
-                let delta = offset - scrollYCurrent.value;
-
-                scrollYCurrentInstant.value = offset;
-                if (delta >= 0 && delta <= 3 && scrollYSmoothing.value) {
-                  scrollYCurrent.value = withTiming(offset, {
-                    duration: 8
-                  })
-                } else {
-                  scrollYCurrent.value = offset;
-                }
-              }
+              // Update the last and current scrollY values
+              scrollYCurrent.value = offset;
           } else {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
@@ -423,7 +411,6 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onBeginDrag: () => {
-        scrollYSmoothing.value = false
         if (!enabled.value) return
 
         // ensure the header stops snapping
@@ -432,7 +419,6 @@ export const useScrollHandlerY = (name: TabName) => {
         if (IS_IOS) cancelAnimation(afterDrag)
       },
       onEndDrag: () => {
-        scrollYSmoothing.value = true
         if (!enabled.value) return
 
         if (IS_IOS) {
