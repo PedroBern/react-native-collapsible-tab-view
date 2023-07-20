@@ -146,7 +146,7 @@ function FlashListImpl<R>(
       contentContainerStyle={memoContentContainerStyle}
       bouncesZoom={false}
       onScroll={scrollHandler}
-      scrollEventThrottle={16}
+      scrollEventThrottle={8}
       contentInset={memoContentInset}
       contentOffset={memoContentOffset}
       refreshControl={memoRefreshControl}

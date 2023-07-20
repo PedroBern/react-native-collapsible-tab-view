@@ -35,6 +35,7 @@ import {
   IndexChangeEventData,
   TabName,
 } from './types'
+import { Dimensions } from 'react-native'
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
 
@@ -255,10 +256,12 @@ export const Container = React.memo(
       }, [revealHeaderOnScroll])
 
       const stylez = useAnimatedStyle(() => {
+        const translateY = Math.min(headerTranslateY.value, headerHeight.value || headerTranslateY.value);
+
         return {
           transform: [
             {
-              translateY: headerTranslateY.value,
+              translateY,
             },
           ],
         }
@@ -463,17 +466,10 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     position: 'absolute',
-    zIndex: 100,
-    width: '100%',
+    zIndex: 2,
+    elevation: 2,
+    width: Dimensions.get('screen').width,
     backgroundColor: 'white',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
   },
   tabBarContainer: {
     zIndex: 1,
