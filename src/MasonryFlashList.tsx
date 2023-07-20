@@ -3,7 +3,6 @@ import {
   MasonryFlashList as SPMasonryFlashList,
 } from '@shopify/flash-list'
 import React from 'react'
-import { Dimensions, View, StyleSheet } from 'react-native'
 import Animated from 'react-native-reanimated'
 
 import {
@@ -53,6 +52,7 @@ function MasonryFlashListImpl<R>(
   {
     style,
     onContentSizeChange,
+    contentContainerStyle: _contentContainerStyle,
     refreshControl,
     ...rest
   }: Omit<MasonryFlashListProps<R>, 'onScroll'>,
@@ -71,7 +71,7 @@ function MasonryFlashListImpl<R>(
     enable(true)
   })
 
-  const { progressViewOffset } = useCollapsibleStyle()
+  const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
   React.useEffect(() => {
     setRef(name, ref)
@@ -109,38 +109,38 @@ function MasonryFlashListImpl<R>(
     [contentInsetValue]
   )
 
+  const memoContentContainerStyle = React.useMemo(
+    () => ({
+      paddingTop: contentContainerStyle.paddingTop,
+      ..._contentContainerStyle,
+    }),
+    [_contentContainerStyle, contentContainerStyle.paddingTop]
+  )
+
   return (
-    <View
-      style={{
-        height: Dimensions.get('screen').height - contentInsetValue,
-        ...styles.container,
+    // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
+    <MasonryFlashListMemo
+      {...rest}
+      onLayout={onLayout}
+      contentContainerStyle={memoContentContainerStyle}
+      ref={(value) => {
+        // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
+        // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
+        // this ref the access to it
+        // eslint-ignore
+        // @ts-expect-error
+        ;(ref as any)(value?.recyclerlistview_unsafe)
       }}
-    >
-      {/* @ts-expect-error typescript complains about `unknown` in the memo, it should be T*/}
-      <MasonryFlashListMemo
-        {...rest}
-        onLayout={onLayout}
-        ref={(value) => {
-          // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
-          // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
-          // this ref the access to it
-          // eslint-ignore
-          // @ts-expect-error
-          ;(ref as any)(value?.recyclerlistview_unsafe)
-        }}
-        bouncesZoom={false}
-        onScroll={scrollHandler}
-        scrollEventThrottle={16}
-        contentInset={memoContentInset}
-        contentOffset={memoContentOffset}
-        refreshControl={memoRefreshControl}
-        // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
-        onMomentumScrollEnd={() => {}}
-        progressViewOffset={progressViewOffset}
-        automaticallyAdjustContentInsets={false}
-        onContentSizeChange={scrollContentSizeChangeHandlers}
-      />
-    </View>
+      bouncesZoom={false}
+      onScroll={scrollHandler}
+      scrollEventThrottle={16}
+      contentInset={memoContentInset}
+      contentOffset={memoContentOffset}
+      refreshControl={memoRefreshControl}
+      progressViewOffset={progressViewOffset}
+      automaticallyAdjustContentInsets={false}
+      onContentSizeChange={scrollContentSizeChangeHandlers}
+    />
   )
 }
 
@@ -150,10 +150,3 @@ function MasonryFlashListImpl<R>(
 export const MasonryFlashList = React.forwardRef(MasonryFlashListImpl) as <T>(
   p: MasonryFlashListProps<T> & { ref?: React.Ref<MasonryFlashListMemoRef> }
 ) => React.ReactElement
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-})

@@ -7,7 +7,7 @@ import {
 
 import Albums from './Albums'
 import Article from './Article'
-import ContactsFlatList from './Contacts'
+import ContactsFlashList from './ContactsFlashList'
 import ExampleMasonry from './ExampleMasonry'
 import { HEADER_HEIGHT } from './Header'
 
@@ -36,8 +36,8 @@ const Example = React.forwardRef<CollapsibleRef, Props>(
           */}
           <ExampleMasonry emptyContacts={emptyContacts} />
         </Tabs.Tab>
-        <Tabs.Tab name="ordered" label="FlatList">
-          <ContactsFlatList emptyContacts={emptyContacts} limit={5} />
+        <Tabs.Tab name="ordered" label="FlashList">
+          <ContactsFlashList emptyContacts={emptyContacts} />
         </Tabs.Tab>
       </Tabs.Container>
     )
