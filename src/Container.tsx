@@ -256,8 +256,8 @@ export const Container = React.memo(
       }, [revealHeaderOnScroll])
 
       const stylez = useAnimatedStyle(() => {
+        // Stop animating the header when off screen to prevent stuttering
         const translateY = Math.min(headerTranslateY.value, headerHeight.value || headerTranslateY.value);
-
         return {
           transform: [
             {

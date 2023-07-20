@@ -26,7 +26,8 @@ import Animated, {
   runOnUI,
   useDerivedValue,
   useEvent,
-  useHandler
+  useHandler,
+  Easing
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -363,6 +364,8 @@ export const useScrollHandlerY = (name: TabName) => {
     return contentHeights.value[tabIndex] || Number.MAX_VALUE
   }, [])
 
+  const isUserDragging = useSharedValue(false)
+  const scrollYCurrentInstant = useSharedValue(0)
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
@@ -382,8 +385,26 @@ export const useScrollHandlerY = (name: TabName) => {
               ? y
               : interpolate(y, [0, clampMax], [0, clampMax], Extrapolate.CLAMP)
 
-              // Update the last and current scrollY values
+            // Ensure the user is not dragging when applying smoothing
+            // Ensure the offset is not already set on the scrollYCurrentInstant
+            // Ensure that the header is still visible on the screen
+            // Ensure the delta between last scroll event is less than 3 pixels
+            const delta = Math.abs(offset - scrollYCurrentInstant.value)
+            if (!isUserDragging.value && offset !== scrollYCurrentInstant.value &&
+                offset <= (headerHeight.value || offset) &&
+                delta <= 2.7
+              ) {
+                // Apply smoothing with a timing animation over 8ms with an easing of ease-out-cubic
+                cancelAnimation(scrollYCurrent)
+                scrollYCurrent.value = withTiming(offset, {
+                  duration: 1,
+                  easing: Easing.out(Easing.exp)
+                })
+            } else {
+              // Update the value instantly to prevent drift
               scrollYCurrent.value = offset;
+            }
+            scrollYCurrentInstant.value = offset
           } else {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
@@ -410,6 +431,7 @@ export const useScrollHandlerY = (name: TabName) => {
         }
       },
       onBeginDrag: () => {
+        isUserDragging.value = true
         if (!enabled.value) return
 
         // ensure the header stops snapping
@@ -417,7 +439,8 @@ export const useScrollHandlerY = (name: TabName) => {
 
         if (IS_IOS) cancelAnimation(afterDrag)
       },
-      onEndDrag: () => {
+      onEndDrag: (event) => {
+        isUserDragging.value = false
         if (!enabled.value) return
 
         if (IS_IOS) {
