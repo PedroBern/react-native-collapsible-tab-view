@@ -94,10 +94,10 @@ const ListEmptyComponent = () => {
 }
 
 const ExampleMasonry: React.FC<{
-  emptyContacts?: boolean
+  emptyList?: boolean
   nestedScrollEnabled?: boolean
   limit?: number
-}> = ({ emptyContacts, nestedScrollEnabled, limit }) => {
+}> = ({ emptyList, nestedScrollEnabled, limit }) => {
   const [isRefreshing, startRefreshing] = useRefresh()
   const [refreshing, setRefreshing] = React.useState(false)
   const [data, setData] = React.useState<Item[]>([])
@@ -118,7 +118,7 @@ const ExampleMasonry: React.FC<{
 
   return (
     <Tabs.MasonryFlashList
-      data={emptyContacts ? [] : limit ? data.slice(0, limit) : data}
+      data={emptyList ? [] : limit ? data.slice(0, limit) : data}
       numColumns={2}
       estimatedItemSize={60}
       keyExtractor={(_, i) => String(i)}

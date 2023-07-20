@@ -30,11 +30,11 @@ const Example = React.forwardRef<CollapsibleRef, Props>(
         </Tabs.Tab>
         <Tabs.Tab name="contacts" label="MasonryFlashList">
           {/* 
-            TODO: check if masonry has the same issue
+            TODO: masonry has the same issue unfortunatelly when not having a lot of elements
             // see: https://github.com/PedroBern/react-native-collapsible-tab-view/issues/335
-            <ContactsFlashList emptyContacts={emptyContacts} limit={5} /> 
+            <ExampleMasonry emptyList={emptyContacts} limit={5} />
           */}
-          <ExampleMasonry emptyContacts={emptyContacts} />
+          <ExampleMasonry emptyList={emptyContacts} />
         </Tabs.Tab>
         <Tabs.Tab name="ordered" label="FlashList">
           <ContactsFlashList emptyContacts={emptyContacts} />
