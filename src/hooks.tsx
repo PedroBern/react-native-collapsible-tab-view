@@ -439,7 +439,7 @@ export const useScrollHandlerY = (name: TabName) => {
 
         if (IS_IOS) cancelAnimation(afterDrag)
       },
-      onEndDrag: (event) => {
+      onEndDrag: () => {
         isUserDragging.value = false
         if (!enabled.value) return
 
