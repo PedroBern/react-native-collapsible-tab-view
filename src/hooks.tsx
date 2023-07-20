@@ -26,8 +26,7 @@ import Animated, {
   runOnUI,
   useDerivedValue,
   useEvent,
-  useHandler,
-  Easing,
+  useHandler
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
