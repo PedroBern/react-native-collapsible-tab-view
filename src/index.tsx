@@ -39,6 +39,7 @@ export const Tabs = {
   ScrollView,
   SectionList,
   FlashList,
+  MasonryFlashList,
 }
 
 export {
