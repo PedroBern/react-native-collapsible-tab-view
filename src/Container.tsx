@@ -298,13 +298,14 @@ export const Container = React.memo(
           const i = tabNames.value.findIndex((n) => n === name)
 
           if (name === focusedTab.value) {
-            const ref = refMap[name]
+            // This causes a bug If you switch to a different tab mid way through a scroll
+            /* const ref = refMap[name]
             runOnUI(scrollToImpl)(
               ref,
               0,
               headerScrollDistance.value - contentInset.value,
               true
-            )
+            ) */
           } else {
             containerRef.current?.setPage(i)
           }
