@@ -1,3 +1,9 @@
+# [6.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.4...v6.2.0) (2023-08-01)
+
+### Features
+
+* Tabs.MasonryFlashList ([85f960d](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/85f960dac71757a07e288c9e3b2c516a6c852a5d))
+
 ## [6.1.4](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.3...v6.1.4) (2023-04-27)
 
 
