@@ -14,7 +14,7 @@
     "react-native": "0.71.6",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-pager-view": "6.2.0",
-    "react-native-reanimated": "~2.14.4",
+    "react-native-reanimated": "^3.4.1",
     "react-native-web": "~0.18.11",
     "use-debounce": "^5.2.0",
     "use-deep-compare": "^1.1.0"

@@ -2,6 +2,7 @@ import { Container } from './Container'
 import { FlashList } from './FlashList'
 import { FlatList } from './FlatList'
 import { Lazy } from './Lazy'
+import { MasonryFlashList } from './MasonryFlashList'
 import { MaterialTabBarProps, MaterialTabItemProps } from './MaterialTabBar'
 import { ScrollView } from './ScrollView'
 import { SectionList } from './SectionList'
@@ -38,9 +39,19 @@ export const Tabs = {
   ScrollView,
   SectionList,
   FlashList,
+  MasonryFlashList,
 }
 
-export { Container, Tab, Lazy, FlatList, ScrollView, SectionList, FlashList }
+export {
+  Container,
+  Tab,
+  Lazy,
+  FlatList,
+  ScrollView,
+  SectionList,
+  FlashList,
+  MasonryFlashList,
+}
 export {
   useCurrentTabScrollY,
   useHeaderMeasurements,
