@@ -99,8 +99,19 @@ const ExampleMasonry: React.FC<{
   limit?: number
 }> = ({ emptyList, nestedScrollEnabled, limit }) => {
   const [isRefreshing, startRefreshing] = useRefresh()
+  const [loading, setLoading] = React.useState(false)
   const [refreshing, setRefreshing] = React.useState(false)
   const [data, setData] = React.useState<Item[]>([])
+
+  const loadmore = React.useCallback(async () => {
+    if (loading) {
+      return
+    }
+    setLoading(true)
+    const res = await asyncGetItems()
+    setLoading(false)
+    setData([...data, ...res])
+  }, [loading, data])
 
   const refresh = React.useCallback(async () => {
     if (refreshing) {
@@ -129,6 +140,7 @@ const ExampleMasonry: React.FC<{
       onRefresh={Platform.OS === 'ios' ? startRefreshing : undefined}
       refreshing={Platform.OS === 'ios' ? isRefreshing : undefined}
       nestedScrollEnabled={nestedScrollEnabled}
+      onEndReached={loadmore}
     />
   )
 }

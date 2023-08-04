@@ -19,7 +19,8 @@
     "bootstrap": "yarn example && yarn",
     "prepack": "bob build",
     "docs": "ts-node ./documentation/buildDocs.ts",
-    "prepare": "bob build"
+    "prepare": "bob build",
+    "postinstall": "patch-package"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -114,6 +115,8 @@
     ]
   },
   "dependencies": {
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "use-deep-compare": "^1.1.0"
   },
   "packageManager": "yarn@1.22.11",
