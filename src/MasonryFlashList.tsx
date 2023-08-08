@@ -134,6 +134,7 @@ function MasonryFlashListImpl<R>(
       // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
       // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
       // this ref the access to it
+      // @ts-expect-error
       ;(recyclerRef as any)(value?.recyclerlistview_unsafe)
       ;(ref as any)(value)
     },
