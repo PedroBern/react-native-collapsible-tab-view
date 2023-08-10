@@ -1,3 +1,10 @@
+## [6.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.0...v6.2.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* recycling and re-rendering issues ([f1cbbc8](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/f1cbbc8ba4e915f95739cdd85726f5db8dfe3f94))
+
 # [6.2.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.1.4...v6.2.0) (2023-08-01)
 
 ### Features
