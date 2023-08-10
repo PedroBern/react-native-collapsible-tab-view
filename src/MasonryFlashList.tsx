@@ -1,8 +1,5 @@
-import {
-  MasonryFlashListProps,
-  MasonryFlashList as SPMasonryFlashList,
-} from '@shopify/flash-list'
-import React from 'react'
+import { MasonryFlashListProps, MasonryFlashListRef } from '@shopify/flash-list'
+import React, { useCallback } from 'react'
 import Animated from 'react-native-reanimated'
 
 import {
@@ -25,25 +22,39 @@ import {
 type MasonryFlashListMemoProps = React.PropsWithChildren<
   MasonryFlashListProps<unknown>
 >
-type MasonryFlashListMemoRef = typeof SPMasonryFlashList
+type MasonryFlashListMemoRef = MasonryFlashListRef<any>
+
+let AnimatedMasonry: React.ComponentClass<
+  MasonryFlashListProps<any>
+> | null = null
+
+const ensureMasonry = () => {
+  if (AnimatedMasonry) {
+    return
+  }
+
+  try {
+    const flashListModule = require('@shopify/flash-list')
+    AnimatedMasonry = (Animated.createAnimatedComponent(
+      flashListModule.MasonryFlashList
+    ) as unknown) as React.ComponentClass<MasonryFlashListProps<any>>
+  } catch (error) {
+    console.error(
+      'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
+    )
+  }
+}
 
 const MasonryFlashListMemo = React.memo(
   React.forwardRef<MasonryFlashListMemoRef, MasonryFlashListMemoProps>(
     (props, passRef) => {
-      // Load FlashList dynamically or print a friendly error message
-      try {
-        const flashListModule = require('@shopify/flash-list')
-        const AnimatedMasonryFlashList = (Animated.createAnimatedComponent(
-          flashListModule.MasonryFlashList
-        ) as unknown) as React.ComponentClass<MasonryFlashListProps<any>>
+      ensureMasonry()
+      return AnimatedMasonry ? (
         // @ts-expect-error
-        return <AnimatedMasonryFlashList ref={passRef} {...props} />
-      } catch (error) {
-        console.error(
-          'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
-        )
-        return <></>
-      }
+        <AnimatedMasonry ref={passRef} {...props} />
+      ) : (
+        <></>
+      )
     }
   )
 )
@@ -60,6 +71,7 @@ function MasonryFlashListImpl<R>(
 ) {
   const name = useTabNameContext()
   const { setRef, contentInset } = useTabsContext()
+  const recyclerRef = useSharedAnimatedRef<any>(null)
   const ref = useSharedAnimatedRef<any>(passRef)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
@@ -74,8 +86,8 @@ function MasonryFlashListImpl<R>(
   const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
   React.useEffect(() => {
-    setRef(name, ref)
-  }, [name, ref, setRef])
+    setRef(name, recyclerRef)
+  }, [name, recyclerRef, setRef])
 
   const scrollContentSizeChange = useUpdateScrollViewContentSize({
     name,
@@ -117,20 +129,25 @@ function MasonryFlashListImpl<R>(
     [_contentContainerStyle, contentContainerStyle.paddingTop]
   )
 
+  const refWorkaround = useCallback(
+    (value: MasonryFlashListMemoRef | null): void => {
+      // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
+      // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
+      // this ref the access to it
+      // @ts-expect-error
+      ;(recyclerRef as any)(value?.recyclerlistview_unsafe)
+      ;(ref as any)(value)
+    },
+    [recyclerRef, ref]
+  )
+
   return (
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <MasonryFlashListMemo
       {...rest}
       onLayout={onLayout}
       contentContainerStyle={memoContentContainerStyle}
-      ref={(value) => {
-        // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
-        // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
-        // this ref the access to it
-        // eslint-ignore
-        // @ts-expect-error
-        ;(ref as any)(value?.recyclerlistview_unsafe)
-      }}
+      ref={refWorkaround}
       bouncesZoom={false}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
