@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
-    "@shopify/flash-list": "^1.4.2",
+    "@shopify/flash-list": "^1.5.0",
     "expo": "^48.0.0",
     "expo-constants": "~14.2.1",
     "expo-splash-screen": "~0.18.1",
@@ -14,7 +14,7 @@
     "react-native": "0.71.6",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-pager-view": "6.2.0",
-    "react-native-reanimated": "~2.14.4",
+    "react-native-reanimated": "^3.4.1",
     "react-native-web": "~0.18.11",
     "use-debounce": "^5.2.0",
     "use-deep-compare": "^1.1.0"

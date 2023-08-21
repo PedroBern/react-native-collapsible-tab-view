@@ -1,6 +1,6 @@
 {
   "name": "react-native-collapsible-tab-view",
-  "version": "6.1.4",
+  "version": "6.2.1",
   "description": "Collapsible tab view component for React Native",
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
@@ -49,7 +49,7 @@
     "@commitlint/config-conventional": "^9.1.1",
     "@microsoft/tsdoc": "^0.13.0",
     "@release-it/conventional-changelog": "^1.1.4",
-    "@shopify/flash-list": "^1.4.2",
+    "@shopify/flash-list": "^1.5.0",
     "@types/react": "~18.0.27",
     "@types/react-native": "0.71.6",
     "babel-jest": "^26.2.2",
