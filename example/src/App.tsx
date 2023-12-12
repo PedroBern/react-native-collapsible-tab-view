@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import AnimatedHeader from './AnimatedHeader'
@@ -112,7 +113,7 @@ const ExampleList: React.FC<object> = () => {
   const borderBottomWidth = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <StatusBar
         translucent
         barStyle={Platform.OS === 'ios' ? statusBarStyle : 'light-content'}
@@ -159,7 +160,7 @@ const ExampleList: React.FC<object> = () => {
       ) : ExampleComponent ? (
         <ExampleComponent />
       ) : null}
-    </View>
+    </GestureHandlerRootView>
   )
 }
 
