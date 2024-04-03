@@ -272,12 +272,27 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const enabled = useSharedValue(false)
 
+  const scrollTo = useScroller()
+
   const enable = useCallback(
     (toggle: boolean) => {
       'worklet'
       enabled.value = toggle
+
+      if (toggle) {
+        const tabIndex = tabNames.value.findIndex((n) => n === name)
+
+        const ref = refMap[name]
+        scrollTo(
+          ref,
+          0,
+          scrollY.value[tabIndex],
+          false,
+          `[${name}] restore scroll position - enable`
+        )
+      }
     },
-    [enabled]
+    [enabled, name, refMap, scrollTo, scrollY.value, tabNames.value]
   )
 
   /**
@@ -292,8 +307,6 @@ export const useScrollHandlerY = (name: TabName) => {
     tabNames,
     name,
   ])
-
-  const scrollTo = useScroller()
 
   const scrollAnimation = useSharedValue<number | undefined>(undefined)
 
