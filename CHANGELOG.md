@@ -1,3 +1,10 @@
+## [6.2.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.1...v6.2.2) (2024-04-03)
+
+
+### Bug Fixes
+
+* lazy FlashList scroll sync issue ([1b89ec7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1b89ec7221dc87792fc56886b170ff6f1d06e230))
+
 ## [6.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.0...v6.2.1) (2023-08-10)
 
 
