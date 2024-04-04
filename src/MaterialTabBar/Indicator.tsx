@@ -7,8 +7,8 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated'
 
-import { isRTL } from '../helpers'
 import { IndicatorProps } from './types'
+import { isRTL } from '../helpers'
 
 const Indicator: React.FC<IndicatorProps> = ({
   indexDecimal,

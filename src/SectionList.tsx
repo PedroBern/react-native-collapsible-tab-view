@@ -70,10 +70,10 @@ function SectionListImpl<R>(
   })
 
   const scrollContentSizeChangeHandlers = useChainCallback(
-    React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
-      onContentSizeChange,
-      scrollContentSizeChange,
-    ])
+    React.useMemo(
+      () => [scrollContentSizeChange, onContentSizeChange],
+      [onContentSizeChange, scrollContentSizeChange]
+    )
   )
 
   const memoRefreshControl = React.useMemo(
@@ -88,9 +88,10 @@ function SectionListImpl<R>(
 
   const contentInsetValue = useConvertAnimatedToValue(contentInset)
 
-  const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
-    contentInsetValue,
-  ])
+  const memoContentInset = React.useMemo(
+    () => ({ top: contentInsetValue }),
+    [contentInsetValue]
+  )
 
   const memoContentOffset = React.useMemo(
     () => ({ x: 0, y: -contentInsetValue }),

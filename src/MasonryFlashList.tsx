@@ -26,9 +26,8 @@ type MasonryFlashListMemoProps = React.PropsWithChildren<
 >
 type MasonryFlashListMemoRef = MasonryFlashListRef<any>
 
-let AnimatedMasonry: React.ComponentClass<
-  MasonryFlashListProps<any>
-> | null = null
+let AnimatedMasonry: React.ComponentClass<MasonryFlashListProps<any>> | null =
+  null
 
 const ensureMasonry = () => {
   if (AnimatedMasonry) {
@@ -37,10 +36,10 @@ const ensureMasonry = () => {
 
   try {
     const flashListModule = require('@shopify/flash-list')
-    AnimatedMasonry = (Animated.createAnimatedComponent(
+    AnimatedMasonry = Animated.createAnimatedComponent(
       flashListModule.MasonryFlashList
-    ) as unknown) as React.ComponentClass<MasonryFlashListProps<any>>
-  } catch (error) {
+    ) as unknown as React.ComponentClass<MasonryFlashListProps<any>>
+  } catch {
     console.error(
       'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
     )
@@ -106,10 +105,10 @@ function MasonryFlashListImpl<R>(
   })
 
   const scrollContentSizeChangeHandlers = useChainCallback(
-    React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
-      onContentSizeChange,
-      scrollContentSizeChange,
-    ])
+    React.useMemo(
+      () => [scrollContentSizeChange, onContentSizeChange],
+      [onContentSizeChange, scrollContentSizeChange]
+    )
   )
 
   const memoRefreshControl = React.useMemo(
@@ -124,9 +123,10 @@ function MasonryFlashListImpl<R>(
 
   const contentInsetValue = useConvertAnimatedToValue<number>(contentInset)
 
-  const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
-    contentInsetValue,
-  ])
+  const memoContentInset = React.useMemo(
+    () => ({ top: contentInsetValue }),
+    [contentInsetValue]
+  )
 
   const memoContentOffset = React.useMemo(
     () => ({ x: 0, y: -contentInsetValue }),

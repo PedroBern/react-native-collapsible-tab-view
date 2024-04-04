@@ -75,10 +75,10 @@ export const ScrollView = React.forwardRef<
     })
 
     const scrollContentSizeChangeHandlers = useChainCallback(
-      React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
-        onContentSizeChange,
-        scrollContentSizeChange,
-      ])
+      React.useMemo(
+        () => [scrollContentSizeChange, onContentSizeChange],
+        [onContentSizeChange, scrollContentSizeChange]
+      )
     )
 
     const memoRefreshControl = React.useMemo(
@@ -93,9 +93,10 @@ export const ScrollView = React.forwardRef<
 
     const contentInsetValue = useConvertAnimatedToValue(contentInset)
 
-    const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
-      contentInsetValue,
-    ])
+    const memoContentInset = React.useMemo(
+      () => ({ top: contentInsetValue }),
+      [contentInsetValue]
+    )
 
     const memoContentOffset = React.useMemo(
       () => ({ x: 0, y: -contentInsetValue }),

@@ -7,10 +7,10 @@ import Animated, {
   useDerivedValue,
 } from 'react-native-reanimated'
 
-import { useCurrentTabScrollY } from '../../src/hooks'
 import ExampleComponent from './Shared/ExampleComponent'
 import ReText from './Shared/ReText'
 import { ExampleComponentType } from './types'
+import { useCurrentTabScrollY } from '../../src/hooks'
 
 const title = 'Animated Header'
 

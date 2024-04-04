@@ -14,10 +14,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
-import { TabName } from '../types'
 import { Indicator } from './Indicator'
 import { MaterialTabItem } from './TabItem'
 import { MaterialTabBarProps, ItemLayout } from './types'
+import { TabName } from '../types'
 
 export const TABBAR_HEIGHT = 48
 

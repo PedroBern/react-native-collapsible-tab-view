@@ -13,12 +13,12 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated'
 
-import { TabName } from '../../../src/types'
 import Albums from './Albums'
 import Article from './Article'
 import Contacts from './Contacts'
 import { HEADER_HEIGHT } from './Header'
 import SectionContacts from './SectionContacts'
+import { TabName } from '../../../src/types'
 
 type Props = {
   emptyContacts?: boolean
@@ -83,13 +83,14 @@ function TabItem<T extends TabName>({
 const Example = React.forwardRef<CollapsibleRef, Props>(
   ({ emptyContacts, ...props }, ref) => {
     const makeLabel = useCallback(
-      <T extends TabName>(label: string) => (props: TabItemProps<T>) => (
-        <TabItem
-          index={props.index}
-          indexDecimal={props.indexDecimal}
-          label={label}
-        />
-      ),
+      <T extends TabName>(label: string) =>
+        (props: TabItemProps<T>) => (
+          <TabItem
+            index={props.index}
+            indexDecimal={props.indexDecimal}
+            label={label}
+          />
+        ),
       []
     )
 

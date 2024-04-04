@@ -125,6 +125,8 @@ const ExampleMasonry: React.FC<{
 
   React.useEffect(() => {
     refresh()
+    // refresh just once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

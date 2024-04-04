@@ -6,7 +6,6 @@ import {
   useContext,
   MutableRefObject,
   useEffect,
-  DependencyList,
   useRef,
 } from 'react'
 import { LayoutChangeEvent, StyleSheet, ViewProps } from 'react-native'
@@ -21,12 +20,13 @@ import Animated, {
   withDelay,
   withTiming,
   interpolate,
-  Extrapolate,
   runOnJS,
   runOnUI,
   useDerivedValue,
   useEvent,
   useHandler,
+  AnimatedRef,
+  Extrapolation,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -38,7 +38,6 @@ import {
   TabName,
   TabReactElement,
   TabsWithProps,
-  Ref,
 } from './types'
 
 export function useContainerRef() {
@@ -47,19 +46,15 @@ export function useContainerRef() {
 
 export function useAnimatedDynamicRefs(): [
   ContextType['refMap'],
-  ContextType['setRef']
+  ContextType['setRef'],
 ] {
   const [map, setMap] = useState<ContextType['refMap']>({})
-  const setRef = useCallback(function <T extends RefComponent>(
-    key: TabName,
-    ref: React.RefObject<T>
-  ) {
+  const setRef = useCallback((key: TabName, ref: AnimatedRef<RefComponent>) => {
     setMap((map) => ({ ...map, [key]: ref }))
     return ref
-  },
-  [])
+  }, [])
 
-  return [map, setRef]
+  return [map, setRef as ContextType['setRef']]
 }
 
 export function useTabProps<T extends TabName>(
@@ -226,7 +221,7 @@ export function useScroller<T extends RefComponent>() {
 
   const scroller = useCallback(
     (
-      ref: Ref<T> | undefined,
+      ref: AnimatedRef<T> | undefined,
       x: number,
       y: number,
       animated: boolean,
@@ -303,10 +298,10 @@ export const useScrollHandlerY = (name: TabName) => {
    */
   const afterDrag = useSharedValue(0)
 
-  const tabIndex = useMemo(() => tabNames.value.findIndex((n) => n === name), [
-    tabNames,
-    name,
-  ])
+  const tabIndex = useMemo(
+    () => tabNames.value.findIndex((n) => n === name),
+    [tabNames, name]
+  )
 
   const scrollAnimation = useSharedValue<number | undefined>(undefined)
 
@@ -393,7 +388,12 @@ export const useScrollHandlerY = (name: TabName) => {
             // make sure the y value is clamped to the scrollable size (clamps overscrolling)
             scrollYCurrent.value = allowHeaderOverscroll
               ? y
-              : interpolate(y, [0, clampMax], [0, clampMax], Extrapolate.CLAMP)
+              : interpolate(
+                  y,
+                  [0, clampMax],
+                  [0, clampMax],
+                  Extrapolation.CLAMP
+                )
           } else {
             const { y } = event.contentOffset
             scrollYCurrent.value = y
@@ -682,7 +682,7 @@ export const usePageScrollHandler = (
       context: unknown
     ) => unknown
   },
-  dependencies?: DependencyList
+  dependencies?: unknown[]
 ) => {
   const { context, doDependenciesDiffer } = useHandler(handlers, dependencies)
   const subscribeForEvents = ['onPageScroll']

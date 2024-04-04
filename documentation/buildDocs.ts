@@ -81,15 +81,13 @@ const overrideProps: OverrideProps = {
   'Tabs.Container': {
     HeaderComponent: {
       type: {
-        name:
-          '((props: TabBarProps<T>) => React.ReactElement) | null | undefined',
+        name: '((props: TabBarProps<T>) => React.ReactElement) | null | undefined',
       },
       defaultValue: null,
     },
     TabBarComponent: {
       type: {
-        name:
-          '((props: TabBarProps<T>) => React.ReactElement) | null | undefined',
+        name: '((props: TabBarProps<T>) => React.ReactElement) | null | undefined',
       },
       defaultValue: { value: 'MaterialTabBar' },
     },
@@ -109,15 +107,13 @@ const overrideProps: OverrideProps = {
     },
     pagerProps: {
       type: {
-        name:
-          "Omit<FlatListProps<number>, 'data' | 'keyExtractor' | 'renderItem' | 'horizontal' | 'pagingEnabled' | 'onScroll' | 'showsHorizontalScrollIndicator' | 'getItemLayout'>",
+        name: "Omit<FlatListProps<number>, 'data' | 'keyExtractor' | 'renderItem' | 'horizontal' | 'pagingEnabled' | 'onScroll' | 'showsHorizontalScrollIndicator' | 'getItemLayout'>",
       },
       defaultValue: null,
     },
     onTabChange: {
       type: {
-        name:
-          '(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void',
+        name: '(data: { prevIndex: number index: number prevTabName: T tabName: T }) => void',
       },
       defaultValue: null,
     },

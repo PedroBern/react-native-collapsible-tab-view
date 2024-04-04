@@ -1,10 +1,10 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import { TabBarProps } from '../../src/types'
 import ExampleComponent from './Shared/ExampleComponent'
 import Header from './Shared/Header'
 import { ExampleComponentType } from './types'
+import { TabBarProps } from '../../src/types'
 
 const title = 'Scroll On Header'
 
