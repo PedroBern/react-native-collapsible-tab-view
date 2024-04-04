@@ -1,3 +1,17 @@
+
+
+# [7.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.2...v7.0.0) (2024-04-04)
+
+
+### chore
+
+* update dependencies ([eb8b645](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/eb8b645e5f83a99a402a0fa56d2d897bba26df4d))
+
+
+### BREAKING CHANGES
+
+* Peer dependency changed to reanimated 3.8.1
+
 ## [6.2.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.1...v6.2.2) (2024-04-03)
 
 
