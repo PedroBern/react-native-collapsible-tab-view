@@ -120,7 +120,7 @@ export const Container = React.memo(
       const accDiffClamp: ContextType['accDiffClamp'] = useSharedValue(0)
       const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
       const scrollY: ContextType['scrollY'] = useSharedValue(
-        tabNamesArray.map(() => 0)
+        Object.fromEntries(tabNamesArray.map((n) => [n, 0]))
       )
 
       const contentHeights: ContextType['contentHeights'] = useSharedValue(
@@ -136,12 +136,6 @@ export const Container = React.memo(
           ? tabNames.value.findIndex((n) => n === initialTabName)
           : 0
       )
-
-      const [data, setData] = React.useState(tabNamesArray)
-
-      React.useEffect(() => {
-        setData(tabNamesArray)
-      }, [tabNamesArray])
 
       const focusedTab: ContextType['focusedTab'] =
         useDerivedValue<TabName>(() => {
@@ -226,7 +220,9 @@ export const Container = React.memo(
         (i) => {
           if (i !== index.value) {
             offset.value =
-              scrollY.value[index.value] - scrollY.value[i] + offset.value
+              scrollY.value[tabNames.value[index.value]] -
+              scrollY.value[tabNames.value[i]] +
+              offset.value
             runOnJS(propagateTabChange)({
               prevIndex: index.value,
               index: i,
@@ -234,7 +230,12 @@ export const Container = React.memo(
               tabName: tabNames.value[i],
             })
             index.value = i
-            scrollYCurrent.value = scrollY.value[index.value] || 0
+            if (
+              typeof scrollY.value[tabNames.value[index.value]] === 'number'
+            ) {
+              scrollYCurrent.value =
+                scrollY.value[tabNames.value[index.value]] || 0
+            }
           }
         },
         []
@@ -433,13 +434,15 @@ export const Container = React.memo(
               {...pagerProps}
               style={[pagerProps?.style, StyleSheet.absoluteFill]}
             >
-              {data.map((tabName, i) => {
+              {tabNamesArray.map((tabName, i) => {
                 return (
                   <View key={i}>
                     <TabNameContext.Provider value={tabName}>
                       <Lazy
                         startMounted={lazy ? undefined : true}
                         cancelLazyFadeIn={!lazy ? true : !!cancelLazyFadeIn}
+                        // ensure that we remount the tab if its name changes but the index doesn't
+                        key={tabName}
                       >
                         {
                           React.Children.toArray(children)[
