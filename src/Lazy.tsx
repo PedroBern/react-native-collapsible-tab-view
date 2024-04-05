@@ -68,14 +68,17 @@ export const Lazy: React.FC<{
     }
   }, [])
 
-  const startMountTimer = React.useCallback(() => {
-    // wait the scene to be at least mountDelay ms focused, before mounting
-    setTimeout(() => {
-      if (focusedTab.value === name) {
-        if (isSelfMounted.current) setCanMount(true)
-      }
-    }, mountDelayMs)
-  }, [focusedTab.value, mountDelayMs, name])
+  const startMountTimer = React.useCallback(
+    (focusedTab: string) => {
+      // wait the scene to be at least mountDelay ms focused, before mounting
+      setTimeout(() => {
+        if (focusedTab === name) {
+          if (isSelfMounted.current) setCanMount(true)
+        }
+      }, mountDelayMs)
+    },
+    [mountDelayMs, name]
+  )
 
   useAnimatedReaction(
     () => {
@@ -87,7 +90,7 @@ export const Lazy: React.FC<{
           opacity.value = 1
           runOnJS(setCanMount)(true)
         } else {
-          runOnJS(startMountTimer)()
+          runOnJS(startMountTimer)(focusedTab.value)
         }
       }
     },
@@ -116,7 +119,7 @@ export const Lazy: React.FC<{
     return {
       opacity: opacity.value,
     }
-  }, [])
+  }, [opacity])
 
   const onLayout = useCallback(() => {
     didTriggerLayout.value = true

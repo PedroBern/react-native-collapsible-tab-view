@@ -1,7 +1,6 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import * as Tabs from 'react-native-collapsible-tab-view'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { AlbumsContent } from './Shared/Albums'
 import { ArticleContent } from './Shared/Article'
@@ -75,7 +74,9 @@ const DynamicTabs: ExampleComponentType = () => {
   }
 
   const TabBarComponent = React.useCallback(
-    (props) => <Tabs.MaterialTabBar {...props} scrollEnabled />,
+    (props: Tabs.MaterialTabBarProps<string>) => (
+      <Tabs.MaterialTabBar {...props} scrollEnabled />
+    ),
     []
   )
 

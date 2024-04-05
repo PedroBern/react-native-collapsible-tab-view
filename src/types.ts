@@ -168,7 +168,7 @@ export type ContextType<T extends TabName = TabName> = {
   /**
    * Array of the scroll y position of each tab.
    */
-  scrollY: SharedValue<number[]>
+  scrollY: SharedValue<Record<string, number>>
   containerHeight: SharedValue<number | undefined>
   /**
    * Object containing the ref of each scrollable component.

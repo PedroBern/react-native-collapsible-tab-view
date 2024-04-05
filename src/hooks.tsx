@@ -249,7 +249,6 @@ export const useScrollHandlerY = (name: TabName) => {
     revealHeaderOnScroll,
     refMap,
     tabNames,
-    index,
     headerHeight,
     contentInset,
     containerHeight,
@@ -275,19 +274,13 @@ export const useScrollHandlerY = (name: TabName) => {
       enabled.value = toggle
 
       if (toggle) {
-        const tabIndex = tabNames.value.findIndex((n) => n === name)
-
         const ref = refMap[name]
-        scrollTo(
-          ref,
-          0,
-          scrollY.value[tabIndex],
-          false,
-          `[${name}] restore scroll position - enable`
-        )
+        const y = scrollY.value[name] ?? scrollYCurrent.value
+
+        scrollTo(ref, 0, y, false, `[${name}] restore scroll position - enable`)
       }
     },
-    [enabled, name, refMap, scrollTo, scrollY.value, tabNames.value]
+    [enabled, name, refMap, scrollTo, scrollY.value, scrollYCurrent.value]
   )
 
   /**
@@ -399,9 +392,9 @@ export const useScrollHandlerY = (name: TabName) => {
             scrollYCurrent.value = y
           }
 
-          scrollY.value[index.value] = scrollYCurrent.value
+          scrollY.value[name] = scrollYCurrent.value
           oldAccScrollY.value = accScrollY.value
-          accScrollY.value = scrollY.value[index.value] + offset.value
+          accScrollY.value = scrollY.value[name] + offset.value
 
           if (revealHeaderOnScroll) {
             const delta = accScrollY.value - oldAccScrollY.value
@@ -485,8 +478,8 @@ export const useScrollHandlerY = (name: TabName) => {
         focusedTab.value !== name
       ) {
         let nextPosition: number | null = null
-        const focusedScrollY = scrollY.value[Math.round(indexDecimal.value)]
-        const tabScrollY = scrollY.value[tabIndex]
+        const focusedScrollY = scrollY.value[focusedTab.value]
+        const tabScrollY = scrollY.value[name]
         const areEqual = focusedScrollY === tabScrollY
 
         if (!areEqual) {
@@ -514,7 +507,7 @@ export const useScrollHandlerY = (name: TabName) => {
 
         if (nextPosition !== null) {
           // console.log(`sync ${name} ${nextPosition}`)
-          scrollY.value[tabIndex] = nextPosition
+          scrollY.value[name] = nextPosition
           scrollTo(refMap[name], 0, nextPosition, false, `[${name}] sync pane`)
         }
       }
@@ -560,20 +553,8 @@ export function useAfterMountEffect(
   nextOnLayout: ViewProps['onLayout'],
   effect: React.EffectCallback
 ) {
-  const name = useTabNameContext()
-  const {
-    //tabsMounted,
-    refMap,
-    scrollY,
-    //scrollYCurrent,
-    tabNames,
-  } = useTabsContext()
-
   const didExecute = useRef(false)
   const didMount = useSharedValue(false)
-
-  const scrollTo = useScroller()
-  const ref = name ? refMap[name] : null
 
   useAnimatedReaction(
     () => {
@@ -582,16 +563,7 @@ export function useAfterMountEffect(
     (didMount, prevDidMount) => {
       if (didMount && !prevDidMount) {
         if (didExecute.current) return
-        if (ref) {
-          const tabIndex = tabNames.value.findIndex((n) => n === name)
-          scrollTo(
-            ref,
-            0,
-            scrollY.value[tabIndex],
-            false,
-            `[${name}] restore scroll position`
-          )
-        }
+
         effect()
         didExecute.current = true
       }
