@@ -19,19 +19,21 @@ const Indicator: React.FC<IndicatorProps> = ({
   const opacity = useSharedValue(fadeIn ? 0 : 1)
 
   const stylez = useAnimatedStyle(() => {
-    const transform =
-      itemsLayout.length > 1
-        ? [
-            {
-              translateX: interpolate(
+    const transform = [
+      {
+        translateX:
+          itemsLayout.length > 1
+            ? interpolate(
                 indexDecimal.value,
                 itemsLayout.map((_, i) => i),
                 // when in RTL mode, the X value should be inverted
                 itemsLayout.map((v) => (isRTL ? -1 * v.x : v.x))
-              ),
-            },
-          ]
-        : undefined
+              )
+            : isRTL
+              ? -1 * itemsLayout[0]?.x
+              : itemsLayout[0]?.x,
+      },
+    ]
 
     const width =
       itemsLayout.length > 1
