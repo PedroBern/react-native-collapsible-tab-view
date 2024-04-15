@@ -13,18 +13,15 @@ import { HEADER_HEIGHT } from './Header'
 
 type Props = {
   emptyContacts?: boolean
-  hideArticleTab?: boolean
 } & Partial<CollapsibleProps>
 
 const Example = React.forwardRef<CollapsibleRef, Props>(
   ({ emptyContacts, ...props }, ref) => {
     return (
       <Tabs.Container ref={ref} headerHeight={HEADER_HEIGHT} lazy {...props}>
-        {props.hideArticleTab ? (
-          <Tabs.Tab name="article" label="Article">
-            <Article />
-          </Tabs.Tab>
-        ) : null}
+        <Tabs.Tab name="article" label="Article">
+          <Article />
+        </Tabs.Tab>
         <Tabs.Tab name="albums" label="Albums">
           <Albums />
         </Tabs.Tab>

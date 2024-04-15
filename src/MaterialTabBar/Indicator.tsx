@@ -19,6 +19,8 @@ const Indicator: React.FC<IndicatorProps> = ({
   const opacity = useSharedValue(fadeIn ? 0 : 1)
 
   const stylez = useAnimatedStyle(() => {
+    const firstItemX = itemsLayout[0]?.x ?? 0
+
     const transform = [
       {
         translateX:
@@ -30,8 +32,8 @@ const Indicator: React.FC<IndicatorProps> = ({
                 itemsLayout.map((v) => (isRTL ? -1 * v.x : v.x))
               )
             : isRTL
-              ? -1 * itemsLayout[0]?.x
-              : itemsLayout[0]?.x,
+              ? -1 * firstItemX
+              : firstItemX,
       },
     ]
 
