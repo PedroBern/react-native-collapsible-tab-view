@@ -1,5 +1,13 @@
 
 
+## [7.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v7.0.0...v7.0.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* dynamic tab sync ([75c6e3a](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/75c6e3a0190428140d3faaaf07c95fb53cb091cf))
+* indicator display for single tab ([ed67c03](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/ed67c03be57d67f91bab3172333166a8ba05b494))
+
 # [7.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.2...v7.0.0) (2024-04-04)
 
 
