@@ -32,6 +32,7 @@ import RevealHeaderOnScroll from './RevealHeaderOnScroll'
 import RevealHeaderOnScrollSnap from './RevealHeaderOnScrollSnap'
 import ScrollOnHeader from './ScrollOnHeader'
 import ScrollableTabs from './ScrollableTabs'
+import SingleTab from './SingleTab'
 import Snap from './Snap'
 import StartOnSpecificTab from './StartOnSpecificTab'
 import UndefinedHeaderHeight from './UndefinedHeaderHeight'
@@ -61,6 +62,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   AnimatedHeader,
   AndroidSharedPullToRefresh,
   HeaderOverscrollExample,
+  SingleTab,
 ]
 
 const ExampleList: React.FC<object> = () => {
