@@ -8,7 +8,6 @@ import Animated, {
 import {
   useChainCallback,
   useCollapsibleStyle,
-  useConvertAnimatedToValue,
   useScrollHandlerY,
   useSharedAnimatedRef,
   useTabNameContext,
@@ -121,16 +120,14 @@ function MasonryFlashListImpl<R>(
     [progressViewOffset, refreshControl]
   )
 
-  const contentInsetValue = useConvertAnimatedToValue<number>(contentInset)
-
   const memoContentInset = React.useMemo(
-    () => ({ top: contentInsetValue }),
-    [contentInsetValue]
+    () => ({ top: contentInset }),
+    [contentInset]
   )
 
   const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInsetValue }),
-    [contentInsetValue]
+    () => ({ x: 0, y: -contentInset }),
+    [contentInset]
   )
 
   const memoContentContainerStyle = React.useMemo(
