@@ -16,6 +16,7 @@ import Animated, {
   useAnimatedReaction,
   useAnimatedRef,
   useAnimatedScrollHandler,
+  useFrameCallback,
   useSharedValue,
   withDelay,
   withTiming,
@@ -248,7 +249,10 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (name: TabName) => {
+export const useScrollHandlerY = (
+  name: TabName,
+  shouldScheduleScrollSync: boolean = false
+) => {
   const {
     accDiffClamp,
     focusedTab,
@@ -275,17 +279,55 @@ export const useScrollHandlerY = (name: TabName) => {
 
   const scrollTo = useScroller()
 
+  /*
+   * shouldScheduleScrollSync is used to schedule scrollTo calls to synchronize
+   * the Y position of the list with header position. This is necessary because
+   * of FlashList and MasonryFlashList. These two components seem to have a bug
+   * where the ref is set before you can actually call scrollTo on them. This
+   * requires us to wait until the onLoad has happened, however, if we dispatch
+   * the scrollTo after the onLoad it causes the user to see the scroll jump.
+   * By eagerly calling scrollTo until enabled.value is true this makes it
+   * impossible for the user to see the scroll jump.
+   *
+   * TODO: revisit disabling shouldScheduleScrollSync on future FlashList
+   * upgrades to validate if they have fixed the problem. Note that to see this
+   * problem it requires a busy JS thread.
+   * */
+  const startFrame = (toggle: boolean) => syncScrollFrame.setActive(toggle)
+  const syncScrollFrame = useFrameCallback(() => {
+    const ref = refMap[name]
+    const y = scrollY.value[name] ?? scrollYCurrent.value
+    scrollTo(ref, 0, y, false, `[${name}] restore scroll position - enable`)
+    if (enabled.value) {
+      runOnJS(startFrame)(false)
+    }
+  }, false)
+
+  useAnimatedReaction(
+    () => focusedTab.value,
+    (currentTab, previous) => {
+      if (currentTab !== previous && currentTab === name) {
+        if (shouldScheduleScrollSync) {
+          runOnJS(startFrame)(true)
+        } else {
+          const ref = refMap[name]
+          const y = scrollY.value[name] ?? scrollYCurrent.value
+          scrollTo(
+            ref,
+            0,
+            y,
+            false,
+            `[${name}] restore scroll position - enable`
+          )
+        }
+      }
+    }
+  )
+
   const enable = useCallback(
     (toggle: boolean) => {
       'worklet'
       enabled.value = toggle
-
-      if (toggle) {
-        const ref = refMap[name]
-        const y = scrollY.value[name] ?? scrollYCurrent.value
-
-        scrollTo(ref, 0, y, false, `[${name}] restore scroll position - enable`)
-      }
     },
     [name, refMap, scrollTo]
   )
