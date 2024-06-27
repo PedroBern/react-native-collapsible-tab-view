@@ -249,10 +249,7 @@ export function useScroller<T extends RefComponent>() {
   return scroller
 }
 
-export const useScrollHandlerY = (
-  name: TabName,
-  shouldScheduleScrollSync: boolean = false
-) => {
+export const useScrollHandlerY = (name: TabName) => {
   const {
     accDiffClamp,
     focusedTab,
@@ -279,21 +276,13 @@ export const useScrollHandlerY = (
 
   const scrollTo = useScroller()
 
-  /*
-   * shouldScheduleScrollSync is used to schedule scrollTo calls to synchronize
-   * the Y position of the list with header position. This is necessary because
-   * of FlashList and MasonryFlashList. These two components seem to have a bug
-   * where the ref is set before you can actually call scrollTo on them. This
-   * requires us to wait until the onLoad has happened, however, if we dispatch
-   * the scrollTo after the onLoad it causes the user to see the scroll jump.
-   * By eagerly calling scrollTo until enabled.value is true this makes it
-   * impossible for the user to see the scroll jump.
-   *
-   * TODO: revisit disabling shouldScheduleScrollSync on future FlashList
-   * upgrades to validate if they have fixed the problem. Note that to see this
-   * problem it requires a busy JS thread.
-   * */
   const startFrame = (toggle: boolean) => syncScrollFrame.setActive(toggle)
+  /*
+   * We sync scroll inside a scheduler to ensure the list is not stuck in an
+   * unwanted position due to it not being ready to receieve the scroll event.
+   * This is happening with FlashList. Revisit this on future updates to
+   * Flashlist.
+   * */
   const syncScrollFrame = useFrameCallback(() => {
     const ref = refMap[name]
     const y = scrollY.value[name] ?? scrollYCurrent.value
@@ -307,19 +296,7 @@ export const useScrollHandlerY = (
     () => focusedTab.value,
     (currentTab, previous) => {
       if (currentTab !== previous && currentTab === name) {
-        if (shouldScheduleScrollSync) {
-          runOnJS(startFrame)(true)
-        } else {
-          const ref = refMap[name]
-          const y = scrollY.value[name] ?? scrollYCurrent.value
-          scrollTo(
-            ref,
-            0,
-            y,
-            false,
-            `[${name}] restore scroll position - enable`
-          )
-        }
+        runOnJS(startFrame)(true)
       }
     }
   )

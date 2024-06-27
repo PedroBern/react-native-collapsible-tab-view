@@ -74,7 +74,7 @@ function MasonryFlashListImpl<R>(
   const recyclerRef = useSharedAnimatedRef<any>(null)
   const ref = useSharedAnimatedRef<any>(passRef)
 
-  const { scrollHandler, enable } = useScrollHandlerY(name, true)
+  const { scrollHandler, enable } = useScrollHandlerY(name)
 
   const hadLoad = useSharedValue(false)
 
