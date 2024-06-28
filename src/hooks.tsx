@@ -16,7 +16,6 @@ import Animated, {
   useAnimatedReaction,
   useAnimatedRef,
   useAnimatedScrollHandler,
-  useFrameCallback,
   useSharedValue,
   withDelay,
   withTiming,
@@ -275,31 +274,6 @@ export const useScrollHandlerY = (name: TabName) => {
   const enabled = useSharedValue(false)
 
   const scrollTo = useScroller()
-
-  const startFrame = (toggle: boolean) => syncScrollFrame.setActive(toggle)
-  /*
-   * We sync scroll inside a scheduler to ensure the list is not stuck in an
-   * unwanted position due to it not being ready to receieve the scroll event.
-   * This is happening with FlashList. Revisit this on future updates to
-   * Flashlist.
-   * */
-  const syncScrollFrame = useFrameCallback(() => {
-    const ref = refMap[name]
-    const y = scrollY.value[name] ?? scrollYCurrent.value
-    scrollTo(ref, 0, y, false, `[${name}] restore scroll position - enable`)
-    if (enabled.value) {
-      runOnJS(startFrame)(false)
-    }
-  }, false)
-
-  useAnimatedReaction(
-    () => focusedTab.value,
-    (currentTab, previous) => {
-      if (currentTab !== previous && currentTab === name) {
-        runOnJS(startFrame)(true)
-      }
-    }
-  )
 
   const enable = useCallback(
     (toggle: boolean) => {

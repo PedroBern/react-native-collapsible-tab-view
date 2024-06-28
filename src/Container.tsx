@@ -10,6 +10,7 @@ import Animated, {
   useSharedValue,
   withDelay,
   withTiming,
+  useFrameCallback,
 } from 'react-native-reanimated'
 
 import { Context, TabNameContext } from './Context'
@@ -207,6 +208,33 @@ export const Container = React.memo(
         [onIndexChange, onTabChange]
       )
 
+      const syncCurrentTabScrollPosition = () => {
+        'worklet'
+
+        const name = tabNamesArray[index.value]
+        scrollToImpl(
+          refMap[name],
+          0,
+          scrollYCurrent.value - contentInset,
+          false
+        )
+      }
+
+      /*
+       * We run syncCurrentTabScrollPosition in every frame after the index
+       * changes for about 1500ms because the Lists can be late to accept the
+       * scrollTo event we send. This fixes the issue of the scroll position
+       * jumping when the user changes tab.
+       * */
+      const toggleSyncScrollFrame = (toggle: boolean) =>
+        syncScrollFrame.setActive(toggle)
+      const syncScrollFrame = useFrameCallback(({ timeSinceFirstFrame }) => {
+        syncCurrentTabScrollPosition()
+        if (timeSinceFirstFrame > 1500) {
+          runOnJS(toggleSyncScrollFrame)(false)
+        }
+      }, false)
+
       useAnimatedReaction(
         () => {
           return calculateNextOffset.value
@@ -230,6 +258,7 @@ export const Container = React.memo(
               scrollYCurrent.value =
                 scrollY.value[tabNames.value[index.value]] || 0
             }
+            runOnJS(toggleSyncScrollFrame)(true)
           }
         },
         []
