@@ -1,0 +1,20 @@
+appId: com.rnctvexample 
+---
+- launchApp
+- tapOn: .*FlashList.*
+- assertVisible: "Scroll Y is: 0.00"
+- swipe:
+    direction: UP
+    duration: 300
+- swipe:
+    direction: LEFT
+    duration: 150
+- swipe:
+    direction: LEFT
+    duration: 150
+- swipe:
+    direction: UP
+    duration: 150
+- swipe:
+    direction: UP
+    duration: 150
