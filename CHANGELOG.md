@@ -1,5 +1,21 @@
 
 
+# [8.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v7.0.1...v8.0.0) (2024-07-05)
+
+
+### Code Refactoring
+
+* **hooks, container:** perf: avoid reading .value outside worklet ([08a1c51](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/08a1c51f1aefbe13dd30dbfb62b7d19848835838))
+
+
+### BREAKING CHANGES
+
+* **hooks, container:** headerHeight, tabBarHeight, containerHeight, and
+contentInset are no longer SharedValues.
+
+If you consume useHeaderMeasurements and/or useTabsContext expect this
+to impact you.
+
 ## [7.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v7.0.0...v7.0.1) (2024-04-15)
 
 
