@@ -21,7 +21,7 @@ const Example = React.forwardRef<CollapsibleRef, Props>((props, ref) => {
     <ScrollView
       nestedScrollEnabled
       contentContainerStyle={{
-        height: windowHeight - 56 - Constants.statusBarHeight, // 56 is the naviagtion header height
+        height: windowHeight - 56 - Constants.statusBarHeight, // 56 is the navigation header height
       }}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={startRefreshing} />
