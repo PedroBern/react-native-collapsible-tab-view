@@ -30,8 +30,8 @@ export const Header = () => {
         {
           translateY: interpolate(
             top.value,
-            [0, -(height.value || 0 - MIN_HEADER_HEIGHT)],
-            [0, (height.value || 0 - MIN_HEADER_HEIGHT) / 2]
+            [0, -(height || 0 - MIN_HEADER_HEIGHT)],
+            [0, (height || 0 - MIN_HEADER_HEIGHT) / 2]
           ),
         },
       ],
