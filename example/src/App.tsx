@@ -35,6 +35,7 @@ import ScrollableTabs from './ScrollableTabs'
 import SingleTab from './SingleTab'
 import Snap from './Snap'
 import StartOnSpecificTab from './StartOnSpecificTab'
+import StretchableHeader from './StretchableHeader'
 import UndefinedHeaderHeight from './UndefinedHeaderHeight'
 import { ExampleComponentType } from './types'
 
@@ -60,6 +61,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   ConditionalTabs,
   MinHeaderHeight,
   AnimatedHeader,
+  StretchableHeader,
   AndroidSharedPullToRefresh,
   HeaderOverscrollExample,
   SingleTab,
