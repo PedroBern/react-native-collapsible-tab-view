@@ -28,7 +28,6 @@ import Animated, {
   Extrapolation,
   useDerivedValue,
   SharedValue,
-  useAnimatedProps,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 

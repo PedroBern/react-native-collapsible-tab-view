@@ -1,6 +1,6 @@
 import React from 'react'
 import { SectionList as RNSectionList, SectionListProps } from 'react-native'
-import { useAnimatedProps } from 'react-native-reanimated'
+import { AnimatedProps, useAnimatedProps } from 'react-native-reanimated'
 
 import { AnimatedSectionList } from './helpers'
 import {
@@ -14,6 +14,8 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+type AnimatedSectionListProps = AnimatedProps<SectionListProps<unknown>>
+
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
@@ -21,7 +23,7 @@ import {
 const SectionListMemo = React.memo(
   React.forwardRef<
     RNSectionList,
-    React.PropsWithChildren<SectionListProps<unknown>>
+    React.PropsWithChildren<AnimatedSectionListProps>
   >((props, passRef) => {
     return (
       <AnimatedSectionList

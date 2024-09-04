@@ -1,6 +1,6 @@
 import React from 'react'
 import { FlatList as RNFlatList, FlatListProps } from 'react-native'
-import { useAnimatedProps } from 'react-native-reanimated'
+import { AnimatedProps, useAnimatedProps } from 'react-native-reanimated'
 
 import { AnimatedFlatList } from './helpers'
 import {
@@ -14,12 +14,14 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+type AnimatedFlatListProps = AnimatedProps<FlatListProps<unknown>>
+
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
 const FlatListMemo = React.memo(
-  React.forwardRef<RNFlatList, React.PropsWithChildren<FlatListProps<unknown>>>(
+  React.forwardRef<RNFlatList, React.PropsWithChildren<AnimatedFlatListProps>>(
     (props, passRef) => {
       return <AnimatedFlatList ref={passRef} {...props} />
     }

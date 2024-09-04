@@ -1,6 +1,9 @@
 import React from 'react'
 import { ScrollViewProps, ScrollView as RNScrollView } from 'react-native'
-import Animated, { useAnimatedProps } from 'react-native-reanimated'
+import Animated, {
+  AnimatedProps,
+  useAnimatedProps,
+} from 'react-native-reanimated'
 
 import {
   useAfterMountEffect,
@@ -13,22 +16,25 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+type AnimatedScrollViewProps = AnimatedProps<ScrollViewProps>
+
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
 const ScrollViewMemo = React.memo(
-  React.forwardRef<RNScrollView, React.PropsWithChildren<ScrollViewProps>>(
-    (props, passRef) => {
-      return (
-        <Animated.ScrollView
-          // @ts-expect-error reanimated types are broken on ref
-          ref={passRef}
-          {...props}
-        />
-      )
-    }
-  )
+  React.forwardRef<
+    RNScrollView,
+    React.PropsWithChildren<AnimatedScrollViewProps>
+  >((props, passRef) => {
+    return (
+      <Animated.ScrollView
+        // @ts-expect-error reanimated types are broken on ref
+        ref={passRef}
+        {...props}
+      />
+    )
+  })
 )
 
 /**

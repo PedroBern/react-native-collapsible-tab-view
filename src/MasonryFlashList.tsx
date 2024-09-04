@@ -1,6 +1,7 @@
 import { MasonryFlashListProps, MasonryFlashListRef } from '@shopify/flash-list'
 import React, { useCallback } from 'react'
 import Animated, {
+  AnimatedProps,
   useAnimatedProps,
   useAnimatedReaction,
   useSharedValue,
@@ -16,18 +17,16 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+type AnimatedFlatListProps = AnimatedProps<MasonryFlashListProps<unknown>>
+
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
-
-type MasonryFlashListMemoProps = React.PropsWithChildren<
-  MasonryFlashListProps<unknown>
->
+type MasonryFlashListMemoProps = React.PropsWithChildren<AnimatedFlatListProps>
 type MasonryFlashListMemoRef = MasonryFlashListRef<any>
 
-let AnimatedMasonry: React.ComponentClass<MasonryFlashListProps<any>> | null =
-  null
+let AnimatedMasonry: React.ComponentClass<AnimatedFlatListProps> | null = null
 
 const ensureMasonry = () => {
   if (AnimatedMasonry) {
@@ -38,7 +37,7 @@ const ensureMasonry = () => {
     const flashListModule = require('@shopify/flash-list')
     AnimatedMasonry = Animated.createAnimatedComponent(
       flashListModule.MasonryFlashList
-    ) as unknown as React.ComponentClass<MasonryFlashListProps<any>>
+    ) as unknown as React.ComponentClass<AnimatedFlatListProps>
   } catch {
     console.error(
       'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'

@@ -7,6 +7,7 @@ import Animated, {
   useSharedValue,
   useAnimatedReaction,
   useAnimatedProps,
+  AnimatedProps,
 } from 'react-native-reanimated'
 
 import {
@@ -19,15 +20,17 @@ import {
   useUpdateScrollViewContentSize,
 } from './hooks'
 
+type AnimatedFlatListProps = AnimatedProps<FlashListProps<unknown>>
+
 /**
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
 
-type FlashListMemoProps = React.PropsWithChildren<FlashListProps<unknown>>
+type FlashListMemoProps = React.PropsWithChildren<AnimatedFlatListProps>
 type FlashListMemoRef = SPFlashList<any>
 
-let AnimatedFlashList: React.ComponentClass<FlashListProps<any>> | null = null
+let AnimatedFlashList: React.ComponentClass<AnimatedFlatListProps> | null = null
 
 const ensureFlastList = () => {
   if (AnimatedFlashList) {
@@ -38,7 +41,7 @@ const ensureFlastList = () => {
     const flashListModule = require('@shopify/flash-list')
     AnimatedFlashList = Animated.createAnimatedComponent(
       flashListModule.FlashList
-    ) as unknown as React.ComponentClass<FlashListProps<any>>
+    ) as unknown as React.ComponentClass<AnimatedFlatListProps>
   } catch {
     console.error(
       'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
