@@ -1,6 +1,7 @@
 import { MasonryFlashListProps, MasonryFlashListRef } from '@shopify/flash-list'
 import React, { useCallback } from 'react'
 import Animated, {
+  useAnimatedProps,
   useAnimatedReaction,
   useSharedValue,
 } from 'react-native-reanimated'
@@ -120,15 +121,12 @@ function MasonryFlashListImpl<R>(
     [progressViewOffset, refreshControl]
   )
 
-  const memoContentInset = React.useMemo(
-    () => ({ top: contentInset }),
-    [contentInset]
-  )
-
-  const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInset }),
-    [contentInset]
-  )
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      contentInset: { top: contentInset.value },
+      contentOffset: { x: 0, y: -contentInset.value },
+    }
+  }, [])
 
   const memoContentContainerStyle = React.useMemo(
     () => ({
@@ -160,8 +158,7 @@ function MasonryFlashListImpl<R>(
       bouncesZoom={false}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
-      contentInset={memoContentInset}
-      contentOffset={memoContentOffset}
+      animatedProps={animatedProps}
       refreshControl={memoRefreshControl}
       progressViewOffset={progressViewOffset}
       automaticallyAdjustContentInsets={false}

@@ -10,18 +10,18 @@ import Animated, {
 import ExampleComponent from './Shared/ExampleComponentFlashList'
 import ReText from './Shared/ReText'
 import { ExampleComponentType } from './types'
-import { useCurrentTabScrollY } from '../../src/hooks'
+import { useCurrentTabScrollY, useTabsContext } from '../../src/hooks'
 
 const title = 'FlashList (contacts tab)'
 
 const MIN_HEADER_HEIGHT = 48
 
 export const Header = () => {
+  const { contentInset } = useTabsContext()
   const { top, height } = useHeaderMeasurements()
   const scrollY = useCurrentTabScrollY()
-
   const scrollYText = useDerivedValue(
-    () => `Scroll Y is: ${scrollY.value.toFixed(2)}`
+    () => `${contentInset.value.toFixed(2)} ${scrollY.value.toFixed(2)}`
   )
 
   const stylez = useAnimatedStyle(() => {
@@ -30,8 +30,8 @@ export const Header = () => {
         {
           translateY: interpolate(
             top.value,
-            [0, -(height || 0 - MIN_HEADER_HEIGHT)],
-            [0, (height || 0 - MIN_HEADER_HEIGHT) / 2]
+            [0, -(height.value || 0 - MIN_HEADER_HEIGHT)],
+            [0, (height.value || 0 - MIN_HEADER_HEIGHT) / 2]
           ),
         },
       ],
@@ -50,7 +50,6 @@ export const Header = () => {
 const Example: ExampleComponentType = () => {
   return (
     <ExampleComponent
-      allowHeaderOverscroll
       renderHeader={() => <Header />}
       minHeaderHeight={MIN_HEADER_HEIGHT}
     />

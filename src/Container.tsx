@@ -106,13 +106,15 @@ export const Container = React.memo(
         [initialTabName, tabNamesArray]
       )
 
-      const contentInset = React.useMemo(() => {
+      const contentInset = useDerivedValue(() => {
         if (allowHeaderOverscroll) return 0
 
         // necessary for the refresh control on iOS to be positioned underneath the header
         // this also adjusts the scroll bars to clamp underneath the header area
-        return IS_IOS ? (headerHeight || 0) + (tabBarHeight || 0) : 0
-      }, [headerHeight, tabBarHeight, allowHeaderOverscroll])
+        return IS_IOS
+          ? (headerHeight.value || 0) + (tabBarHeight.value || 0)
+          : 0
+      }, [allowHeaderOverscroll])
 
       const snappingTo: ContextType['snappingTo'] = useSharedValue(0)
       const offset: ContextType['offset'] = useSharedValue(0)
@@ -141,8 +143,10 @@ export const Container = React.memo(
       const calculateNextOffset = useSharedValue(initialIndex)
       const headerScrollDistance: ContextType['headerScrollDistance'] =
         useDerivedValue(() => {
-          return headerHeight !== undefined ? headerHeight - minHeaderHeight : 0
-        }, [headerHeight, minHeaderHeight])
+          return headerHeight.value !== undefined
+            ? headerHeight.value - minHeaderHeight
+            : 0
+        }, [minHeaderHeight])
 
       const indexDecimal: ContextType['indexDecimal'] = useSharedValue(
         index.value
@@ -162,7 +166,7 @@ export const Container = React.memo(
           scrollToImpl(
             refMap[name],
             0,
-            scrollYCurrent.value - contentInset,
+            scrollYCurrent.value - contentInset.value,
             false
           )
         }
@@ -179,7 +183,7 @@ export const Container = React.memo(
             resyncTabScroll()
           }
         },
-        [tabNamesArray, refMap, afterRender, contentInset]
+        [tabNamesArray, refMap, afterRender]
       )
 
       // derived from scrollX
@@ -215,7 +219,7 @@ export const Container = React.memo(
         scrollToImpl(
           refMap[name],
           0,
-          scrollYCurrent.value - contentInset,
+          scrollYCurrent.value - contentInset.value,
           false
         )
       }
@@ -299,7 +303,7 @@ export const Container = React.memo(
             runOnUI(scrollToImpl)(
               ref,
               0,
-              headerScrollDistance.value - contentInset,
+              headerScrollDistance.value - contentInset.value,
               true
             )
           } else {
@@ -307,7 +311,7 @@ export const Container = React.memo(
           }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [containerRef, refMap, contentInset]
+        [containerRef, refMap]
       )
 
       useAnimatedReaction(

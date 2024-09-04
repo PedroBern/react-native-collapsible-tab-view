@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollViewProps, ScrollView as RNScrollView } from 'react-native'
-import Animated from 'react-native-reanimated'
+import Animated, { useAnimatedProps } from 'react-native-reanimated'
 
 import {
   useAfterMountEffect,
@@ -90,15 +90,12 @@ export const ScrollView = React.forwardRef<
       [progressViewOffset, refreshControl]
     )
 
-    const memoContentInset = React.useMemo(
-      () => ({ top: contentInset }),
-      [contentInset]
-    )
-
-    const memoContentOffset = React.useMemo(
-      () => ({ x: 0, y: -contentInset }),
-      [contentInset]
-    )
+    const animatedProps = useAnimatedProps(() => {
+      return {
+        contentInset: { top: contentInset.value },
+        contentOffset: { x: 0, y: -contentInset.value },
+      }
+    }, [])
 
     const memoContentContainerStyle = React.useMemo(
       () => [
@@ -121,8 +118,7 @@ export const ScrollView = React.forwardRef<
         onScroll={scrollHandler}
         onContentSizeChange={scrollContentSizeChangeHandlers}
         scrollEventThrottle={16}
-        contentInset={memoContentInset}
-        contentOffset={memoContentOffset}
+        animatedProps={animatedProps}
         automaticallyAdjustContentInsets={false}
         refreshControl={memoRefreshControl}
         // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735

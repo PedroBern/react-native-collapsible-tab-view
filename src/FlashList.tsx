@@ -6,6 +6,7 @@ import React, { useCallback } from 'react'
 import Animated, {
   useSharedValue,
   useAnimatedReaction,
+  useAnimatedProps,
 } from 'react-native-reanimated'
 
 import {
@@ -117,22 +118,19 @@ function FlashListImpl<R>(
     [progressViewOffset, refreshControl]
   )
 
-  const memoContentInset = React.useMemo(
-    () => ({ top: contentInset }),
-    [contentInset]
-  )
-
-  const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInset }),
-    [contentInset]
-  )
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      contentInset: { top: contentInset.value },
+      contentOffset: { x: 0, y: -contentInset.value },
+    }
+  }, [])
 
   const memoContentContainerStyle = React.useMemo(
     () => ({
       paddingTop: contentContainerStyle.paddingTop,
       ..._contentContainerStyle,
     }),
-    [_contentContainerStyle, contentContainerStyle.paddingTop]
+    [_contentContainerStyle, contentContainerStyle]
   )
 
   const refWorkaround = useCallback(
@@ -157,8 +155,7 @@ function FlashListImpl<R>(
       bouncesZoom={false}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
-      contentInset={memoContentInset}
-      contentOffset={memoContentOffset}
+      animatedProps={animatedProps}
       refreshControl={memoRefreshControl}
       progressViewOffset={progressViewOffset}
       automaticallyAdjustContentInsets={false}

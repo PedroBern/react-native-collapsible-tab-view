@@ -1,5 +1,6 @@
 import React from 'react'
 import { FlatList as RNFlatList, FlatListProps } from 'react-native'
+import { useAnimatedProps } from 'react-native-reanimated'
 
 import { AnimatedFlatList } from './helpers'
 import {
@@ -78,15 +79,12 @@ function FlatListImpl<R>(
     [progressViewOffset, refreshControl]
   )
 
-  const memoContentInset = React.useMemo(
-    () => ({ top: contentInset }),
-    [contentInset]
-  )
-
-  const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInset }),
-    [contentInset]
-  )
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      contentInset: { top: contentInset.value },
+      contentOffset: { x: 0, y: -contentInset.value },
+    }
+  }, [])
 
   const memoContentContainerStyle = React.useMemo(
     () => [
@@ -111,8 +109,7 @@ function FlatListImpl<R>(
       onScroll={scrollHandler}
       onContentSizeChange={scrollContentSizeChangeHandlers}
       scrollEventThrottle={16}
-      contentInset={memoContentInset}
-      contentOffset={memoContentOffset}
+      animatedProps={animatedProps}
       automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
       // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735

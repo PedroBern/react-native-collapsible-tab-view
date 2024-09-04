@@ -26,6 +26,9 @@ import Animated, {
   useHandler,
   AnimatedRef,
   Extrapolation,
+  useDerivedValue,
+  SharedValue,
+  useAnimatedProps,
 } from 'react-native-reanimated'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
@@ -119,17 +122,15 @@ export function useTabNameContext(): TabName {
 }
 
 export function useLayoutHeight(initialHeight: number = 0) {
-  const [height, setHeight] = useState(initialHeight)
+  const height = useSharedValue(initialHeight)
 
-  const getHeight = useCallback(
-    (event: LayoutChangeEvent) => {
-      const latestHeight = event.nativeEvent.layout.height
-      if (latestHeight !== height) {
-        setHeight(latestHeight)
-      }
-    },
-    [height, setHeight]
-  )
+  const getHeight = useCallback((event: LayoutChangeEvent) => {
+    'worklet'
+    const latestHeight = event.nativeEvent.layout.height
+    if (latestHeight !== height.value) {
+      height.value = latestHeight
+    }
+  }, [])
   return [height, getHeight] as const
 }
 /**
@@ -146,9 +147,9 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     allowHeaderOverscroll,
     minHeaderHeight,
   } = useTabsContext()
-  const containerHeightWithMinHeader = Math.max(
-    0,
-    (containerHeight ?? 0) - minHeaderHeight
+  const containerHeightWithMinHeader = useDerivedValue(
+    () => Math.max(0, (containerHeight.value ?? 0) - minHeaderHeight),
+    [minHeaderHeight]
   )
 
   return useMemo(
@@ -157,27 +158,22 @@ export function useCollapsibleStyle(): CollapsibleStyle {
       contentContainerStyle: {
         minHeight:
           IS_IOS && !allowHeaderOverscroll
-            ? containerHeightWithMinHeader - (tabBarHeight || 0)
-            : containerHeightWithMinHeader + (headerHeight || 0),
+            ? containerHeightWithMinHeader.value - (tabBarHeight.value || 0)
+            : containerHeightWithMinHeader.value + (headerHeight.value || 0),
         paddingTop:
           IS_IOS && !allowHeaderOverscroll
             ? 0
-            : (headerHeight || 0) + (tabBarHeight || 0),
+            : (headerHeight.value || 0) + (tabBarHeight.value || 0),
       },
       progressViewOffset:
         // on iOS we need the refresh control to be at the top if overscrolling
         IS_IOS && allowHeaderOverscroll
           ? 0
           : // on android we need it below the header or it doesn't show because of z-index
-            (headerHeight || 0) + (tabBarHeight || 0),
+            (headerHeight.value || 0) + (tabBarHeight.value || 0),
     }),
-    [
-      allowHeaderOverscroll,
-      headerHeight,
-      tabBarHeight,
-      width,
-      containerHeightWithMinHeader,
-    ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allowHeaderOverscroll, width]
   )
 }
 
@@ -240,7 +236,7 @@ export function useScroller<T extends RefComponent>() {
       // console.log(
       //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset}`
       // )
-      scrollToImpl(ref, x, y - contentInset, animated)
+      scrollToImpl(ref, x, y - contentInset.value, animated)
     },
     [contentInset]
   )
@@ -357,20 +353,21 @@ export const useScrollHandlerY = (name: TabName) => {
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
+        'worklet'
         if (!enabled.value) return
 
         if (focusedTab.value === name) {
           if (IS_IOS) {
             let { y } = event.contentOffset
             // normalize the value so it starts at 0
-            y = y + contentInset
+            y = y + contentInset.value
 
             const contentHeight =
               contentHeights.value[tabNames.value.indexOf(name)] ||
               Number.MAX_VALUE
 
             const clampMax =
-              contentHeight - (containerHeight || 0) + contentInset
+              contentHeight - (containerHeight.value || 0) + contentInset.value
             // make sure the y value is clamped to the scrollable size (clamps overscrolling)
             scrollYCurrent.value = allowHeaderOverscroll
               ? y
@@ -491,7 +488,7 @@ export const useScrollHandlerY = (name: TabName) => {
             if (focusedIsOnTop) {
               nextPosition = snappingTo.value
             } else if (currIsOnTop) {
-              nextPosition = headerHeight || 0
+              nextPosition = headerHeight.value || 0
             }
           } else if (currIsOnTop || focusedIsOnTop) {
             nextPosition = Math.min(focusedScrollY, headerScrollDistance.value)
@@ -600,11 +597,11 @@ export interface HeaderMeasurements {
   /**
    * Animated value that represents the current Y translation of the header
    */
-  top: Animated.SharedValue<number>
+  top: SharedValue<number>
   /**
    * Animated value that represents the height of the header
    */
-  height: number
+  height: SharedValue<number>
 }
 
 export function useHeaderMeasurements(): HeaderMeasurements {

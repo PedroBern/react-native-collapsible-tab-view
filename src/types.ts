@@ -135,9 +135,9 @@ export type CollapsibleProps = {
 }
 
 export type ContextType<T extends TabName = TabName> = {
-  headerHeight: number
-  tabBarHeight: number
-  containerHeight: number
+  headerHeight: SharedValue<number>
+  tabBarHeight: SharedValue<number>
+  containerHeight: SharedValue<number>
   revealHeaderOnScroll: boolean
   snapThreshold: number | null | undefined
   /**
@@ -209,7 +209,7 @@ export type ContextType<T extends TabName = TabName> = {
    */
   contentHeights: SharedValue<number[]>
 
-  contentInset: number
+  contentInset: SharedValue<number>
 
   headerTranslateY: SharedValue<number>
 
