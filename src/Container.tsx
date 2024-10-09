@@ -433,7 +433,7 @@ export const Container = React.memo(
             >
               {data.map((tabName, i) => {
                 return (
-                  <View key={i}>
+                  <View key={i} style={{ height: '100%', width: '100%' }}>
                     <TabNameContext.Provider value={tabName}>
                       <Lazy
                         startMounted={lazy ? undefined : true}
