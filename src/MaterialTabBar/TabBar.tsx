@@ -100,19 +100,22 @@ const MaterialTabBar = <T extends TabName = TabName>({
         if (!event.nativeEvent?.layout) return
         const { width, x } = event.nativeEvent.layout
 
-        itemLayoutGathering.current.set(name, {
-          width,
-          x,
-        })
+        // Only update if we don't already have a layout for this tab
+        if (!itemLayoutGathering.current.has(name)) {
+          itemLayoutGathering.current.set(name, {
+            width,
+            x,
+          })
 
-        // pick out the layouts for the tabs we know about (in case they changed dynamically)
-        const layout = Array.from(itemLayoutGathering.current.entries())
-          .filter(([tabName]) => tabNames.includes(tabName))
-          .map(([, layout]) => layout)
-          .sort((a, b) => a.x - b.x)
+          // pick out the layouts for the tabs we know about (in case they changed dynamically)
+          const layout = Array.from(itemLayoutGathering.current.entries())
+            .filter(([tabName]) => tabNames.includes(tabName))
+            .map(([, layout]) => layout)
+            .sort((a, b) => a.x - b.x)
 
-        if (layout.length === tabNames.length) {
-          setItemsLayout(layout)
+          if (layout.length === tabNames.length) {
+            setItemsLayout(layout)
+          }
         }
       }
     },
