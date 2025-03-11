@@ -229,7 +229,10 @@ export const Container = React.memo(
       const toggleSyncScrollFrame = (toggle: boolean) =>
         syncScrollFrame.setActive(toggle)
       const syncScrollFrame = useFrameCallback(({ timeSinceFirstFrame }) => {
-        syncCurrentTabScrollPosition()
+        if (timeSinceFirstFrame % 100 === 0) {
+          syncCurrentTabScrollPosition()
+        }
+
         if (timeSinceFirstFrame > 1500) {
           runOnJS(toggleSyncScrollFrame)(false)
         }
