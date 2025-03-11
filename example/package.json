@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@legendapp/list": "^1.0.0-beta.16",
     "@shopify/flash-list": "^1.6.4",
     "expo": "^50.0.14",
     "expo-constants": "~15.4.5",

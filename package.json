@@ -47,6 +47,7 @@
   "homepage": "https://github.com/PedroBern/react-native-collapsible-tab-view#readme",
   "devDependencies": {
     "@commitlint/config-conventional": "^19.1.0",
+    "@legendapp/list": "^1.0.0-beta.16",
     "@microsoft/tsdoc": "^0.14.2",
     "@release-it/conventional-changelog": "^8.0.1",
     "@shopify/flash-list": "^1.6.4",
@@ -76,6 +77,7 @@
   },
   "peerDependencies": {
     "@shopify/flash-list": ">=1.0.0",
+    "@legendapp/list": "*",
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",
@@ -83,6 +85,9 @@
   },
   "peerDependenciesMeta": {
     "@shopify/flash-list": {
+      "optional": true
+    },
+    "@legendapp/list": {
       "optional": true
     }
   },

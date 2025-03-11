@@ -23,6 +23,7 @@ import FlashList from './FlashList'
 import HeaderOverscrollExample from './HeaderOverscroll'
 import Lazy from './Lazy'
 import LazyNoFade from './LazyNoFade'
+import LegendList from './LegendList'
 import MasonryFlashList from './MasonryFlashList'
 import MinHeaderHeight from './MinHeaderHeight'
 import OnTabChange from './OnTabChange'
@@ -41,6 +42,7 @@ import { ExampleComponentType } from './types'
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Default,
   FlashList,
+  LegendList,
   DefaultCustomLabels,
   Snap,
   RevealHeaderOnScroll,

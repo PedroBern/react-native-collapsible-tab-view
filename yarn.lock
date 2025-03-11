@@ -2803,6 +2803,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@legendapp/list@^1.0.0-beta.16":
+  version "1.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/@legendapp/list/-/list-1.0.0-beta.16.tgz#da217f3bf6704083f6922d541cc8df300aed1db1"
+  integrity sha512-E28PCdp5os0varbhd56/TxNiOtYZiV+Y6I/fDcT55J3Soces5Mlw/T17Iy1FYtGF5Py1qpdLUzZnl2BMeaq5xA==
+
 "@ljharb/through@^2.3.12":
   version "2.3.13"
   resolved "https://registry.yarnpkg.com/@ljharb/through/-/through-2.3.13.tgz#b7e4766e0b65aa82e529be945ab078de79874edc"
