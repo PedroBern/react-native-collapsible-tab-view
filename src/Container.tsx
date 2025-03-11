@@ -436,7 +436,7 @@ export const Container = React.memo(
             >
               {tabNamesArray.map((tabName, i) => {
                 return (
-                  <View key={i} style={{ height: '100%', width: '100%' }}>
+                  <View key={i} style={styles.pageContainer}>
                     <TabNameContext.Provider value={tabName}>
                       <Lazy
                         startMounted={lazy ? undefined : true}
@@ -465,6 +465,10 @@ export const Container = React.memo(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  pageContainer: {
+    height: '100%',
+    width: '100%',
   },
   topContainer: {
     position: 'absolute',
