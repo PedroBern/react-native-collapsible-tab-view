@@ -1,7 +1,6 @@
 import type { LegendListProps, LegendListRef } from '@legendapp/list'
 import type { AnimatedLegendList as AnimatedLegendListType } from '@legendapp/list/reanimated'
 import React from 'react'
-import { ScrollView } from 'react-native'
 import { useSharedValue, useAnimatedReaction } from 'react-native-reanimated'
 
 import {
@@ -65,7 +64,6 @@ function LegendListImpl<T>(
   const name = useTabNameContext()
   const { setRef, contentInset } = useTabsContext()
   const ref = useSharedAnimatedRef<any>(passRef)
-  const scrollRef = useSharedAnimatedRef<ScrollView>(null)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
 
@@ -93,8 +91,8 @@ function LegendListImpl<T>(
   const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
   React.useEffect(() => {
-    setRef(name, scrollRef)
-  }, [name, scrollRef, setRef])
+    setRef(name, ref)
+  }, [name, ref, setRef])
 
   const scrollContentSizeChange = useUpdateScrollViewContentSize({
     name,
