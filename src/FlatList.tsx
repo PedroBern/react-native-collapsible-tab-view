@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList as RNFlatList, FlatListProps } from 'react-native'
+import Animated from 'react-native-reanimated'
 
-import { AnimatedFlatList } from './helpers'
 import {
   useAfterMountEffect,
   useChainCallback,
@@ -20,7 +20,7 @@ import {
 const FlatListMemo = React.memo(
   React.forwardRef<RNFlatList, React.PropsWithChildren<FlatListProps<unknown>>>(
     (props, passRef) => {
-      return <AnimatedFlatList ref={passRef} {...props} />
+      return <Animated.FlatList ref={passRef} {...props} />
     }
   )
 )
