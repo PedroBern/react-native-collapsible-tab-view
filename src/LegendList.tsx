@@ -132,6 +132,7 @@ function LegendListImpl<T>(
       {...rest}
       ref={ref}
       contentContainerStyle={memoContentContainerStyle}
+      progressViewOffset={progressViewOffset}
       bouncesZoom={false}
       onScroll={scrollHandler}
       scrollEventThrottle={8}

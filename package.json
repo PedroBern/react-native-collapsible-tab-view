@@ -67,7 +67,7 @@
     "react": "~18.2.0",
     "react-docgen-typescript": "^1.20.5",
     "react-native": "~0.73.6",
-    "react-native-builder-bob": "^0.18.2",
+    "react-native-builder-bob": "^0.37.0",
     "react-native-gesture-handler": "~2.16.0",
     "react-native-pager-view": "^6.3.0",
     "react-native-reanimated": "3.8.1",
@@ -76,8 +76,8 @@
     "typescript": "^5.4.3"
   },
   "peerDependencies": {
-    "@shopify/flash-list": ">=1.0.0",
     "@legendapp/list": "*",
+    "@shopify/flash-list": ">=1.0.0",
     "react": "*",
     "react-native": "*",
     "react-native-pager-view": "*",

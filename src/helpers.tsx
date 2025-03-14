@@ -11,8 +11,6 @@ export const { isRTL } = I18nManager
 
 export const IS_IOS = Platform.OS === 'ios'
 
-export const AnimatedFlatList = Animated.FlatList
-
 export const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
 export function scrollToImpl<T extends RefComponent>(
