@@ -34,6 +34,10 @@ export type MaterialTabItemProps<T extends TabName> = TabItemProps<T> & {
    * Color applied to the label when inactive
    */
   inactiveColor?: string
+  /**
+   * Whether fonts should scale to respect Text Size accessibility settings
+   */
+  allowFontScaling?: boolean
 } & Omit<PressableProps, 'onPress' | 'children'>
 
 export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
@@ -82,6 +86,11 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
    * Whether to keep the currently active tab centered in a scrollable tab bar
    */
   keepActiveTabCentered?: boolean
+
+  /**
+   * Whether fonts should scale to respect Text Size accessibility settings
+   */
+  allowFontScaling?: boolean
 }
 
 export type ItemLayout = {

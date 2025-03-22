@@ -39,7 +39,6 @@ export const TABBAR_HEIGHT = 48
  * >
  *   {...}
  * </Tabs.Container>
- * ```
  */
 const MaterialTabBar = <T extends TabName = TabName>({
   tabNames,
@@ -59,6 +58,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
   tabStyle,
   width: customWidth,
   keepActiveTabCentered,
+  allowFontScaling = true,
 }: MaterialTabBarProps<T>): React.ReactElement => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -218,6 +218,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
             activeColor={activeColor}
             inactiveColor={inactiveColor}
             style={tabStyle}
+            allowFontScaling={allowFontScaling}
           />
         )
       })}
@@ -234,6 +235,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
 }
 
 const MemoizedTabBar = React.memo(MaterialTabBar)
+MemoizedTabBar.displayName = 'MaterialTabBar'
 
 export { MemoizedTabBar as MaterialTabBar }
 

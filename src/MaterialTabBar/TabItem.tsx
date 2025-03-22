@@ -33,6 +33,7 @@ export const MaterialTabItem = <T extends TabName = string>(
     inactiveOpacity = 0.7,
     pressColor = '#DDDDDD',
     pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
+    allowFontScaling = true,
     ...rest
   } = props
 
@@ -54,14 +55,17 @@ export const MaterialTabItem = <T extends TabName = string>(
   const renderedLabel = useMemo(() => {
     if (typeof label === 'string') {
       return (
-        <Animated.Text style={[styles.label, stylez, labelStyle]}>
+        <Animated.Text
+          style={[styles.label, stylez, labelStyle]}
+          allowFontScaling={allowFontScaling}
+        >
           {label}
         </Animated.Text>
       )
     }
 
     return label(props)
-  }, [label, labelStyle, props, stylez])
+  }, [label, labelStyle, props, stylez, allowFontScaling])
 
   return (
     <Pressable
