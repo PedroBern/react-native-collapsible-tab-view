@@ -355,6 +355,7 @@ Any additional props are passed to the pressable component.
 |`pressOpacity`|`number \| undefined`||
 |`scrollEnabled`|`boolean \| undefined`||
 |`style`|`StyleProp<ViewStyle>`|Either view styles or a function that receives a boolean reflecting whether the component is currently pressed and returns view styles.|
+|`allowFontScaling`|`boolean \| undefined`|Whether fonts should scale to respect Text Size accessibility settings|
 
 
 
