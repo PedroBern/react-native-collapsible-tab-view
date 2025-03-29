@@ -1,5 +1,12 @@
 
 
+## [8.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v8.0.0...v8.0.1) (2025-03-29)
+
+
+### Bug Fixes
+
+* tabs not being displayed on Android ([559ae22](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/559ae222c48aee73f24e4c27db07890f8e28d694))
+
 # [8.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v7.0.1...v8.0.0) (2024-07-05)
 
 
