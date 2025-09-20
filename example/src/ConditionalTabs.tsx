@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { TabBarProps } from 'react-native-collapsible-tab-view'
 
 import ExampleComponent from './Shared/ExampleComponent'
 import { ExampleComponentType } from './types'
-import { TabBarProps } from '../../src/types'
 
 const title = 'Conditional Tabs'
 

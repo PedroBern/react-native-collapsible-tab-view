@@ -18,13 +18,12 @@ import Article from './Article'
 import Contacts from './Contacts'
 import { HEADER_HEIGHT } from './Header'
 import SectionContacts from './SectionContacts'
-import { TabName } from '../../../src/types'
 
 type Props = {
   emptyContacts?: boolean
 } & Partial<CollapsibleProps>
 
-function TabItem<T extends TabName>({
+function TabItem<T extends string>({
   index,
   indexDecimal,
   label,
@@ -83,7 +82,7 @@ function TabItem<T extends TabName>({
 const Example = React.forwardRef<CollapsibleRef, Props>(
   ({ emptyContacts, ...props }, ref) => {
     const makeLabel = useCallback(
-      <T extends TabName>(label: string) =>
+      <T extends string>(label: string) =>
         (props: TabItemProps<T>) => (
           <TabItem
             index={props.index}
