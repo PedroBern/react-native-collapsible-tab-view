@@ -96,11 +96,7 @@ function SectionListImpl<R>(
   )
 
   const memoContentContainerStyle = React.useMemo(
-    () => [
-      _contentContainerStyle,
-      // TODO: investigate types
-      contentContainerStyle as any,
-    ],
+    () => [_contentContainerStyle, contentContainerStyle],
     [_contentContainerStyle, contentContainerStyle]
   )
   const memoStyle = React.useMemo(() => [_style, style], [_style, style])
@@ -122,8 +118,6 @@ function SectionListImpl<R>(
       contentOffset={memoContentOffset}
       automaticallyAdjustContentInsets={false}
       refreshControl={memoRefreshControl}
-      // workaround for: https://github.com/software-mansion/react-native-reanimated/issues/2735
-      onMomentumScrollEnd={() => {}}
     />
   )
 }

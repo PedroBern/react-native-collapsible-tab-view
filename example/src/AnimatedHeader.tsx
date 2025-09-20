@@ -1,6 +1,9 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useHeaderMeasurements } from 'react-native-collapsible-tab-view'
+import {
+  useHeaderMeasurements,
+  useCurrentTabScrollY,
+} from 'react-native-collapsible-tab-view'
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -10,7 +13,6 @@ import Animated, {
 import ExampleComponent from './Shared/ExampleComponent'
 import ReText from './Shared/ReText'
 import { ExampleComponentType } from './types'
-import { useCurrentTabScrollY } from '../../src/hooks'
 
 const title = 'Animated Header'
 

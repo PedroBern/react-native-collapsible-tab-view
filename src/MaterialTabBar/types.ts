@@ -6,12 +6,12 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native'
-import Animated from 'react-native-reanimated'
+import { AnimatedStyle, SharedValue } from 'react-native-reanimated'
 
 import { TabBarProps, TabName, TabItemProps } from '../types'
 
-type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
-type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>
+type AnimatedViewStyle = StyleProp<AnimatedStyle<ViewStyle>>
+type AnimatedTextStyle = StyleProp<AnimatedStyle<TextStyle>>
 
 export type MaterialTabItemProps<T extends TabName> = TabItemProps<T> & {
   onPress: (name: T) => void
@@ -44,7 +44,7 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
   /**
    * Style to apply to the active indicator.
    */
-  indicatorStyle?: AnimatedStyle
+  indicatorStyle?: AnimatedViewStyle
   /**
    * React component to render as tab bar item
    */
@@ -90,8 +90,8 @@ export type ItemLayout = {
 }
 
 export type IndicatorProps = {
-  indexDecimal: Animated.SharedValue<number>
+  indexDecimal: SharedValue<number>
   itemsLayout: ItemLayout[]
-  style?: AnimatedStyle
+  style?: AnimatedViewStyle
   fadeIn?: boolean
 }

@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useLayoutEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedReaction,
-  runOnJS,
   withTiming,
   useAnimatedStyle,
 } from 'react-native-reanimated'
+import { scheduleOnRN } from 'react-native-worklets'
 
 import { ScrollView } from './ScrollView'
 import { useScroller, useTabNameContext, useTabsContext } from './hooks'
@@ -51,18 +51,22 @@ export const Lazy: React.FC<{
    */
   const isSelfMounted = React.useRef(true)
 
-  /**
-   * We start mounted if we are the focused tab, or if props.startMounted is true.
-   */
-  const shouldStartMounted =
-    typeof _startMounted === 'boolean'
-      ? _startMounted
-      : focusedTab.value === name
-  let initialOpacity = 1
-  if (!cancelLazyFadeIn && !shouldStartMounted) {
-    initialOpacity = 0
-  }
-  const opacity = useSharedValue(initialOpacity)
+  const opacity = useSharedValue(0)
+
+  useLayoutEffect(() => {
+    /**
+     * We start mounted if we are the focused tab, or if props.startMounted is true.
+     */
+    const shouldStartMounted =
+      typeof _startMounted === 'boolean'
+        ? _startMounted
+        : focusedTab.value === name
+    let initialOpacity = 1
+    if (!cancelLazyFadeIn && !shouldStartMounted) {
+      initialOpacity = 0
+    }
+    opacity.value = initialOpacity
+  }, [cancelLazyFadeIn, focusedTab, name, _startMounted, opacity])
 
   React.useEffect(() => {
     return () => {
@@ -90,9 +94,9 @@ export const Lazy: React.FC<{
       if (focused && !wasFocused && !canMount) {
         if (cancelLazyFadeIn) {
           opacity.value = 1
-          runOnJS(setCanMount)(true)
+          scheduleOnRN(setCanMount, true)
         } else {
-          runOnJS(startMountTimer)(focusedTab.value)
+          scheduleOnRN(startMountTimer, focusedTab.value)
         }
       }
     },

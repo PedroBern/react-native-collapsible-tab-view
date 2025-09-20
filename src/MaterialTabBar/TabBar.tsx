@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import {
   StyleSheet,
   useWindowDimensions,
@@ -119,7 +119,15 @@ const MaterialTabBar = <T extends TabName = TabName>({
     [scrollEnabled, tabNames]
   )
 
-  const cancelNextScrollSync = useSharedValue(index.value)
+  const cancelNextScrollSync = useSharedValue(0)
+  const currentIndexToSync = useSharedValue(0)
+  const targetIndexToSync = useSharedValue(0)
+
+  useLayoutEffect(() => {
+    cancelNextScrollSync.value = index.value
+    currentIndexToSync.value = index.value
+    targetIndexToSync.value = index.value
+  }, [cancelNextScrollSync, currentIndexToSync, index, targetIndexToSync])
 
   const onScroll = useAnimatedScrollHandler(
     {
@@ -136,9 +144,6 @@ const MaterialTabBar = <T extends TabName = TabName>({
     },
     []
   )
-
-  const currentIndexToSync = useSharedValue(index.value)
-  const targetIndexToSync = useSharedValue(index.value)
 
   useAnimatedReaction(
     () => {

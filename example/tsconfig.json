@@ -11,7 +11,8 @@
       "dom",
       "esnext"
     ],
-    "moduleResolution": "node",
+    "module": "es2020",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,

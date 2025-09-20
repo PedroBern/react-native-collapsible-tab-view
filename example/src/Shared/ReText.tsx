@@ -3,21 +3,24 @@
 import React from 'react'
 import type { TextProps as RNTextProps } from 'react-native'
 import { StyleSheet, TextInput } from 'react-native'
-import Animated, { useAnimatedProps } from 'react-native-reanimated'
+import {
+  useAnimatedProps,
+  SharedValue,
+  createAnimatedComponent,
+} from 'react-native-reanimated'
 
 const styles = StyleSheet.create({
   baseStyle: {
     color: 'black',
   },
 })
-Animated.addWhitelistedNativeProps({ text: true })
 
 interface TextProps {
-  text: Animated.SharedValue<string>
-  style?: Animated.AnimateProps<RNTextProps>['style']
+  text: SharedValue<string>
+  style?: RNTextProps['style']
 }
 
-const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
+const AnimatedTextInput = createAnimatedComponent(TextInput)
 
 const ReText = (props: TextProps) => {
   const { text, style } = { style: {}, ...props }
