@@ -1,7 +1,4 @@
-import type {
-  FlashListProps,
-  FlashList as SPFlashList,
-} from '@shopify/flash-list'
+import type { FlashListProps, FlashListRef } from '@shopify/flash-list'
 import React, { useCallback } from 'react'
 import Animated, {
   useSharedValue,
@@ -23,8 +20,7 @@ import {
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
 
-type FlashListMemoProps = React.PropsWithChildren<FlashListProps<unknown>>
-type FlashListMemoRef = SPFlashList<any>
+type FlashListMemoProps<T> = React.PropsWithChildren<FlashListProps<T>>
 
 let AnimatedFlashList: React.ComponentClass<FlashListProps<any>> | null = null
 
@@ -46,7 +42,7 @@ const ensureFlastList = () => {
 }
 
 const FlashListMemo = React.memo(
-  React.forwardRef<FlashListMemoRef, FlashListMemoProps>((props, passRef) => {
+  React.forwardRef<any, FlashListMemoProps<any>>((props, passRef) => {
     ensureFlastList()
     return AnimatedFlashList ? (
       <AnimatedFlashList ref={passRef} {...props} />
@@ -54,7 +50,9 @@ const FlashListMemo = React.memo(
       <></>
     )
   })
-)
+) as <T>(
+  props: FlashListMemoProps<T> & { ref?: React.Ref<any> }
+) => React.ReactElement | null
 
 function FlashListImpl<R>(
   {
@@ -64,12 +62,11 @@ function FlashListImpl<R>(
     contentContainerStyle: _contentContainerStyle,
     ...rest
   }: Omit<FlashListProps<R>, 'onScroll'>,
-  passRef: React.Ref<SPFlashList<any>>
+  passRef: React.Ref<FlashListRef<any>>
 ) {
   const name = useTabNameContext()
   const { setRef, contentInset } = useTabsContext()
   const ref = useSharedAnimatedRef<any>(passRef)
-  const recyclerRef = useSharedAnimatedRef<any>(null)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
 
@@ -93,8 +90,8 @@ function FlashListImpl<R>(
   const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
   React.useEffect(() => {
-    setRef(name, recyclerRef)
-  }, [name, recyclerRef, setRef])
+    setRef(name, ref)
+  }, [name, ref, setRef])
 
   const scrollContentSizeChange = useUpdateScrollViewContentSize({
     name,
@@ -128,31 +125,20 @@ function FlashListImpl<R>(
   )
 
   const memoContentContainerStyle = React.useMemo(
-    () => ({
-      paddingTop: contentContainerStyle.paddingTop,
-      ..._contentContainerStyle,
-    }),
+    () => [
+      {
+        paddingTop: contentContainerStyle.paddingTop,
+      },
+      _contentContainerStyle,
+    ],
     [_contentContainerStyle, contentContainerStyle.paddingTop]
   )
 
-  const refWorkaround = useCallback(
-    (value: FlashListMemoRef | null): void => {
-      // https://github.com/Shopify/flash-list/blob/2d31530ed447a314ec5429754c7ce88dad8fd087/src/FlashList.tsx#L829
-      // We are not accessing the right element or view of the Flashlist (recyclerlistview). So we need to give
-      // this ref the access to it
-      // eslint-ignore
-      ;(recyclerRef as any)(value?.recyclerlistview_unsafe)
-      ;(ref as any)(value)
-    },
-    [recyclerRef, ref]
-  )
-
   return (
-    // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <FlashListMemo
       {...rest}
       onLoad={onLoad}
-      ref={refWorkaround}
+      ref={ref}
       contentContainerStyle={memoContentContainerStyle}
       bouncesZoom={false}
       onScroll={scrollHandler}
@@ -171,5 +157,5 @@ function FlashListImpl<R>(
  * Use like a regular FlashList.
  */
 export const FlashList = React.forwardRef(FlashListImpl) as <T>(
-  p: FlashListProps<T> & { ref?: React.Ref<SPFlashList<T>> }
+  p: FlashListProps<T> & { ref?: React.Ref<FlashListRef<T>> }
 ) => React.ReactElement
