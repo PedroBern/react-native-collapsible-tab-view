@@ -10,7 +10,7 @@ const title = 'Ref example "jumpToTab" after 1 second'
 const Header = buildHeader(title)
 
 const RefExample: ExampleComponentType = () => {
-  const ref = React.useRef<CollapsibleRef>()
+  const ref = React.useRef<CollapsibleRef>(null)
 
   React.useEffect(() => {
     const timer = setTimeout(() => {

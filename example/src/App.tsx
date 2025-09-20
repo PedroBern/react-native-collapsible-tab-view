@@ -1,16 +1,15 @@
 import { Ionicons } from '@expo/vector-icons'
-import Constants from 'expo-constants'
 import * as React from 'react'
 import {
   Platform,
   ScrollView,
   StatusBar,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
 import AndroidSharedPullToRefresh from './AndroidSharedPullToRefresh'
 import AnimatedHeader from './AnimatedHeader'
@@ -23,7 +22,6 @@ import FlashList from './FlashList'
 import HeaderOverscrollExample from './HeaderOverscroll'
 import Lazy from './Lazy'
 import LazyNoFade from './LazyNoFade'
-import MasonryFlashList from './MasonryFlashList'
 import MinHeaderHeight from './MinHeaderHeight'
 import OnTabChange from './OnTabChange'
 import QuickStartDemo from './QuickStartDemo'
@@ -47,7 +45,6 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   RevealHeaderOnScrollSnap,
   Lazy,
   LazyNoFade,
-  MasonryFlashList,
   ScrollableTabs,
   CenteredEmptyList,
   ScrollOnHeader,
@@ -114,67 +111,54 @@ const ExampleList: React.FC<object> = () => {
   const borderBottomWidth = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0
 
   return (
-    <View style={styles.container}>
-      <StatusBar
-        translucent
-        barStyle={Platform.OS === 'ios' ? statusBarStyle : 'light-content'}
-      />
-      <View
-        style={[
-          styles.appbar,
-          backgroundColor ? { backgroundColor } : null,
-          appbarElevation
-            ? { elevation: appbarElevation, borderBottomWidth }
-            : null,
-        ]}
-      >
-        <View style={styles.statusbar} />
-        <SafeAreaView>
-          <View style={styles.content}>
-            {index > -1 ? (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleNavigateBack}
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <StatusBar
+          translucent
+          barStyle={Platform.OS === 'ios' ? statusBarStyle : 'light-content'}
+        />
+        <View
+          style={[
+            styles.appbar,
+            backgroundColor ? { backgroundColor } : null,
+            appbarElevation
+              ? { elevation: appbarElevation, borderBottomWidth }
+              : null,
+          ]}
+        >
+          <SafeAreaView edges={['top']}>
+            <View style={styles.content}>
+              {index > -1 ? (
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleNavigateBack}
+                >
+                  <Ionicons name="arrow-back" size={24} color={tintColor} />
+                </TouchableOpacity>
+              ) : null}
+              <Text
+                style={[styles.title, tintColor ? { color: tintColor } : null]}
               >
-                <Ionicons
-                  name={
-                    Platform.OS === 'android'
-                      ? 'md-arrow-back'
-                      : 'ios-arrow-back'
-                  }
-                  size={24}
-                  color={tintColor}
-                />
-              </TouchableOpacity>
-            ) : null}
-            <Text
-              style={[styles.title, tintColor ? { color: tintColor } : null]}
-            >
-              {index > -1 ? EXAMPLE_COMPONENTS[index].title : title}
-            </Text>
-            {index > -1 ? <View style={styles.button} /> : null}
-          </View>
-        </SafeAreaView>
+                {index > -1 ? EXAMPLE_COMPONENTS[index].title : title}
+              </Text>
+              {index > -1 ? <View style={styles.button} /> : null}
+            </View>
+          </SafeAreaView>
+        </View>
+        {index === -1 ? (
+          <ScrollView>{EXAMPLE_COMPONENTS.map(renderItem)}</ScrollView>
+        ) : ExampleComponent ? (
+          <ExampleComponent />
+        ) : null}
       </View>
-      {index === -1 ? (
-        <ScrollView>{EXAMPLE_COMPONENTS.map(renderItem)}</ScrollView>
-      ) : ExampleComponent ? (
-        <ExampleComponent />
-      ) : null}
-    </View>
+    </SafeAreaProvider>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eceff1',
-    height: Platform.OS === 'web' ? '100vh' : '100%',
-  },
-  statusbar: {
-    height: Platform.select({
-      android: Constants.statusBarHeight,
-      ios: 0,
-    }),
+    height: '100%',
   },
   appbar: {
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
