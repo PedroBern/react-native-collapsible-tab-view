@@ -18,7 +18,6 @@
     - [Tabs.Lazy](#tabslazy)
     - [Tabs.FlatList](#tabsflatlist)
     - [Tabs.FlashList](#tabsflatlist)
-    - [Tabs.MasonryFlashList](#tabsmasonryflatlist)
     - [Tabs.SectionList](#tabssectionlist)
     - [Tabs.ScrollView](#tabsscrollview)
     - [Ref](#ref)
@@ -242,10 +241,6 @@ Use like a regular FlatList.
 ### Tabs.FlashList
 
 Use like a regular FlashList.
-
-### Tabs.MasonryFlashList
-
-Use like a regular MasonryFlashList.
 
 ### Tabs.ScrollView
 
