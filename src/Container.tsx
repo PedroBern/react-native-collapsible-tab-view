@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import Animated, {
@@ -71,11 +71,11 @@ export const Container = React.memo(
         headerContainerStyle,
         cancelTranslation,
         containerStyle,
-        lazy,
-        cancelLazyFadeIn,
         pagerProps,
         onIndexChange,
         onTabChange,
+        lazy,
+        cancelLazyFadeIn,
         width: customWidth,
         allowHeaderOverscroll,
       },
@@ -349,6 +349,27 @@ export const Container = React.memo(
         [onTabPress]
       )
 
+      const renderContent = useCallback(
+        (tabName: string, i: number) => {
+          if (lazy) {
+            return (
+              <Lazy
+                startMounted={lazy ? undefined : true}
+                cancelLazyFadeIn={!lazy ? true : !!cancelLazyFadeIn}
+                // ensure that we remount the tab if its name changes but the index doesn't
+                key={tabName}
+              >
+                {React.Children.toArray(children)[i] as React.ReactElement}
+              </Lazy>
+            )
+          }
+          return (
+            <>{React.Children.toArray(children)[i] as React.ReactElement}</>
+          )
+        },
+        [cancelLazyFadeIn, children, lazy]
+      )
+
       return (
         <Context.Provider
           value={{
@@ -438,18 +459,7 @@ export const Container = React.memo(
                 return (
                   <View key={i} style={styles.pageContainer}>
                     <TabNameContext.Provider value={tabName}>
-                      <Lazy
-                        startMounted={lazy ? undefined : true}
-                        cancelLazyFadeIn={!lazy ? true : !!cancelLazyFadeIn}
-                        // ensure that we remount the tab if its name changes but the index doesn't
-                        key={tabName}
-                      >
-                        {
-                          React.Children.toArray(children)[
-                            i
-                          ] as React.ReactElement
-                        }
-                      </Lazy>
+                      {renderContent(tabName, i)}
                     </TabNameContext.Provider>
                   </View>
                 )
