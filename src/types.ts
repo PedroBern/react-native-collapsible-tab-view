@@ -222,7 +222,12 @@ export type ContextType<T extends TabName = TabName> = {
    */
   allowHeaderOverscroll?: boolean
 
-  minHeaderHeight: number
+  minHeaderHeight: number,
+
+  /**
+  * Is dragging gesture active?
+  */
+  isDragging: Animated.SharedValue<boolean>
 }
 
 export type ScrollViewProps = ComponentProps<typeof Animated.ScrollView>
