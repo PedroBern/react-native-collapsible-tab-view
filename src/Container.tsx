@@ -120,6 +120,7 @@ export const Container = React.memo(
       const oldAccScrollY: ContextType['oldAccScrollY'] = useSharedValue(0)
       const accDiffClamp: ContextType['accDiffClamp'] = useSharedValue(0)
       const scrollYCurrent: ContextType['scrollYCurrent'] = useSharedValue(0)
+      const isDragging: ContextType['isDragging'] = useSharedValue(false)
       const scrollY: ContextType['scrollY'] = useSharedValue(
         Object.fromEntries(tabNamesArray.map((n) => [n, 0]))
       )
@@ -377,6 +378,7 @@ export const Container = React.memo(
             headerTranslateY,
             width,
             allowHeaderOverscroll,
+            isDragging
           }}
         >
           <Animated.View

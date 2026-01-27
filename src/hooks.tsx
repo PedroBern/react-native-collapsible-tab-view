@@ -269,6 +269,7 @@ export const useScrollHandlerY = (name: TabName) => {
     contentHeights,
     indexDecimal,
     allowHeaderOverscroll,
+    isDragging
   } = useTabsContext()
 
   const enabled = useSharedValue(false)
@@ -408,6 +409,8 @@ export const useScrollHandlerY = (name: TabName) => {
       onBeginDrag: () => {
         if (!enabled.value) return
 
+        isDragging.value = true
+
         // ensure the header stops snapping
         cancelAnimation(accDiffClamp)
 
@@ -415,6 +418,8 @@ export const useScrollHandlerY = (name: TabName) => {
       },
       onEndDrag: () => {
         if (!enabled.value) return
+
+        isDragging.value = false
 
         if (IS_IOS) {
           // we delay this by one frame so that onMomentumBegin may fire on iOS
@@ -508,7 +513,7 @@ export const useScrollHandlerY = (name: TabName) => {
     [revealHeaderOnScroll, refMap, snapThreshold, enabled, scrollTo]
   )
 
-  return { scrollHandler, enable }
+  return { scrollHandler, enable, isDragging }
 }
 
 type ForwardRefType<T> =
