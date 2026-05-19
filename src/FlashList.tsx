@@ -129,10 +129,10 @@ function FlashListImpl<R>(
 
   const memoContentContainerStyle = React.useMemo(
     () => ({
-      paddingTop: contentContainerStyle.paddingTop,
+      ...contentContainerStyle,
       ..._contentContainerStyle,
     }),
-    [_contentContainerStyle, contentContainerStyle.paddingTop]
+    [_contentContainerStyle, contentContainerStyle]
   )
 
   const refWorkaround = useCallback(
