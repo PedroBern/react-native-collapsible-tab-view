@@ -3,6 +3,7 @@ import type {
   FlashList as SPFlashList,
 } from '@shopify/flash-list'
 import React, { useCallback } from 'react'
+import type { LayoutChangeEvent } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedReaction,
@@ -79,9 +80,26 @@ function FlashListImpl<R>(
     hadLoad.value = true
   }, [hadLoad])
 
+  // FlashList v2 never calls `onLoad` while `data` is empty, so an empty list
+  // would keep its scroll handler disabled and the header would stop following
+  // it. Enable an empty list after its first layout instead, like the other
+  // scrollables do (see `useAfterMountEffect`).
+  const isEmpty = !rest.data || rest.data.length === 0
+  const didLayout = useSharedValue(false)
+  const { onLayout: onLayoutProp } = rest
+  const onLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      requestAnimationFrame(() => {
+        didLayout.value = true
+      })
+      onLayoutProp?.(event)
+    },
+    [didLayout, onLayoutProp]
+  )
+
   useAnimatedReaction(
     () => {
-      return hadLoad.value
+      return hadLoad.value || (isEmpty && didLayout.value)
     },
     (ready) => {
       if (ready) {
@@ -152,6 +170,7 @@ function FlashListImpl<R>(
     <FlashListMemo
       {...rest}
       onLoad={onLoad}
+      onLayout={onLayout}
       ref={refWorkaround}
       contentContainerStyle={memoContentContainerStyle}
       bouncesZoom={false}
